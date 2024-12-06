@@ -30,12 +30,12 @@ class AuthenticatedSessionController extends Controller
 
         $params = $request->all();
         $rules = [   
-            // 'phone_no'     => ['required','string','max:13'],  
+            'phone_no'     => ['required','string','max:13'],  
             'password'     => ['required','string','max:255']
             ]; 
         $messages = [
-            // 'phone_no.required'   => 'Phone number required',
-            // 'phone_no.string'     => 'Enter valid phone number',
+            'phone_no.required'   => 'Phone number required',
+            'phone_no.string'     => 'Enter valid phone number',
             'password.required'   => 'Password field is required', 
             'password.string'     => 'Enter valid Password'
         ]; 

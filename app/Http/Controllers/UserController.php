@@ -4,12 +4,12 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use App\Models\UserRole;
 use App\Models\Permission;
 use App\Models\Modules;
-use Illuminate\Support\Arr;
 
 class UserController extends Controller
 {
@@ -88,8 +88,7 @@ class UserController extends Controller
             $user->user_address          = $params['user_address'];
             $user->user_phone_number     = $params['user_phone_number'];
             $user->user_role_id          = $params['user_role'];
-            $user->user_hash_pass        = Hash::Make('Test@123'); 
-            $user->user_password         = 'Test@123'; 
+            $user->user_password        = Hash::Make('Test@123'); 
             $user->user_sweetword        = 'Test@123'; 
             $user->user_module_ids       = $moduleIds;
             $user->user_permission_ids   = $permissionIds;

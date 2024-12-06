@@ -15,8 +15,15 @@ class PasswordResetLinkController extends Controller
      *
      * @throws \Illuminate\Validation\ValidationException
      */
+
+     public function create()
+     {
+         return view('auth.forgot-password');  // This should return your 'forgot-password.blade.php'
+     }
+
     public function store(Request $request): JsonResponse
-    {
+    {   
+        dd($request->all());
         $request->validate([
             'email' => ['required', 'email'],
         ]);
