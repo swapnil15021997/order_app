@@ -37,10 +37,13 @@ Route::post('/login', [AuthenticatedSessionController::class, 'store'])
 //     // ->middleware('guest')
 //     ->name('password.email');
 
+Route::get('/password-reset/{token}', [NewPasswordController::class, 'create'])
+    // ->middleware('guest')
+    ->name('password.store');
 
 
 Route::post('/reset-password', [NewPasswordController::class, 'store'])
-    ->middleware('guest')
+    // ->middleware('guest')
     ->name('password.store');
 
 Route::get('/verify-email/{id}/{hash}', VerifyEmailController::class)
