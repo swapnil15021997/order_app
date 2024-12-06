@@ -3,13 +3,21 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
+use Illuminate\Support\Facades\Validator;
+
+use App\Models\User;
+use App\Models\UserRole;
+use App\Models\Permission;
+use App\Models\Modules;
+use Illuminate\Http\JsonResponse;
+
+use Illuminate\Support\Arr;
 
 class RegisteredUserController extends Controller
 {
@@ -18,12 +26,14 @@ class RegisteredUserController extends Controller
      *
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function store(Request $request): Response
+    public function store(Request $request): JsonResponse
     {
+        $params = $request->all();
+             
         $rules = [
-            'name'      => ['required', 'string', 'max:255'],
-            'email'     => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
-            'password'  => ['required', 'confirmed', Rules\Password::defaults()],
+            'name'              => ['required', 'string', 'max:255'],
+            'email'             => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
+            'password'          => ['required', 'confirmed', Rules\Password::defaults()],
             'user_name'         => ['required','string'],  
             'user_address'      => ['required','string','max:255'],
             'user_phone_number' => ['required','string','max:13'],
@@ -60,8 +70,8 @@ class RegisteredUserController extends Controller
             ]);
         }
 
-        $moduleIds      = explode(',', $check_role->user_module_ids);
-        $permissionIds  = explode(',',$check_role->user_permission_ids);
+        $moduleIds = !empty($check_role->user_module_ids) ? explode(',', $check_role->user_module_ids) : [];
+        $permissionIds = !empty($check_role->user_permission_ids) ? explode(',', $check_role->user_permission_ids) : [];
 
         $existingModules = Modules::whereIn('module_id', $moduleIds)->pluck('module_id')->toArray();
 
