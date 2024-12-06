@@ -3,6 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
     <title>Forgot Password</title>
     <style>
         body {
@@ -63,17 +66,16 @@
     </style>
 </head>
 <body>
-    <div class="container">
+<div class="container">
         <h2>Reset Your Password</h2>
-        <form method="POST" action="{{ route('password.email') }}">
+        <form id="forgotPasswordForm" method="POST" action="{{ route('password.email') }}">
             @csrf
             <!-- Email Field -->
             <div class="form-group">
                 <label for="email">Email Address</label>
                 <input type="email" id="email" name="email" required placeholder="Enter your email address" value="{{ old('email') }}">
-                @if ($errors->has('email'))
-                    <p class="error">{{ $errors->first('email') }}</p>
-                @endif
+
+                <div id="emailError" class="error" style="display:none;"></div>
             </div>
             
             <!-- Submit Button -->
@@ -83,7 +85,48 @@
             <p style="text-align: center; margin-top: 15px;">
                 <a href="{{ route('login') }}">Back to login</a>
             </p>
+
+            <div id="responseMessage" class="success" style="display:none;"></div>
         </form>
     </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+    
+    $(document).ready(function() {
+    $('#forgotPasswordForm').on('submit', function(e) {
+        e.preventDefault(); // Prevent default form submission
+                var email = $('#email').val(); // Get email value
+        var csrfToken = $('meta[name="csrf-token"]').attr('content');
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
+    // Submit the password reset request
+        $.ajax({
+            url: "{{ route('password.email') }}", // Password reset route
+            method: 'POST',
+            data: {
+                email:email
+            },
+            dataType:"JSON",
+            success: function(response) {
+                $('#responseMessage').text(response.status).show();
+            },
+            error: function(xhr) {
+                var errors = xhr.responseJSON.errors;
+                if (errors && errors.email) {
+                    $('#emailError').text(errors.email[0]).show();
+                } else {
+                    $('#emailError').text('Something went wrong, please try again.').show();
+                }
+            }
+        });
+    });
+});
+
+    </script>
 </body>
 </html>

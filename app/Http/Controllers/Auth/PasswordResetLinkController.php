@@ -18,12 +18,16 @@ class PasswordResetLinkController extends Controller
 
      public function create()
      {
-         return view('auth.forgot-password');  // This should return your 'forgot-password.blade.php'
+
+        return view('auth.forgot-password');  
      }
 
-    public function store(Request $request): JsonResponse
+    public function store(Request $request)
     {   
-        dd($request->all());
+        \Log::info('CSRF Token:', ['token' => $request->session()->token()]);
+        \Log::info('Request Token:', ['token' => $request->input('_token')]);
+    
+
         $request->validate([
             'email' => ['required', 'email'],
         ]);
@@ -42,5 +46,6 @@ class PasswordResetLinkController extends Controller
         }
 
         return response()->json(['status' => __($status)]);
+
     }
 }

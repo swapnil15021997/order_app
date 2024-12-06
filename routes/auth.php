@@ -8,6 +8,17 @@ use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\VerifyEmailController;
 use Illuminate\Support\Facades\Route;
 
+Route::get('/forgot-password', [PasswordResetLinkController::class, 'create'])->name('password.request');
+
+// Route::middleware('web')->group(function () {
+//     Route::post('/forgot-password', [PasswordResetLinkController::class, 'store'])
+//         ->name('password.email');
+// });
+Route::post('/forgot-password', [PasswordResetLinkController::class, 'store'])
+// ->middleware('guest')
+->name('password.email');
+
+
 Route::post('/register', [RegisteredUserController::class, 'store'])
     ->middleware('guest')
     ->name('register');
@@ -16,9 +27,17 @@ Route::post('/login', [AuthenticatedSessionController::class, 'store'])
     ->middleware('guest')
     ->name('login');
 
-Route::post('/forgot-password', [PasswordResetLinkController::class, 'store'])
-    ->middleware('guest')
-    ->name('password.email');
+// Route::get('/forgot-password', [PasswordResetLinkController::class, 'create'])
+//     ->middleware('guest')
+//     ->name('password.request');
+
+    
+// Route::post('/forgot-password', [PasswordResetLinkController::class, 'store'])
+
+//     // ->middleware('guest')
+//     ->name('password.email');
+
+
 
 Route::post('/reset-password', [NewPasswordController::class, 'store'])
     ->middleware('guest')
