@@ -103,6 +103,7 @@ class BranchController extends Controller
         }
     
         $searchQuery = $request->input('search', ''); 
+
         $perPage     = $request->input('per_page', 15);   
         $page        = $request->input('page', 1);  
         $offset      = ($page - 1) * $perPage;
@@ -126,11 +127,14 @@ class BranchController extends Controller
             'message' => 'Branch list fetched successfully!',
             'data'    => [
                 'branches'     => $branches,
-                'total'        => $total_branches,
-                'per_page'     => $perPage,
-                'current_page' => $page,
-                'total_pages'  => $total_pages,
             ],
+            'draw' => intval($request->input('draw')),
+
+            'recordsTotal'        => $total_branches,
+            'recordsFiltered' => $branches->count(),
+            'per_page'     => $perPage,
+            'current_page' => $page,
+            'total_pages'  => $total_pages,
         ]);
     }
 

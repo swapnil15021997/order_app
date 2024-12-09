@@ -7,11 +7,22 @@ use App\Models\Order;
 use App\Models\Branch;
 use App\Models\Item;
 use App\Models\File;
+use DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Arr;
 
 class OrderController extends Controller
 {
+
+    public function order_index(Request $request){
+        $metals = DB::table('metals')->select('metal_name')->get();
+        $melting = DB::table('melting')->select('melting_name')->get();
+        $branches = Branch::select('branch_id', 'branch_name')->take(5)->get();
+        $branchesArray = $branches->toArray();
+
+        return view('orders/order_master',compact('metals', 'melting','branchesArray'));
+    }
+
     public function order_add(Request $request){
         $params = $request->all();
 
@@ -212,7 +223,14 @@ class OrderController extends Controller
         $page        = $request->input('page', 1);   
         $offset      = ($page - 1) * $perPage;
    
-        $ordersQuery = Order::query();       
+        $ordersQuery = Order::query()    
+        ->leftJoin('branch AS from_branch', 'from_branch.branch_id', '=', 'orders.order_from_branch_id')  // Join to get 'order_from_branch' name
+        ->leftJoin('branch AS to_branch', 'to_branch.branch_id', '=', 'orders.order_to_branch_id')  // Join to get 'order_to_branch' name
+        ->select(
+            'orders.*', 
+            'from_branch.branch_name AS order_from_name',   
+            'to_branch.branch_name AS order_to_name'        
+        ); 
         if (!empty($searchQuery)) {
             $ordersQuery->where(function ($query) use ($searchQuery) {
                 $query->where('order_number', 'like', "%{$searchQuery}%")
@@ -238,6 +256,12 @@ class OrderController extends Controller
                 'current_page' => $page,
                 'total_pages'  => $total_pages,
             ],
+            'recordsTotal'  => $total_orders,
+            'recordsFiltered' => $orders->count(),
+            'per_page'     => $perPage,
+            'current_page' => $page,
+            'total_pages'  => $total_pages,
+    
         ]);
     }
 

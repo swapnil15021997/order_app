@@ -36,11 +36,6 @@ Route::post('role-remove', [UserController::class, 'role_remove']);
 Route::post('permission-list', [UserController::class, 'permission_list']);
 
 
-Route::post('order-add', [OrderController::class, 'order_add']);
-Route::post('order-list', [OrderController::class, 'order_list']);
-Route::post('order-details', [OrderController::class, 'order_details']);
-Route::post('order-remove', [OrderController::class, 'order_remove']);
-
 
 Route::post('notes-add'    , [NotesController::class, 'add_notes']);
 Route::post('notes-details', [NotesController::class, 'notes_details']);

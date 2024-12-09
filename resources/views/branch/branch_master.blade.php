@@ -11,20 +11,16 @@
                   Overview
                 </div>
                 <h2 class="page-title">
-                  Dashboard
+                  Branch
                 </h2>
               </div>
               <div class="col-auto ms-auto d-print-none">
                 <div class="btn-list">
-                  <span class="d-none d-sm-inline">
-                    <a href="#" class="btn">
-                      New view
-                    </a>
-                  </span>
+                
                   <a href="#" class="btn btn-primary d-none d-sm-inline-block" data-bs-toggle="modal" data-bs-target="#modal-report">
                     <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
                     <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 5l0 14" /><path d="M5 12l14 0" /></svg>
-                    Create new report
+                    Create new branch
                   </a>
                   <a href="#" class="btn btn-primary d-sm-none btn-icon" data-bs-toggle="modal" data-bs-target="#modal-report" aria-label="Create new report">
                     <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
@@ -43,9 +39,7 @@
                             <thead>
                             <tr>
                                 <th class="w-1"><input class="form-check-input m-0 align-middle" type="checkbox" aria-label="Select all invoices"></th>
-                                <th class="w-1">No. <!-- Download SVG icon from http://tabler-icons.io/i/chevron-up -->
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-sm icon-thick" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 15l6 -6l6 6" /></svg>
-                                </th>
+                              
                                 <th>Branch Name</th>
                                 <th>Branch Address</th>
                                 <th>Operations</th>
@@ -149,10 +143,10 @@
                     url: "{{ route('branch_list') }}", 
                     type: 'POST',
                     data: function(d) {
-                        d.search = $('#search_input').val(); 
+                        d.search   = d.search.value; 
                         d.per_page = d.length;  
-                        d.page = d.start / d.length + 1;  
-                        d.draw = d.draw;  
+                        d.page     = d.start / d.length + 1;  
+                        d.draw     = d.draw;  
                     },
                     headers: {
                         'X-CSRF-TOKEN': csrfToken  // Add CSRF token in the header
@@ -169,7 +163,7 @@
                     { data: 'branch_id', name: 'branch_id' },  
                     { data: 'branch_name', name: 'branch_name' }, 
                     { data: 'branch_address', name: 'branch_address' },  
-                    { data: 'branch_added_by', name: 'branch_added_by' }, 
+
                     { 
                         data: 'branch_id', 
                         name: 'operations', 
@@ -181,6 +175,9 @@
                 ],
                 "pageLength": 10,  
                 "lengthMenu": [10, 25, 50, 100]  
+            });
+            $('input[aria-controls="branch_table"]').on('keyup', function() {
+                table.search(this.value).draw();
             });
        
 
