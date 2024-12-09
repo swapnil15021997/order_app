@@ -175,8 +175,9 @@
           </div>
       </div>
     </div>
+</div>
 
-    <div class="modal modal-blur fade" id="edit_order" tabindex="-2" role="dialog" aria-hidden="true">
+    <div class="modal modal-blur fade" id="edit_order" tabindex="-1" role="dialog" aria-hidden="true">
       <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
           <div class="modal-header">
@@ -284,7 +285,7 @@
             <a href="#" class="btn btn-link link-secondary" data-bs-dismiss="modal">
               Cancel
             </a>
-            <a href="#" class="btn btn-primary ms-auto" data-bs-dismiss="modal" id="saveBranchBtn">
+            <a href="#" class="btn btn-primary ms-auto" data-bs-dismiss="modal" id="updateOrderBtn">
               <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
               <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 5l0 14" /><path d="M5 12l14 0" /></svg>
               Update Order
@@ -293,45 +294,9 @@
           </div>
       </div>
     </div>
-
-
-    <div class="modal modal-blur fade" id="edit_branch" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog modal-lg" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">New report</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <input type="hidden" id="edit_branch_id" value="">
-                        <label class="form-label">Branch Name</label>
-                        <input id="edit_branch_name" type="text" name="branch_name" class="form-control"  placeholder="Add branch Name">
-                    </div>
-                </div>
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <div>
-                                <label class="form-label">Branch Address</label>
-                                <textarea id="edit_branch_address" name="branch_address" class="form-control" rows="3"></textarea>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <a href="#" class="btn btn-link link-secondary" data-bs-dismiss="modal">
-                    Cancel
-                    </a>
-                    <a id="editBranchBtn" href="#" class="btn btn-primary ms-auto" data-bs-dismiss="modal">
-                    <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 5l0 14" /><path d="M5 12l14 0" /></svg>
-                    Create new branch
-                    </a>
-                </div>
-            </div>
-        </div>
     </div>
+
+
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
     <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-beta.1/js/select2.min.js"></script> -->
@@ -455,12 +420,12 @@
                 var itemName = $('#edit_item_name').val();
                 var itemMelting = $('#edit_item_melting').val();
                 var itemWeight = $('#edit_item_weight').val();
-                var itemImages = $('#edit_item_image_id')[0].files; // Get files if any
+                var itemImages = $('#edit_item_image_id')[0].files; 
                 
                 if (orderDate && orderType && orderFrom && orderTo) {
                     var formData = new FormData();
-                    formData.append('_token', csrfToken);  // Add CSRF token
-                    formData.append('order_id', orderId);  // Append the order ID to identify which order to update
+                    formData.append('_token', csrfToken);  
+                    formData.append('order_id', edit_order_id);  
                     formData.append('order_date', orderDate);
                     formData.append('order_type', orderType);
                     formData.append('order_from_branch_id', orderFrom);
@@ -476,7 +441,7 @@
                     }
 
                     $.ajax({
-                        url: "{{ route('order-add') }}",  
+                        url: "{{ route('order-update') }}",  
                         type: 'POST',
                         data: formData,
                         contentType: false,
@@ -485,7 +450,7 @@
                             if (response.status == 200) {
                                 $('#branch_table').DataTable().ajax.reload();  
                                 alert(response.message);
-                                $('#modal-report').modal('hide');  
+                                $('#edit_order').modal('hide');  
                             } else {
                                 alert('Error updating order: ' + response.message);
                             }
@@ -525,16 +490,17 @@
                    
                     if (response.status==200) {
                         var order = response.data;
-
+                        var items = response.data.items[0];
+                        console.log("Items",items);
                         $('#edit_order_id').val(order.order_id);
                         $('#edit_order_date').val(order.order_date);  
                         $('#edit_order_type').val(order.order_type);
                         $('#edit_searchableSelectFrom').val(order.order_from_branch_id);
                         $('#edit_searchableSelectTo').val(order.order_to_branch_id);
-                        $('#edit_item_name').val(order.item_name);
-                        $('#edit_item_metal').val(order.item_metal);
-                        $('#edit_item_melting').val(order.item_melting);
-                        $('#edit_item_weight').val(order.item_weight);
+                        $('#edit_item_name').val(items.item_name);
+                        $('#edit_item_metal').val(items.item_metal);
+                        $('#edit_item_melting').val(items.item_melting);
+                        $('#edit_item_weight').val(items.item_weight);
                         $('body').addClass('modal-open');
                         $('#edit_order').modal('show');
 

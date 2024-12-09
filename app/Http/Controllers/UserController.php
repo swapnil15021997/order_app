@@ -15,6 +15,12 @@ class UserController extends Controller
 {
     //
 
+    public function user_index(Request $request){
+        $users = User::take(5)->get()->toArray();
+
+        return view('users/users',['users' => $users]);
+    }
+
     public function user_add_edit(Request $request)
     {    
         $params = $request->all();
@@ -216,7 +222,14 @@ class UserController extends Controller
         $page        = $request->input('page', 1);   
         $offset      = ($page - 1) * $perPage;
    
-        $usersQuery = User::query();       
+        $usersQuery = User::query()
+        ->leftJoin('user_roles as roles', 'users.user_role_id', '=', 'roles.role_id')
+        ->select(
+            'users.id',
+            'users.user_name',
+            'users.user_phone_number',
+            'roles.role_name'
+        );       
         if (!empty($searchQuery)) {
             $usersQuery->where(function ($query) use ($searchQuery) {
                 $query->where('user_name', 'like', "%{$searchQuery}%")

@@ -22,16 +22,6 @@ Route::post('/login', [AuthenticatedSessionController::class, 'store']);
 Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->middleware('auth:sanctum');
 Route::post('/reset-password', [NewPasswordController::class, 'store'])->middleware('auth:sanctum');
 
-Route::post('user-add-edit', [UserController::class, 'user_add_edit']);
-Route::post('user-list', [UserController::class, 'user_list']);
-Route::post('user-details', [UserController::class, 'user_details']);
-Route::post('user-remove', [UserController::class, 'user_remove']);
-
-
-Route::post('role-add-edit', [UserController::class, 'role_add_and_edit']);
-Route::post('role-details', [UserController::class, 'role_details']);
-Route::post('role-list', [UserController::class, 'role_list']);
-Route::post('role-remove', [UserController::class, 'role_remove']);
 
 Route::post('permission-list', [UserController::class, 'permission_list']);
 
