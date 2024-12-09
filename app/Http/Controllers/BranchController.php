@@ -10,6 +10,8 @@ use Illuminate\Support\Arr;
 
 class BranchController extends Controller
 {
+
+
     public function add_edit_branch(Request $request){
         $params = $request->all();
              
@@ -24,12 +26,12 @@ class BranchController extends Controller
         $rules = [   
             'branch_id'           => ['nullable','string'],
             'branch_name'         => ['required','string'],  
-            'branch_address'      => ['required','string']
+            'branch_address'      => ['nullable','string']
         ]; 
         $messages = [
             'branch_name.required'         => 'Branch name is required.',
             'branch_name.string'           => 'Branch name must be a string.',
-            'branch_address.required'      => 'Please provide branch address',
+            // 'branch_address.required'      => 'Please provide branch address',
             'branch_address.string'        => 'Please provide branch address'
             
         ]; 

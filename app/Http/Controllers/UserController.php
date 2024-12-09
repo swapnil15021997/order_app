@@ -23,17 +23,17 @@ class UserController extends Controller
         $rules = [   
             'user_id'           => ['nullable','string'],
             'user_name'         => ['required','string'],  
-            'user_address'      => ['required','string','max:255'],
-            'user_phone_number' => ['required','string','max:13'],
+            'user_address'      => ['nullable','string','max:255'],
+            'user_phone_number' => ['nullable','string','max:13'],
             'user_role'         => ['required','string']
             ]; 
         $messages = [
             'user_name.required'         => 'User name is required.',
             'user_name.string'           => 'User name must be a string.',
-            'user_address.required'      => 'Address is required.',
+            // 'user_address.required'      => 'Address is required.',
             'user_address.string'        => 'Address must be a string.',
             'user_address.max'           => 'Address cannot exceed 255 characters.',
-            'user_phone_number.required' => 'Phone number is required.',
+            // 'user_phone_number.required' => 'Phone number is required.',
             'user_phone_number.string'   => 'Phone number must be a string.',
             'user_phone_number.max'      => 'Phone number cannot exceed 13 characters.',
             'user_role.required'         => 'User role is required.',
@@ -56,8 +56,8 @@ class UserController extends Controller
             ]);
         }
 
-        $moduleIds      = explode(',', $check_role->user_module_ids);
-        $permissionIds  = explode(',',$check_role->user_permission_ids);
+        $moduleIds       = !empty($check_role->role_module_ids) ? explode(',', $check_role->role_module_ids) : [];
+        $permissionIds   = !empty($check_role->role_permission_ids) ? explode(',', $check_role->role_permission_ids) : [];
 
         $existingModules = Modules::whereIn('module_id', $moduleIds)->pluck('module_id')->toArray();
 
@@ -76,22 +76,38 @@ class UserController extends Controller
         }
 
         if (empty($params['user_id'])){
-            $get_data = User::get_data_by_phone_no($params['user_phone_number']);
+
+            // $get_data = User::get_data_by_phone_no($params['user_phone_number']);
+            // if (!empty($get_data)){
+            //     return response()->json([
+            //         'status' => 500,
+            //         'message' => 'User already exist'
+            //     ]); 
+            // }
+            $get_data = User::get_data_by_user_name($params['user_name']);
             if (!empty($get_data)){
                 return response()->json([
                     'status' => 500,
-                    'message' => 'User does not exist'
+                    'message' => 'User already exist'
                 ]); 
             }
+            $userModuleIds     = implode(',', $moduleIds);       
+            $userPermissionIds = implode(',', $permissionIds);   
+
+
+
+
             $user = new User();
+            $user->name                  = $params['user_name'];
             $user->user_name             = $params['user_name'];
+            $user->email                 = 'test@example.com';
             $user->user_address          = $params['user_address'];
             $user->user_phone_number     = $params['user_phone_number'];
             $user->user_role_id          = $params['user_role'];
-            $user->user_password        = Hash::Make('Test@123'); 
+            $user->password              = Hash::Make('Test@123'); 
             $user->user_sweetword        = 'Test@123'; 
-            $user->user_module_ids       = $moduleIds;
-            $user->user_permission_ids   = $permissionIds;
+            $user->user_module_id        = $userModuleIds;
+            $user->user_permission_id    = $userPermissionIds;
         
             $user->save();
         
@@ -107,6 +123,16 @@ class UserController extends Controller
                     'status' => 500,
                     'message' => 'User not found.',
                 ]);
+            }
+
+            if($user->user_phone_number != $params['user_phone_number']){
+                $get_data = User::get_data_by_phone_no($params['user_phone_number']);
+                if (!empty($get_data)){
+                    return response()->json([
+                        'status' => 500,
+                        'message' => 'User already exist'
+                    ]); 
+                }
             }
             $user->user_name             = $params['user_name'];
             $user->user_address          = $params['user_address'];

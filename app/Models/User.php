@@ -67,4 +67,11 @@ class User extends Authenticatable
         $user = User::where('id',$user_id)->first();
         return $user;
     }
+
+
+    public static function get_data_by_user_name($name){
+        $user = User::where('user_name',$name)->first();
+        return $user;
+
+    }
 }
