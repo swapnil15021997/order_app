@@ -11,17 +11,20 @@ use Illuminate\Support\Arr;
 class BranchController extends Controller
 {
 
-
+    public function branch_index(Request $request){
+        return view('branch/branch_master');
+    }
     public function add_edit_branch(Request $request){
         $params = $request->all();
-             
-        $token = $request->header('Authorization');
+        $user = auth()->user();
 
-        $session = DB::table('user_sessions')
-        ->where('session_token', $token)
-        ->where('session_status', 1) 
-        ->where('session_is_delete', false)
-        ->first();
+        // $token = $request->header('Authorization');
+
+        // $session = DB::table('sessions')
+        // ->where('session_token', $token)
+        // ->where('session_status', 1) 
+        // ->where('session_is_delete', false)
+        // ->first();
 
         $rules = [   
             'branch_id'           => ['nullable','string'],
@@ -48,7 +51,7 @@ class BranchController extends Controller
             $branch = new Branch();
             $branch->branch_name      = $params['branch_name'];
             $branch->branch_address   = $params['branch_address'];
-            $branch->branch_added_by  = $session->session_user_id;
+            $branch->branch_added_by  = $user->id;
             $branch->save();
             return response()->json([
                 'status' => 200,

@@ -1,32 +1,37 @@
 <?php
 
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Controller;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\BranchController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return ['Laravel' => app()->version()];
+    return view('welcome');
 });
 
-use App\Http\Controllers\Auth\PasswordResetLinkController;
-use App\Http\Controllers\Auth\NewPasswordController;
+// Route::get('/dashboard', function () {
+//     return view('dashboard');
+// })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::get('/csrf-token', function () {
-    return response()->json([
-        'csrf_token' => csrf_token()
-    ]);
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-// Forgot Password Page
-// Route::get('/forgot-password', [PasswordResetLinkController::class, 'create'])
-//     ->name('password.request');
+Route::middleware('guest')->group(function () {
+    Route::get('/dashboard-page', [DashboardController::class, 'create'])->name('dashboard-page');
+ 
+});
+Route::post('branch-add-edit', [BranchController::class, 'add_edit_branch'])->name('add_edit_branch');
+Route::post('branch-list', [BranchController::class, 'branch_list'])->name('branch_list');
 
-// Route::post('/forgot-password', [PasswordResetLinkController::class, 'store'])
-//     ->name('password.email');
+Route::get('branch-master', [BranchController::class, 'branch_index']);
 
-// // Password Reset Form
-// Route::get('/reset-password/{token}', [NewPasswordController::class, 'create'])
-//     ->name('password.reset');
+Route::post('branch-details', [BranchController::class, 'branch_details'])->name('branch_details');;
+Route::post('branch-remove', [BranchController::class, 'branch_remove']);
 
-// // Handle Password Reset Form Submission
-// Route::post('/reset-password', [NewPasswordController::class, 'store'])
-//     ->name('password.update');
+
+
 require __DIR__.'/auth.php';
