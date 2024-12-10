@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
     <meta name="csrf-token" content="{{ csrf_token() }}"/> <!-- Add CSRF token -->
  
-    <title>Dashboard - Tabler - Premium and Open Source dashboard template with responsive and high quality UI.</title>
+    <title>{{ $pageTitle ?? 'Order Management' }}</title>
     <!-- CSS files -->
     <link href="{{ asset('css/tabler.min.css')}}" rel="stylesheet"/>
     <link href="{{ asset('css/tabler-flags.min.css')}}" rel="stylesheet"/>

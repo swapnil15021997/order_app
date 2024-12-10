@@ -52,7 +52,7 @@
                 </div>
             </div>
         </div>
-
+        <input type="hidden" name="" id="delete_branch_id">
 
         <div class="modal modal-blur fade" id="modal-report" tabindex="-1" role="dialog" aria-hidden="true">
             <div class="modal-dialog modal-lg" role="document">
@@ -124,6 +124,31 @@
                         <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
                         <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 5l0 14" /><path d="M5 12l14 0" /></svg>
                         Create new branch
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal modal-blur fade" id="delete_branch" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Delete Branch</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            Do you want to delete this branch?
+                         </div>
+                    </div>
+                    
+                    <div class="modal-footer">
+                        <a href="#" class="btn btn-link link-secondary" data-bs-dismiss="modal">
+                        Cancel
+                        </a>
+                        <a id="DeleteBranchBtn" href="#" class="btn btn-primary ms-auto" data-bs-dismiss="modal">
+                              Delete This branch
                         </a>
                     </div>
                 </div>
@@ -262,15 +287,45 @@
                 }
             });
 
-            
-           
+            $('#DeleteBranchBtn').click(function(e) {
+                e.preventDefault(); 
 
-            function delete_branch(branch_id){
-
-            }
-
-
+                var branchId = $('#delete_branch_id').val();
+                if (branchId) {
+                    $.ajax({
+                        url: "{{ route('branch_remove') }}",  
+                        type: 'POST',
+                        data: {
+                            _token        : csrfToken,
+                            branch_id     : branchId,
+                        },
+                        success: function(response) {
+                            if (response.status==200) {
+                                $('#delete_branch_id').val();
+                                $('#delete_branch').modal('hide');
+                                $('#branch_table').DataTable().ajax.reload(); 
+                                alert(response.message);
+                            } else {
+                                alert('Error creating branch: ' + response.message);
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            alert('An error occurred: ' + error);
+                        }
+                    });
+                } else {
+                    alert('Please fill in both fields.');
+                }
+            });         
         });
+        function delete_branch(branch_id){
+            $('#delete_branch_id').val(branch_id);
+            $('#delete_branch').modal('show');
+        
+        }
+
+
+       
 
         function edit_branch(branch_id){
             var csrfToken = $('meta[name="csrf-token"]').attr('content');

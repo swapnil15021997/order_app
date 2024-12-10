@@ -7,7 +7,7 @@
             <div class="row g-2 align-items-center">
                 <div class="col">
                     <h2 class="page-title">
-                    Users
+                    Roles
                     </h2>
                     <div class="text-secondary mt-1" id="pagination_code"></div>
                 </div>
@@ -16,10 +16,10 @@
                     <div class="d-flex">
                     <!-- <input type="search" class="form-control d-inline-block w-9 me-3" placeholder="Search user…"/> -->
                     
-                    <a href="{{route('user-add')}}" class="btn btn-primary d-none d-sm-inline-block">
+                    <a href="{{route('role-add')}}" class="btn btn-primary d-none d-sm-inline-block">
                         <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
                         <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 5l0 14" /><path d="M5 12l14 0" /></svg>
-                        New user
+                        New Role
                     </a>
 
                   
@@ -45,65 +45,6 @@
     </div>
 
 
-    <div class="modal modal-blur fade" id="add_user" tabindex="-1" role="dialog" aria-hidden="true">
-    
-        <div class="modal-dialog modal-lg" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">New User</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-lg-6">
-                        
-                            <div class="mb-3">
-
-                                <label class="form-label">User Name</label>
-                                <input type="text" id="user_name" class="form-control" placeholder="User Name">
-                            </div>
-                        </div>
-                        <div class="col-lg-6">
-                            <div class="mb-3">
-                                <label class="form-label">Phone Number</label>
-                                <input type="text" id="user_phone_no" class="form-control" placeholder="User Phone Number">
-                            </div>
-                        </div>
-                    </div>
-                
-                    <div class="row">
-                    
-                        <div class="col-lg-6">
-                            <div class="mb-3">
-                                <label class="form-label">User Role</label>
-
-                            </div>
-                            
-                        </div>
-                    <div class="col-lg-6">
-                        <div class="mb-3">
-                            <label class="form-label">User Address</label>
-                            <textarea id="user_address" name="user_address" class="form-control" rows="3"></textarea>
-
-                        </div>
-                    </div>
-                    </div>            
-                </div>
-           
-                <div class="modal-footer">
-                    <a href="#" class="btn btn-link link-secondary" data-bs-dismiss="modal">
-                        Cancel
-                    </a>
-                    <a href="#" class="btn btn-primary ms-auto" data-bs-dismiss="modal" id="updateOrderBtn">
-                        <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
-                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 5l0 14" /><path d="M5 12l14 0" /></svg>
-                        Save User
-                    </a>
-            
-                </div>
-            </div>
-        </div>
-    </div>
     
 
     <input type="hidden" name="" id="delete_user_id">
@@ -143,11 +84,11 @@
         
         $(document).ready(function () {
             // Fetch users on page load
-            fetchUsers();
+            fetchRoles();
 
             // Search event
             $('input[type="search"]').on('input', function () {
-                fetchUsers(1, $(this).val());
+                fetchRoles(1, $(this).val());
             });
 
             // Pagination event
@@ -157,11 +98,11 @@
                 fetchUsers(page);
             });
 
-            function fetchUsers(page = 1, search = '') {
+            function fetchRoles(page = 1, search = '') {
                 const perPage = 5; 
 
                 $.ajax({
-                    url: '{{ route("user-list")}}', 
+                    url: '{{ route("role-list")}}', 
                     type: 'POST',
                     data: {
                         _token: $('meta[name="csrf-token"]').attr('content'), 
@@ -172,19 +113,19 @@
                     success: function (response) {
                         // Update user list
                         let usersHtml = '';
-                        response.data.users.forEach(user => {
+                        response.data.roles.forEach(user => {
                             usersHtml += `
                                 <div class="col-md-6 col-lg-3">
                                     <div class="card">
                                         <div class="card-body p-4 text-center">
                                             <span class="avatar avatar-xl mb-3 rounded" style="background-image: url(/path/to/user/image)"></span>
-                                            <h3 class="m-0 mb-1"><a href="#">${user.user_name}</a></h3>
-                                            <div class="text-secondary">${user.role_name}</div>
-                                             
+                                            <h3 class="m-0 mb-1"><a href="#">${user.role_name}</a></h3>
+
+                                            
                                         </div>
                                         <div class="d-flex">
-                                            <a href="#" class="card-btn" onclick="editUser(${user.id})">Edit</a>
-                                            <a href="#" class="card-btn" onclick="delete_user(${user.id})">Delete</a>
+                                            <a href="#" class="card-btn" onclick="editUser(${user.role_id})">Edit</a>
+                                            <a href="#" class="card-btn" onclick="delete_user(${user.role_id})">Delete</a>
                                         </div>
                                     </div>
                                 </div>
@@ -246,7 +187,7 @@
         });
         function editUser(userId) {
             // Redirect to the edit page and pass the user ID
-            window.location.href = `/edit-user/${userId}`;
+            window.location.href = `/edit-role/${userId}`;
         }
 
         function delete_user(order_id){

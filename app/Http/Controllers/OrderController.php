@@ -19,8 +19,10 @@ class OrderController extends Controller
         $melting = DB::table('melting')->select('melting_name')->get();
         $branches = Branch::select('branch_id', 'branch_name')->take(5)->get();
         $branchesArray = $branches->toArray();
-
-        return view('orders/order_master',compact('metals', 'melting','branchesArray'));
+        $pageTitle = 'Orders';
+        $login = auth()->user();
+        $activePage = 'orders';
+        return view('orders/order_master',compact('metals', 'melting','branchesArray','pageTitle','login','activePage'));
     }
 
     public function order_add(Request $request){
@@ -229,8 +231,8 @@ class OrderController extends Controller
         ->select(
             'orders.*', 
             'from_branch.branch_name AS order_from_name',   
-            'to_branch.branch_name AS order_to_name'        
-        ); 
+            'to_branch.branch_name AS order_to_name')
+        ->where('orders.is_delete',0); 
         if (!empty($searchQuery)) {
             $ordersQuery->where(function ($query) use ($searchQuery) {
                 $query->where('order_number', 'like', "%{$searchQuery}%")

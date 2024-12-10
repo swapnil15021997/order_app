@@ -12,7 +12,9 @@ class BranchController extends Controller
 {
 
     public function branch_index(Request $request){
-        return view('branch/branch_master');
+        $login = auth()->user();
+        $activePage = 'branch';
+        return view('branch/branch_master',['pageTitle'=>'Branch','login'=>$login,'activePage'=>$activePage]);
     }
     public function add_edit_branch(Request $request){
         $params = $request->all();
@@ -108,7 +110,7 @@ class BranchController extends Controller
         $page        = $request->input('page', 1);  
         $offset      = ($page - 1) * $perPage;
   
-        $branchQuery  = Branch::query();       
+        $branchQuery  = Branch::query()->where('is_delete',0);       
         if (!empty($searchQuery)) {
             $branchQuery->where(function ($query) use ($searchQuery) {
                 $query->where('branch_name', 'like', "%{$searchQuery}%");

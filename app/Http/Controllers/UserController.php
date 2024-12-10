@@ -16,22 +16,42 @@ class UserController extends Controller
     //
 
     public function user_index(Request $request){
-        $users = User::take(5)->get()->toArray();
 
-        return view('users/users',['users' => $users]);
+        $login = auth()->user();
+
+        $users = User::take(5)->get()->toArray();
+        // $role  = UserRole::
+        $activePage = 'users';
+        return view('users/users',['users' => $users,'pageTitle'=>'Users','login'=>$login,'activePage'=>$activePage]);
     }
+
+    public function user_add(Request $request){
+        $users = User::take(5)->get()->toArray();
+        $roles = UserRole::select('role_id', 'role_name')->get()->toArray();
+        
+        $modules = Modules::with('permissions:permission_id,permission_name,permission_module_id') 
+            ->select('module_id', 'module_name')
+            ->get()
+            ->toArray();
+        
+        return view('users/user_add',['users' => $users,'roles' => $roles, 'modules'=>$modules]);
+    }
+    
 
     public function user_add_edit(Request $request)
     {    
         $params = $request->all();
-             
-
+     
         $rules = [   
             'user_id'           => ['nullable','string'],
             'user_name'         => ['required','string'],  
+            'user_email'         => ['required','email'],  
             'user_address'      => ['nullable','string','max:255'],
             'user_phone_number' => ['nullable','string','max:13'],
-            'user_role'         => ['required','string']
+            'user_role'         => ['required','string'],
+            'user_permission'   => ['required','string','max:255'],
+            'user_module'       => ['required','string','max:13'],
+     
             ]; 
         $messages = [
             'user_name.required'         => 'User name is required.',
@@ -44,6 +64,11 @@ class UserController extends Controller
             'user_phone_number.max'      => 'Phone number cannot exceed 13 characters.',
             'user_role.required'         => 'User role is required.',
             'user_role.string'           => 'User role must be a string.',
+            'user_permission.required'   => 'Please provide permission',
+            'user_module.required'       => 'Please provide modules',
+            'user_email.required'         => 'User email is required.',
+            'user_email.email'           => 'User email must be a valid email.',
+      
         ]; 
         $validator = Validator::make($params, $rules, $messages);
         
@@ -62,8 +87,8 @@ class UserController extends Controller
             ]);
         }
 
-        $moduleIds       = !empty($check_role->role_module_ids) ? explode(',', $check_role->role_module_ids) : [];
-        $permissionIds   = !empty($check_role->role_permission_ids) ? explode(',', $check_role->role_permission_ids) : [];
+        $moduleIds       = !empty($params['user_modules']) ? explode(',', $params['user_modules']) : [];
+        $permissionIds   = !empty($params['user_permission']) ? explode(',', $params['user_permission']) : [];
 
         $existingModules = Modules::whereIn('module_id', $moduleIds)->pluck('module_id')->toArray();
 
@@ -106,7 +131,7 @@ class UserController extends Controller
             $user = new User();
             $user->name                  = $params['user_name'];
             $user->user_name             = $params['user_name'];
-            $user->email                 = 'test@example.com';
+            $user->email                 = $params['user_email'];
             $user->user_address          = $params['user_address'];
             $user->user_phone_number     = $params['user_phone_number'];
             $user->user_role_id          = $params['user_role'];
@@ -143,6 +168,7 @@ class UserController extends Controller
             $user->user_name             = $params['user_name'];
             $user->user_address          = $params['user_address'];
             $user->user_phone_number     = $params['user_phone_number'];
+            $user->user_email            = $params['user_email'];
             $user->user_module_ids       = $moduleIds;
             $user->user_permission_ids   = $permissionIds;
         
@@ -152,6 +178,24 @@ class UserController extends Controller
                 'message' => 'User updated successfully!'
             ]);
         }
+    }
+
+    public function edit_user(Request $request,$user_id){
+        $user = User::get_user_by_id($user_id);
+        if (!$user) {
+            return response()->json([
+                'status' => 500,
+                'message' => 'User not found.',
+            ]);
+        }
+        $roles = UserRole::select('role_id', 'role_name')->get()->toArray();
+        
+        $modules = Modules::with('permissions:permission_id,permission_name,permission_module_id') 
+            ->select('module_id', 'module_name')
+            ->get()
+            ->toArray();
+     
+        return view('users/user_edit',['user' => $user,'roles'=>$roles,'modules'=>$modules]);
     }
 
     public function user_remove(Request $request)
@@ -229,7 +273,7 @@ class UserController extends Controller
             'users.user_name',
             'users.user_phone_number',
             'roles.role_name'
-        );       
+        )->where('users.is_delete',0);       
         if (!empty($searchQuery)) {
             $usersQuery->where(function ($query) use ($searchQuery) {
                 $query->where('user_name', 'like', "%{$searchQuery}%")
@@ -300,6 +344,17 @@ class UserController extends Controller
 
 
     // Roles and permissions
+
+    public function role_index(Request $request){
+
+        $login = auth()->user();
+
+
+        // $role  = UserRole::
+        $activePage = 'roles';
+        return view('users/roles',['pageTitle'=>'Roles','login'=>$login,'activePage'=>$activePage]);
+    }
+
     public function permission_list(Request $request){
         
         $permission_list = Permission::where('is_delete', false)->get();  
@@ -396,6 +451,21 @@ class UserController extends Controller
         }
     }
 
+   
+
+    public function role_add(Request $request){
+
+        $roles = UserRole::select('role_id', 'role_name')->get()->toArray();
+        
+        $modules = Modules::with('permissions:permission_id,permission_name,permission_module_id') 
+            ->select('module_id', 'module_name')
+            ->get()
+            ->toArray();
+        $login = auth()->user();
+
+        $activePage = 'Role';
+        return view('users/role_add',['roles' => $roles, 'modules'=>$modules,'login'=>$login,'activePage'=>$activePage]);
+    }
 
     public function role_list(Request $request){
         $rules = [
@@ -455,6 +525,24 @@ class UserController extends Controller
         ]);
     }
 
+    public function edit_role(Request $request,$role_id){
+        $login = auth()->user();
+
+        $role = UserRole::get_role_by_id($role_id);
+        if (!$role) {
+            return response()->json([
+                'status' => 500,
+                'message' => 'User Role not found.',
+            ]);
+        }
+        
+        $modules = Modules::with('permissions:permission_id,permission_name,permission_module_id') 
+            ->select('module_id', 'module_name')
+            ->get()
+            ->toArray();
+     
+        return view('users/role_edit',['login'=>$login,'modules'=>$modules]);
+    }
     public function role_details(Request $request){
         $params = $request->all();
              

@@ -23,4 +23,9 @@ class Permission extends Model
     //     $user = UserRole::where('role_id',$role_id)->first();
     //     return $user;
     // }
+
+    public function module()
+    {
+        return $this->belongsTo(Module::class, 'module_id'); 
+    }
 }

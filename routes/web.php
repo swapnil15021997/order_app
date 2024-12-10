@@ -12,9 +12,11 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-// Route::get('/dashboard', function () {
-//     return view('dashboard');
-// })->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', function () {
+    $login = auth()->user();
+
+    return view('index_new',['login'=>$login,'activePage'=>'dashboard']);
+})->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -29,27 +31,33 @@ Route::middleware('guest')->group(function () {
 
 Route::post('branch-add-edit', [BranchController::class, 'add_edit_branch'])->name('add_edit_branch');
 Route::post('branch-list', [BranchController::class, 'branch_list'])->name('branch_list');
-Route::get('branch-master', [BranchController::class, 'branch_index']);
+Route::get('branch-master', [BranchController::class, 'branch_index'])->name('branch-master');
 Route::post('branch-details', [BranchController::class, 'branch_details'])->name('branch_details');;
-Route::post('branch-remove', [BranchController::class, 'branch_remove']);
+Route::post('branch-remove', [BranchController::class, 'branch_remove'])->name('branch_remove');
 
-Route::get('order-master', [OrderController::class, 'order_index']);
+Route::get('order-master', [OrderController::class, 'order_index'])->name('order-master');
 Route::post('order-add', [OrderController::class, 'order_add'])->name('order-add');
 Route::post('order-update', [OrderController::class, 'order_update'])->name('order-update');
 Route::post('order-list', [OrderController::class, 'order_list'])->name('order_list');
 Route::post('order-details', [OrderController::class, 'order_details'])->name('order_details');
-Route::post('order-remove', [OrderController::class, 'order_remove']);
+Route::post('order-remove', [OrderController::class, 'order_remove'])->name('order_remove');
 
-Route::get('user-master', [UserController::class, 'user_index']);
-Route::post('user-add-edit', [UserController::class, 'user_add_edit']);
+Route::get('user-master', [UserController::class, 'user_index'])->name('user-master');
+Route::get('user-add', [UserController::class, 'user_add'])->name('user-add');
+Route::get('edit-user/{user_id}', [UserController::class, 'edit_user']);
+
+Route::post('user-add-edit', [UserController::class, 'user_add_edit'])->name('user_add_edit');
 Route::post('user-list', [UserController::class, 'user_list'])->name('user-list');
 Route::post('user-details', [UserController::class, 'user_details']);
-Route::post('user-remove', [UserController::class, 'user_remove']);
+Route::post('user-remove', [UserController::class, 'user_remove'])->name('user_remove');
 
 
-Route::post('role-add-edit', [UserController::class, 'role_add_and_edit']);
-Route::post('role-details', [UserController::class, 'role_details']);
-Route::post('role-list', [UserController::class, 'role_list']);
+Route::get('role-master', [UserController::class, 'role_index'])->name('role-master');
+Route::get('role-add', [UserController::class, 'role_add'])->name('role-add');
+Route::get('edit-role/{role_id}', [UserController::class, 'edit_role']);
+Route::post('role-add-edit', [UserController::class, 'role_add_and_edit'])->name('role_add_and_edit');
+Route::post('role-details', [UserController::class, 'role_details'])->name('role-details');
+Route::post('role-list', [UserController::class, 'role_list'])->name('role-list');
 Route::post('role-remove', [UserController::class, 'role_remove']);
 
 

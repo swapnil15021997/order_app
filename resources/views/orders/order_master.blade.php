@@ -295,6 +295,31 @@
       </div>
     </div>
     </div>
+    <input type="hidden" name="" id="delete_order_id">
+    <div class="modal modal-blur fade" id="delete_order" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Delete Order</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        Do you want to delete this order?
+                        </div>
+                </div>
+                
+                <div class="modal-footer">
+                    <a href="#" class="btn btn-link link-secondary" data-bs-dismiss="modal">
+                    Cancel
+                    </a>
+                    <a id="DeleteOrderBtn" href="#" class="btn btn-primary ms-auto" data-bs-dismiss="modal">
+                            Delete This Order
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
 
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -464,14 +489,36 @@
                 }
             });
 
-            
-           
+            $('#DeleteOrderBtn').click(function(e) {
+                e.preventDefault(); 
 
-            function delete_branch(branch_id){
-
-            }
-
-
+                var orderId = $('#delete_order_id').val();
+                if (orderId) {
+                    $.ajax({
+                        url: "{{ route('order_remove') }}",  
+                        type: 'POST',
+                        data: {
+                            _token        : csrfToken,
+                            order_id     : orderId,
+                        },
+                        success: function(response) {
+                            if (response.status==200) {
+                                $('#delete_order_id').val();
+                                $('#delete_order').modal('hide');
+                                $('#branch_table').DataTable().ajax.reload(); 
+                                alert(response.message);
+                            } else {
+                                alert('Error deleting order: ' + response.message);
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            alert('An error occurred: ' + error);
+                        }
+                    });
+                } else {
+                    alert('Please fill in both fields.');
+                }
+            });  
         });
 
         function edit_order(order_id){
@@ -514,6 +561,11 @@
             });
         }
 
+        function delete_order(order_id){
+            $('#delete_order_id').val(order_id);
+            $('#delete_order').modal('show');
+      
+        }
 
         function formatDate(date) {
             var d = new Date(date);
