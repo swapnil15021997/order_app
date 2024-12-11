@@ -21,6 +21,7 @@ class OrderController extends Controller
         $branchesArray = $branches->toArray();
         $pageTitle = 'Orders';
         $login = auth()->user();
+        
         $activePage = 'orders';
         return view('orders/order_master',compact('metals', 'melting','branchesArray','pageTitle','login','activePage'));
     }
@@ -144,6 +145,17 @@ class OrderController extends Controller
     }
 
 
+    public function order_add_page(Request $request){
+        $metals        = DB::table('metals')->select('metal_name')->get();
+        $melting       = DB::table('melting')->select('melting_name')->get();
+        $branches      = Branch::select('branch_id', 'branch_name')->take(5)->get();
+        $branchesArray = $branches->toArray();
+        $pageTitle     = 'Orders';
+        $login         = auth()->user()->toArray();
+        $activePage    = 'orders';
+        return view('orders/order_add',compact('metals', 'melting','branchesArray','pageTitle','login','activePage'));
+    }
+
     private function generateUniqueNumber($column)
     {
         do {
@@ -153,6 +165,27 @@ class OrderController extends Controller
         return $number;
     }
 
+    
+    public function order_edit_page(Request $request,$id){
+        $metals        = DB::table('metals')->select('metal_name')->get();
+        $melting       = DB::table('melting')->select('melting_name')->get();
+        $branches      = Branch::select('branch_id', 'branch_name')->take(5)->get();
+        $branchesArray = $branches->toArray();
+        $order         = Order::get_order_with_items($id);
+        if (empty($order)){
+            return response()->json([
+                'status' => 500,
+                'message' => 'Order does not exist'
+            ]);
+        }
+
+        $pageTitle     = 'Orders';
+        $login         = auth()->user()->toArray();
+        $activePage    = 'orders';
+        return view('orders/order_edit'
+        ,compact('metals', 'melting','branchesArray',
+        'pageTitle','login','activePage','order'));
+    }
     public function order_details(Request $request){
         $params = $request->all();
              

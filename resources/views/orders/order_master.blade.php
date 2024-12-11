@@ -17,7 +17,7 @@
             <div class="col-auto ms-auto d-print-none">
             <div class="btn-list">
             
-                <a href="#" class="btn btn-primary d-none d-sm-inline-block" data-bs-toggle="modal" data-bs-target="#modal-report">
+                <a href="{{route('order-add-page')}}" class="btn btn-primary d-none d-sm-inline-block" >
                 <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
                 <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 5l0 14" /><path d="M5 12l14 0" /></svg>
                 Create new Order
@@ -326,11 +326,19 @@
     <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
     <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-beta.1/js/select2.min.js"></script> -->
 
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-
+     
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
     <script>
         $(document).ready(function() {
-           
+            $('#order_date').val('');
+            $('#order_type').val('');
+            $('#searchableSelectFrom').val('');
+            $('#searchableSelectTo').val('');
+            $('#item_metal').val('');
+            $('#item_name').val('');
+            $('#item_melting').val('');
+            $('#item_weight').val('');
+            $('#item_image_id').val('');
             var csrfToken = $('meta[name="csrf-token"]').attr('content');
 
             $('#branch_table').DataTable({
@@ -381,57 +389,7 @@
             });
        
 
-            $('#saveBranchBtn').click(function(e) {
-                e.preventDefault(); 
-                var orderDate = $('#order_date').val();
-                var orderType = $('#order_type').val();
-                var orderFrom = $('#searchableSelectFrom').val();
-                var orderTo = $('#searchableSelectTo').val();
-                var item_metal = $('#item_metal').val();
-                var item_name  = $('#item_name').val();
-                var item_melting = $('#item_melting').val();
-                var item_weight = $('#item_weight').val();
-                var itemImages = $('#item_image_id')[0].files; 
-                var formattedOrderDate = formatDate(orderDate);
-               
-                if (orderDate && orderType && orderFrom && orderTo) {
-                    var formData = new FormData();
-                    formData.append('_token', csrfToken);  // Add CSRF token
-                    formData.append('order_date', orderDate);
-                    formData.append('order_type', orderType);
-                    formData.append('order_from_branch_id', orderFrom);
-                    formData.append('order_to_branch_id', orderTo);
-                    formData.append('item_metal', item_metal);
-                    formData.append('item_name', item_name);
-                    formData.append('item_melting', item_melting);
-                    formData.append('item_weight', item_weight);
-
-                    // Append files to FormData
-                    for (var i = 0; i < itemImages.length; i++) {
-                        formData.append('item_file_images[]', itemImages[i]);
-                    }
-                    $.ajax({
-                        url: "{{ route('order-add') }}",  
-                        type: 'POST',
-                        data: formData,
-                        contentType: false,  
-                        processData: false, 
-                        success: function(response) {
-                            if (response.status == 200) {
-                                $('#branch_table').DataTable().ajax.reload();  // Reload table
-                                alert(response.message);
-                            } else {
-                                alert('Error creating order: ' + response.message);
-                            }
-                        },
-                        error: function(xhr, status, error) {
-                            alert('An error occurred: ' + error);
-                        }
-                    });
-                } else {
-                    alert('Please fill in all fields.');
-                }
-            });
+           
 
 
             $('#updateOrderBtn').click(function(e) {
@@ -522,43 +480,44 @@
         });
 
         function edit_order(order_id){
-            var csrfToken = $('meta[name="csrf-token"]').attr('content');
+            window.location.href = `/edit-order/${order_id}`;
+            // var csrfToken = $('meta[name="csrf-token"]').attr('content');
 
-            $.ajax({
-                url: "{{ route('order_details') }}", 
-                type: 'POST',
-                data: {
-                    _token        : csrfToken,
-                    order_id     : order_id,
-                },
-                success: function(response) {
-                    // Handle success
-                    console.log("Success",response.data);
+            // $.ajax({
+            //     url: "{{ route('order_details') }}", 
+            //     type: 'POST',
+            //     data: {
+            //         _token        : csrfToken,
+            //         order_id     : order_id,
+            //     },
+            //     success: function(response) {
+            //         // Handle success
+            //         console.log("Success",response.data);
                    
-                    if (response.status==200) {
-                        var order = response.data;
-                        var items = response.data.items[0];
-                        console.log("Items",items);
-                        $('#edit_order_id').val(order.order_id);
-                        $('#edit_order_date').val(order.order_date);  
-                        $('#edit_order_type').val(order.order_type);
-                        $('#edit_searchableSelectFrom').val(order.order_from_branch_id);
-                        $('#edit_searchableSelectTo').val(order.order_to_branch_id);
-                        $('#edit_item_name').val(items.item_name);
-                        $('#edit_item_metal').val(items.item_metal);
-                        $('#edit_item_melting').val(items.item_melting);
-                        $('#edit_item_weight').val(items.item_weight);
-                        $('body').addClass('modal-open');
-                        $('#edit_order').modal('show');
+            //         if (response.status==200) {
+            //             var order = response.data;
+            //             var items = response.data.items[0];
+            //             console.log("Items",items);
+            //             $('#edit_order_id').val(order.order_id);
+            //             $('#edit_order_date').val(order.order_date);  
+            //             $('#edit_order_type').val(order.order_type);
+            //             $('#edit_searchableSelectFrom').val(order.order_from_branch_id);
+            //             $('#edit_searchableSelectTo').val(order.order_to_branch_id);
+            //             $('#edit_item_name').val(items.item_name);
+            //             $('#edit_item_metal').val(items.item_metal);
+            //             $('#edit_item_melting').val(items.item_melting);
+            //             $('#edit_item_weight').val(items.item_weight);
+            //             $('body').addClass('modal-open');
+            //             $('#edit_order').modal('show');
 
-                    } else {
-                        alert('Error fetching branch: ' + response.message);
-                    }
-                },
-                error: function(xhr, status, error) {
-                    alert('An error occurred: ' + error);
-                }
-            });
+            //         } else {
+            //             alert('Error fetching branch: ' + response.message);
+            //         }
+            //     },
+            //     error: function(xhr, status, error) {
+            //         alert('An error occurred: ' + error);
+            //     }
+            // });
         }
 
         function delete_order(order_id){
@@ -574,5 +533,6 @@
             var day = ('0' + d.getDate()).slice(-2);  
             return year + '-' + month + '-' + day;  
         }
+
     </script>
 @endsection

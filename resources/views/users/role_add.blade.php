@@ -137,7 +137,7 @@
                     data: data,
                     success: function (response) {
                         if (response.status==200) {
-                            alert('User added successfully');
+                            alert('Role added successfully');
                             location.href = "{{route('role-master')}}";
                         } else {
                             alert('Failed to add user: ' + response.message);

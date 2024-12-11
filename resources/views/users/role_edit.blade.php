@@ -63,6 +63,8 @@
                                                             name="permission_{{ $permission['permission_id'] }}" 
                                                             data-module-id="{{ $module['module_id'] }}"  
                                                             @if (in_array($permission, array_column($module['permissions'], 'permission_name')))  @endif
+                                                            @if (in_array($permission['permission_id'], $rolePermissions)) checked @endif
+   
                                                         >
                                                     </td>
                                                 @endforeach
@@ -82,7 +84,7 @@
                         <a href="#" class="btn btn-primary ms-auto"  id="saveUser">
                             <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
                             <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 5l0 14" /><path d="M5 12l14 0" /></svg>
-                            Update Rols
+                            Update Roles
                         </a>
                     </div>
                 </div>
@@ -94,50 +96,7 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <script>
-         function fetchRoleDetails(roleId) {
-                var csrfToken = $('meta[name="csrf-token"]').attr('content');
-
-                if (roleId) {
-                    $.ajax({
-                        url: "{{ route('role-details') }}", 
-                        type: 'POST',
-                        data: {
-                            'role_id' : roleId
-                        },
-                        headers: {
-                            'X-CSRF-TOKEN': csrfToken 
-                        },
-                        success: function (response) {
-                            console.log(response);
-                            if (response.data.role_permission_ids != null){
-                                const rolePermissionIds = response.data.role_permission_ids.split(',').map(Number);
-                                
-                                $('input[type="checkbox"]').prop('checked', false);
-                                console.log(rolePermissionIds);
-                                rolePermissionIds.forEach(permissionId => {
-                                    $(`#permission_${permissionId}`).prop('checked', true);
-                                });
-
-                            }
-                        },
-                        error: function (xhr) {
-                            alert(xhr.responseJSON.message || 'An error occurred');
-                        }
-                    });
-                }
-            }
- 
-            let preSelectedRoleId = $('#select_role').val();
-            fetchRoleDetails(preSelectedRoleId);
- 
-            $('#select_role').on('change', function () {
-                let roleId = $(this).val();
-                fetchRoleDetails(roleId);
-                $('input[type="checkbox"]').prop('checked', false);
-            });
-
-
-
+        
             $(document).ready(function () {
                 $('#saveUser').on('click', function (e) {
 

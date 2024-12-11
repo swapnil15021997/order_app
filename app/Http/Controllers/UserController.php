@@ -540,8 +540,15 @@ class UserController extends Controller
             ->select('module_id', 'module_name')
             ->get()
             ->toArray();
-     
-        return view('users/role_edit',['login'=>$login,'modules'=>$modules]);
+        $rolePermissions = explode(',', $role->role_permission_ids);
+        $activePage = 'Role';
+        return view('users/role_edit',[
+            'login'           => $login,
+            'modules'         => $modules,
+            'role'            => $role,
+            'rolePermissions' => $rolePermissions,
+            'activePage'      => $activePage
+        ]);
     }
     public function role_details(Request $request){
         $params = $request->all();

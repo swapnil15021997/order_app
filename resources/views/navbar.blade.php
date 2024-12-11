@@ -33,7 +33,7 @@
               <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
                 <a href="{{route('profile.edit')}}" class="dropdown-item">Profile</a>
                 <div class="dropdown-divider"></div>
-                <a href="{{route('logout')}}" class="dropdown-item">Logout</a>
+                <a href="" onclick="logout()" class="dropdown-item">Logout</a>
               </div>
             </div>
           </div>
@@ -102,3 +102,23 @@
           </div>
         </div>
       </header>
+
+      <script>
+        function logout(){
+          var csrfToken = $('meta[name="csrf-token"]').attr('content');
+
+          $.ajax({
+            url: "{{ route('logout') }}",  
+            type: 'POST',
+            data: {
+                _token        : csrfToken,
+              
+            },
+            success: function(response) {
+              if(response.success){
+                location.href = "{{ route('login') }}";
+              }
+            }
+          })  
+        }
+      </script>

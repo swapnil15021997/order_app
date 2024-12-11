@@ -29,11 +29,16 @@ Route::middleware('guest')->group(function () {
  
 });
 
+Route::middleware('auth')->group(function () {
 Route::post('branch-add-edit', [BranchController::class, 'add_edit_branch'])->name('add_edit_branch');
 Route::post('branch-list', [BranchController::class, 'branch_list'])->name('branch_list');
 Route::get('branch-master', [BranchController::class, 'branch_index'])->name('branch-master');
 Route::post('branch-details', [BranchController::class, 'branch_details'])->name('branch_details');;
 Route::post('branch-remove', [BranchController::class, 'branch_remove'])->name('branch_remove');
+
+Route::get('order-add', [OrderController::class, 'order_add_page'])->name('order-add-page');
+Route::get('edit-order/{id}', [OrderController::class, 'order_edit_page'])->name('order_edit_page');
+
 
 Route::get('order-master', [OrderController::class, 'order_index'])->name('order-master');
 Route::post('order-add', [OrderController::class, 'order_add'])->name('order-add');
@@ -60,6 +65,6 @@ Route::post('role-details', [UserController::class, 'role_details'])->name('role
 Route::post('role-list', [UserController::class, 'role_list'])->name('role-list');
 Route::post('role-remove', [UserController::class, 'role_remove']);
 
-
+});
 
 require __DIR__.'/auth.php';
