@@ -143,6 +143,27 @@
                 <p class="text-center">No files available.</p>
             @endif
             </div>
+            <div class="row" id="payment">
+                <div class="col-lg-6">
+                    <div>
+                        <label class="form-label">Payment Advance</label>
+                        <input type="number" class="form-control" id="payment_advance" 
+                        
+                        value="{{ optional($paymentArray)['payment_advance_cash'] }}" 
+                        name="example-text-input" >
+
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="mb-3">
+                        <label class="form-label">Payment Booking</label>
+                        <input type="number" class="form-control" id="payment_booking" 
+                        value="{{ optional($paymentArray)['payment_advance_cash'] }}" 
+                        >
+                    </div>
+                </div>
+            </div>
+           
            
             <div class="row">
                 <div class="col-lg-6">
@@ -166,6 +187,17 @@
    
 
     <script>
+         $(document).ready(function() {
+
+            $('#order_type').on('change', function () {
+                const paymentDiv = $('#payment');
+                if (this.checked) {
+                    paymentDiv.removeClass('d-none'); // Show payment div
+                } else {
+                    paymentDiv.addClass('d-none'); // Hide payment div
+                }
+            });
+
 
         $('#updateOrderBtn').click(function(e) {
             e.preventDefault(); 
@@ -195,7 +227,16 @@
                 formData.append('item_name', itemName);
                 formData.append('item_melting', itemMelting);
                 formData.append('item_weight', itemWeight);
-
+                if(payment_advance){
+                    formData.append('payment_advance', payment_advance);
+                }else{
+                    formData.append('payment_advance', null);
+                }
+                if(payment_booking){
+                    formData.append('payment_booking', payment_booking);
+                }else{
+                    formData.append('payment_booking', null);
+                }
                 // Append files to FormData
                 for (var i = 0; i < itemImages.length; i++) {
                     formData.append('item_file_images[]', itemImages[i]);

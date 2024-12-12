@@ -7,13 +7,38 @@ use App\Models\Order;
 use App\Models\Branch;
 use App\Models\Item;
 use App\Models\File;
+use App\Models\Transactions;
+use App\Models\Payment;
 use DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Arr;
-
+use Carbon\Carbon;
 class OrderController extends Controller
 {
 
+    public function view_order(Request $request,$id){
+        $order         = Order::get_order_with_items($id);
+        $order         = $order->toArray();
+
+        $fileArray = [];
+        if(!empty($login)){
+            $userBranchIds = explode(',', $login['user_branch_ids']);
+        }
+
+        if (!empty($order['items'][0]['files'])){
+            $fileArray = $order['items'][0]['files']->toArray();
+        }
+
+        $login = auth()->user();
+        if(!empty($login)){
+            $userBranchIds = explode(',', $login['user_branch_ids']);
+        }
+        $activePage = 'orders';
+        $branch       = Branch::get_all_branch();
+        $user_branch  = Branch::whereIn('branch_id', $userBranchIds)->get()->toArray();
+
+        return view('orders/order_view',['order'=>$order,'fileArray'=>$fileArray,'pageTitle'=>'Order','login'=>$login,'activePage'=>$activePage,'user_branch'=>$user_branch]);
+    }
     public function order_index(Request $request){
         $metals = DB::table('metals')->select('metal_name')->get();
         $melting = DB::table('melting')->select('melting_name')->get();
@@ -21,14 +46,21 @@ class OrderController extends Controller
         $branchesArray = $branches->toArray();
         $pageTitle = 'Orders';
         $login = auth()->user();
-        
+       
+        if(!empty($login)){
+            $userBranchIds = explode(',', $login['user_branch_ids']);
+        }
+        $branch       = Branch::get_all_branch();
+        $user_branch  = Branch::whereIn('branch_id', $userBranchIds)->get()->toArray();
+    
         $activePage = 'orders';
-        return view('orders/order_master',compact('metals', 'melting','branchesArray','pageTitle','login','activePage'));
+        return view('orders/order_master',compact('metals', 'melting','branchesArray','pageTitle','login','activePage','user_branch'));
     }
 
     public function order_add(Request $request){
         $params = $request->all();
-
+        $login  = auth()->user();
+       
         $rules = [   
             
             'order_date'           => ['required', 'date', 'date_format:Y-m-d'],  
@@ -40,7 +72,10 @@ class OrderController extends Controller
             'item_melting'         => ['required', 'string'],
             'item_weight'          => ['required', 'numeric'],
             'item_file_images'     => ['nullable'],  
-            'item_file_images.*'   => ['file', 'mimes:jpeg,jpg,png,pdf', 'max:10240'],  
+            'item_file_images.*'   => ['file', 'mimes:jpeg,jpg,png,pdf', 'max:10240'],
+            'payment_advanced' => ['nullable','numeric'],
+            'payment_booking' => ['nullable','numeric'],
+            
             ]; 
         $messages = [
                 'order_date.required'         => 'Order date is required.',
@@ -66,6 +101,8 @@ class OrderController extends Controller
                 'item_file_images.*.file'     => 'Each item file image must be a valid file.',
                 'item_file_images.*.mimes'    => 'Each item file image must be a jpeg, jpg, png, or pdf file.',
                 'item_file_images.*.max'      => 'Each item file image cannot exceed 10MB.',
+                'payment_advance.numeric'         => 'Payment Advance must be a number.',
+                'payment_booking.numeric'         => 'Payment Booking must be a number.',
 
             ]; 
 
@@ -78,7 +115,12 @@ class OrderController extends Controller
                 'errors'  => $validator->errors(), 
             ]);
         } 
-
+        if ($params['order_type']==2 && ($params['payment_advance']== null || $params['payment_booking']==null)){
+            return response()->json([
+                'status' => 500,
+                'message' =>"Please enter payment details"
+            ]);
+        }
         $branch = Branch::get_branch_by_id($params['order_from_branch_id']);
 
         if (empty($branch)) {
@@ -138,6 +180,26 @@ class OrderController extends Controller
         $item->item_file_images = implode(',', $fileIds);
         $item->save();
 
+        $trans = new Transactions();
+        $trans->trans_from          = $params['order_from_branch_id'];
+        $trans->trans_to            = $params['order_to_branch_id'];
+        $trans->trans_active_branch = $login->user_active_branch;
+        $trans->trans_user_id       = $login->id;
+        $trans->trans_order_id      = $order->order_id;
+        $trans->trans_item_id       = $item->item_id;
+        $trans->trans_date          = Carbon::now()->toDateString();
+        $trans->trans_time          = Carbon::now()->toDateTimeString(); 
+        $trans->save();
+
+        if($params['order_type'] == 2){
+            $payment = new Payment();
+            $payment->payment_order_id      = $order->order_id;
+            $payment->payment_booking_rate  = $params['payment_booking'];
+            $payment->payment_customer_id   = 1;
+            $payment->payment_advance_cash  = $params['payment_advance'];
+            $payment->payment_date          = Carbon::now()->toDateString();
+            $payment->save();
+        }
         return response()->json([
             "status" =>200,
             "message"=>"Order created successfully"
@@ -153,7 +215,15 @@ class OrderController extends Controller
         $pageTitle     = 'Orders';
         $login         = auth()->user()->toArray();
         $activePage    = 'orders';
-        return view('orders/order_add',compact('metals', 'melting','branchesArray','pageTitle','login','activePage'));
+        $login = auth()->user();
+
+        if(!empty($login)){
+            $userBranchIds = explode(',', $login['user_branch_ids']);
+        }
+        $branch       = Branch::get_all_branch();
+        $user_branch  = Branch::whereIn('branch_id', $userBranchIds)->get()->toArray();
+    
+        return view('orders/order_add',compact('metals', 'melting','branchesArray','pageTitle','login','activePage','user_branch'));
     }
 
     private function generateUniqueNumber($column)
@@ -180,11 +250,21 @@ class OrderController extends Controller
                 'message' => 'Order does not exist'
             ]);
         }
-
+        $paymentArray = [];
+        if($order['order_type']==2){
+            $paymentArray = Payment::where('payment_order_id',$id)->first();
+           
+        }
         $pageTitle     = 'Orders';
         $login         = auth()->user()->toArray();
         $activePage    = 'orders';
         $fileArray = [];
+        if(!empty($login)){
+            $userBranchIds = explode(',', $login['user_branch_ids']);
+        }
+        $branch       = Branch::get_all_branch();
+        $user_branch  = Branch::whereIn('branch_id', $userBranchIds)->get()->toArray();
+    
 
         if (!empty($order['items'][0]['files'])){
             $fileArray = $order['items'][0]['files']->toArray();
@@ -192,7 +272,7 @@ class OrderController extends Controller
        
         return view('orders/order_edit'
         ,compact('metals', 'melting','branchesArray',
-        'pageTitle','login','activePage','order','fileArray'));
+        'pageTitle','login','activePage','order','fileArray','user_branch','paymentArray'));
     }
     public function order_details(Request $request){
         $params = $request->all();
@@ -327,7 +407,10 @@ class OrderController extends Controller
             'item_melting'         => ['required', 'string'],
             'item_weight'          => ['required', 'numeric'],
             'item_file_images'     => ['nullable'],  
-            'item_file_images.*'   => ['file', 'mimes:jpeg,jpg,png,pdf', 'max:10240'],  
+            'item_file_images.*'   => ['file', 'mimes:jpeg,jpg,png,pdf', 'max:10240'],
+            'payment_advanced' => ['nullable','numeric'],
+            'payment_booking' => ['nullable','numeric'],
+          
             ]; 
         $messages = [
                 'order_id.required' => 'Order ID is required.',
@@ -355,7 +438,8 @@ class OrderController extends Controller
                 'item_file_images.*.file'     => 'Each item file image must be a valid file.',
                 'item_file_images.*.mimes'    => 'Each item file image must be a jpeg, jpg, png, or pdf file.',
                 'item_file_images.*.max'      => 'Each item file image cannot exceed 10MB.',
-
+                'payment_advance.numeric'         => 'Payment Advance must be a number.',
+                'payment_booking.numeric'         => 'Payment Booking must be a number.',
             ]; 
 
         $validator = Validator::make($params, $rules, $messages);
@@ -423,6 +507,15 @@ class OrderController extends Controller
         }
 
         $item->save();
+
+        // payment update
+        if($params['order_type'] == 2){
+            $payment = Payment::where('payment_order_id', $params['order_id']);
+            $payment->payment_booking_rate  = $params['payment_booking'];
+            $payment->payment_advance_cash  = $params['payment_advance'];
+            $payment->save();
+
+        }
         return response()->json([
             'status'  => 200,
             'message' => 'Order updated successfully' 

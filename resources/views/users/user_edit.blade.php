@@ -17,7 +17,7 @@
     <div class="page-body">
         <div class="container-xl">
             <div class="row row-cards">
-
+                <div class="" id="alert-container"></div>
                 <div class="col-lg-6">
                 
                     <div class="mb-3">
@@ -66,6 +66,21 @@
 
                     </div>
                 </div>
+                <div class="col-lg-6">
+                        <div class="mb-3">
+                            <div class="form-label">Select multiple states</div>
+                            <select type="text" class="form-select" id="select-states" multiple>
+                            @if(!empty($branch))
+                            
+                            @foreach($branch as $b)
+                                <option value="{{ $b['branch_id'] }}"
+                                @if (in_array($b['branch_id'], array_column($user_branch, 'branch_id'))) selected @endif
+                                >{{ $b['branch_name'] }}</option>
+                                @endforeach
+                            @endif
+                            </select>
+                        </div>
+                    </div>
             </div>
 
 
@@ -131,7 +146,34 @@
     <div>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
+    <script src="{{ asset('libs/tom-select/dist/js/tom-select.base.min.js')}}?1692870487" defer></script>
+  
+    <script>
+            // @formatter:off
+            document.addEventListener("DOMContentLoaded", function () {
+                var el;
+                window.TomSelect && (new TomSelect(el = document.getElementById('select-states'), {
+                    copyClassesToDropdown: false,
+                    dropdownParent: 'body',
+                    controlInput: '<input>',
+                    render:{
+                        item: function(data,escape) {
+                            if( data.customProperties ){
+                                return '<div><span class="dropdown-item-indicator">' + data.customProperties + '</span>' + escape(data.text) + '</div>';
+                            }
+                            return '<div>' + escape(data.text) + '</div>';
+                        },
+                        option: function(data,escape){
+                            if( data.customProperties ){
+                                return '<div><span class="dropdown-item-indicator">' + data.customProperties + '</span>' + escape(data.text) + '</div>';
+                            }
+                            return '<div>' + escape(data.text) + '</div>';
+                        },
+                    },
+                }));
+            });
+            // @formatter:on
+        </script>
     <script>
          function fetchRoleDetails(roleId) {
                 var csrfToken = $('meta[name="csrf-token"]').attr('content');
@@ -225,20 +267,50 @@
                         data: data,
                         success: function (response) {
                             if (response.status==200) {
-                                alert('User added successfully');
+                                alert('User updated successfully');
                                 location.href = "{{route('user-master')}}";
+                                showAlert('success',response.message);
+
                             } else {
                                 alert('Failed to add user: ' + response.message);
+                                showAlert('warning',response.message);
                             }
                         },
                         error: function (xhr, status, error) {
                             // Handle error
                             alert('An error occurred: ' + xhr.responseJSON.message);
+                            showAlert('warning',error);
                         }
                     });
                 });
             });
 
+            function showAlert(type, message) {
+                const alertContainer = document.getElementById('alert-container');
+                const alertHTML = `
+                    <div class="alert alert-${type} alert-dismissible" role="alert">
+                        <div class="d-flex">
+                            <div>
+                                ${type === 'success' ? `
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icon alert-icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                    <path d="M5 12l5 5l10 -10" />
+                                </svg>` : `
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icon alert-icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                    <path d="M10.24 3.957l-8.422 14.06a1.989 1.989 0 0 0 1.7 2.983h16.845a1.989 1.989 0 0 0 1.7 -2.983l-8.423 -14.06a1.989 1.989 0 0 0 -3.4 0z" />
+                                    <path d="M12 9v4" />
+                                    <path d="M12 17h.01" />
+                                </svg>`}
+                            </div>
+                            <div>${message}</div>
+                        </div>
+                        <a class="btn-close" data-bs-dismiss="alert" aria-label="close"></a>
+                    </div>
+                `;
+                alertContainer.innerHTML = alertHTML;
+                console.log("here");
+            }
 
     </script>
 @endsection

@@ -14,6 +14,7 @@ class NotesController extends Controller
 
     public function add_notes(Request $request){
         $params = $request->all();
+
         $rules = [   
             'notes_text'          => ['nullable','string'],
             'notes_file'          => ['nullable'],  
@@ -179,7 +180,7 @@ class NotesController extends Controller
         $page        = $request->input('page', 1);  
         $offset      = ($page - 1) * $perPage;
   
-        $notesQuery  = Notes::query();       
+        $notesQuery  = Notes::query()->with('file');       
         if (!empty($searchQuery)) {
             $notesQuery->where(function ($query) use ($searchQuery) {
                 $query->where('notes_text', 'like', "%{$searchQuery}%");
@@ -191,8 +192,8 @@ class NotesController extends Controller
             ->offset($offset)
             ->limit($perPage)
             ->get();
-        $total_pages = ceil($total_branches / $perPage);
-
+        $total_pages = ceil($total_notes / $perPage);
+        
         return response()->json([
             'status' => 200,
             'message' => 'Notes list fetched successfully!',

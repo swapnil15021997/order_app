@@ -15,7 +15,16 @@ class BranchController extends Controller
     public function branch_index(Request $request){
         $login = auth()->user();
         $activePage = 'branch';
-        return view('branch/branch_master',['pageTitle'=>'Branch','login'=>$login,'activePage'=>$activePage]);
+
+        $login = auth()->user();
+
+        if(!empty($login)){
+            $userBranchIds = explode(',', $login['user_branch_ids']);
+        }
+        $branch       = Branch::get_all_branch();
+        $users_branch = Branch::whereIn('branch_id', $userBranchIds)->get()->toArray();
+        
+        return view('branch/branch_master',['pageTitle'=>'Branch','login'=>$login,'activePage'=>$activePage,'user_branch'=>$users_branch]);
     }
     public function add_edit_branch(Request $request){
         $params = $request->all();

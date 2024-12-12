@@ -27,7 +27,3 @@ Route::post('permission-list', [UserController::class, 'permission_list']);
 
 
 
-Route::post('notes-add'    , [NotesController::class, 'add_notes']);
-Route::post('notes-details', [NotesController::class, 'notes_details']);
-Route::post('notes-remove' , [NotesController::class, 'notes_remove']);
-Route::post('notes-list'   , [NotesController::class, 'notes_list']);

@@ -17,6 +17,7 @@
         <div class="page-body">
             <div class="container-xl">
                 <div class="row row-cards">
+                    <div class="" id="alert-container"></div>
 
                     <div class="col-lg-6">
                     
@@ -224,10 +225,12 @@
                     const userAddress = $('#user_address').val();
                     const roleId = $('#select_role').val();
                     const user_email = $('#user_email').val();
-                   
+                    const selected_sites = $('#select-states').val();
+                    
 
                     // Validate data
                     if (!userName || !userPhone || !roleId ) {
+                        showAlert('warning', 'Please fill all fields and select at least one permission');
                         alert('Please fill all fields and select at least one permission.');
                         return;
                     }
@@ -246,12 +249,13 @@
                     const data = {
                         _token: $('meta[name="csrf-token"]').attr('content'), 
                         user_name        : userName,
-                        user_phone_number: userPhone,
+                        user_phone_number: parseInt(userPhone),
                         user_address     : userAddress,
                         user_role        : roleId,
                         user_permission  : permissionIds.join(','), 
                         user_module      : moduleIds.join(','),
-                        user_email       : user_email 
+                        user_email       : user_email ,
+                        user_branch      :selected_sites
 
                     };
 
@@ -262,18 +266,51 @@
                         success: function (response) {
                             if (response.status==200) {
                                 alert('User added successfully');
+                                showAlert('success', 'User added successfully');
+
                                 location.href = "{{route('user-master')}}";
                             } else {
                                 alert('Failed to add user: ' + response.message);
+                                showAlert('warning', response.message);
+
                             }
                         },
                         error: function (xhr, status, error) {
                             // Handle error
+                            showAlert('warning', error);
+
                             alert('An error occurred: ' + xhr.responseJSON.message);
                         }
                     });
                 });
             });
+            
+        function showAlert(type, message) {
+            const alertContainer = document.getElementById('alert-container');
+            const alertHTML = `
+                <div class="alert alert-${type} alert-dismissible" role="alert">
+                    <div class="d-flex">
+                        <div>
+                            ${type === 'success' ? `
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon alert-icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                <path d="M5 12l5 5l10 -10" />
+                            </svg>` : `
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon alert-icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                <path d="M10.24 3.957l-8.422 14.06a1.989 1.989 0 0 0 1.7 2.983h16.845a1.989 1.989 0 0 0 1.7 -2.983l-8.423 -14.06a1.989 1.989 0 0 0 -3.4 0z" />
+                                <path d="M12 9v4" />
+                                <path d="M12 17h.01" />
+                            </svg>`}
+                        </div>
+                        <div>${message}</div>
+                    </div>
+                    <a class="btn-close" data-bs-dismiss="alert" aria-label="close"></a>
+                </div>
+            `;
+            alertContainer.innerHTML = alertHTML;
+            console.log("here");
+        }
 
         </script>
 

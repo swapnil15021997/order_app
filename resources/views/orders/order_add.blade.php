@@ -118,7 +118,7 @@
                 <div class="col-lg-6">
                     <div>
                         <label class="form-label">Weight</label>
-                        <input type="text" class="form-control" id="item_weight" name="example-text-input" placeholder="Weight of item">
+                        <input type="number" class="form-control" id="item_weight" name="example-text-input" placeholder="Weight of item">
 
                     </div>
                 </div>
@@ -131,6 +131,24 @@
                     </div>
                 </div>
             </div>
+
+
+            <div class="row" id="payment">
+                <div class="col-lg-6">
+                    <div>
+                        <label class="form-label">Payment Advance</label>
+                        <input type="number" class="form-control" id="payment_advance" name="example-text-input" >
+
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="mb-3">
+                        <label class="form-label">Payment Booking</label>
+                        <input type="number" class="form-control" id="payment_booking">
+                    </div>
+                </div>
+            </div>
+           
          
             <div class="row">
                 <div class="col-lg-6">
@@ -155,6 +173,15 @@
    
     <script>    
         $(document).ready(function() {
+
+            $('#order_type').on('change', function () {
+                const paymentDiv = $('#payment');
+                if (this.checked) {
+                    paymentDiv.removeClass('d-none'); // Show payment div
+                } else {
+                    paymentDiv.addClass('d-none'); // Hide payment div
+                }
+            });
        
             var csrfToken = $('meta[name="csrf-token"]').attr('content');
             $('#saveBranchBtn').click(function(e) {
@@ -170,6 +197,8 @@
                 var item_name    = $('#item_name').val();
                 var item_melting = $('#item_melting').val();
                 var item_weight  = $('#item_weight').val();
+                var payment_advance  = $('#payment_advance').val();
+                var payment_booking  = $('#payment_booking').val();
                 var itemImages   = $('#item_image_id')[0].files; 
                 var formattedOrderDate = formatDate(orderDate);
                 
@@ -182,6 +211,19 @@
                     formData.append('order_to_branch_id', orderTo);
                     formData.append('item_metal', item_metal);
                     formData.append('item_name', item_name);
+                    if(payment_advance){
+
+                        formData.append('payment_advance', payment_advance);
+                    }else{
+                        formData.append('payment_advance', null);
+                    }
+                    if(payment_booking){
+
+                        formData.append('payment_booking', payment_booking);
+                    }else{
+                        formData.append('payment_booking', null);
+                    }
+
                     formData.append('item_melting', item_melting);
                     formData.append('item_weight', item_weight);
 

@@ -6,6 +6,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\BranchController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\NotesController;
 use Illuminate\Support\Facades\Route;
 use App\Models\Branch;
 Route::get('/', function () {
@@ -43,6 +44,8 @@ Route::post('branch-active', [BranchController::class, 'change_active_branch'])-
 
 Route::get('order-add', [OrderController::class, 'order_add_page'])->name('order-add-page');
 Route::get('edit-order/{id}', [OrderController::class, 'order_edit_page'])->name('order_edit_page');
+Route::get('view-order/{id}', [OrderController::class, 'view_order'])->name('view-order');
+
 
 
 Route::get('order-master', [OrderController::class, 'order_index'])->name('order-master');
@@ -69,6 +72,12 @@ Route::post('role-add-edit', [UserController::class, 'role_add_and_edit'])->name
 Route::post('role-details', [UserController::class, 'role_details'])->name('role-details');
 Route::post('role-list', [UserController::class, 'role_list'])->name('role-list');
 Route::post('role-remove', [UserController::class, 'role_remove']);
+
+
+Route::post('notes-add'    , [NotesController::class, 'add_notes'])->name('notes_add');
+Route::post('notes-details', [NotesController::class, 'notes_details'])->name('notes_details');
+Route::post('notes-remove' , [NotesController::class, 'notes_remove'])->name('notes_remove');
+Route::post('notes-list'   , [NotesController::class, 'notes_list'])->name('notes_list');
 
 });
 

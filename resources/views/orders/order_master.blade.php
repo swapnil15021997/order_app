@@ -383,6 +383,9 @@
                                   <a class="dropdown-item" href="#" onclick="edit_order(${row.order_id})">
                                     Edit
                                   </a>
+                                  <a class="dropdown-item" href="#" onclick="view_order(${row.order_id})">
+                                    View
+                                  </a>
                                   <a class="dropdown-item" href="#" onclick="delete_order(${row.order_id})">
                                     Delete
                                   </a>
@@ -529,6 +532,11 @@
             //         alert('An error occurred: ' + error);
             //     }
             // });
+        }
+
+        function view_order(order_id){
+            window.location.href = `/view-order/${order_id}`;
+           
         }
 
         function delete_order(order_id){

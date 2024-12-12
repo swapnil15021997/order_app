@@ -23,10 +23,14 @@ class UserController extends Controller
         $users = User::take(5)->get()->toArray();
         // $role  = UserRole::
         $activePage = 'users';
+        if(!empty($login)){
+            $userBranchIds = explode(',', $login['user_branch_ids']);
+        }
+        $users_branch = Branch::whereIn('branch_id', $userBranchIds)->get()->toArray();
         
         return view('users/users',['users' => $users,
         'pageTitle'=>'Users','login'=>$login,
-        'activePage'=>$activePage]);
+        'activePage'=>$activePage,'user_branch'=>$users_branch]);
     }
 
     public function user_add(Request $request){
@@ -41,26 +45,32 @@ class UserController extends Controller
         $activePage = 'users';
         $branch     = Branch::get_all_branch();
 
+        if(!empty($login)){
+            $userBranchIds = explode(',', $login['user_branch_ids']);
+        }
+        $users_branch = Branch::whereIn('branch_id', $userBranchIds)->get()->toArray();
+        
         return view('users/user_add',['users' => $users,'login'=>$login,
         'activePage'=>$activePage,'branch'=>$branch,
-        'roles' => $roles, 'modules'=>$modules]);
+        'roles' => $roles, 'modules'=>$modules,'user_branch'=>$users_branch]);
     }
 
 
     public function user_add_edit(Request $request)
     {    
         $params = $request->all();
-     
+
         $rules = [   
             'user_id'           => ['nullable','string'],
             'user_name'         => ['required','string'],  
             'user_email'         => ['required','email'],  
             'user_address'      => ['nullable','string','max:255'],
-            'user_phone_number' => ['nullable','string','max:13'],
+            'user_phone_number' => ['nullable','regex:/^\d{10,13}$/'],
             'user_role'         => ['required','string'],
             'user_permission'   => ['required','string','max:255'],
             'user_module'       => ['required','string','max:13'],
-     
+            'user_branch'       => ['required'],
+            
             ]; 
         $messages = [
             'user_name.required'         => 'User name is required.',
@@ -69,13 +79,14 @@ class UserController extends Controller
             'user_address.string'        => 'Address must be a string.',
             'user_address.max'           => 'Address cannot exceed 255 characters.',
             // 'user_phone_number.required' => 'Phone number is required.',
-            'user_phone_number.string'   => 'Phone number must be a string.',
+            'user_phone_number.integer'   => 'Phone number must be a number.',
             'user_phone_number.max'      => 'Phone number cannot exceed 13 characters.',
             'user_role.required'         => 'User role is required.',
             'user_role.string'           => 'User role must be a string.',
             'user_permission.required'   => 'Please provide permission',
+            'user_branch.required'       => 'Please select branch',
             'user_module.required'       => 'Please provide modules',
-            'user_email.required'         => 'User email is required.',
+            'user_email.required'        => 'User email is required.',
             'user_email.email'           => 'User email must be a valid email.',
       
         ]; 
@@ -98,6 +109,7 @@ class UserController extends Controller
 
         $moduleIds       = !empty($params['user_modules']) ? explode(',', $params['user_modules']) : [];
         $permissionIds   = !empty($params['user_permission']) ? explode(',', $params['user_permission']) : [];
+            //   = !empty($params['user_branch']) ? explode(',', $params['user_branch']) : [];
 
         $existingModules = Modules::whereIn('module_id', $moduleIds)->pluck('module_id')->toArray();
 
@@ -114,16 +126,27 @@ class UserController extends Controller
                 'message' => 'One or more permissions do not exist.',
             ]);
         }
+        $userModuleIds     = implode(',', $moduleIds);       
+        $userPermissionIds = implode(',', $permissionIds);  
+        $branchIds         = implode(',', $params['user_branch']);   
 
         if (empty($params['user_id'])){
 
-            // $get_data = User::get_data_by_phone_no($params['user_phone_number']);
-            // if (!empty($get_data)){
-            //     return response()->json([
-            //         'status' => 500,
-            //         'message' => 'User already exist'
-            //     ]); 
-            // }
+            $get_data = User::get_data_by_phone_no($params['user_phone_number']);
+           
+            if (!empty($get_data)){
+                return response()->json([
+                    'status' => 500,
+                    'message' => 'User already exist with phone number'
+                ]); 
+            }
+            $get_data = User::get_data_by_email($params['user_email']);
+            if (!empty($get_data)){
+                return response()->json([
+                    'status' => 500,
+                    'message' => 'User already exist with phone number'
+                ]); 
+            }
             $get_data = User::get_data_by_user_name($params['user_name']);
             if (!empty($get_data)){
                 return response()->json([
@@ -131,12 +154,7 @@ class UserController extends Controller
                     'message' => 'User already exist'
                 ]); 
             }
-            $userModuleIds     = implode(',', $moduleIds);       
-            $userPermissionIds = implode(',', $permissionIds);   
-
-
-
-
+           
             $user = new User();
             $user->name                  = $params['user_name'];
             $user->user_name             = $params['user_name'];
@@ -148,6 +166,7 @@ class UserController extends Controller
             $user->user_sweetword        = 'Test@123'; 
             $user->user_module_id        = $userModuleIds;
             $user->user_permission_id    = $userPermissionIds;
+            $user->user_branch_ids       = $branchIds;
         
             $user->save();
         
@@ -180,7 +199,7 @@ class UserController extends Controller
             $user->user_email            = $params['user_email'];
             $user->user_module_ids       = $moduleIds;
             $user->user_permission_ids   = $permissionIds;
-        
+            $user->user_branch_ids       = $branchIds;        
             $user->save();
             return response()->json([
                 'status' => 200,
@@ -203,8 +222,18 @@ class UserController extends Controller
             ->select('module_id', 'module_name')
             ->get()
             ->toArray();
-     
-        return view('users/user_edit',['user' => $user,'roles'=>$roles,'modules'=>$modules]);
+        
+            
+        $branch     = Branch::get_all_branch();
+        $login = auth()->user();
+
+        if(!empty($login)){
+            $userBranchIds = explode(',', $login['user_branch_ids']);
+        }
+        $branch       = Branch::get_all_branch();
+        $users_branch = Branch::whereIn('branch_id', $userBranchIds)->get()->toArray();
+        
+        return view('users/user_edit',['user' => $user,'roles'=>$roles,'modules'=>$modules,'user_branch'=>$users_branch,'login'=>$login,'activePage'=>'users','branch'=>$branch]);
     }
 
     public function user_remove(Request $request)
