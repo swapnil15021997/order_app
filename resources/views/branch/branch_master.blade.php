@@ -7,9 +7,7 @@
             <div class="row g-2 align-items-center">
               <div class="col">
                 <!-- Page pre-title -->
-                <div class="page-pretitle">
-                  Overview
-                </div>
+              
                 <h2 class="page-title">
                   Branch
                 </h2>
@@ -32,6 +30,8 @@
         </div>
         <div class="page-body">
           <div class="container-xl">
+              
+                <div id="show_success"></div>
                 <div class="row row-deck row-cards">    
 
                     <div class="table-responsive">
@@ -58,14 +58,15 @@
             <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">New report</h5>
+                        <h5 class="modal-title">New Branch</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
+                    <div id="alert-container"></div>
                     <div class="modal-body">
                         <div class="mb-3">
                             <input type="hidden" id="branch_id" value="">
                             <label class="form-label">Branch Name</label>
-                            <input id="branch_name" type="text" name="branch_name" class="form-control"  placeholder="Add branch Name">
+                            <input id="branch_name" required type="text" name="branch_name" class="form-control"  placeholder="Add branch Name">
                         </div>
                     </div>
                     <div class="modal-body">
@@ -73,7 +74,7 @@
                             <div class="col-lg-12">
                                 <div>
                                     <label class="form-label">Branch Address</label>
-                                    <textarea id="branch_address" name="branch_address" class="form-control" rows="3"></textarea>
+                                    <textarea id="branch_address" required name="branch_address" class="form-control" rows="3"></textarea>
                                 </div>
                             </div>
                         </div>
@@ -82,7 +83,7 @@
                         <a href="#" class="btn btn-link link-secondary" data-bs-dismiss="modal">
                         Cancel
                         </a>
-                        <a id="saveBranchBtn" href="#" class="btn btn-primary ms-auto" data-bs-dismiss="modal">
+                        <a id="saveBranchBtn" href="#" class="btn btn-primary ms-auto">
                         <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
                         <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 5l0 14" /><path d="M5 12l14 0" /></svg>
                         Create new branch
@@ -100,6 +101,8 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
+                        <div id="alert-container"></div>
+
                         <div class="mb-3">
                             <input type="hidden" id="edit_branch_id" value="">
                             <label class="form-label">Branch Name</label>
@@ -185,7 +188,7 @@
                     }
                 },
                 columns: [
-                    { data: 'branch_id', name: 'branch_id' },  
+                    { data: 'serial_number', name: 'serial_number' },  
                     { data: 'branch_name', name: 'branch_name' }, 
                     { data: 'branch_address', name: 'branch_address' },  
 
@@ -193,8 +196,15 @@
                         data: 'branch_id', 
                         name: 'operations', 
                         render: function(data, type, row) {
-                            return '<button class="btn btn-warning btn-sm edit-btn"  onclick="edit_branch('+ row.branch_id + ')">Edit</button>' +
-                                '<button class="btn btn-warning btn-sm edit-btn"  onclick="delete_branch('+ row.branch_id + ')">Delete</button>';
+                            return `<button data-bs-toggle="dropdown" type="button" class="btn dropdown-toggle dropdown-toggle-split"></button>
+                                <div class="dropdown-menu dropdown-menu-end">
+                                  <a class="dropdown-item" href="#" onclick="edit_branch(${row.branch_id})">
+                                    Edit
+                                  </a>
+                                  <a class="dropdown-item" href="#" onclick="delete_branch(${row.branch_id})">
+                                    Delete
+                                  </a>
+                                </div>`;
                         },     
                     }   
                 ],
@@ -213,7 +223,7 @@
                 var branchName    = $('#branch_name').val();
                 var branchAddress = $('#branch_address').val();
                 var branchId = $('#branch_id').val();
-                alert(branchId);
+
                 if (branchName && branchAddress) {
                     $.ajax({
                         url: "{{ route('add_edit_branch') }}",  // Adjust the route as needed
@@ -233,17 +243,22 @@
                                 $('#branch_id').val();
                                 $('#branch_name').val();
                                 $('#branch_address').val();
-                                alert(response.message);
+                                // alert(response.message);
+                                showSuccess('success', response.message);
+
                             } else {
-                                alert('Error creating branch: ' + response.message);
+                                // alert('Error creating branch: ' + response.message);
+                                showAlert('warning', response.message);
                             }
                         },
                         error: function(xhr, status, error) {
-                            alert('An error occurred: ' + error);
+                            // alert('An error occurred: ' + error);
+                            showAlert('warning', error);
                         }
                     });
                 } else {
-                    alert('Please fill in both fields.');
+                    // alert('Please fill in both fields.');
+                    showAlert('warining', 'Please fill in both fields, Name and address');
                 }
             });
 
@@ -253,7 +268,7 @@
                 var branchName    = $('#edit_branch_name').val();
                 var branchAddress = $('#edit_branch_address').val();
                 var branchId = $('#edit_branch_id').val();
-                alert(branchId);
+                 
                 if (branchName && branchAddress) {
                     $.ajax({
                         url: "{{ route('add_edit_branch') }}",  // Adjust the route as needed
@@ -274,16 +289,21 @@
                                 $('#edit_branch_name').val();
                                 $('#edit_branch_address').val();
                                 alert(response.message);
+                                showSuccess('success',response.message);
                             } else {
                                 alert('Error creating branch: ' + response.message);
+                                showAlert('warining',response.message);
                             }
                         },
                         error: function(xhr, status, error) {
                             alert('An error occurred: ' + error);
+                            showAlert('error',error);
                         }
                     });
                 } else {
                     alert('Please fill in both fields.');
+                    showAlert('error','Please fill in both fields');
+
                 }
             });
 
@@ -305,6 +325,7 @@
                                 $('#delete_branch').modal('hide');
                                 $('#branch_table').DataTable().ajax.reload(); 
                                 alert(response.message);
+                                showSuccess('success',response.message);
                             } else {
                                 alert('Error creating branch: ' + response.message);
                             }
@@ -359,7 +380,61 @@
         }
 
 
+        
+        function showAlert(type, message) {
+            const alertContainer = document.getElementById('alert-container');
+            const alertHTML = `
+                <div class="alert alert-${type} alert-dismissible" role="alert">
+                    <div class="d-flex">
+                        <div>
+                            ${type === 'success' ? `
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon alert-icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                <path d="M5 12l5 5l10 -10" />
+                            </svg>` : `
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon alert-icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                <path d="M10.24 3.957l-8.422 14.06a1.989 1.989 0 0 0 1.7 2.983h16.845a1.989 1.989 0 0 0 1.7 -2.983l-8.423 -14.06a1.989 1.989 0 0 0 -3.4 0z" />
+                                <path d="M12 9v4" />
+                                <path d="M12 17h.01" />
+                            </svg>`}
+                        </div>
+                        <div>${message}</div>
+                    </div>
+                    <a class="btn-close" data-bs-dismiss="alert" aria-label="close"></a>
+                </div>
+            `;
+            alertContainer.innerHTML = alertHTML;
+            console.log("here");
+        }
 
+
+        function showSuccess(type, message){
+            const alertContainer = document.getElementById('show_success');
+            const alertHTML = `
+                <div class="alert alert-${type} alert-dismissible" role="alert">
+                    <div class="d-flex">
+                        <div>
+                            ${type === 'success' ? `
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon alert-icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                <path d="M5 12l5 5l10 -10" />
+                            </svg>` : `
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon alert-icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                <path d="M10.24 3.957l-8.422 14.06a1.989 1.989 0 0 0 1.7 2.983h16.845a1.989 1.989 0 0 0 1.7 -2.983l-8.423 -14.06a1.989 1.989 0 0 0 -3.4 0z" />
+                                <path d="M12 9v4" />
+                                <path d="M12 17h.01" />
+                            </svg>`}
+                        </div>
+                        <div>${message}</div>
+                    </div>
+                    <a class="btn-close" data-bs-dismiss="alert" aria-label="close"></a>
+                </div>
+            `;
+            alertContainer.innerHTML = alertHTML;
+            console.log("here");
+        }
 
     </script>
 @endsection

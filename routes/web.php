@@ -7,15 +7,18 @@ use App\Http\Controllers\BranchController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
-
+use App\Models\Branch;
 Route::get('/', function () {
     return view('welcome');
 });
 
 Route::get('/dashboard', function () {
-    $login = auth()->user();
-
-    return view('index_new',['login'=>$login,'activePage'=>'dashboard']);
+    $login = auth()->user()->toArray();
+    if(!empty($login)){
+        $userBranchIds = explode(',', $login['user_branch_ids']);
+    }
+    $users_branch = Branch::whereIn('branch_id', $userBranchIds)->get()->toArray();
+    return view('index_new',['login'=>$login,'activePage'=>'dashboard','user_branch'=>$users_branch]);
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
@@ -35,6 +38,8 @@ Route::post('branch-list', [BranchController::class, 'branch_list'])->name('bran
 Route::get('branch-master', [BranchController::class, 'branch_index'])->name('branch-master');
 Route::post('branch-details', [BranchController::class, 'branch_details'])->name('branch_details');;
 Route::post('branch-remove', [BranchController::class, 'branch_remove'])->name('branch_remove');
+Route::post('branch-active', [BranchController::class, 'change_active_branch'])->name('branch-active');
+
 
 Route::get('order-add', [OrderController::class, 'order_add_page'])->name('order-add-page');
 Route::get('edit-order/{id}', [OrderController::class, 'order_edit_page'])->name('order_edit_page');

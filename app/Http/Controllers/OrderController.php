@@ -172,6 +172,8 @@ class OrderController extends Controller
         $branches      = Branch::select('branch_id', 'branch_name')->take(5)->get();
         $branchesArray = $branches->toArray();
         $order         = Order::get_order_with_items($id);
+        $order         = $order->toArray();
+
         if (empty($order)){
             return response()->json([
                 'status' => 500,
@@ -182,9 +184,15 @@ class OrderController extends Controller
         $pageTitle     = 'Orders';
         $login         = auth()->user()->toArray();
         $activePage    = 'orders';
+        $fileArray = [];
+
+        if (!empty($order['items'][0]['files'])){
+            $fileArray = $order['items'][0]['files']->toArray();
+        }
+       
         return view('orders/order_edit'
         ,compact('metals', 'melting','branchesArray',
-        'pageTitle','login','activePage','order'));
+        'pageTitle','login','activePage','order','fileArray'));
     }
     public function order_details(Request $request){
         $params = $request->all();
@@ -265,7 +273,8 @@ class OrderController extends Controller
             'orders.*', 
             'from_branch.branch_name AS order_from_name',   
             'to_branch.branch_name AS order_to_name')
-        ->where('orders.is_delete',0); 
+        ->where('orders.is_delete',0)
+        ->orderBy('order_id', 'desc');
         if (!empty($searchQuery)) {
             $ordersQuery->where(function ($query) use ($searchQuery) {
                 $query->where('order_number', 'like', "%{$searchQuery}%")
@@ -279,6 +288,9 @@ class OrderController extends Controller
         ->offset($offset)
         ->limit($perPage)
         ->get();
+        $orders->each(function ($order, $index) {
+            $order->serial_number = $index + 1; 
+        });
         $total_pages = ceil($total_orders / $perPage);
 
         return response()->json([

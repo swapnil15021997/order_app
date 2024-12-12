@@ -32,6 +32,8 @@
     </div>
     <div class="page-body">
         <div class="container-xl">
+        <div id="alert-container"></div>
+
             <div class="row row-deck row-cards">    
 
                 <div class="table-responsive">
@@ -365,7 +367,7 @@
                     }
                 },
                 columns: [
-                    { data: 'order_id', name: 'order_id' },  
+                    { data: 'serial_number', name: 'serial_number' },  
                     { data: 'order_date', name: 'order_date' }, 
                     { data: 'order_type', name: 'order_type' }, 
                     { data: 'order_from_name', name: 'order_from_name' },  
@@ -376,8 +378,16 @@
                         data: 'order_id', 
                         name: 'operations', 
                         render: function(data, type, row) {
-                            return '<button class="btn btn-warning btn-sm edit-btn"  onclick="edit_order('+ row.order_id + ')">Edit</button>' +
-                                '<button class="btn btn-warning btn-sm edit-btn"  onclick="delete_order('+ row.order_id + ')">Delete</button>';
+                            return `<button data-bs-toggle="dropdown" type="button" class="btn dropdown-toggle dropdown-toggle-split"></button>
+                                <div class="dropdown-menu dropdown-menu-end">
+                                  <a class="dropdown-item" href="#" onclick="edit_order(${row.order_id})">
+                                    Edit
+                                  </a>
+                                  <a class="dropdown-item" href="#" onclick="delete_order(${row.order_id})">
+                                    Delete
+                                  </a>
+                                </div>`;
+                                
                         },     
                     }   
                 ],
@@ -465,6 +475,7 @@
                                 $('#delete_order').modal('hide');
                                 $('#branch_table').DataTable().ajax.reload(); 
                                 alert(response.message);
+                                showAlert('success', response.message);
                             } else {
                                 alert('Error deleting order: ' + response.message);
                             }
@@ -532,6 +543,34 @@
             var month = ('0' + (d.getMonth() + 1)).slice(-2); 
             var day = ('0' + d.getDate()).slice(-2);  
             return year + '-' + month + '-' + day;  
+        }
+
+        
+        function showAlert(type, message) {
+            const alertContainer = document.getElementById('alert-container');
+            const alertHTML = `
+                <div class="alert alert-${type} alert-dismissible" role="alert">
+                    <div class="d-flex">
+                        <div>
+                            ${type === 'success' ? `
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon alert-icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                <path d="M5 12l5 5l10 -10" />
+                            </svg>` : `
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon alert-icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                <path d="M10.24 3.957l-8.422 14.06a1.989 1.989 0 0 0 1.7 2.983h16.845a1.989 1.989 0 0 0 1.7 -2.983l-8.423 -14.06a1.989 1.989 0 0 0 -3.4 0z" />
+                                <path d="M12 9v4" />
+                                <path d="M12 17h.01" />
+                            </svg>`}
+                        </div>
+                        <div>${message}</div>
+                    </div>
+                    <a class="btn-close" data-bs-dismiss="alert" aria-label="close"></a>
+                </div>
+            `;
+            alertContainer.innerHTML = alertHTML;
+            console.log("here");
         }
 
     </script>

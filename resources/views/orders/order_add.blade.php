@@ -16,7 +16,7 @@
 
     <div class="page-body">
         <div class="container-xl">
-        
+            <div id="alert-container"></div>
             <div class="row">
 
                 <div class="col-lg-6">
@@ -37,7 +37,7 @@
                         <div class="d-flex align-items-center">
                             <label class="form-check-label me-2">Reparing</label>
                             <label class="form-check form-switch m-0">
-                                <input class="form-check-input" id="orderType" type="checkbox" checked>
+                                <input class="form-check-input" id="order_type" type="checkbox" checked>
                             </label>
                             <label class="form-check-label ms-2">Order</label>
                         </div>
@@ -147,6 +147,8 @@
             </div>
         </div>
     </div>
+
+    
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
@@ -159,7 +161,8 @@
 
                 e.preventDefault(); 
                 var orderDate    = $('#order_date').val();
-                var orderType    = $('#order_type');
+                var orderType    = document.getElementById('order_type');
+              
                 const orderTypeValue = orderType.checked ? 2 : 1;
                 var orderFrom    = $('#searchableSelectFrom').val();
                 var orderTo      = $('#searchableSelectTo').val();
@@ -199,6 +202,8 @@
                             if (response.status == 200) {
                                 $('#branch_table').DataTable().ajax.reload();  // Reload table
                                 alert(response.message);
+                                showAlert('success', response.message);
+
                                 $('#order_date').val('');
                                 $('#order_type').val('');
                                 $('#searchableSelectFrom').val('');
@@ -208,17 +213,23 @@
                                 $('#item_melting').val('');
                                 $('#item_weight').val('');
                                 $('#item_image_id').val('');
-                                location.href = "{{route('order-master')}}";
+                                setTimeout(function() {
+                                    location.href = "{{ route('order-master') }}";
+                                }, 1000);
                             } else {
                                 alert('Error creating order: ' + response.message);
+                                showAlert('warning', response.message);
                             }
                         },
                         error: function(xhr, status, error) {
-                            alert('An error occurred: ' + error);
+                            // alert('An error occurred: ' + error);
+                            showAlert('warning', error);
                         }
                     });
                 } else {
                     alert('Please fill in all fields.');
+
+                    showAlert('warning', 'Please fill in all fields orderDate, orderType and Order To');
                 }
             });
         });
@@ -320,6 +331,34 @@
             }else{
                 alert("Please enter a branch name")
             }
+        }
+
+
+        function showAlert(type, message) {
+            const alertContainer = document.getElementById('alert-container');
+            const alertHTML = `
+                <div class="alert alert-${type} alert-dismissible" role="alert">
+                    <div class="d-flex">
+                        <div>
+                            ${type === 'success' ? `
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon alert-icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                <path d="M5 12l5 5l10 -10" />
+                            </svg>` : `
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon alert-icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                <path d="M10.24 3.957l-8.422 14.06a1.989 1.989 0 0 0 1.7 2.983h16.845a1.989 1.989 0 0 0 1.7 -2.983l-8.423 -14.06a1.989 1.989 0 0 0 -3.4 0z" />
+                                <path d="M12 9v4" />
+                                <path d="M12 17h.01" />
+                            </svg>`}
+                        </div>
+                        <div>${message}</div>
+                    </div>
+                    <a class="btn-close" data-bs-dismiss="alert" aria-label="close"></a>
+                </div>
+            `;
+            alertContainer.innerHTML = alertHTML;
+            console.log("here");
         }
     </script>
 @endsection

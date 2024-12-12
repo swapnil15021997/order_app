@@ -10,6 +10,7 @@ use App\Models\User;
 use App\Models\UserRole;
 use App\Models\Permission;
 use App\Models\Modules;
+use App\Models\Branch;
 
 class UserController extends Controller
 {
@@ -22,21 +23,29 @@ class UserController extends Controller
         $users = User::take(5)->get()->toArray();
         // $role  = UserRole::
         $activePage = 'users';
-        return view('users/users',['users' => $users,'pageTitle'=>'Users','login'=>$login,'activePage'=>$activePage]);
+        
+        return view('users/users',['users' => $users,
+        'pageTitle'=>'Users','login'=>$login,
+        'activePage'=>$activePage]);
     }
 
     public function user_add(Request $request){
         $users = User::take(5)->get()->toArray();
         $roles = UserRole::select('role_id', 'role_name')->get()->toArray();
-        
+        $login = auth()->user();
+
         $modules = Modules::with('permissions:permission_id,permission_name,permission_module_id') 
             ->select('module_id', 'module_name')
             ->get()
             ->toArray();
-        
-        return view('users/user_add',['users' => $users,'roles' => $roles, 'modules'=>$modules]);
+        $activePage = 'users';
+        $branch     = Branch::get_all_branch();
+
+        return view('users/user_add',['users' => $users,'login'=>$login,
+        'activePage'=>$activePage,'branch'=>$branch,
+        'roles' => $roles, 'modules'=>$modules]);
     }
-    
+
 
     public function user_add_edit(Request $request)
     {    

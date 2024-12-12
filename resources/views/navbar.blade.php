@@ -24,7 +24,6 @@
             </div>
             <div class="nav-item dropdown">
               <a href="#" class="nav-link d-flex lh-1 text-reset p-0" data-bs-toggle="dropdown" aria-label="Open user menu">
-                <span class="avatar avatar-sm" style="background-image: url(./static/avatars/000m.jpg)"></span>
                 <div class="d-none d-xl-block ps-2">
                   <div>{{$login['name']}}</div>
                   <div class="mt-1 small text-secondary"></div>
@@ -34,7 +33,21 @@
                 <a href="{{route('profile.edit')}}" class="dropdown-item">Profile</a>
                 <div class="dropdown-divider"></div>
                 <a href="" onclick="logout()" class="dropdown-item">Logout</a>
+                
               </div>
+            </div>
+            <div class="ps-2 nav-item dropdown">
+              <button data-bs-toggle="dropdown" type="button" class="btn dropdown-toggle dropdown-toggle-split"></button>
+              <div class="dropdown-menu dropdown-menu-end">
+              @foreach($user_branch as $branch)
+                <a 
+                  class="dropdown-item  @if($branch['branch_id'] == $login['user_active_branch']) active @endif" 
+                  href="#" 
+                  onclick="changeBranch('{{ $branch['branch_id'] }}')">
+                  {{ $branch['branch_name'] }}
+                </a>
+              @endforeach
+              <div>
             </div>
           </div>
         </div>
@@ -102,7 +115,7 @@
           </div>
         </div>
       </header>
-
+      <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
       <script>
         function logout(){
           var csrfToken = $('meta[name="csrf-token"]').attr('content');
@@ -121,4 +134,63 @@
             }
           })  
         }
+
+        function changeBranch(branch_id){
+          var csrfToken = $('meta[name="csrf-token"]').attr('content');
+
+          $.ajax({
+              url: "{{ route('branch-active') }}",  // Adjust the route as needed
+              type: 'POST',
+              data: {
+                  _token        : csrfToken,
+                  branch_id     : branch_id,
+              },
+              success: function(response) {
+                  // Handle success
+
+                  if (response.status==200) {
+                     
+                      // alert(response.message);
+                      showAlert('success', response.message);
+
+                  } else {
+                      // alert('Error creating branch: ' + response.message);
+                      showAlert('warning', response.message);
+                  }
+              },
+              error: function(xhr, status, error) {
+                  // alert('An error occurred: ' + error);
+                  showAlert('warning', error);
+              }
+          });
+        }
+
+         
+        function showAlert(type, message) {
+            const alertContainer = document.getElementById('alert-site');
+            const alertHTML = `
+                <div class="alert alert-${type} alert-dismissible" role="alert">
+                    <div class="d-flex">
+                        <div>
+                            ${type === 'success' ? `
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon alert-icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                <path d="M5 12l5 5l10 -10" />
+                            </svg>` : `
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon alert-icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                <path d="M10.24 3.957l-8.422 14.06a1.989 1.989 0 0 0 1.7 2.983h16.845a1.989 1.989 0 0 0 1.7 -2.983l-8.423 -14.06a1.989 1.989 0 0 0 -3.4 0z" />
+                                <path d="M12 9v4" />
+                                <path d="M12 17h.01" />
+                            </svg>`}
+                        </div>
+                        <div>${message}</div>
+                    </div>
+                    <a class="btn-close" data-bs-dismiss="alert" aria-label="close"></a>
+                </div>
+            `;
+            alertContainer.innerHTML = alertHTML;
+            console.log("here");
+        }
+
       </script>

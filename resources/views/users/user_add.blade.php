@@ -34,7 +34,7 @@
                     </div>
                 </div>
                     
-                <div class="row">
+                <div class="row row-cards">
                     <div class="col-lg-6">
                         <div class="mb-3">
                             <label class="form-label">User Role</label>
@@ -55,7 +55,7 @@
                     </div>
                 </div>  
 
-                <div class="row">
+                <div class="row row-cards">
                     <div class="col-lg-6">
                         <div class="mb-3">
                             <label class="form-label">User Email</label>
@@ -63,56 +63,68 @@
 
                         </div>
                     </div>
+
+                    <div class="col-lg-6">
+                        <div class="mb-3">
+                                <div class="form-label">Select multiple states</div>
+                                <select type="text" class="form-select" id="select-states" multiple>
+                                @if(!empty($branch))
+                                
+                                @foreach($branch as $b)
+                                    <option value="{{ $b['branch_id'] }}">{{ $b['branch_name'] }}</option>
+                                    @endforeach
+                                @endif
+                                </select>
+                        </div>
+                    </div>
                 </div>
+                
 
 
-                <div class="row">
+                <div class="row row-cards">
 
                     <div class="col-lg-12">
                         <div class="mb-3">
-                            <div class="card">
-                                <div class="card-header">
-                                    <h3 class="card-title">Modules and Permissions</h3>
-                                </div>
-                                <div class="card-body">
-                                    <table class="table table-bordered">
-                                        <thead>
-                                            <tr>
-                                                <th>Module Name</th>
-                                                <th>Read</th>
-                                                <th>Write</th>
-                                                <th>Create</th>
-                                                <th>Update</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach ($modules as $module)
-                                                <tr>
-                                                    <td>{{ $module['module_name'] }}</td>
+                           
+                            <h3 class="card-title">Modules and Permissions</h3>
+                        
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Module Name</th>
+                                        <th>Read</th>
+                                        <th>Write</th>
+                                        <th>Create</th>
+                                        <th>Update</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($modules as $module)
+                                        <tr>
+                                            <td>{{ $module['module_name'] }}</td>
 
-                                                    @foreach ($module['permissions'] as $permission)
-                                                        <td>
-                                                            <input 
-                                                                type="checkbox" 
-                                                                id="permission_{{ $permission['permission_id'] }}" 
-                                                                name="permission_{{ $permission['permission_id'] }}" 
-                                                                name="permission_{{ $permission['permission_id'] }}" 
-                                                                data-module-id="{{ $module['module_id'] }}"  
-                                                                @if (in_array($permission, array_column($module['permissions'], 'permission_name')))  @endif
-                                                            >
-                                                        </td>
-                                                    @endforeach
-                                                </tr>
+                                            @foreach ($module['permissions'] as $permission)
+                                                <td>
+                                                    <input 
+                                                        type="checkbox" 
+                                                        id="permission_{{ $permission['permission_id'] }}" 
+                                                        name="permission_{{ $permission['permission_id'] }}" 
+                                                        name="permission_{{ $permission['permission_id'] }}" 
+                                                        data-module-id="{{ $module['module_id'] }}"  
+                                                        @if (in_array($permission, array_column($module['permissions'], 'permission_name')))  @endif
+                                                    >
+                                                </td>
                                             @endforeach
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                                
                         </div>
                     </div>
 
                 </div>
-                <div class="row">
+                <div class="row row-cards">
                     <div class="col-lg-6">
                         <div class="mb-3">
                             <a href="#" class="btn btn-primary ms-auto"  id="saveUser">
@@ -128,7 +140,34 @@
         <div>
 
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-   
+        <script src="{{ asset('libs/tom-select/dist/js/tom-select.base.min.js')}}?1692870487" defer></script>
+  
+        <script>
+            // @formatter:off
+            document.addEventListener("DOMContentLoaded", function () {
+                var el;
+                window.TomSelect && (new TomSelect(el = document.getElementById('select-states'), {
+                    copyClassesToDropdown: false,
+                    dropdownParent: 'body',
+                    controlInput: '<input>',
+                    render:{
+                        item: function(data,escape) {
+                            if( data.customProperties ){
+                                return '<div><span class="dropdown-item-indicator">' + data.customProperties + '</span>' + escape(data.text) + '</div>';
+                            }
+                            return '<div>' + escape(data.text) + '</div>';
+                        },
+                        option: function(data,escape){
+                            if( data.customProperties ){
+                                return '<div><span class="dropdown-item-indicator">' + data.customProperties + '</span>' + escape(data.text) + '</div>';
+                            }
+                            return '<div>' + escape(data.text) + '</div>';
+                        },
+                    },
+                }));
+            });
+            // @formatter:on
+        </script>
         <script>
             function fetchRoleDetails(roleId) {
                 var csrfToken = $('meta[name="csrf-token"]').attr('content');
