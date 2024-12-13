@@ -41,7 +41,7 @@ class Order extends Model
     }
 
     public static function get_order_by_id($order_id){
-        $order = Order::where('order_id',$order_id)->where('is_delete',1)->first();
+        $order = Order::where('order_id',$order_id)->where('is_delete',0)->first();
         return $order;
     }
 

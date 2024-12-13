@@ -7,12 +7,15 @@
         <div class="row g-2 align-items-center">
             <div class="col">
             <!-- Page pre-title -->
-            <div class="page-pretitle">
+            <!-- <div class="page-pretitle">
                 Overview
-            </div>
-            <h2 class="page-title">
-                Orders
-            </h2>
+                </div> -->
+                <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="#">Home</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Orders</li>
+                        </ol>
+                </nav>
             </div>
             <div class="col-auto ms-auto d-print-none">
             <div class="btn-list">

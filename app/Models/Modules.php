@@ -13,7 +13,11 @@ class Modules extends Model
     use HasFactory;
 
     protected $table = 'modules';
-
+    protected $fillable = [
+        'module_name',
+        'created_at',
+        'updated_at'  
+    ];
 
     public function permissions()
     {

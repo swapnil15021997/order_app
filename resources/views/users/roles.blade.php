@@ -6,6 +6,11 @@
         <div class="container-xl">
             <div class="row g-2 align-items-center">
                 <div class="col">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{{route('dashboard')}}">Home</a></li>
+                        <li class="breadcrumb-item active" aria-current="page"><a href="{{route('role-master')}}">Roles</a></li>
+                    </ol>
+                    <br/>
                     <h2 class="page-title">
                     Roles
                     </h2>

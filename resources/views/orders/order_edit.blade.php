@@ -6,9 +6,16 @@
         <div class="container-xl">
             <div class="row g-2 align-items-center">
                 <div class="col">
-                    <h2 class="page-title">
+                    <!-- <h2 class="page-title">
                     Edit Order
-                    </h2>
+                    </h2> -->
+                    <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="{{route('dashboard')}}">Home</a></li>
+                                <li class="breadcrumb-item" aria-current="page"><a href="{{route('order-master')}}">Orders</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">Edit Order</li>
+                            </ol>
+                    </nav>
                 </div>
             </div>
         </div>
@@ -22,7 +29,7 @@
                 <div class="col-lg-6">
                  
                     <div class="mb-3">
-                        <input type="hidden" name="edit_order_id">
+                        <input type="hidden" id="edit_order_id" value="{{$order['order_id']}}">
                         <label class="form-label">Order Date</label>
                         <input type="date" id="edit_order_date" value="{{$order['order_date']}}" class="form-control" form>
                     </div>
@@ -197,6 +204,7 @@
                     paymentDiv.addClass('d-none'); // Hide payment div
                 }
             });
+        
 
 
         $('#updateOrderBtn').click(function(e) {
@@ -204,9 +212,7 @@
             var orderId = $('#edit_order_id').val();  // Get the order ID to update
             var orderDate = $('#edit_order_date').val();
             var orderType    = document.getElementById('order_type');
-              
-                const orderTypeValue = orderType.checked ? 2 : 1;
-            
+            const orderTypeValue = orderType.checked ? 2 : 1;
             var orderFrom = $('#edit_searchableSelectFrom').val();
             var orderTo = $('#edit_searchableSelectTo').val();
             var itemMetal = $('#edit_item_metal').val();
@@ -214,13 +220,15 @@
             var itemMelting = $('#edit_item_melting').val();
             var itemWeight = $('#edit_item_weight').val();
             var itemImages = $('#edit_item_image_id')[0].files; 
-            
+            var payment_advance = $('#payment_advance').val();
+            var payment_booking = $('#payment_booking').val();
+
             if (orderDate && orderType && orderFrom && orderTo) {
                 var formData = new FormData();
                 formData.append('_token', csrfToken);  
-                formData.append('order_id', edit_order_id);  
+                formData.append('order_id', orderId);  
                 formData.append('order_date', orderDate);
-                formData.append('order_type', orderType);
+                formData.append('order_type', orderTypeValue);
                 formData.append('order_from_branch_id', orderFrom);
                 formData.append('order_to_branch_id', orderTo);
                 formData.append('item_metal', itemMetal);
@@ -275,6 +283,7 @@
 
             }
         });
+    });
 
         
         function showAlert(type, message) {

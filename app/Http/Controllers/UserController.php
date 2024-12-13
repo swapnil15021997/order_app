@@ -390,7 +390,15 @@ class UserController extends Controller
 
         // $role  = UserRole::
         $activePage = 'roles';
-        return view('users/roles',['pageTitle'=>'Roles','login'=>$login,'activePage'=>$activePage]);
+        $login = auth()->user();
+
+        if(!empty($login)){
+            $userBranchIds = explode(',', $login['user_branch_ids']);
+        }
+        // $branch       = Branch::get_all_branch();
+        $users_branch = Branch::whereIn('branch_id', $userBranchIds)->get()->toArray();
+
+        return view('users/roles',['pageTitle'=>'Roles','login'=>$login,'activePage'=>$activePage,'user_branch'=>$users_branch]);
     }
 
     public function permission_list(Request $request){
@@ -502,7 +510,14 @@ class UserController extends Controller
         $login = auth()->user();
 
         $activePage = 'Role';
-        return view('users/role_add',['roles' => $roles, 'modules'=>$modules,'login'=>$login,'activePage'=>$activePage]);
+        if(!empty($login)){
+            $userBranchIds = explode(',', $login['user_branch_ids']);
+        }
+        // $branch       = Branch::get_all_branch();
+        $users_branch = Branch::whereIn('branch_id', $userBranchIds)->get()->toArray();
+
+        return view('users/role_add',['roles' => $roles, 'modules'=>$modules,
+        'login'=>$login,'activePage'=>$activePage,'user_branch'=>$users_branch]);
     }
 
     public function role_list(Request $request){
@@ -580,12 +595,19 @@ class UserController extends Controller
             ->toArray();
         $rolePermissions = explode(',', $role->role_permission_ids);
         $activePage = 'Role';
+        if(!empty($login)){
+            $userBranchIds = explode(',', $login['user_branch_ids']);
+        }
+        // $branch       = Branch::get_all_branch();
+        $users_branch = Branch::whereIn('branch_id', $userBranchIds)->get()->toArray();
+
         return view('users/role_edit',[
             'login'           => $login,
             'modules'         => $modules,
             'role'            => $role,
             'rolePermissions' => $rolePermissions,
-            'activePage'      => $activePage
+            'activePage'      => $activePage,
+            'user_branch'     => $users_branch
         ]);
     }
     public function role_details(Request $request){

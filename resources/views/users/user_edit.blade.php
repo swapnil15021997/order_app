@@ -6,9 +6,14 @@
         <div class="container-xl">
             <div class="row g-2 align-items-center">
                 <div class="col">
-                    <h2 class="page-title">
+                    <!-- <h2 class="page-title">
                     New Users
-                    </h2>
+                    </h2> -->
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{{route('dashboard')}}">Home</a></li>
+                        <li class="breadcrumb-item" aria-current="page"><a href="{{route('user-master')}}">Orders</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Edit User</li>
+                    </ol>
                 </div>
             </div>
         </div>

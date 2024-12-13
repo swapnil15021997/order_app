@@ -13,6 +13,7 @@ use DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Arr;
 use Carbon\Carbon;
+use App\Jobs\SendEmailJob;
 class OrderController extends Controller
 {
 
@@ -198,7 +199,7 @@ class OrderController extends Controller
             $payment->save();
         }
 
-        SendEmailJob::dispatch($order->order_id);
+        SendEmailJob::dispatch($order->order_id,$type="add");
         return response()->json([
             "status" =>200,
             "message"=>"Order created successfully"
@@ -450,7 +451,8 @@ class OrderController extends Controller
                 'errors'  => $validator->errors(), 
             ]);
         } 
-        $order_rec = Order::get_order_by_id(order_id);
+        $order_rec = Order::get_order_by_id($params['order_id']);
+
         if(empty($order_rec)){
             return response()->json([
                 'status' => 500,
@@ -509,12 +511,23 @@ class OrderController extends Controller
 
         // payment update
         if($params['order_type'] == 2){
-            $payment = Payment::where('payment_order_id', $params['order_id']);
-            $payment->payment_booking_rate  = $params['payment_booking'];
-            $payment->payment_advance_cash  = $params['payment_advance'];
-            $payment->save();
-
+            
+            $payment = Payment::where('payment_order_id', $params['order_id'])->first();
+            if(!empty($payment)){
+                $payment->payment_booking_rate  = $params['payment_booking'];
+                $payment->payment_advance_cash  = $params['payment_advance'];
+                $payment->save();
+            }else{
+                $payment = new Payment();
+                $payment->payment_order_id      = $order_rec->order_id;
+                $payment->payment_booking_rate  = $params['payment_booking'];
+                $payment->payment_customer_id   = 1;
+                $payment->payment_advance_cash  = $params['payment_advance'];
+                $payment->payment_date          = Carbon::now()->toDateString();
+                $payment->save();
+            }
         }
+        SendEmailJob::dispatch($order_rec->order_id,$type="Edit");
         return response()->json([
             'status'  => 200,
             'message' => 'Order updated successfully' 

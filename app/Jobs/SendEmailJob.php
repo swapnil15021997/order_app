@@ -5,18 +5,25 @@ namespace App\Jobs;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use App\Http\Controllers\MailController;
+use App\Models\Order;
+use App\Models\Settings;
+
+
+
 class SendEmailJob implements ShouldQueue
 {
     use Queueable;
     public $order_id;
+    public $type;
 
     /**
      * Create a new job instance.
      */
-    public function __construct($order_id)
+    public function __construct($order_id,$type)
     {
         //
         $this->order_id = $order_id;
+        $this->type     = $type;
     }
 
     /**
@@ -56,7 +63,8 @@ class SendEmailJob implements ShouldQueue
             'item_name'   => $order['item_name'],
             'item_metal'  => $order['item_metal'],
             'item_melting'=> $order['item_melting'],
-            'item_weight' => $order['item_weight']
+            'item_weight' => $order['item_weight'],
+            'type'        => $this->type,
         ];
     
         $mail = new MailController();

@@ -13,10 +13,11 @@ class Permission extends Model
     protected $table = 'permissions';
 
     // Define the fillable fields
-    // protected $fillable = [
-    //     'role_name',
-    //     'role_status',
-    // ];
+    protected $fillable = [
+        'permission_name',
+        'permission_module_id',
+        'permission_status'
+    ];
 
 
     // public static function get_role_by_id($role_id){

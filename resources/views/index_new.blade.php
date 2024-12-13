@@ -6,9 +6,15 @@
         <div class="container-xl">
             <div class="row g-2 align-items-center">
                 <div class="col">
-                    <h2 class="page-title">
+                    <!-- <h2 class="page-title">
                     Dashboard
-                    </h2>
+                    </h2> -->
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item active"><a href="{{route('dashboard')}}">Home</a></li>
+
+                        </ol>
+                    </nav>
                 </div>
             </div>
         </div>

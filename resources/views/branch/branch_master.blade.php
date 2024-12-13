@@ -8,9 +8,15 @@
               <div class="col">
                 <!-- Page pre-title -->
               
-                <h2 class="page-title">
+                <!-- <h2 class="page-title">
                   Branch
-                </h2>
+                </h2> -->
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">branch</li>
+                    </ol>
+                </nav>
               </div>
               <div class="col-auto ms-auto d-print-none">
                 <div class="btn-list">

@@ -6,9 +6,17 @@
         <div class="container-xl">
             <div class="row g-2 align-items-center">
                 <div class="col">
-                    <h2 class="page-title">
+                    <!-- <h2 class="page-title">
                     New Order
-                    </h2>
+                    </h2> -->
+                    
+                    <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="{{route('dashboard')}}">Home</a></li>
+                                <li class="breadcrumb-item" aria-current="page"><a href="{{route('order-master')}}">Orders</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">New Order</li>
+                            </ol>
+                    </nav>
                 </div>
             </div>
         </div>

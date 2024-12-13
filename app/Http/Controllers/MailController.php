@@ -10,10 +10,15 @@ class MailController extends Controller
     //
 
     public function send_email($data){
+        if($data['type']=='Add'){
 
-        $subject = "Chalan Created for " .$data['order_name'];
-      
-        $message = "This is to inform you about a new chalan of type " .$data['order_name'];
+            $subject = "Chalan Created for " .$data['order_name'];
+            $message = "This is to inform you about a new chalan of type " .$data['order_name'];
+        }else{
+            $subject = "Chalan Updated for " .$data['order_name'];
+            $message = "This is to inform you about a Update chalan of type " .$data['order_name'];
+        }
+        
 
         $message.="\nFrom Branch Name: ".$data['order_form'];
         $message.="\nTo Branch Name: ".$data['order_to'];
