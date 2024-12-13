@@ -370,7 +370,7 @@
                     </div>
                 
                 </div>
-
+                @if($order['order_type']==2)
                 <div
                     style="
                     display: flex;
@@ -444,9 +444,10 @@
                 
                 </div>
                 
-
+                
                 
                 </div>
+                @endif
                 <div style="margin-top: 32px; padding: 8px">
                 <p>Company's GSTIN/UIN : <b>24ABDCS4503K1ZG</b></p>
                 <p>Companys PAN : <b>ABDCS450Kk</b></p>

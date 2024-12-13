@@ -20,6 +20,8 @@ class OrderController extends Controller
         $order         = Order::get_order_with_items($id);
         $order         = $order->toArray();
 
+        $login = auth()->user();
+        
         $fileArray = [];
         if(!empty($login)){
             $userBranchIds = explode(',', $login['user_branch_ids']);
@@ -27,11 +29,6 @@ class OrderController extends Controller
 
         if (!empty($order['items'][0]['files'])){
             $fileArray = $order['items'][0]['files']->toArray();
-        }
-
-        $login = auth()->user();
-        if(!empty($login)){
-            $userBranchIds = explode(',', $login['user_branch_ids']);
         }
         $activePage = 'orders';
         $branch       = Branch::get_all_branch();

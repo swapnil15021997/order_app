@@ -28,4 +28,9 @@ class Branch extends Model
         return $branch;
     }
 
+    public static function get_latest_branch(){
+        $branch = Branch::where('is_delete',0)->take(5)->get()->toArray();
+        return $branch;
+    }
+
 }

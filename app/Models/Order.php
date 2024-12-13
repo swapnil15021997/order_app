@@ -60,6 +60,23 @@ class Order extends Model
     //     return $order;
     // }
     
+    public static function get_latest_order(){
+        $ordersQuery = Order::query()    
+        ->leftJoin('branch AS from_branch', 'from_branch.branch_id', '=', 'orders.order_from_branch_id')  // Join to get 'order_from_branch' name
+        ->leftJoin('branch AS to_branch', 'to_branch.branch_id', '=', 'orders.order_to_branch_id')  // Join to get 'order_to_branch' name
+        ->select(
+            'orders.*', 
+            'from_branch.branch_name AS order_from_name',   
+            'to_branch.branch_name AS order_to_name')
+        ->where('orders.is_delete',0)
+        ->take(5)
+        ->orderBy('order_id', 'desc')
+        ->get()
+        ->toArray();
+
+        return $ordersQuery;
+
+    }
     public static function get_order_with_items($order_id)
 {
     $order = Order::where('order_id', $order_id)

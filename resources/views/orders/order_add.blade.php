@@ -35,11 +35,11 @@
                         </select> -->
                         <label class="form-label">Order Type</label>
                         <div class="d-flex align-items-center">
-                            <label class="form-check-label me-2">Reparing</label>
+                            <label class="form-check-label ms-2">Order</label>
                             <label class="form-check form-switch m-0">
                                 <input class="form-check-input" id="order_type" type="checkbox" checked>
                             </label>
-                            <label class="form-check-label ms-2">Order</label>
+                            <label class="form-check-label me-2">Reparing</label>
                         </div>
                          
                     </div>
@@ -133,7 +133,7 @@
             </div>
 
 
-            <div class="row" id="payment">
+            <div class="row d-none" id="payment">
                 <div class="col-lg-6">
                     <div>
                         <label class="form-label">Payment Advance</label>
@@ -177,9 +177,9 @@
             $('#order_type').on('change', function () {
                 const paymentDiv = $('#payment');
                 if (this.checked) {
-                    paymentDiv.removeClass('d-none'); // Show payment div
-                } else {
                     paymentDiv.addClass('d-none'); // Hide payment div
+                } else {
+                    paymentDiv.removeClass('d-none'); // Show payment div
                 }
             });
        

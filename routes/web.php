@@ -7,8 +7,13 @@ use App\Http\Controllers\BranchController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\NotesController;
+use App\Http\Controllers\Auth\PasswordController;
 use Illuminate\Support\Facades\Route;
 use App\Models\Branch;
+use App\Models\Order;
+use App\Models\User;
+use App\Models\UserRole;
+
 Route::get('/', function () {
     return view('welcome');
 });
@@ -19,7 +24,17 @@ Route::get('/dashboard', function () {
         $userBranchIds = explode(',', $login['user_branch_ids']);
     }
     $users_branch = Branch::whereIn('branch_id', $userBranchIds)->get()->toArray();
-    return view('index_new',['login'=>$login,'activePage'=>'dashboard','user_branch'=>$users_branch]);
+    $branch_count = Branch::where('is_delete',0)->count();
+    $user_count   = User::where('is_delete',0)->count();
+    $orders_count = Order::where('is_delete',0)->count();
+    $total_role   = UserRole::whereNull('deleted_at')->count();
+    
+    $order        = Order::get_latest_order();
+    $branch       = Branch::get_latest_branch();
+    return view('index_new',['login'=>$login,'activePage'=>'dashboard',
+    'user_branch'=>$users_branch,'order_count'=>$orders_count,
+    'user_count'=>$user_count,'branch_count'=>$branch_count,
+    'total_role'=>$total_role,'order'=>$order,'branch'=>$branch]);
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
@@ -78,6 +93,11 @@ Route::post('notes-add'    , [NotesController::class, 'add_notes'])->name('notes
 Route::post('notes-details', [NotesController::class, 'notes_details'])->name('notes_details');
 Route::post('notes-remove' , [NotesController::class, 'notes_remove'])->name('notes_remove');
 Route::post('notes-list'   , [NotesController::class, 'notes_list'])->name('notes_list');
+
+Route::get('settings'   , [ProfileController::class, 'get_settings'])->name('settings');
+
+Route::post('password', [PasswordController::class, 'update'])->name('password.update');
+
 
 });
 

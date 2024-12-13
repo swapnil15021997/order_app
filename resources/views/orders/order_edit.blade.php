@@ -31,11 +31,11 @@
                     <div class="mb-3">
                         <label class="form-label">Order Type</label>
                         <div class="d-flex align-items-center">
-                            <label class="form-check-label me-2">Reparing</label>
+                            <label class="form-check-label me-2">Order</label>
                             <label class="form-check form-switch m-0">
                                 <input class="form-check-input" id="order_type" type="checkbox" @if($order['order_type'] == 2) checked @endif>
                             </label>
-                            <label class="form-check-label ms-2">Order</label>
+                            <label class="form-check-label ms-2">Reparing</label>
                         </div>
                          
                     </div>
@@ -143,7 +143,7 @@
                 <p class="text-center">No files available.</p>
             @endif
             </div>
-            <div class="row" id="payment">
+            <div class="row " id="payment">
                 <div class="col-lg-6">
                     <div>
                         <label class="form-label">Payment Advance</label>

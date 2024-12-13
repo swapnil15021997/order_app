@@ -30,8 +30,8 @@
                 </div>
               </a>
               <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                <a href="{{route('profile.edit')}}" class="dropdown-item">Profile</a>
-                <div class="dropdown-divider"></div>
+                <!-- <a href="{{route('profile.edit')}}" class="dropdown-item">Profile</a> -->
+                <a href="{{route('settings')}}" class="dropdown-item">Settings</a>
                 <a href="" onclick="logout()" class="dropdown-item">Logout</a>
                 
               </div>
@@ -96,6 +96,17 @@
                     </span>
                     <span class="nav-link-title">
                       Users
+                    </span>
+                  </a>
+                </li>
+                <li class="nav-item {{ $activePage === 'roles' ? 'active' : '' }}">
+                  <a class="nav-link" href="{{route('role-master')}}" >
+                    <span class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/package -->
+                      <!-- <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3l8 4.5l0 9l-8 4.5l-8 -4.5l0 -9l8 -4.5" /><path d="M12 12l8 -4.5" /><path d="M12 12l0 9" /><path d="M12 12l-8 -4.5" /><path d="M16 5.25l-8 4.5" /></svg> -->
+                      <svg width="24" height="24"><path d="M12 24a12 12 0 1 1 0-24 12 12 0 0 1 0 24Zm-8.7-5.3a11 11 0 0 0 17.4 0C19.4 16.3 14.6 15 12 15c-2.6 0-7.4 1.3-8.7 3.7ZM12 13c2.2 0 4-2 4-4.5S14.2 4 12 4 8 6 8 8.5 9.8 13 12 13Z" fill-rule="nonzero"/></svg>
+                    </span>
+                    <span class="nav-link-title">
+                      Roles
                     </span>
                   </a>
                 </li>
