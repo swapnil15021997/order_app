@@ -197,6 +197,8 @@ class OrderController extends Controller
             $payment->payment_date          = Carbon::now()->toDateString();
             $payment->save();
         }
+
+        SendEmailJob::dispatch($order->order_id);
         return response()->json([
             "status" =>200,
             "message"=>"Order created successfully"

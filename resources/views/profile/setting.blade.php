@@ -125,25 +125,36 @@
                                         <h3 class="card-title">Update Settings</h3>
 
                                             <p class="card-subtitle">You can set a permanent password if you don't want to use temporary login codes.</p>
-                                            <form method="post" action="{{ route('password.update') }}" class="mt-6 space-y-6">
-                                                @csrf
-                                                @method('post')
+                                         
 
                                                 <div>
                                                     <div class="row g-3 mb-3">
-                             
+                                                        @foreach($settings as $set)
                                                         <div class="col-md">
-                                                            <div class="form-label">Current Password</div>
-                                                            <input type="password" name="current_password" class="form-control" name="name">
+                                                            <div class="form-label">{{$set['setting_name']}}</div>
+                                                            @if($set['setting_name']=="email")
+                                                            <input type="email" name="{{$set['setting_name']}}" value="{{$set['setting_value']}}" class="form-control">
+                                                            @endif
+
+                                                            @if($set['setting_name']=="logo")
+                                                            <input type="file" name="{{$set['setting_name']}}" class="form-control">
+                                                            @endif
+                                                            @if($set['setting_name']=="notification_icon")
+                                                            <input type="file" name="{{$set['setting_name']}}" class="form-control">
+                                                            @endif
+                                                            @if($set['setting_name']=="fcm_token")
+                                                            <input type="text" name="{{$set['setting_name']}}" class="form-control">
+                                                            @endif
                                                         </div>
-                                                        <div class="col-md">
+                                                        @endforeach
+                                                        <!-- <div class="col-md">
                                                             <div class="form-label">New Password</div>
                                                             <input type="password" class="form-control" name="password">
                                                         </div>
                                                         <div class="col-auto">
                                                             <div class="form-label">Confirm Password</div>
                                                             <input type="password" class="form-control" name="password_confirmation">
-                                                        </div>
+                                                        </div> -->
                                                     
                                                     </div>
                                                 </div>
@@ -158,7 +169,7 @@
                                                         </button>
                                                     </div>
                                                 </div> 
-                                            </form> 
+                                             
                                     </div>
                                 </div>
 

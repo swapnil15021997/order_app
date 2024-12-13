@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
 use App\Models\Branch;
+use App\Models\Settings;
 
 class ProfileController extends Controller
 {
@@ -74,14 +75,17 @@ class ProfileController extends Controller
         $activePage = 'profile';
         $branch       = Branch::get_all_branch();
         $user_branch  = Branch::whereIn('branch_id', $userBranchIds)->get()->toArray();
-
-
+        $settings = Settings::all()->filter(function ($setting) {
+            return $setting->setting_name !== 'fcm_token';
+        })->toArray();
+        
         return view('profile.setting', [
             'user' => $request->user(),
             'login' => $login,
             'activePage' => $activePage,
             'branch'=>$branch,
-            'user_branch' => $user_branch
+            'user_branch' => $user_branch,
+            'settings' => $settings
 
         ]);
     
