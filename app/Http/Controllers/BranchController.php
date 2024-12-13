@@ -8,6 +8,7 @@ use App\Models\User;
 use DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Session;
 
 class BranchController extends Controller
 {
@@ -24,7 +25,9 @@ class BranchController extends Controller
         $branch       = Branch::get_all_branch();
         $users_branch = Branch::whereIn('branch_id', $userBranchIds)->get()->toArray();
         
-        return view('branch/branch_master',['pageTitle'=>'Branch','login'=>$login,'activePage'=>$activePage,'user_branch'=>$users_branch]);
+        $combined_permissions = session('combined_permissions', []);
+
+        return view('branch/branch_master',['pageTitle'=>'Branch','login'=>$login,'activePage'=>$activePage,'user_branch'=>$users_branch,'user_permissions'=>$combined_permissions]);
     }
     public function add_edit_branch(Request $request){
         $params = $request->all();
@@ -59,7 +62,16 @@ class BranchController extends Controller
                 'errors'  => $validator->errors(), 
             ]);
         } 
+        $combined_permissions = session('combined_permissions', []);
+
         if(empty($params['branch_id'])){
+            if(! in_array(3 ,$combined_permissions)){
+                return response()->json([
+                    'status' => 500,
+                    'message' => 'You dont have permission to add branch' 
+                ]);
+            }
+
             $branch = new Branch();
             $branch->branch_name      = $params['branch_name'];
             $branch->branch_address   = $params['branch_address'];
@@ -70,6 +82,13 @@ class BranchController extends Controller
                 'message' => 'Branch added successfully' 
             ]);
         }else{
+            if(! in_array(2 ,$combined_permissions)){
+                return response()->json([
+                    'status' => 500,
+                    'message' => 'You dont have permission to update branch' 
+                ]);
+            }
+
             $branch = Branch::find($params['branch_id']);
             if(empty($branch)){
                 return response()->json([
@@ -249,6 +268,14 @@ class BranchController extends Controller
                 'errors'  => $validator->errors(), 
             ]);
         } 
+        $combined_permissions = session('combined_permissions', []);
+        if(! in_array(4 ,$combined_permissions)){
+            return response()->json([
+                'status' => 500,
+                'message' => 'You dont have permission to delete branch' 
+            ]);
+        }
+
         $branch = Branch::find($params['branch_id']);
         if(empty($branch)){
             return response()->json([

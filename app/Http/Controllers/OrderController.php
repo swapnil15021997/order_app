@@ -51,8 +51,10 @@ class OrderController extends Controller
         $branch       = Branch::get_all_branch();
         $user_branch  = Branch::whereIn('branch_id', $userBranchIds)->get()->toArray();
     
-        $activePage = 'orders';
-        return view('orders/order_master',compact('metals', 'melting','branchesArray','pageTitle','login','activePage','user_branch'));
+        $activePage       = 'orders';
+        $user_permissions = session('combined_permissions', []);
+      
+        return view('orders/order_master',compact('metals', 'melting','branchesArray','pageTitle','login','activePage','user_branch','user_permissions'));
     }
 
     public function order_add(Request $request){
@@ -113,6 +115,13 @@ class OrderController extends Controller
                 'errors'  => $validator->errors(), 
             ]);
         } 
+        $combined_permissions = session('combined_permissions', []);
+        if(! in_array(7 ,$combined_permissions)){
+            return response()->json([
+                'status' => 500,
+                'message' => 'You dont have permission to Create order' 
+            ]);
+        }
         if ($params['order_type']==2 && ($params['payment_advance']== null || $params['payment_booking']==null)){
             return response()->json([
                 'status' => 500,
@@ -451,6 +460,13 @@ class OrderController extends Controller
                 'errors'  => $validator->errors(), 
             ]);
         } 
+        $combined_permissions = session('combined_permissions', []);
+        if(! in_array(6 ,$combined_permissions)){
+            return response()->json([
+                'status' => 500,
+                'message' => 'You dont have permission to Update order' 
+            ]);
+        }
         $order_rec = Order::get_order_by_id($params['order_id']);
 
         if(empty($order_rec)){
@@ -559,6 +575,13 @@ class OrderController extends Controller
                 'errors'  => $validator->errors(), 
             ]);
         } 
+        $combined_permissions = session('combined_permissions', []);
+        if(! in_array(8 ,$combined_permissions)){
+            return response()->json([
+                'status' => 500,
+                'message' => 'You dont have permission to delete order' 
+            ]);
+        }
 
         $check_order = Order::get_order_with_items($params['order_id']);
         if (empty($check_order)){

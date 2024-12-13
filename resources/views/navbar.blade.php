@@ -67,6 +67,7 @@
                     </span>
                   </a>
                 </li>
+                @if(in_array(1, $user_permissions))
                 <li class="nav-item {{ $activePage === 'branch' ? 'active' : '' }}">
                   <a class="nav-link" href="{{route('branch-master')}}" >
                     <span class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/package -->
@@ -78,6 +79,9 @@
                   </a>
                 
                 </li>
+                @endif
+                @if(in_array(5, $user_permissions))
+
                 <li class="nav-item {{ $activePage === 'orders' ? 'active' : '' }}">
                   <a class="nav-link" href="{{route('order-master')}}" >
                     <span class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/checkbox -->
@@ -88,6 +92,9 @@
                     </span>
                   </a>
                 </li>
+                @endif
+                @if(in_array(9,$user_permissions))
+
                 <li class="nav-item {{ $activePage === 'users' ? 'active' : '' }}">
                   <a class="nav-link" href="{{route('user-master')}}" >
                     <span class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/package -->
@@ -99,6 +106,10 @@
                     </span>
                   </a>
                 </li>
+                @endif
+
+                @if(in_array(13, $user_permissions))
+
                 <li class="nav-item {{ $activePage === 'roles' ? 'active' : '' }}">
                   <a class="nav-link" href="{{route('role-master')}}" >
                     <span class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/package -->
@@ -110,6 +121,7 @@
                     </span>
                   </a>
                 </li>
+                @endif
               </ul>
               <div class="my-2 my-md-0 flex-grow-1 flex-md-grow-0 order-first order-md-last">
                 <form action="./" method="get" autocomplete="off" novalidate>

@@ -30,13 +30,22 @@ Route::get('/dashboard', function () {
     $user_count   = User::where('is_delete',0)->count();
     $orders_count = Order::where('is_delete',0)->count();
     $total_role   = UserRole::whereNull('deleted_at')->count();
-    
     $order        = Order::get_latest_order();
     $branch       = Branch::get_latest_branch();
+
+    $user_permission = isset($login['user_permission_id']) ? explode(',', $login['user_permission_id']) : [];
+    $role            = UserRole::whereNull('deleted_at')->first()->toArray();
+    $role_permission = [];
+    if(!empty($role)){
+        $role_permission = isset($role['role_permission_ids']) ? explode(',', $role['role_permission_ids']) : [];
+    }
+    $combined_permissions = array_unique(array_merge((array)$user_permission, (array)$role_permission));
+    session(['combined_permissions' => $combined_permissions]);
+
     return view('index_new',['login'=>$login,'activePage'=>'dashboard',
     'user_branch'=>$users_branch,'order_count'=>$orders_count,
     'user_count'=>$user_count,'branch_count'=>$branch_count,
-    'total_role'=>$total_role,'order'=>$order,'branch'=>$branch]);
+    'total_role'=>$total_role,'order'=>$order,'branch'=>$branch,'user_permissions'=>$combined_permissions]);
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {

@@ -27,10 +27,11 @@ class UserController extends Controller
             $userBranchIds = explode(',', $login['user_branch_ids']);
         }
         $users_branch = Branch::whereIn('branch_id', $userBranchIds)->get()->toArray();
-        
+        $user_permissions = session('combined_permissions', []);
+     
         return view('users/users',['users' => $users,
         'pageTitle'=>'Users','login'=>$login,
-        'activePage'=>$activePage,'user_branch'=>$users_branch]);
+        'activePage'=>$activePage,'user_branch'=>$users_branch,'user_permissions'=>$user_permissions]);
     }
 
     public function user_add(Request $request){
@@ -154,6 +155,13 @@ class UserController extends Controller
                     'message' => 'User already exist'
                 ]); 
             }
+            $combined_permissions = session('combined_permissions', []);
+            if(! in_array(11 ,$combined_permissions)){
+                return response()->json([
+                    'status' => 500,
+                    'message' => 'You dont have permission to add User' 
+                ]);
+            }
            
             $user = new User();
             $user->name                  = $params['user_name'];
@@ -184,6 +192,13 @@ class UserController extends Controller
                 ]);
             }
 
+            $combined_permissions = session('combined_permissions', []);
+            if(! in_array(10 ,$combined_permissions)){
+                return response()->json([
+                    'status' => 500,
+                    'message' => 'You dont have permission to update User' 
+                ]);
+            }
             if($user->user_phone_number != $params['user_phone_number']){
                 $get_data = User::get_data_by_phone_no($params['user_phone_number']);
                 if (!empty($get_data)){
@@ -262,6 +277,13 @@ class UserController extends Controller
             return response()->json([
                 'status' => 500,
                 'message' => 'User not found.',
+            ]);
+        }
+        $combined_permissions = session('combined_permissions', []);
+        if(! in_array(12 ,$combined_permissions)){
+            return response()->json([
+                'status' => 500,
+                'message' => 'You dont have permission to delete User' 
             ]);
         }
         $user->is_delete = 1;
@@ -397,8 +419,9 @@ class UserController extends Controller
         }
         // $branch       = Branch::get_all_branch();
         $users_branch = Branch::whereIn('branch_id', $userBranchIds)->get()->toArray();
+        $user_permissions = session('combined_permissions', []);
 
-        return view('users/roles',['pageTitle'=>'Roles','login'=>$login,'activePage'=>$activePage,'user_branch'=>$users_branch]);
+        return view('users/roles',['pageTitle'=>'Roles','login'=>$login,'activePage'=>$activePage,'user_branch'=>$users_branch,'user_permissions'=>$user_permissions]);
     }
 
     public function permission_list(Request $request){
@@ -463,7 +486,13 @@ class UserController extends Controller
 
        
         if (empty($params['role_id'])){
-           
+            $combined_permissions = session('combined_permissions', []);
+            if(! in_array(15 ,$combined_permissions)){
+                return response()->json([
+                    'status' => 500,
+                    'message' => 'You dont have permission to add Role' 
+                ]);
+            }
             $user_role = new UserRole();
             $user_role->role_name         = $params['role_name'];
             $user_role->role_module_ids = implode(',', $moduleIds);
@@ -481,6 +510,13 @@ class UserController extends Controller
                 return response()->json([
                     'status' => 500,
                     'message' => 'User role does not exist'
+                ]);
+            }
+            $combined_permissions = session('combined_permissions', []);
+            if(! in_array(14 ,$combined_permissions)){
+                return response()->json([
+                    'status' => 500,
+                    'message' => 'You dont have permission to add Role' 
                 ]);
             }
     
@@ -664,6 +700,13 @@ class UserController extends Controller
                 'errors'  => $validator->errors(), 
             ]);
         } 
+        $combined_permissions = session('combined_permissions', []);
+        if(! in_array(16 ,$combined_permissions)){
+            return response()->json([
+                'status' => 500,
+                'message' => 'You dont have permission to delete Role' 
+            ]);
+        }
         $check_role = UserRole::get_role_by_id($params['role_id']);
         if (empty($check_role)){
             return response()->json([
