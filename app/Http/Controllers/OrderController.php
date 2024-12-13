@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Arr;
 use Carbon\Carbon;
 use App\Jobs\SendEmailJob;
+use App\Jobs\SendNotification;
 class OrderController extends Controller
 {
 
@@ -60,7 +61,7 @@ class OrderController extends Controller
     public function order_add(Request $request){
         $params = $request->all();
         $login  = auth()->user();
-       
+
         $rules = [   
             
             'order_date'           => ['required', 'date', 'date_format:Y-m-d'],  
@@ -122,7 +123,7 @@ class OrderController extends Controller
                 'message' => 'You dont have permission to Create order' 
             ]);
         }
-        if ($params['order_type']==2 && ($params['payment_advance']== null || $params['payment_booking']==null)){
+        if ($params['order_type']==1 && ($params['payment_advance']== null || $params['payment_booking']==null)){
             return response()->json([
                 'status' => 500,
                 'message' =>"Please enter payment details"
@@ -198,7 +199,7 @@ class OrderController extends Controller
         $trans->trans_time          = Carbon::now()->toDateTimeString(); 
         $trans->save();
 
-        if($params['order_type'] == 2){
+        if($params['order_type'] == 1){
             $payment = new Payment();
             $payment->payment_order_id      = $order->order_id;
             $payment->payment_booking_rate  = $params['payment_booking'];
@@ -208,7 +209,8 @@ class OrderController extends Controller
             $payment->save();
         }
 
-        SendEmailJob::dispatch($order->order_id,$type="add");
+        SendEmailJob::dispatch($order->order_id,$type="Add");
+        SendNotification::dispatch($order->order_id,$type="Add");
         return response()->json([
             "status" =>200,
             "message"=>"Order created successfully"
@@ -224,6 +226,8 @@ class OrderController extends Controller
         $pageTitle     = 'Orders';
         $login         = auth()->user()->toArray();
         $activePage    = 'orders';
+        $user_permissions = session('combined_permissions', []);
+      
         $login = auth()->user();
 
         if(!empty($login)){
@@ -232,7 +236,7 @@ class OrderController extends Controller
         $branch       = Branch::get_all_branch();
         $user_branch  = Branch::whereIn('branch_id', $userBranchIds)->get()->toArray();
     
-        return view('orders/order_add',compact('metals', 'melting','branchesArray','pageTitle','login','activePage','user_branch'));
+        return view('orders/order_add',compact('metals', 'melting','branchesArray','pageTitle','login','activePage','user_branch','user_permissions'));
     }
 
     private function generateUniqueNumber($column)
@@ -544,6 +548,8 @@ class OrderController extends Controller
             }
         }
         SendEmailJob::dispatch($order_rec->order_id,$type="Edit");
+        SendNotification::dispatch($order_rec->order_id,$type="Edit");
+
         return response()->json([
             'status'  => 200,
             'message' => 'Order updated successfully' 

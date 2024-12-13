@@ -112,14 +112,20 @@ Route::post('password', [PasswordController::class, 'update'])->name('password.u
 
 });
 
+
+
+Route::get('firebase_json.js', [DashboardController::class, 'firebase_config']);
+Route::post('update-fcm', [DashboardController::class, 'update_fcm'])->name('update-fcm');
+
+
 Route::get('/test', function () {
+
     $order_id = 1;
-    
     $order = Order::query()    
     ->leftJoin('branch AS from_branch', 'from_branch.branch_id', '=', 'orders.order_from_branch_id')  // Join to get 'order_from_branch' name
     ->leftJoin('branch AS to_branch', 'to_branch.branch_id', '=', 'orders.order_to_branch_id')  // Join to get 'order_to_branch' name
     ->leftJoin('items as item', 'item.item_order_id', '=', 'orders.order_id')  // Join to get 'order_to_branch' name
-    
+
     ->select(
         'orders.*', 
         'item.*',
@@ -128,31 +134,31 @@ Route::get('/test', function () {
     ->where('orders.is_delete',0)
     ->where('order_id',$order_id)->first();
     
-    $settings = Settings::where('setting_name','email')->first();
+    $get_users = [$order->order_from_branch_id, $order->order_to_branch_id];
+    $comma_separated_ids = implode(',', $get_users);
+    $users = User::query()
+    ->where(function ($query) use ($get_users) {
+        foreach ($get_users as $site_id) {
+            $query->orWhereRaw("FIND_IN_SET(?, user_branch_ids)", [$site_id]);
+        }
+    })
+    ->get()
+    ->toArray();
     
-    if($order['order_type'] == 1){
-        $order_type = 'Order';
-    }else{
-        $order_type = 'Reparing';
-    }
-    $mail_data = [
-        'mail_to'   => $settings['mail_to'],
-        'mail_from' => 'noreply@example.com',
-        'order_form'=> $order['order_from_name'],
-        'order_to'  => $order['order_to_name'],
-        'order_id'  => $order['order_id'],
-        'order_type' => $order['order_type'],
-        'order_name' => $order_type,
+    $noti_data = [];
+    foreach($users as $user){
         
-        'order_date' => $order['order_date'],
-        'item_name' => $order['item_name'],
-        'item_metal' => $order['item_metal'],
-        'item_melting'=> $order['item_melting'],
-        'item_weight'=> $order['item_weight']
-    ];
+        $noti_data['title']     = 'CHALAN CREATED SUCCESSFULLY';
+        $noti_data['body']      = 'CHALAN CREATED SUCCESSFULLY';
+        $noti_data['fcm_token'] = $user['user_fcm_token'];
+        $dash = new DashboardController();
+        $not = $dash->sendFirebaseNotification($noti_data);
 
-    $mail = new MailController();
-    $mail->send_email($mail_data);
+    }
+    return response()->json([
+        'message' => 'Notifications sent successfully',
+        'notified_users' => array_column($users, 'id'),
+    ], 200);
 
 });
 

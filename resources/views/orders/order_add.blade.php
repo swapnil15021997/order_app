@@ -223,13 +223,13 @@
 
                         formData.append('payment_advance', payment_advance);
                     }else{
-                        formData.append('payment_advance', null);
+                        formData.append('payment_advance', '');
                     }
                     if(payment_booking){
 
                         formData.append('payment_booking', payment_booking);
                     }else{
-                        formData.append('payment_booking', null);
+                        formData.append('payment_booking', '');
                     }
 
                     formData.append('item_melting', item_melting);

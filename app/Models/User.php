@@ -31,7 +31,8 @@ class User extends Authenticatable
         'user_role_id',
         'user_module_id',
         'user_permission_id',
-        'user_active_branch'
+        'user_active_branch',
+        'user_fcm_token'
     ];
 
     /**
