@@ -153,7 +153,7 @@ Route::get('/test', function () {
         $noti_data['fcm_token'] = $user['user_fcm_token'];
         $dash = new DashboardController();
         $not = $dash->sendFirebaseNotification($noti_data);
-
+        dd("test",$not);
     }
     return response()->json([
         'message' => 'Notifications sent successfully',

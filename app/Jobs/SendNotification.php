@@ -56,7 +56,7 @@ class SendNotification implements ShouldQueue
         
         $noti_data = [];
         foreach($users as $user){
-            
+        
             $noti_data['title']     = 'CHALAN CREATED SUCCESSFULLY';
             $noti_data['body']      = 'CHALAN CREATED SUCCESSFULLY';
             $noti_data['fcm_token'] = $user['user_fcm_token'];

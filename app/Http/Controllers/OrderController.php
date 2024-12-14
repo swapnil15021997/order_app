@@ -156,6 +156,8 @@ class OrderController extends Controller
         $order->order_from_branch_id = $params['order_from_branch_id'];
         $order->order_to_branch_id   = $params['order_to_branch_id'];
         $order->order_type           = $params['order_type'];
+        $order->order_user_id        = $login->id;
+        
         $order->save();
 
         

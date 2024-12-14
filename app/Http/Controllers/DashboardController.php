@@ -82,7 +82,7 @@ class DashboardController extends Controller
         $filePath        = public_path('js/firebase_json.js'); 
         
         if (File::exists($filePath)) {  
-                
+            dd("hee");
             return response()->file($filePath, ['Content-Type' => 'text/javascript']);
         }
          else {
@@ -144,7 +144,7 @@ class DashboardController extends Controller
         }
         $headers = [
             'Authorization' => 'Bearer ' . $accessToken['jwt'],
-            'Content-Type' => 'application/json; UTF-8',
+            'Content-Type' => 'application/json',
         ];
 
         $url = "https://fcm.googleapis.com/v1/projects/orderapp-bc2f6/messages:send";
@@ -154,17 +154,27 @@ class DashboardController extends Controller
                 "token" => $noti_data['fcm_token'],
                 "notification" => [
                     "title" => $noti_data['title'],
-                    "body" => $noti_data['body']
-                ]
+                    "body" => $noti_data['body'],
+
+                    ]
             ]
         ];
-        \Log::info(['User Notified'=>$payload]);
+        \Log::info(['User Notified'=>$payload,'From'=>$accessToken['jwt']]);
         $response = Http::withHeaders($headers)->post($url, $payload);
+        if ($response->failed()) {
+            \Log::error('FCM Notification Failed', [
+                'response_status' => $response->status(),
+                'response_body' => $response->body(),
+            ]);
+        }
+        \Log::info(['FCM Response' => $response->body()]);
 
         if ($response->successful()) {
-            
+            dd("if",$response->json());
             return $response->json();
         } else {
+            dd("else",$response->json());
+
             return [
                 'error' => $response->status(),
                 'message' => $response->body()

@@ -183,6 +183,8 @@
   
   
 <script src="https://www.gstatic.com/firebasejs/8.3.2/firebase.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.2.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.2.0/firebase-messaging.js"></script> 
 <script type="module">
 
 
@@ -267,15 +269,15 @@
 
 
                 self.addEventListener('push', function(payload,event) {
-            event.waitUntil(
-                self.registration.showNotification('Title', {
-                    body: payload.notification.body,
-                    icon: payload.notification.icon // replace with actual icon URL
-                    
-                  
+                  event.waitUntil(
+                      self.registration.showNotification('Title', {
+                          body: payload.notification.body,
+                          icon: payload.notification.icon // replace with actual icon URL
+                          
+                        
 
-                })
-            );
+                      })
+              );
         });
 
 
