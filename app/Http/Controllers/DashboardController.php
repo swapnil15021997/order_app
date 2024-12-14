@@ -9,6 +9,7 @@ use GuzzleHttp\Client;
 use \Firebase\JWT\JWT;
 use App\Models\Settings;
 use App\Models\User;
+use App\Models\Notification;
 use File;
 use Illuminate\Support\Facades\Validator;
 use Carbon\Carbon;
@@ -22,28 +23,13 @@ class DashboardController extends Controller
     }
 
 
-    // function getAccessToken()
-    // {
-
-    //     // Path to the service account key file
-    //     $keyPath = storage_path('firebase-cred.json'); // Ensure this path is correct
-
-    //     $factory = (new Factory)->withServiceAccount($keyPath);
-    //     $googleAuthToken = $factory->createAuth()->getAccessToken();
-
-    //     return [
-    //         'token' => $googleAuthToken->getValue(),
-    //         'expiry' => $googleAuthToken->getExpiresAt()->format('Y-m-d H:i:s')
-    //     ];
-    // }
+  
 
     function getAccessToken()
     {
         $keyPath        = public_path('json/firebase_key_value_pair.json'); 
         $serviceAccount = json_decode(file_get_contents($keyPath), true);
-
-        
-        $now = time();
+        $now            = time();
         $expirationTime = $now + 3600; // The token expires in 1 hour (3600 seconds)
 
         // Create the JWT
@@ -126,16 +112,16 @@ class DashboardController extends Controller
 
         $settings = Settings::where('setting_name','fcm_token')->first();
         if(empty($settings)){
-            $accessToken = $this->getAccessToken();
-            $settings->setting_value  = $accessToken['jwt'];
-            $settings->setting_expired = $accessToken['exp'];
+            $accessToken                = $this->getAccessToken();
+            $settings->setting_value    = $accessToken['jwt'];
+            $settings->setting_expired  = $accessToken['exp'];
         }else{
             $expiry      = $settings->setting_expired;
             $currentTime = Carbon::now()->timestamp;
 
             if ($currentTime > $expiry) {
-                $accessToken = $this->getAccessToken();
-                $settings->setting_value = $accessToken['jwt'];
+                $accessToken               = $this->getAccessToken();
+                $settings->setting_value   = $accessToken['jwt'];
                 $settings->setting_expired = $accessToken['exp'];
                 $settings->save();
             }else{
@@ -161,7 +147,11 @@ class DashboardController extends Controller
         ];
         \Log::info(['User Notified'=>$payload,'From'=>$accessToken['jwt']]);
         $response = Http::withHeaders($headers)->post($url, $payload);
+        $noti     = Notification::where('noti_id',$noti_data['noti_id'])->first();
         if ($response->failed()) {
+            $noti->noti_failed_reason = 'FCM Notification failed with status: ' . $response->status() . '. Response Body: ' . $response->body();
+         
+            $noti->save();
             \Log::error('FCM Notification Failed', [
                 'response_status' => $response->status(),
                 'response_body' => $response->body(),
@@ -170,11 +160,10 @@ class DashboardController extends Controller
         \Log::info(['FCM Response' => $response->body()]);
 
         if ($response->successful()) {
-            dd("if",$response->json());
+            $noti->noti_status = 1;
+            $noti->save();
             return $response->json();
         } else {
-            dd("else",$response->json());
-
             return [
                 'error' => $response->status(),
                 'message' => $response->body()

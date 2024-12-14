@@ -6,6 +6,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use App\Models\Order;
 use App\Models\User;
+use App\Models\Notification;
 use App\Http\Controllers\DashboardController;
 
 
@@ -31,10 +32,9 @@ class SendNotification implements ShouldQueue
     public function handle(): void
     {
         $order = Order::query()    
-        ->leftJoin('branch AS from_branch', 'from_branch.branch_id', '=', 'orders.order_from_branch_id')  // Join to get 'order_from_branch' name
-        ->leftJoin('branch AS to_branch', 'to_branch.branch_id', '=', 'orders.order_to_branch_id')  // Join to get 'order_to_branch' name
-        ->leftJoin('items as item', 'item.item_order_id', '=', 'orders.order_id')  // Join to get 'order_to_branch' name
-    
+        ->leftJoin('branch AS from_branch', 'from_branch.branch_id', '=', 'orders.order_from_branch_id') 
+        ->leftJoin('branch AS to_branch', 'to_branch.branch_id', '=', 'orders.order_to_branch_id')  
+        ->leftJoin('items as item', 'item.item_order_id', '=', 'orders.order_id')  
         ->select(
             'orders.*', 
             'item.*',
@@ -53,17 +53,68 @@ class SendNotification implements ShouldQueue
         })
         ->get()
         ->toArray();
+
+        if($this->type=="Add"){
+            $type=1;
+        }else{
+            $type=2;
+        }
+        $data = [];
+
+         
+        if($order['order_type'] == 1){
+            $data['order_name'] = 'Order';
+        }else{
+            $data['order_name'] = 'Reparing';
+        }
+        
+        if($this->type=='Add'){
+
+            $subject = "Chalan Created for " .$data['order_name'];
+            $message = "This is to inform you about a new chalan of type " .$data['order_name'];
+        }else{
+            $subject = "Chalan Updated for " .$data['order_name'];
+            $message = "This is to inform you about a Update chalan of type " .$data['order_name'];
+        }
+        
+
+        $message.="\nFrom Branch Name: ".$order['order_form'];
+        $message.="\nTo Branch Name: ".$order['order_to'];
+        $message.="\nOrder Date: ".$order['order_date'];
+        $data['title'] = $message;
+        $data['body'] = $subject;
+        
         
         $noti_data = [];
+        $noti = Notification::create([
+            'noti_status'       => 1,
+            'noti_user_ids'     => null,
+            'noti_type'         => $type,
+            'noti_order_id'     => $order->order_id,
+            'noti_title'        => $data['title'],
+            'noti_message'      => $data['body'],    
+            'noti_read_by'      => null,    
+            'noti_deleted_by'   => null,
+            'noti_failed_reason'=> null
+        ]);
+
+        $data['noti_id'] = $noti->noti_id;
+        $user_ids = [];
+        $noti_data = [];
         foreach($users as $user){
-        
-            $noti_data['title']     = 'CHALAN CREATED SUCCESSFULLY';
-            $noti_data['body']      = 'CHALAN CREATED SUCCESSFULLY';
+            $user_ids[] = $user['id'];
+
+            $noti_data['title']     = $data['title'];
+            $noti_data['body']      = $data['body'];
             $noti_data['fcm_token'] = $user['user_fcm_token'];
+            $noti_data['noti_id']   = $data['noti_id'];
             $dash = new DashboardController();
             $not = $dash->sendFirebaseNotification($noti_data);
-    
+            
         }
+        $noti->update([
+            'noti_user_ids' => implode(',', $user_ids),
+        ]);
 
     }
 }
