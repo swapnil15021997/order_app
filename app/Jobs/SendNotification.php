@@ -112,7 +112,7 @@ class SendNotification implements ShouldQueue
             $not = $dash->sendFirebaseNotification($noti_data);
             
         }
-        $noti->update([
+        $noti->save([
             'noti_user_ids' => implode(',', $user_ids),
         ]);
 

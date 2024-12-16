@@ -44,10 +44,10 @@
                         <label class="form-label">Order Type</label>
                         <div class="d-flex align-items-center">
                             <label class="form-check-label ms-2">Order</label>
-                            <label class="form-check form-switch m-0">
+                            <label class="form-check form-switch m-0 ms-2">
                                 <input class="form-check-input" id="order_type" type="checkbox" checked>
                             </label>
-                            <label class="form-check-label me-2">Reparing</label>
+                            <label class="form-check-label me-2 ms-2">Reparing</label>
                         </div>
                          
                     </div>
@@ -138,7 +138,26 @@
                         <input type="file" class="form-control" id="item_image_id"  multiple  placeholder="Choose Images">
                     </div>
                 </div>
-            </div>
+                <div class="col-lg-4">
+                    <div class="mb-3">
+                        <label class="form-label">Select Customer</label>
+                        <select id="searchableCust" class="form-select select2">
+                            
+                            <!-- @foreach ($branchesArray as $branch)
+                                <option value="{{ $branch['branch_id'] }}">{{ $branch['branch_name'] }}</option>
+                            @endforeach -->
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col-lg-2">
+                    <div class="mb-3">
+                        <label class="form-label">Create New</label>
+                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal-report">Create New</button>
+                    </div>
+                </div>
+
+'            </div>
 
 
             <div class="row d-none" id="payment">
@@ -174,6 +193,52 @@
         </div>
     </div>
 
+    <div class="modal modal-blur fade" id="modal-report" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+
+                    <div class="modal-header">
+                        <h5 class="modal-title">New Customer</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div id="alert-container-cust"></div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <input type="hidden" id="branch_id" value="">
+                            <label class="form-label">Customer Name</label>
+                            <input id="customer_name" required type="text" name="customer_name" class="form-control"  placeholder="Add Customer Name">
+                        </div>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div>
+                                    <label class="form-label">Customer Address</label>
+                                    <textarea id="customer_address" required name="customer_address" class="form-control" rows="3"></textarea>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div>
+                                    <label class="form-label">Customer Phone No</label>
+                                    <input id="customer_phone_no" required type="text" name="customer_phone_no" class="form-control"  placeholder="Add phone no">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <a href="#" class="btn btn-link link-secondary" data-bs-dismiss="modal">
+                        Cancel
+                        </a>
+                        <a id="saveCustBtn" href="#" class="btn btn-primary ms-auto">
+                        <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 5l0 14" /><path d="M5 12l14 0" /></svg>
+                        Create new Customer
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
@@ -201,6 +266,7 @@
                 const orderTypeValue = orderType.checked ? 2 : 1;
                 var orderFrom    = $('#searchableSelectFrom').val();
                 var orderTo      = $('#searchableSelectTo').val();
+                var cust         = $('#searchableCust').val();
                 var item_metal   = $('#item_metal').val();
                 var item_name    = $('#item_name').val();
                 var item_melting = $('#item_melting').val();
@@ -217,6 +283,9 @@
                     formData.append('order_type', orderTypeValue);
                     formData.append('order_from_branch_id', orderFrom);
                     formData.append('order_to_branch_id', orderTo);
+                    formData.append('order_user_id', cust);
+
+                    
                     formData.append('item_metal', item_metal);
                     formData.append('item_name', item_name);
                     if(payment_advance){
@@ -282,6 +351,53 @@
                     showAlert('warning', 'Please fill in all fields orderDate, orderType and Order To');
                 }
             });
+
+
+            $('#saveCustBtn').click(function(e) {
+                e.preventDefault(); 
+                var custName    = $('#customer_name').val();
+                var custAddress = $('#customer_address').val();
+                var custPhone   = $('#customer_phone_no').val();
+                
+                // var branchId = $('#branch_id').val();
+                console.log(custAddress,custName)
+                if (custName && custPhone) {
+                    $.ajax({
+                        url: "{{ route('add_edit_cust') }}",  // Adjust the route as needed
+                        type: 'POST',
+                        data: {
+                            _token           : csrfToken,
+                            customer_name    : custName,
+                            customer_address : custAddress,
+                            customer_phone_no:custPhone,
+                            customer_id      : null,
+                        },
+                        success: function(response) {
+                            // Handle success
+                            
+                            if (response.status==200) {
+                                $('#modal-report').modal('hide');  // Hide the modal
+                                $('#customer_name').val();
+                                $('#customer_address').val();
+                                $('#customer_phone_no').val();
+                                showAlertCust('success', response.message);
+                                // alert(response.message);
+
+                            } else {
+                                // alert('Error creating branch: ' + response.message);
+                                showAlertCust('warning', response.message);
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            // alert('An error occurred: ' + error);
+                            showAlertCust('warning', error);
+                        }
+                    });
+                } else {
+                    // alert('Please fill in both fields.');
+                    showAlertCust('warining', 'Please fill in both fields, Name and address');
+                }
+            });
         });
 
         var userInput = '';
@@ -327,6 +443,50 @@
                             return {
                                 id: item.branch_id,
                                 text: item.branch_name
+                            };
+                        }),
+                        pagination: {
+                            more: data.data.length >= 10 // Check if there are more results
+                        }
+                    };
+                },
+                cache: true 
+            }
+        });
+        
+        $('#searchableCust').on('select2:open', function() {
+                $('.select2-search__field').on('input', function() {
+                    userInput = $(this).val();
+                });
+            });
+            var csrfToken = $('meta[name="csrf-token"]').attr('content');
+            $('#searchableCust').select2({
+                
+                placeholder: "Select an option",
+                allowClear: true,
+                ajax: {
+                    url: "{{route('customer_list')}}", 
+                dataType: 'json',
+                type: 'POST',
+                headers: {
+                        'X-CSRF-TOKEN': csrfToken  // Add CSRF token in the header
+                },
+                delay: 250, 
+                data: function (params) {
+                    return {
+                       
+                        search: params.term, 
+                        per_page: 10,
+                        page: params.page || 1 
+                    };
+                },
+                processResults: function (data) {
+                    
+                    return {
+                        results: data.data.cust.map(function (item) {
+                            return {
+                                id: item.cust_id,
+                                text: item.cust_name
                             };
                         }),
                         pagination: {
@@ -410,5 +570,35 @@
             alertContainer.innerHTML = alertHTML;
             console.log("here");
         }
+
+        function showAlertCust(type, message) {
+            const alertContainer = document.getElementById('alert-container-cust');
+            const alertHTML = `
+                <div class="alert alert-${type} alert-dismissible" role="alert">
+                    <div class="d-flex">
+                        <div>
+                            ${type === 'success' ? `
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon alert-icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                <path d="M5 12l5 5l10 -10" />
+                            </svg>` : `
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon alert-icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                <path d="M10.24 3.957l-8.422 14.06a1.989 1.989 0 0 0 1.7 2.983h16.845a1.989 1.989 0 0 0 1.7 -2.983l-8.423 -14.06a1.989 1.989 0 0 0 -3.4 0z" />
+                                <path d="M12 9v4" />
+                                <path d="M12 17h.01" />
+                            </svg>`}
+                        </div>
+                        <div>${message}</div>
+                    </div>
+                    <a class="btn-close" data-bs-dismiss="alert" aria-label="close"></a>
+                </div>
+            `;
+            alertContainer.innerHTML = alertHTML;
+            console.log("here");
+        }
+
+
+        
     </script>
 @endsection

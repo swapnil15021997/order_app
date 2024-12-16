@@ -8,6 +8,8 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\NotesController;
 use App\Http\Controllers\MailController;
+use App\Http\Controllers\CustomerController;
+
 use App\Http\Controllers\Auth\PasswordController;
 use Illuminate\Support\Facades\Route;
 use App\Models\Branch;
@@ -66,6 +68,9 @@ Route::get('branch-master', [BranchController::class, 'branch_index'])->name('br
 Route::post('branch-details', [BranchController::class, 'branch_details'])->name('branch_details');;
 Route::post('branch-remove', [BranchController::class, 'branch_remove'])->name('branch_remove');
 Route::post('branch-active', [BranchController::class, 'change_active_branch'])->name('branch-active');
+
+Route::post('customer-add-edit', [CustomerController::class, 'add_edit_customer'])->name('add_edit_cust');
+Route::post('customer-list',     [CustomerController::class, 'customer_list'])->name('customer_list');
 
 
 Route::get('order-add', [OrderController::class, 'order_add_page'])->name('order-add-page');

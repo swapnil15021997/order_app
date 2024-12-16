@@ -9,6 +9,7 @@ use App\Models\Item;
 use App\Models\File;
 use App\Models\Transactions;
 use App\Models\Payment;
+use App\Models\Customers;
 use DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Arr;
@@ -32,30 +33,26 @@ class OrderController extends Controller
         if (!empty($order['items'][0]['files'])){
             $fileArray = $order['items'][0]['files']->toArray();
         }
-        $activePage = 'orders';
-        $branch       = Branch::get_all_branch();
+        $activePage   = 'orders';
         $user_branch  = Branch::whereIn('branch_id', $userBranchIds)->get()->toArray();
 
         return view('orders/order_view',['order'=>$order,'fileArray'=>$fileArray,'pageTitle'=>'Order','login'=>$login,'activePage'=>$activePage,'user_branch'=>$user_branch]);
     }
     public function order_index(Request $request){
-        $metals = DB::table('metals')->select('metal_name')->get();
-        $melting = DB::table('melting')->select('melting_name')->get();
-        $branches = Branch::select('branch_id', 'branch_name')->take(5)->get();
-        $branchesArray = $branches->toArray();
-        $pageTitle = 'Orders';
-        $login = auth()->user();
+        $metals        = DB::table('metals')->select('metal_name')->get();
+        $melting       = DB::table('melting')->select('melting_name')->get();
+        $pageTitle     = 'Orders';
+        $login         = auth()->user();
        
         if(!empty($login)){
             $userBranchIds = explode(',', $login['user_branch_ids']);
         }
-        $branch       = Branch::get_all_branch();
         $user_branch  = Branch::whereIn('branch_id', $userBranchIds)->get()->toArray();
     
         $activePage       = 'orders';
         $user_permissions = session('combined_permissions', []);
       
-        return view('orders/order_master',compact('metals', 'melting','branchesArray','pageTitle','login','activePage','user_branch','user_permissions'));
+        return view('orders/order_master',compact('metals', 'melting','pageTitle','login','activePage','user_branch','user_permissions'));
     }
 
     public function order_add(Request $request){
@@ -71,6 +68,7 @@ class OrderController extends Controller
             'item_metal'           => ['required', 'string'],
             'item_name'            => ['required', 'string'],
             'item_melting'         => ['required', 'string'],
+            'order_user_id'        => ['required', 'string'],
             'item_weight'          => ['required', 'numeric'],
             'item_file_images'     => ['nullable'],  
             'item_file_images.*'   => ['file', 'mimes:jpeg,jpg,png,pdf', 'max:10240'],
@@ -89,6 +87,9 @@ class OrderController extends Controller
                 'order_type.required'         => 'Order type is required.',
                 'order_type.string'           => 'Order type must be a string.',
                 'order_type.in'               => 'Order type must be 1 or 2.',
+
+                'order_user_id.required'         => 'Customer Details is required.',
+                'order_user_id.string'           => 'Customer Details must be a string.',
                 
                 'item_metal.required'         => 'Item metal is required.',
                 'item_metal.string'           => 'Item metal must be a string.',
@@ -157,7 +158,7 @@ class OrderController extends Controller
         $order->order_to_branch_id   = $params['order_to_branch_id'];
         $order->order_type           = $params['order_type'];
         $order->order_user_id        = $login->id;
-        
+        $order->order_customer_id    = $params['order_user_id'];
         $order->save();
 
         
@@ -219,7 +220,7 @@ class OrderController extends Controller
         ]);
     }
 
-
+    // order add page
     public function order_add_page(Request $request){
         $metals        = DB::table('metals')->select('metal_name')->get();
         $melting       = DB::table('melting')->select('melting_name')->get();
@@ -235,7 +236,8 @@ class OrderController extends Controller
         if(!empty($login)){
             $userBranchIds = explode(',', $login['user_branch_ids']);
         }
-        $branch       = Branch::get_all_branch();
+
+        // branch array of user
         $user_branch  = Branch::whereIn('branch_id', $userBranchIds)->get()->toArray();
     
         return view('orders/order_add',compact('metals', 'melting','branchesArray','pageTitle','login','activePage','user_branch','user_permissions'));
@@ -270,6 +272,9 @@ class OrderController extends Controller
             $paymentArray = Payment::where('payment_order_id',$id)->first();
            
         }
+        $customer  = Customers::where('is_delete',0)->get()->toArray();
+        
+        // $order['order_cust']
         $pageTitle     = 'Orders';
         $login         = auth()->user()->toArray();
         $activePage    = 'orders';
@@ -277,22 +282,22 @@ class OrderController extends Controller
         if(!empty($login)){
             $userBranchIds = explode(',', $login['user_branch_ids']);
         }
-        $branch       = Branch::get_all_branch();
         $user_branch  = Branch::whereIn('branch_id', $userBranchIds)->get()->toArray();
     
-
         if (!empty($order['items'][0]['files'])){
             $fileArray = $order['items'][0]['files']->toArray();
         }
-       
+        $user_permissions = session('combined_permissions', []);
+      
         return view('orders/order_edit'
         ,compact('metals', 'melting','branchesArray',
-        'pageTitle','login','activePage','order','fileArray','user_branch','paymentArray'));
+        'pageTitle','login','activePage','order','fileArray','user_branch','paymentArray','customer','user_permissions'));
     }
+
+
     public function order_details(Request $request){
         $params = $request->all();
              
-
         $rules = [   
             
             'order_id' => ['required','string'],
@@ -331,6 +336,7 @@ class OrderController extends Controller
 
     }
 
+    // List of order table
     public function order_list(Request $request){
         $rules = [
             'search'   => ['nullable', 'string'], 
@@ -407,7 +413,7 @@ class OrderController extends Controller
         ]);
     }
 
-
+    // Order Updte
     public function order_update(Request $request){
         $params = $request->all();
 
@@ -423,10 +429,11 @@ class OrderController extends Controller
             'item_weight'          => ['required', 'numeric'],
             'item_file_images'     => ['nullable'],  
             'item_file_images.*'   => ['file', 'mimes:jpeg,jpg,png,pdf', 'max:10240'],
-            'payment_advanced' => ['nullable','numeric'],
-            'payment_booking' => ['nullable','numeric'],
-          
-            ]; 
+            'payment_advanced'     => ['nullable','numeric'],
+            'payment_booking'      => ['nullable','numeric'],
+            'order_user_id'        => ['required', 'string'],
+
+        ]; 
         $messages = [
                 'order_id.required' => 'Order ID is required.',
                 'order_id.string' => 'Order ID must be a string.',         
@@ -440,6 +447,9 @@ class OrderController extends Controller
                 'order_type.required'         => 'Order type is required.',
                 'order_type.string'           => 'Order type must be a string.',
                 'order_type.in'               => 'Order type must be 1 or 2.',
+                
+                'order_user_id.required'      => 'Customer Details is required.',
+                'order_user_id.string'        => 'Customer Details must be a string.',
                 
                 'item_metal.required'         => 'Item metal is required.',
                 'item_metal.string'           => 'Item metal must be a string.',
@@ -497,10 +507,12 @@ class OrderController extends Controller
             ]);
         }    
 
-        $order_rec->order_date = $params['order_date'];
+        $order_rec->order_date           = $params['order_date'];
         $order_rec->order_from_branch_id = $params['order_from_branch_id'];
-        $order_rec->order_to_branch_id = $params['order_to_branch_id'];
-        $order_rec->order_type = $params['order_type'];
+        $order_rec->order_to_branch_id   = $params['order_to_branch_id'];
+        $order_rec->order_type           = $params['order_type'];
+        $order_rec->order_customer_id    = $params['order_user_id'];
+       
         $order_rec->save();
         $item = Item::where('item_order_id', $order_rec->order_id)->first();
 
@@ -558,10 +570,12 @@ class OrderController extends Controller
         ]);
 
     }
+
+
+
+    // order delete
     public function order_remove(Request $request){
         $params = $request->all();
-             
-
         $rules = [   
             
             'order_id' => ['required','string'],

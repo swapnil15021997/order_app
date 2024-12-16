@@ -13,34 +13,24 @@ use Illuminate\Support\Facades\Session;
 class BranchController extends Controller
 {
 
+    // Branch Master
     public function branch_index(Request $request){
-        $login = auth()->user();
+        $login      = auth()->user();
         $activePage = 'branch';
-
-        $login = auth()->user();
 
         if(!empty($login)){
             $userBranchIds = explode(',', $login['user_branch_ids']);
         }
-        $branch       = Branch::get_all_branch();
-        $users_branch = Branch::whereIn('branch_id', $userBranchIds)->get()->toArray();
-        
+        $users_branch = Branch::whereIn('branch_id', $userBranchIds)->get()->toArray();        
         $combined_permissions = session('combined_permissions', []);
 
         return view('branch/branch_master',['pageTitle'=>'Branch','login'=>$login,'activePage'=>$activePage,'user_branch'=>$users_branch,'user_permissions'=>$combined_permissions]);
     }
+
+    // Bracnh add edit ajax call
     public function add_edit_branch(Request $request){
         $params = $request->all();
-        $user = auth()->user();
-
-        // $token = $request->header('Authorization');
-
-        // $session = DB::table('sessions')
-        // ->where('session_token', $token)
-        // ->where('session_status', 1) 
-        // ->where('session_is_delete', false)
-        // ->first();
-
+        $user   = auth()->user();
         $rules = [   
             'branch_id'           => ['nullable','string'],
             'branch_name'         => ['required','string'],  
@@ -107,6 +97,7 @@ class BranchController extends Controller
       
     }
 
+    // Branch List ajax
     public function branch_list(Request $request){
         
         $rules = [
@@ -174,6 +165,7 @@ class BranchController extends Controller
     }
 
 
+    // Update active branches of user
     function change_active_branch(Request $request){
         $params = $request->all();
       
@@ -212,7 +204,7 @@ class BranchController extends Controller
         ]);
     }
     
-
+    // branch details
     public function branch_details(Request $request){
         $params = $request->all();
       
@@ -246,8 +238,9 @@ class BranchController extends Controller
             'message' => 'Branch details find successfully',
             'data'    => $branch
         ]);
-    }
+    }   
 
+    // Remove a branch from the table
     public function branch_remove(Request $request){
         $params = $request->all();
       

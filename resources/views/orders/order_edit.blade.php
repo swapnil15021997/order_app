@@ -133,6 +133,22 @@
                         <input type="file" class="form-control" id="edit_item_image_id"  multiple  placeholder="Choose Images">
                     </div>
                 </div>
+                <div class="col-lg-4">
+                    <div class="mb-3">
+                        <label class="form-label">Select Customer</label>
+                        <select id="searchableCust" class="form-select select2">
+                            
+                            <!-- @foreach ($branchesArray as $branch)
+                                <option value="{{ $branch['branch_id'] }}">{{ $branch['branch_name'] }}</option>
+                            @endforeach -->
+                            @foreach ($customer as $branch)
+                                <option value="{{ $branch['cust_id'] }}"
+                                @if ($branch['cust_id'] == $order['order_customer_id']) selected @endif
+                                >{{ $branch['cust_name'] }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
             </div>
 
             <div class="row">
@@ -150,7 +166,7 @@
                 <p class="text-center">No files available.</p>
             @endif
             </div>
-            <div class="row " id="payment">
+            <div class="row d-none " id="payment">
                 <div class="col-lg-6">
                     <div>
                         <label class="form-label">Payment Advance</label>
