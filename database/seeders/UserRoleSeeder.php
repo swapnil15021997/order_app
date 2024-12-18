@@ -13,8 +13,8 @@ class UserRoleSeeder extends Seeder
      */
     public function run(): void
     {   
-        $moduleIds       = explode(',', [1,2,3,4]);
-        $permissionIds   = explode(',', [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]);
+        $moduleIds       = implode(',', [1,2,3,4]);
+        $permissionIds   = implode(',', [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]);
         UserRole::create([
             'role_name'           => 'Admin',
             'role_status'         => 1, // 1: Active
@@ -22,8 +22,8 @@ class UserRoleSeeder extends Seeder
             'role_permission_ids' => $permissionIds
         ]);
 
-        $manager_moduleIds       = explode(',', [1,2]);
-        $manager_permissionIds   = explode(',', [1,2,3,4,5,6,7,8]);
+        $manager_moduleIds       = implode(',', [1,2]);
+        $manager_permissionIds   = implode(',', [1,2,3,4,5,6,7,8]);
        
         UserRole::create([
             'role_name'           => 'Manager',
@@ -33,8 +33,8 @@ class UserRoleSeeder extends Seeder
 
         ]);
 
-        $salesman_moduleIds       = explode(',', [1,2]);
-        $salesman_permissionIds   = explode(',', [1,5]);
+        $salesman_moduleIds       = implode(',', [1,2]);
+        $salesman_permissionIds   = implode(',', [1,5]);
        
         UserRole::create([
             'role_name'           => 'Salesman',
