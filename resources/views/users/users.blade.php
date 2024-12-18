@@ -51,7 +51,7 @@
                                         Edit Role
                                     </a>
 
-                                    <a href="#" onclick="delete_user({{$role['role_id']}})" class="btn btn-primary d-none d-sm-inline-block">
+                                    <a href="#" onclick="delete_role({{$role['role_id']}})" class="btn btn-primary d-none d-sm-inline-block">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
                                             <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/>
                                             <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"/>
@@ -74,7 +74,7 @@
                                     <div class="subheader">Create New Role</div>                                    
                                 </div>
                                 <div>
-                                <a href="{{route('role-add')}}" class="btn btn-primary d-none d-sm-inline-block">
+                                <a href="#" data-bs-toggle="modal" data-bs-target="#modal-role" class="btn btn-primary d-none d-sm-inline-block">
 
                                     <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 5l0 14" /><path d="M5 12l14 0" /></svg>
                                         New Role
@@ -127,6 +127,140 @@
         </div>
     </div>
 
+
+    <div class="modal modal-blur fade" id="modal-role" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">New Role</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div id="alert-container"></div>
+                <div class="model-body">
+                     
+                      
+                </div>
+                <div class="modal-body">
+                    <div id="save-role-container"></div>
+                
+                    <div class="mb-3">
+                        <label class="form-label">Role Name</label>
+                        <input type="text" id="role_name" class="form-control" placeholder="User Name">
+                    </div>
+                  
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Module Name</th>
+                                <th>Read</th>
+                                <th>Write</th>
+                                <th>Create</th>
+                                <th>Update</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($modules as $module)
+                                <tr>
+                                    <td>{{ $module['module_name'] }}</td>
+
+                                    @foreach ($module['permissions'] as $permission)
+                                        <td>
+                                            <input 
+                                                type="checkbox" 
+                                                id="save_permission_{{ $permission['permission_id'] }}" 
+                                                name="permission_{{ $permission['permission_id'] }}" 
+                                                name="permission_{{ $permission['permission_id'] }}" 
+                                                data-module-id="{{ $module['module_id'] }}"  
+                                                @if (in_array($permission, array_column($module['permissions'], 'permission_name')))  @endif
+                                            >
+                                        </td>
+                                    @endforeach
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                    <div>
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                        <a href="#" class="btn btn-link link-secondary" data-bs-dismiss="modal">
+                        Cancel
+                        </a>
+                        <a id="saveRole" href="#" class="btn btn-primary ms-auto">
+                        <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 5l0 14" /><path d="M5 12l14 0" /></svg>
+                        Create Role
+                        </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <input type="hidden" name="" id="edit_role_id">
+    <div class="modal modal-blur fade" id="update-role" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Update Role</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div id="update-role-container"></div>
+                
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Role Name</label>
+                        <input type="text" id="edit_role_name" class="form-control" placeholder="User Name">
+                    </div>
+                  
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Module Name</th>
+                                <th>Read</th>
+                                <th>Write</th>
+                                <th>Create</th>
+                                <th>Update</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($modules as $module)
+                                <tr>
+                                    <td>{{ $module['module_name'] }}</td>
+
+                                    @foreach ($module['permissions'] as $permission)
+                                        <td>
+                                            <input 
+                                                type="checkbox" 
+                                                id="role_permission_{{ $permission['permission_id'] }}" 
+                                                name="permission_{{ $permission['permission_id'] }}" 
+                                                name="permission_{{ $permission['permission_id'] }}" 
+                                                data-module-id="{{ $module['module_id'] }}"  
+                                                @if (in_array($permission, array_column($module['permissions'], 'permission_name')))  @endif
+                                            >
+                                        </td>
+                                    @endforeach
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                    <div>
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                        <a href="#" class="btn btn-link link-secondary" data-bs-dismiss="modal">
+                        Cancel
+                        </a>
+                        <a id="UpdateRole" href="#" class="btn btn-primary ms-auto">
+                        <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 5l0 14" /><path d="M5 12l14 0" /></svg>
+                        Update Role
+                        </a>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <div class="modal modal-blur fade" id="add_user" tabindex="-1" role="dialog" aria-hidden="true">
     
@@ -221,12 +355,12 @@
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Delete User</h5>
+                    <h5 class="modal-title">Delete Role</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <div class="mb-3">
-                        Do you want to delete this user?
+                        Do you want to delete this role?
                         </div>
                 </div>
                 
@@ -234,8 +368,8 @@
                     <a href="#" class="btn btn-link link-secondary" data-bs-dismiss="modal">
                     Cancel
                     </a>
-                    <a id="DeleteUserBtn" href="#" class="btn btn-primary ms-auto" data-bs-dismiss="modal">
-                            Delete This User
+                    <a id="DeleteRoleBtn" href="#" class="btn btn-primary ms-auto" data-bs-dismiss="modal">
+                        Delete This Role
                     </a>
                 </div>
             </div>
@@ -250,6 +384,68 @@
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
     <script>
+
+
+        $(document).ready(function () {
+            document.querySelectorAll('input[type="checkbox"]').forEach(function(checkbox) {
+                checkbox.checked = false; // Uncheck all checkboxes
+            });
+            $('#saveRole').on('click', function (e) {
+
+                e.preventDefault();  
+                const userName = $('#role_name').val();
+             
+                // Validate data
+                if (!userName ) {
+                    alert('Please fill all fields and select at least one permission.');
+                    return;
+                }
+                const permissionIds = [];
+                const moduleIds = [];
+                $('input[type="checkbox"]:checked').each(function () {
+                   
+                    const permissionId = $(this).attr('id').replace('save_permission_', '');  // Extract permission_id from id
+                    const moduleId = $(this).data('module-id'); 
+                    permissionIds.push(permissionId);
+                    if (!moduleIds.includes(moduleId)) {
+                        moduleIds.push(moduleId);
+                    }
+                });
+                // Prepare data to be sent
+                const data = {
+                    _token: $('meta[name="csrf-token"]').attr('content'), 
+                    role_id          :null,
+                    role_name        : userName,
+                    user_permission  : permissionIds.join(','), 
+                    user_module      : moduleIds.join(','),
+                    
+                };
+
+                $.ajax({
+                    url: "{{ route('role_add_and_edit') }}", 
+                    type: 'POST',
+                    data: data,
+                    success: function (response) {
+                        if (response.status==200) {
+                            alert('Role added successfully');
+                            location.href = "{{route('user-master')}}";
+                            $('#modal-role').modal('hide');
+                            showAlertSaveRole('success', response.message);
+                        } else {
+                            alert('Failed to add user: ' + response.message);
+                            showAlertSaveRole('warning', response.message);
+
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        // Handle error
+                        showAlertSaveRole('warning', xhr.responseJSON.message);
+
+                        alert('An error occurred: ' + xhr.responseJSON.message);
+                    }
+                });
+            });
+        });
         
         $(document).ready(function () {
             // Fetch users on page load
@@ -414,7 +610,103 @@
                 }
             });  
 
+
+            $('#UpdateRole').on('click', function (e) {
+
+                e.preventDefault();  
+                const role_id      = $('#edit_role_id').val();
+                const role_name    = $('#edit_role_name').val();
+
+
+                // Validate data
+                if (!role_name ) {
+                    alert('Please fill all fields and select at least one permission.');
+                    return;
+                }
+                const permissionIds = [];
+                const moduleIds = [];
+                $('input[type="checkbox"]:checked').each(function () {
+                
+                    const permissionId = $(this).attr('id').replace('role_permission_', '');  // Extract permission_id from id
+                    const moduleId = $(this).data('module-id'); 
+                    permissionIds.push(permissionId);
+                    if (!moduleIds.includes(moduleId)) {
+                        moduleIds.push(moduleId);
+                    }
+                });
+                // Prepare data to be sent
+                const data = {
+                    _token: $('meta[name="csrf-token"]').attr('content'), 
+                    role_id          : role_id,
+                    role_name        : role_name,
+                    
+                    user_permission  : permissionIds.join(','), 
+                    user_module      : moduleIds.join(','),
+                };
+
+                $.ajax({
+                    url: "{{ route('role_add_and_edit') }}", 
+                    type: 'POST',
+                    data: data,
+                    success: function (response) {
+                        if (response.status==200) {
+                            
+                            showAlertUpdateRole('success','Role Updated Successfully');
+                            $('#update-role').modal('hide');
+                            location.href = "{{route('user-master')}}";
+
+                        } else {
+                            alert('Failed to add user: ' + response.message);
+                            showAlertUpdateRole('warning',response.message);
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        // Handle error
+                        alert('An error occurred: ' + xhr.responseJSON.message);
+                    }
+                });
+            });
+
+
+            $('#DeleteRoleBtn').click(function(e) {
+                var csrfToken = $('meta[name="csrf-token"]').attr('content');
+
+                alert();
+                e.preventDefault(); 
+
+                var userId = $('#delete_role_id').val();
+
+                if (userId) {
+                    $.ajax({
+                        url: "{{ route('role_remove') }}",  
+                        type: 'POST',
+                        data: {
+                            _token        : csrfToken,
+                            role_id       : userId,
+                        },
+                        success: function(response) {
+                            if (response.status==200) {
+                                $('#delete_role_id').val();
+                                $('#delete_role').modal('hide');
+                                location.reload();
+                                alert(response.message);
+                            } else {
+                                alert('Error deleting order: ' + response.message);
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            alert('An error occurred: ' + error);
+                        }
+                    });
+                } else {
+                    alert('Please fill in both fields.');
+                }
+            });  
+
         });
+            
+         
+        
         function editUser(userId) {
             // Redirect to the edit page and pass the user ID
             window.location.href = `/edit-user/${userId}`;
@@ -426,16 +718,145 @@
       
         }
 
-        function edit_role(userId) {
-            // Redirect to the edit page and pass the user ID
-            window.location.href = `/edit-role/${userId}`;
+        function edit_role(role_id) {
+      
+            // window.location.href = `/edit-role/${userId}`;
+            document.querySelectorAll('input[type="checkbox"]').forEach(function(checkbox) {
+                checkbox.checked = false; // Uncheck all checkboxes
+            });
+
+            var csrfToken = $('meta[name="csrf-token"]').attr('content');
+
+            $.ajax({
+                url: "{{ route('role-details') }}",  
+                type: 'POST',
+                data: {
+                    _token        : csrfToken,
+                    role_id     : role_id,
+                },
+                success: function(response) {
+                    // Handle success
+                   
+                    if (response.status==200) {
+                       
+                        var role_permission_ids = response.data.role_permission_ids;
+                        console.log("role_permission_ids",role_permission_ids);
+                        if (role_permission_ids != null){
+                            const permissionArray   = role_permission_ids.split(',');
+                            document.querySelectorAll('input[type="checkbox"]').forEach(function(checkbox) {
+                                const permissionId = checkbox.id.replace('role_permission_', ''); 
+                                if (permissionArray.includes(permissionId)) {
+                                    checkbox.checked = true;
+                                }
+                            });
+                        }
+                        $('#edit_role_id').val(role_id);
+                        $('#edit_role_name').val(response.data.role_name);
+                        $('#update-role').modal('show');
+                    } else {
+                        alert('Error fetching branch: ' + response.message);
+                        showAlertUpdateRole('warning',response.message);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    alert('An error occurred: ' + error);
+                    showAlertUpdateRole('warning',error);
+                }
+            });
+
         }
 
         function delete_role(order_id){
             $('#delete_role_id').val(order_id);
-            $('#delete_role').modal('show');
-      
+            $('#delete_role').modal('show');      
         }
+
+
+
+        function showAlert(type, message) {
+            const alertContainer = document.getElementById('role-container');
+            const alertHTML = `
+                <div class="alert alert-${type} alert-dismissible" role="alert">
+                    <div class="d-flex">
+                        <div>
+                            ${type === 'success' ? `
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon alert-icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                <path d="M5 12l5 5l10 -10" />
+                            </svg>` : `
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon alert-icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                <path d="M10.24 3.957l-8.422 14.06a1.989 1.989 0 0 0 1.7 2.983h16.845a1.989 1.989 0 0 0 1.7 -2.983l-8.423 -14.06a1.989 1.989 0 0 0 -3.4 0z" />
+                                <path d="M12 9v4" />
+                                <path d="M12 17h.01" />
+                            </svg>`}
+                        </div>
+                        <div>${message}</div>
+                    </div>
+                    <a class="btn-close" data-bs-dismiss="alert" aria-label="close"></a>
+                </div>
+            `;
+            alertContainer.innerHTML = alertHTML;
+            console.log("here");
+        }
+
+
+        function showAlertUpdateRole(type, message) {
+            const alertContainer = document.getElementById('update-role-container');
+            const alertHTML = `
+                <div class="alert alert-${type} alert-dismissible" role="alert">
+                    <div class="d-flex">
+                        <div>
+                            ${type === 'success' ? `
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon alert-icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                <path d="M5 12l5 5l10 -10" />
+                            </svg>` : `
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon alert-icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                <path d="M10.24 3.957l-8.422 14.06a1.989 1.989 0 0 0 1.7 2.983h16.845a1.989 1.989 0 0 0 1.7 -2.983l-8.423 -14.06a1.989 1.989 0 0 0 -3.4 0z" />
+                                <path d="M12 9v4" />
+                                <path d="M12 17h.01" />
+                            </svg>`}
+                        </div>
+                        <div>${message}</div>
+                    </div>
+                    <a class="btn-close" data-bs-dismiss="alert" aria-label="close"></a>
+                </div>
+            `;
+            alertContainer.innerHTML = alertHTML;
+            console.log("here");
+        }
+
+        function showAlertSaveRole(type, message) {
+            const alertContainer = document.getElementById('save-role-container');
+            const alertHTML = `
+                <div class="alert alert-${type} alert-dismissible" role="alert">
+                    <div class="d-flex">
+                        <div>
+                            ${type === 'success' ? `
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon alert-icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                <path d="M5 12l5 5l10 -10" />
+                            </svg>` : `
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon alert-icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                <path d="M10.24 3.957l-8.422 14.06a1.989 1.989 0 0 0 1.7 2.983h16.845a1.989 1.989 0 0 0 1.7 -2.983l-8.423 -14.06a1.989 1.989 0 0 0 -3.4 0z" />
+                                <path d="M12 9v4" />
+                                <path d="M12 17h.01" />
+                            </svg>`}
+                        </div>
+                        <div>${message}</div>
+                    </div>
+                    <a class="btn-close" data-bs-dismiss="alert" aria-label="close"></a>
+                </div>
+            `;
+            alertContainer.innerHTML = alertHTML;
+            console.log("here");
+        }
+
+
+        
 
     </script>
 @endsection

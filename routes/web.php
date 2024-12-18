@@ -95,7 +95,7 @@ Route::get('edit-user/{user_id}', [UserController::class, 'edit_user']);
 
 Route::post('user-add-edit', [UserController::class, 'user_add_edit'])->name('user_add_edit');
 Route::post('user-list', [UserController::class, 'user_list'])->name('user-list');
-Route::post('user-details', [UserController::class, 'user_details']);
+Route::post('user-details', [UserController::class, 'user_details'])->name('user_details');
 Route::post('user-remove', [UserController::class, 'user_remove'])->name('user_remove');
 
 
@@ -105,7 +105,7 @@ Route::get('edit-role/{role_id}', [UserController::class, 'edit_role']);
 Route::post('role-add-edit', [UserController::class, 'role_add_and_edit'])->name('role_add_and_edit');
 Route::post('role-details', [UserController::class, 'role_details'])->name('role-details');
 Route::post('role-list', [UserController::class, 'role_list'])->name('role-list');
-Route::post('role-remove', [UserController::class, 'role_remove']);
+Route::post('role-remove', [UserController::class, 'role_remove'])->name('role_remove');
 
 
 Route::post('notes-add'    , [NotesController::class, 'add_notes'])->name('notes_add');

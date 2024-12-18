@@ -11,7 +11,7 @@ use App\Models\UserRole;
 use App\Models\Permission;
 use App\Models\Modules;
 use App\Models\Branch;
-
+use Carbon\Carbon;
 class UserController extends Controller
 {
     //
@@ -33,11 +33,17 @@ class UserController extends Controller
         ->withCount('users')
         ->get()->toArray();
          
+        
+        $modules = Modules::with('permissions:permission_id,permission_name,permission_module_id') 
+            ->select('module_id', 'module_name')
+            ->get()
+            ->toArray();
+
         return view('users/users',['users' => $users,
             'pageTitle'=>'Users','login'=>$login,
             'activePage'=>$activePage,'user_branch'=>$users_branch,
             'user_permissions'=>$user_permissions,
-            'roles'=>$roles
+            'roles'=>$roles, 'modules'=>$modules
         ]);
     }
 
@@ -485,7 +491,6 @@ class UserController extends Controller
         $permissionIds = explode(',', $params['user_permission']);
 
         $existingModules = Modules::whereIn('module_id', $moduleIds)->pluck('module_id')->toArray();
-
         if (count($existingModules) !== count($moduleIds)) {
             return response()->json([
                 'status' => 500,
@@ -734,7 +739,7 @@ class UserController extends Controller
                 'message' => 'User role does not exist'
             ]);
         }
-        $check_role->is_delete = 1;
+        $check_role->deleted_at =  Carbon::now();
         $check_role->save();
         return response()->json([
             'status' => 200,
