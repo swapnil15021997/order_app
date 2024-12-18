@@ -203,72 +203,72 @@
                     alert('Please fill in both fields.');
                 }
             });  
+            function edit_order(order_id){
+                window.location.href = `/edit-order/${order_id}`;
+                // var csrfToken = $('meta[name="csrf-token"]').attr('content');
+    
+                // $.ajax({
+                //     url: "{{ route('order_details') }}", 
+                //     type: 'POST',
+                //     data: {
+                //         _token        : csrfToken,
+                //         order_id     : order_id,
+                //     },
+                //     success: function(response) {
+                //         // Handle success
+                //         console.log("Success",response.data);
+                       
+                //         if (response.status==200) {
+                //             var order = response.data;
+                //             var items = response.data.items[0];
+                //             console.log("Items",items);
+                //             $('#edit_order_id').val(order.order_id);
+                //             $('#edit_order_date').val(order.order_date);  
+                //             $('#edit_order_type').val(order.order_type);
+                //             $('#edit_searchableSelectFrom').val(order.order_from_branch_id);
+                //             $('#edit_searchableSelectTo').val(order.order_to_branch_id);
+                //             $('#edit_item_name').val(items.item_name);
+                //             $('#edit_item_metal').val(items.item_metal);
+                //             $('#edit_item_melting').val(items.item_melting);
+                //             $('#edit_item_weight').val(items.item_weight);
+                //             $('body').addClass('modal-open');
+                //             $('#edit_order').modal('show');
+    
+                //         } else {
+                //             alert('Error fetching branch: ' + response.message);
+                //         }
+                //     },
+                //     error: function(xhr, status, error) {
+                //         alert('An error occurred: ' + error);
+                //     }
+                // });
+            }
+    
+            function view_order(order_id){
+                window.location.href = `/view-order/${order_id}`;
+               
+            }
+    
+            function view_qr_code(order_id){
+                window.location.href = `/qr-code/${order_id}`;
+               
+            }
+    
+            function delete_order(order_id){
+                $('#delete_order_id').val(order_id);
+                $('#delete_order').modal('show');
+          
+            }
+    
+            function formatDate(date) {
+                var d = new Date(date);
+                var year = d.getFullYear();  
+                var month = ('0' + (d.getMonth() + 1)).slice(-2); 
+                var day = ('0' + d.getDate()).slice(-2);  
+                return year + '-' + month + '-' + day;  
+            }
         });
 
-        function edit_order(order_id){
-            window.location.href = `/edit-order/${order_id}`;
-            // var csrfToken = $('meta[name="csrf-token"]').attr('content');
-
-            // $.ajax({
-            //     url: "{{ route('order_details') }}", 
-            //     type: 'POST',
-            //     data: {
-            //         _token        : csrfToken,
-            //         order_id     : order_id,
-            //     },
-            //     success: function(response) {
-            //         // Handle success
-            //         console.log("Success",response.data);
-                   
-            //         if (response.status==200) {
-            //             var order = response.data;
-            //             var items = response.data.items[0];
-            //             console.log("Items",items);
-            //             $('#edit_order_id').val(order.order_id);
-            //             $('#edit_order_date').val(order.order_date);  
-            //             $('#edit_order_type').val(order.order_type);
-            //             $('#edit_searchableSelectFrom').val(order.order_from_branch_id);
-            //             $('#edit_searchableSelectTo').val(order.order_to_branch_id);
-            //             $('#edit_item_name').val(items.item_name);
-            //             $('#edit_item_metal').val(items.item_metal);
-            //             $('#edit_item_melting').val(items.item_melting);
-            //             $('#edit_item_weight').val(items.item_weight);
-            //             $('body').addClass('modal-open');
-            //             $('#edit_order').modal('show');
-
-            //         } else {
-            //             alert('Error fetching branch: ' + response.message);
-            //         }
-            //     },
-            //     error: function(xhr, status, error) {
-            //         alert('An error occurred: ' + error);
-            //     }
-            // });
-        }
-
-        function view_order(order_id){
-            window.location.href = `/view-order/${order_id}`;
-           
-        }
-
-        function view_qr_code(order_id){
-            window.location.href = `/qr-code/${order_id}`;
-           
-        }
-
-        function delete_order(order_id){
-            $('#delete_order_id').val(order_id);
-            $('#delete_order').modal('show');
-      
-        }
-
-        function formatDate(date) {
-            var d = new Date(date);
-            var year = d.getFullYear();  
-            var month = ('0' + (d.getMonth() + 1)).slice(-2); 
-            var day = ('0' + d.getDate()).slice(-2);  
-            return year + '-' + month + '-' + day;  
-        }
 
         
         function showAlert(type, message) {
