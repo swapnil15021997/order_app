@@ -147,6 +147,20 @@
                                 >{{ $branch['cust_name'] }}</option>
                             @endforeach
                         </select>
+                        <div class="d-none" id="cust_div" >
+                            <div>
+                                <label class="form-label">Customer Phone Number</label>
+                                <input type="text" class="form-control" id="cust_phone_no" placeholder="Customer Phone No">    
+                            </div>
+                            <div>
+                                <label class="form-label">Customer Address</label>
+                                <textarea id="customer_address" required name="customer_address" class="form-control" rows="3"></textarea>    
+                            </div>
+                            <div>
+                                <label class="form-label">Create New</label>
+                                <button id="saveCustBtn" class="btn btn-primary">Create New</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -210,7 +224,7 @@
    
 
     <script>
-         $(document).ready(function() {
+        $(document).ready(function() {
 
             $('#order_type').on('change', function () {
                 const paymentDiv = $('#payment');
@@ -223,124 +237,271 @@
         
 
 
-        $('#updateOrderBtn').click(function(e) {
-            e.preventDefault(); 
-            var orderId = $('#edit_order_id').val();  // Get the order ID to update
-            var orderDate = $('#edit_order_date').val();
-            var orderType    = document.getElementById('order_type');
-            const orderTypeValue = orderType.checked ? 2 : 1;
-            var orderFrom = $('#edit_searchableSelectFrom').val();
-            var orderTo = $('#edit_searchableSelectTo').val();
-            var itemMetal = $('#edit_item_metal').val();
-            var itemName = $('#edit_item_name').val();
-            var itemMelting = $('#edit_item_melting').val();
-            var itemWeight = $('#edit_item_weight').val();
-            var itemImages = $('#edit_item_image_id')[0].files; 
-            var payment_advance = $('#payment_advance').val();
-            var payment_booking = $('#payment_booking').val();
+            $('#updateOrderBtn').click(function(e) {
+                e.preventDefault(); 
+                var orderId = $('#edit_order_id').val();  // Get the order ID to update
+                var orderDate = $('#edit_order_date').val();
+                var orderType    = document.getElementById('order_type');
+                const orderTypeValue = orderType.checked ? 2 : 1;
+                var orderFrom = $('#edit_searchableSelectFrom').val();
+                var orderTo = $('#edit_searchableSelectTo').val();
+                var itemMetal = $('#edit_item_metal').val();
+                var itemName = $('#edit_item_name').val();
+                var itemMelting = $('#edit_item_melting').val();
+                var itemWeight = $('#edit_item_weight').val();
+                var itemImages = $('#edit_item_image_id')[0].files; 
+                var payment_advance = $('#payment_advance').val();
+                var payment_booking = $('#payment_booking').val();
 
-            if (orderDate && orderType && orderFrom && orderTo) {
-                var formData = new FormData();
-                formData.append('_token', csrfToken);  
-                formData.append('order_id', orderId);  
-                formData.append('order_date', orderDate);
-                formData.append('order_type', orderTypeValue);
-                formData.append('order_from_branch_id', orderFrom);
-                formData.append('order_to_branch_id', orderTo);
-                formData.append('item_metal', itemMetal);
-                formData.append('item_name', itemName);
-                formData.append('item_melting', itemMelting);
-                formData.append('item_weight', itemWeight);
-                if(payment_advance){
-                    formData.append('payment_advance', payment_advance);
-                }else{
-                    formData.append('payment_advance', null);
-                }
-                if(payment_booking){
-                    formData.append('payment_booking', payment_booking);
-                }else{
-                    formData.append('payment_booking', null);
-                }
-                // Append files to FormData
-                for (var i = 0; i < itemImages.length; i++) {
-                    formData.append('item_file_images[]', itemImages[i]);
-                }
+                if (orderDate && orderType && orderFrom && orderTo) {
+                    var formData = new FormData();
+                    formData.append('_token', csrfToken);  
+                    formData.append('order_id', orderId);  
+                    formData.append('order_date', orderDate);
+                    formData.append('order_type', orderTypeValue);
+                    formData.append('order_from_branch_id', orderFrom);
+                    formData.append('order_to_branch_id', orderTo);
+                    formData.append('item_metal', itemMetal);
+                    formData.append('item_name', itemName);
+                    formData.append('item_melting', itemMelting);
+                    formData.append('item_weight', itemWeight);
+                    if(payment_advance){
+                        formData.append('payment_advance', payment_advance);
+                    }else{
+                        formData.append('payment_advance', null);
+                    }
+                    if(payment_booking){
+                        formData.append('payment_booking', payment_booking);
+                    }else{
+                        formData.append('payment_booking', null);
+                    }
+                    // Append files to FormData
+                    for (var i = 0; i < itemImages.length; i++) {
+                        formData.append('item_file_images[]', itemImages[i]);
+                    }
 
-                $.ajax({
-                    url: "{{ route('order-update') }}",  
-                    type: 'POST',
-                    data: formData,
-                    contentType: false,
-                    processData: false,
-                    success: function(response) {
-                        if (response.status == 200) {
+                    $.ajax({
+                        url: "{{ route('order-update') }}",  
+                        type: 'POST',
+                        data: formData,
+                        contentType: false,
+                        processData: false,
+                        success: function(response) {
+                            if (response.status == 200) {
 
-                            alert(response.message);
-                            showAlert('success', response.message);
-                            setTimeout(function() {
-                                    location.href = "{{ route('order-master') }}";
-                            }, 1000);
+                                alert(response.message);
+                                showAlert('success', response.message);
+                                setTimeout(function() {
+                                        location.href = "{{ route('order-master') }}";
+                                }, 1000);
 
-                        } else {
-                            alert('Error updating order: ' + response.message);
-                            showAlert('warning', response.message);
+                            } else {
+                                alert('Error updating order: ' + response.message);
+                                showAlert('warning', response.message);
+
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            alert('An error occurred: ' + error);
+                            showAlert('warning', error);
 
                         }
-                    },
-                    error: function(xhr, status, error) {
-                        alert('An error occurred: ' + error);
-                        showAlert('warning', error);
+                    });
+                } else {
+                    alert('Please fill in all fields.');
+                    showAlert('warning', 'Please fill in all fields orderDate, orderType and Order To');
 
-                    }
-                });
-            } else {
-                alert('Please fill in all fields.');
-                showAlert('warning', 'Please fill in all fields orderDate, orderType and Order To');
-
-            }
-        });
+                }
+            });
 
 
     
             var csrfToken = $('meta[name="csrf-token"]').attr('content');
             $('#edit_searchableSelectTo').select2({
-                
-                placeholder: "Select an option",
-                allowClear: true,
-                ajax: {
-                    url: "{{route('branch_list')}}", 
-                dataType: 'json',
-                type: 'POST',
-                headers: {
-                        'X-CSRF-TOKEN': csrfToken  // Add CSRF token in the header
-                },
-                delay: 250, 
-                data: function (params) {
-                    return {
-                       
-                        search: params.term, 
-                        per_page: 10,
-                        page: params.page || 1 
-                    };
-                },
-                processResults: function (data) {
                     
-                    return {
-                        results: data.data.branches.map(function (item) {
-                            return {
-                                id: item.branch_id,
-                                text: item.branch_name
-                            };
-                        }),
-                        pagination: {
-                            more: data.data.length >= 10 // Check if there are more results
-                        }
-                    };
-                },
-                cache: true 
-            }
+                    placeholder: "Select an option",
+                    allowClear: true,
+                    ajax: {
+                        url: "{{route('branch_list')}}", 
+                    dataType: 'json',
+                    type: 'POST',
+                    headers: {
+                            'X-CSRF-TOKEN': csrfToken  // Add CSRF token in the header
+                    },
+                    delay: 250, 
+                    data: function (params) {
+                        return {
+                        
+                            search: params.term, 
+                            per_page: 10,
+                            page: params.page || 1 
+                        };
+                    },
+                    processResults: function (data) {
+                        
+                        return {
+                            results: data.data.branches.map(function (item) {
+                                return {
+                                    id: item.branch_id,
+                                    text: item.branch_name
+                                };
+                            }),
+                            pagination: {
+                                more: data.data.length >= 10 // Check if there are more results
+                            }
+                        };
+                    },
+                    cache: true 
+                }
+            });
         });
-    });
+
+
+        $(document).ready(function () {
+
+            $('#searchableCust').on('select2:open', function() {
+                $('.select2-search__field').on('input', function() {
+                    userInput = $(this).val();
+                });
+            });
+
+            $('#searchableCust').on('select2:select', function (e) {
+                console.log("Event triggered", e.params.data);
+                if (e.params.data.newOption) {
+                    console.log("New customer added");
+                    $('#cust_div').removeClass('d-none');
+                } else {
+                    $('#cust_div').addClass('d-none');
+                }
+            });
+            var csrfToken = $('meta[name="csrf-token"]').attr('content');
+
+            $('#searchableCust').select2({
+                placeholder: "Search or add a customer",
+                allowClear: true,
+                tags: true, // Enable adding new tags
+                ajax: {
+                        url: "{{route('customer_list')}}", // Backend route for fetching customers
+                        dataType: 'json',
+                        type: 'POST',
+                        headers: {
+                            'X-CSRF-TOKEN': csrfToken // CSRF token for security
+                        },
+                        delay: 250, // Debounce for better performance
+                        data: function (params) {
+                            return {
+                                search: params.term, // User input for search
+                                per_page: 10, // Number of results per page
+                                page: params.page || 1 // Current page
+                            };
+                        },
+                        processResults: function (data) {
+                            return {
+                                results: data.data.cust.map(function (item) {
+                                    return {
+                                        id: item.cust_id,
+                                        text: item.cust_name
+                                    };
+                                }),
+                                pagination: {
+                                    more: data.data.length >= 10 // Check if there are more results
+                                }
+                            };
+                        },
+                        cache: true
+                    },
+                    createTag: function (params) {
+                        // Allow adding new customer only if input is non-empty
+                        if ($.trim(params.term) === '') {
+                            return null;
+                        }
+                        return {
+                            id: 'new:' + params.term, // Mark it as a new option
+                            text: params.term,
+                            newOption: true
+                        };
+                    },
+                    templateResult: function (data) {
+                        // Highlight the "Add new customer" option
+                        if (data.newOption) {
+                            return $('<span><em>Create ": </em>' + data.text + '"</span>');
+                        }
+                        return data.text;
+                    },
+                    templateSelection: function (data) {
+                        // Display the selected item properly
+
+                        return data.text;
+                    }
+            })
+            
+
+            $('#searchableCust').on('select2:select', function (e) {
+                console.log("Event triggered:", e.params.data);
+
+                // Check if the selected option is a new customer
+                if (e.params.data.newOption) {
+                    console.log("New customer selected");
+                    $('#cust_div').removeClass('d-none'); // Remove the 'd-none' class
+                } else {
+                    console.log("Existing customer selected");
+                    $('#cust_div').addClass('d-none'); // Add the 'd-none' class
+                }
+            });
+
+
+            $('#saveCustBtn').click(function(e) {
+                e.preventDefault(); 
+                var custName    = userInput;
+                var custAddress = $('#customer_address').val();
+                var custPhone   = $('#cust_phone_no').val();
+
+                // var branchId = $('#branch_id').val();
+                console.log("Customer Info",custAddress,custName);
+                if (custName && custPhone) {
+                    $.ajax({
+                        url: "{{ route('add_edit_cust') }}",  // Adjust the route as needed
+                        type: 'POST',
+                        data: {
+                            _token           : csrfToken,
+                            customer_name    : custName,
+                            customer_address : custAddress,
+                            customer_phone_no:custPhone,
+                            customer_id      : null,
+                        },
+                        success: function(response) {
+                            // Handle success
+                            
+                            if (response.status==200) {
+                                console.log("Resposne of cust",response.data);
+                                UserInput = '';
+                                $('#customer_address').val();
+                                $('#cust_phone_no').val();
+                                
+                                var newOption = new Option(response.data.cust_name, response.data.cust_id, true, true);
+                                $('#searchableCust').append(newOption).trigger('change');
+                                $('#searchableCust').val(response.data.cust_id).trigger('change');
+
+                                showAlert('success', response.message);
+                                // alert(response.message);
+
+                            } else {
+                                // alert('Error creating branch: ' + response.message);
+                                showAlert('warning', response.message);
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            // alert('An error occurred: ' + error);
+                            showAlert('warning', error);
+                        }
+                    });
+                } else {
+                    // alert('Please fill in both fields.');
+                    showAlert('warining', 'Please fill in both fields, Name and address');
+                }
+            });
+        });
+
 
         
         function showAlert(type, message) {
