@@ -152,6 +152,7 @@
             },
             success: function(response) {
               if(response.success){
+                console.log(response);
                 location.href = "{{ route('login') }}";
               }
             }
