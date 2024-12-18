@@ -79,12 +79,15 @@ Route::get('view-order/{id}', [OrderController::class, 'view_order'])->name('vie
 
 
 
-Route::get('order-master', [OrderController::class, 'order_index'])->name('order-master');
-Route::post('order-add', [OrderController::class, 'order_add'])->name('order-add');
-Route::post('order-update', [OrderController::class, 'order_update'])->name('order-update');
-Route::post('order-list', [OrderController::class, 'order_list'])->name('order_list');
+Route::get('order-master',   [OrderController::class, 'order_index'])->name('order-master');
+Route::post('order-add',     [OrderController::class, 'order_add'])->name('order-add');
+Route::post('order-update',  [OrderController::class, 'order_update'])->name('order-update');
+Route::post('order-list',    [OrderController::class, 'order_list'])->name('order_list');
 Route::post('order-details', [OrderController::class, 'order_details'])->name('order_details');
-Route::post('order-remove', [OrderController::class, 'order_remove'])->name('order_remove');
+Route::post('order-remove',  [OrderController::class, 'order_remove'])->name('order_remove');
+Route::get('qr-code/{id}',   [OrderController::class, 'order_qr_code'])->name('order_qr_code');
+
+
 
 Route::get('user-master', [UserController::class, 'user_index'])->name('user-master');
 Route::get('user-add', [UserController::class, 'user_add'])->name('user-add');

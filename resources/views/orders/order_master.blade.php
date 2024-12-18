@@ -154,6 +154,9 @@
                                   <a class="dropdown-item" href="#" onclick="view_order(${row.order_id})">
                                     View
                                   </a>
+                                  <a class="dropdown-item" href="#" onclick="view_qr_code(${row.order_id})">
+                                    Show QR 
+                                  </a>
                                   <a class="dropdown-item" href="#" onclick="delete_order(${row.order_id})">
                                     Delete
                                   </a>
@@ -168,12 +171,6 @@
             $('input[aria-controls="branch_table"]').on('keyup', function() {
                 table.search(this.value).draw();
             });
-       
-
-           
-
-
-        
 
             $('#DeleteOrderBtn').click(function(e) {
                 e.preventDefault(); 
@@ -251,6 +248,11 @@
 
         function view_order(order_id){
             window.location.href = `/view-order/${order_id}`;
+           
+        }
+
+        function view_qr_code(order_id){
+            window.location.href = `/qr-code/${order_id}`;
            
         }
 

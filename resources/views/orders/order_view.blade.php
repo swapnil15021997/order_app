@@ -147,7 +147,7 @@
                                 max-width: 60%;
                             "
                             >
-                            <p>HSN/SAC</p>
+                            <p>@if(!empty($customer_order['cust_name'])) {{$customer_order['cust_name']}} @endif</p>
                             </div>
                 
                         </div>
@@ -191,7 +191,7 @@
                         max-width: 60%;
                     "
                     >
-                    <p>HSN/SAC</p>
+                    <p>@if(!empty($customer_order['cust_phone_no'])) {{$customer_order['cust_phone_no']}} @endif</p>
                     </div>
                 
                 </div>
@@ -228,7 +228,7 @@
                         max-width: 60%;
                     "
                     >
-                    <p>HSN/SAC</p>
+                    <p>@if(!empty($customer_order['cust_address'])) {{$customer_order['cust_address']}} @endif</p>
                     </div>
                 
                 </div>
@@ -377,7 +377,7 @@
                     </div>
                 
                 </div>
-                @if($order['order_type']==2)
+                @if($order['order_type']==1)
                 <div
                     style="
                     display: flex;
@@ -409,7 +409,7 @@
                         max-width: 60%;
                     "
                     >
-                    <p>HSN/SAC</p>
+                    <p>@if(!empty($payment['payment_advance_cash'])) {{$payment['payment_advance_cash']}} @endif</p>
                     </div>
                 
                 </div>
@@ -446,7 +446,7 @@
                         max-width: 60%;
                     "
                     >
-                    <p>HSN/SAC</p>
+                    <p>@if(!empty($payment['payment_booking_rate'])) {{$payment['payment_booking_rate']}} @endif</p>
                     </div>
                 
                 </div>

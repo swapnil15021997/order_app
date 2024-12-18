@@ -16,6 +16,9 @@ use Illuminate\Support\Arr;
 use Carbon\Carbon;
 use App\Jobs\SendEmailJob;
 use App\Jobs\SendNotification;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
+
+
 class OrderController extends Controller
 {
 
@@ -33,10 +36,23 @@ class OrderController extends Controller
         if (!empty($order['items'][0]['files'])){
             $fileArray = $order['items'][0]['files']->toArray();
         }
+        $customer_order = [];
+        if(!empty($order['order_customer_id'])){
+            $customer_order = Customers::where('cust_id',$order['order_customer_id'])->first()->toArray();
+        }
+        $payment = [];
+        if($order['order_type']==1){
+            $payment = Payment::where('payment_order_id',$order['order_id'])->first()->toArray();
+        }
         $activePage   = 'orders';
         $user_branch  = Branch::whereIn('branch_id', $userBranchIds)->get()->toArray();
-
-        return view('orders/order_view',['order'=>$order,'fileArray'=>$fileArray,'pageTitle'=>'Order','login'=>$login,'activePage'=>$activePage,'user_branch'=>$user_branch]);
+        $user_permissions = session('combined_permissions', []);
+      
+        return view('orders/order_view',['order'=>$order,'fileArray'=>$fileArray,
+        'pageTitle'=>'Order','login'=>$login,'activePage'=>$activePage,
+        'user_branch'=>$user_branch,'user_permissions'=>$user_permissions,
+        'customer_order'=>$customer_order,'payment'=>$payment
+    ]);
     }
     public function order_index(Request $request){
         $metals        = DB::table('metals')->select('metal_name')->get();
@@ -292,6 +308,34 @@ class OrderController extends Controller
         return view('orders/order_edit'
         ,compact('metals', 'melting','branchesArray',
         'pageTitle','login','activePage','order','fileArray','user_branch','paymentArray','customer','user_permissions'));
+    }
+
+
+    public function order_qr_code(Request $request,$id){
+
+        $order  = Order::get_order_with_items($id);
+        $order  = $order->toArray();
+
+        if (empty($order)){
+            return response()->json([
+                'status' => 500,
+                'message' => 'Order does not exist'
+            ]);
+        }
+        if($order['order_type']==1){
+            $type = 'Order';
+        }else{
+            $type = 'Reparing';
+        }
+
+        return QrCode::generate(
+            implode('|', [
+                $order['order_qr_code'],
+                $order['order_date'],
+                $type
+            ])
+        );
+
     }
 
 
