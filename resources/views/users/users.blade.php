@@ -550,18 +550,14 @@
                         data: 'user_id', 
                         name: 'operations', 
                         render: function(data, type, row) {
+                            console.log(row);
                             return `<button data-bs-toggle="dropdown" type="button" class="btn dropdown-toggle dropdown-toggle-split"></button>
                                 <div class="dropdown-menu dropdown-menu-end">
-                                  <a class="dropdown-item" href="#" onclick="edit_order(${row.user_id})">
+                                  <a class="dropdown-item" href="#" onclick="editUser(${row.id})">
                                     Edit
                                   </a>
-                                  <a class="dropdown-item" href="#" onclick="view_order(${row.user_id})">
-                                    View
-                                  </a>
-                                  <a class="dropdown-item" href="#" onclick="view_qr_code(${row.user_id})">
-                                    Show QR 
-                                  </a>
-                                  <a class="dropdown-item" href="#" onclick="delete_order(${row.order_id})">
+                                  
+                                  <a class="dropdown-item" href="#" onclick="delete_user(${row.id})">
                                     Delete
                                   </a>
                                 </div>`;
@@ -701,22 +697,8 @@
                 } else {
                     alert('Please fill in both fields.');
                 }
-            });  
-
-        });
+            });
             
-         
-        
-        function editUser(userId) {
-            // Redirect to the edit page and pass the user ID
-            window.location.href = `/edit-user/${userId}`;
-        }
-
-        function delete_user(order_id){
-            $('#delete_user_id').val(order_id);
-            $('#delete_user').modal('show');
-      
-        }
 
         function edit_role(role_id) {
       
@@ -771,6 +753,23 @@
             $('#delete_role').modal('show');      
         }
 
+
+        });
+            
+         
+        
+       
+        function editUser(userId) {
+            alert(userId);
+            // Redirect to the edit page and pass the user ID
+            window.location.href = `/edit-user/${userId}`;
+        }
+
+        function delete_user(order_id){
+            $('#delete_user_id').val(order_id);
+            $('#delete_user').modal('show');
+    
+        }
 
 
         function showAlert(type, message) {
