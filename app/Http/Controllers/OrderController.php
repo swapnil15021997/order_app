@@ -23,8 +23,18 @@ class OrderController extends Controller
 {
 
     public function view_order(Request $request,$id){
-        $order         = Order::get_order_with_items($id);
-        $order         = $order->toArray();
+
+        $order = Order::query()
+            ->leftJoin('branch AS from_branch', 'from_branch.branch_id', '=', 'orders.order_from_branch_id')  // Join to get 'order_from_branch' name
+            ->leftJoin('branch AS to_branch', 'to_branch.branch_id', '=', 'orders.order_to_branch_id')  // Join to get 'order_to_branch' name
+            ->select(
+                'orders.*', 
+                'from_branch.branch_name AS order_from_name',   
+                'to_branch.branch_name AS order_to_name'
+            )
+            ->with('items') 
+            ->where('orders.order_id', $id)  
+            ->first();  
 
         $login = auth()->user();
         
@@ -44,15 +54,25 @@ class OrderController extends Controller
         if($order['order_type']==1){
             $payment = Payment::where('payment_order_id',$order['order_id'])->first()->toArray();
         }
-        $activePage   = 'orders';
-        $user_branch  = Branch::whereIn('branch_id', $userBranchIds)->get()->toArray();
+        $activePage       = 'orders';
+        $user_branch      = Branch::whereIn('branch_id', $userBranchIds)->get()->toArray();
         $user_permissions = session('combined_permissions', []);
-      
-        return view('orders/order_view',['order'=>$order,'fileArray'=>$fileArray,
-        'pageTitle'=>'Order','login'=>$login,'activePage'=>$activePage,
-        'user_branch'=>$user_branch,'user_permissions'=>$user_permissions,
-        'customer_order'=>$customer_order,'payment'=>$payment
-    ]);
+        if($order['order_type']==1){
+            $type = 'Order';
+        }else{
+            $type = 'Reparing';
+        }
+        $qr_code = QrCode::size(50)->generate(
+            implode('|', [
+                $order['order_qr_code']
+            ])
+        );
+        return view('orders/view_order',['order'=>$order,'fileArray'=>$fileArray,
+            'pageTitle'=>'Order','login'=>$login,'activePage'=>$activePage,
+            'user_branch'=>$user_branch,'user_permissions'=>$user_permissions,
+            'customer_order'=>$customer_order,'payment'=>$payment,'qr_code'=>$qr_code
+        ]);
+ 
     }
     public function order_index(Request $request){
         $metals        = DB::table('metals')->select('metal_name')->get();

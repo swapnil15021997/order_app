@@ -28,10 +28,17 @@ class UserController extends Controller
         }
         $users_branch = Branch::whereIn('branch_id', $userBranchIds)->get()->toArray();
         $user_permissions = session('combined_permissions', []);
-     
+        
+        $roles = UserRole::whereNull('deleted_at')
+        ->withCount('users')
+        ->get()->toArray();
+         
         return view('users/users',['users' => $users,
-        'pageTitle'=>'Users','login'=>$login,
-        'activePage'=>$activePage,'user_branch'=>$users_branch,'user_permissions'=>$user_permissions]);
+            'pageTitle'=>'Users','login'=>$login,
+            'activePage'=>$activePage,'user_branch'=>$users_branch,
+            'user_permissions'=>$user_permissions,
+            'roles'=>$roles
+        ]);
     }
 
     public function user_add(Request $request){
@@ -50,10 +57,11 @@ class UserController extends Controller
             $userBranchIds = explode(',', $login['user_branch_ids']);
         }
         $users_branch = Branch::whereIn('branch_id', $userBranchIds)->get()->toArray();
-        
+        $user_permissions = session('combined_permissions', []);
+
         return view('users/user_add',['users' => $users,'login'=>$login,
         'activePage'=>$activePage,'branch'=>$branch,
-        'roles' => $roles, 'modules'=>$modules,'user_branch'=>$users_branch]);
+        'roles' => $roles, 'modules'=>$modules,'user_branch'=>$users_branch,'user_permissions'=>$user_permissions]);
     }
 
 
@@ -347,6 +355,9 @@ class UserController extends Controller
         ->offset($offset)
         ->limit($perPage)
         ->get();
+        $users->each(function ($user, $index) {
+            $user->serial_number = $index + 1; 
+        });
         $total_pages = ceil($total_users / $perPage);
 
         return response()->json([
@@ -359,6 +370,11 @@ class UserController extends Controller
                 'current_page' => $page,
                 'total_pages'  => $total_pages,
             ],
+            'recordsTotal'  => $total_users,
+            'recordsFiltered' => $users->count(),
+            'per_page'     => $perPage,
+            'current_page' => $page,
+            'total_pages'  => $total_pages,
         ]);
     
 
@@ -551,9 +567,10 @@ class UserController extends Controller
         }
         // $branch       = Branch::get_all_branch();
         $users_branch = Branch::whereIn('branch_id', $userBranchIds)->get()->toArray();
+        $user_permissions = session('combined_permissions', []);
 
         return view('users/role_add',['roles' => $roles, 'modules'=>$modules,
-        'login'=>$login,'activePage'=>$activePage,'user_branch'=>$users_branch]);
+        'login'=>$login,'activePage'=>$activePage,'user_branch'=>$users_branch,'user_permissions'=>$user_permissions]);
     }
 
     public function role_list(Request $request){
@@ -636,6 +653,7 @@ class UserController extends Controller
         }
         // $branch       = Branch::get_all_branch();
         $users_branch = Branch::whereIn('branch_id', $userBranchIds)->get()->toArray();
+        $user_permissions = session('combined_permissions', []);
 
         return view('users/role_edit',[
             'login'           => $login,
@@ -643,7 +661,9 @@ class UserController extends Controller
             'role'            => $role,
             'rolePermissions' => $rolePermissions,
             'activePage'      => $activePage,
-            'user_branch'     => $users_branch
+            'user_branch'     => $users_branch,
+            'user_permissions'=>  $user_permissions
+
         ]);
     }
     public function role_details(Request $request){

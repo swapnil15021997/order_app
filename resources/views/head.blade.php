@@ -15,6 +15,7 @@
     <link href="{{ asset('css/tabler-vendors.min.css')}}" rel="stylesheet"/>
     <link href="{{ asset('css/demo.min.css')}}" rel="stylesheet"/>
     <link href="{{ asset('css/chat.css')}}" rel="stylesheet"/>
+    <link rel="icon" href="{{ asset('static/sonic-icon.svg')}}" type="image/png">
 
     <link href="https://cdn.datatables.net/1.13.5/css/jquery.dataTables.min.css" rel="stylesheet" />
 

@@ -62,7 +62,7 @@
 
                         <select id="searchableSelectFrom" class="form-select"  type="text">
                        
-                            @foreach ($branchesArray as $branch)
+                            @foreach ($user_branch as $branch)
                                
                                 <option value="{{ $branch['branch_id'] }}"  @if ($branch['branch_id'] == $login['user_active_branch']) selected @endif>{{ $branch['branch_name'] }}</option>
                             @endforeach
@@ -70,7 +70,7 @@
                     </div>
                     
                 </div>
-                <div class="col-lg-4">
+                <div class="col-lg-6">
                     <div class="mb-3">
                         <label class="form-label">Order To</label>
                         <select id="searchableSelectTo" class="form-select select2">
@@ -82,12 +82,12 @@
                     </div>
                 </div>
 
-                <div class="col-lg-2">
+                <!-- <div class="col-lg-2">
                     <div class="mb-3">
                         <label class="form-label">Create New</label>
                         <button class="btn btn-primary" onclick="create_new_branch()">Create New</button>
                     </div>
-                </div>
+                </div> -->
             </div>            
                     
             <div class="row">
@@ -111,7 +111,7 @@
                 </div>
             </div>
 
-            <div class="row">
+            <div class="row mb-3">
                 <div class="col-lg-6">
                     <div>
                         <label class="form-label">Melting</label>
@@ -142,22 +142,27 @@
                     <div class="mb-3">
                         <label class="form-label">Select Customer</label>
                         <select id="searchableCust" class="form-select select2">
-                            
-                            <!-- @foreach ($branchesArray as $branch)
+                             <!-- @foreach ($branchesArray as $branch)
                                 <option value="{{ $branch['branch_id'] }}">{{ $branch['branch_name'] }}</option>
                             @endforeach -->
                         </select>
+                        <div class="d-none" id="cust_div" >
+                            <div>
+                                <label class="form-label">Customer Phone Number</label>
+                                <input type="text" class="form-control" id="cust_phone_no" placeholder="Customer Phone No">    
+                            </div>
+                            <div>
+                                <label class="form-label">Customer Address</label>
+                                <textarea id="customer_address" required name="customer_address" class="form-control" rows="3"></textarea>    
+                            </div>
+                            <div>
+                                <label class="form-label">Create New</label>
+                                <button id="saveCustBtn" class="btn btn-primary">Create New</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
-
-                <div class="col-lg-2">
-                    <div class="mb-3">
-                        <label class="form-label">Create New</label>
-                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal-report">Create New</button>
-                    </div>
-                </div>
-
-'            </div>
+            </div>
 
 
             <div class="row d-none" id="payment">
@@ -193,51 +198,7 @@
         </div>
     </div>
 
-    <div class="modal modal-blur fade" id="modal-report" tabindex="-1" role="dialog" aria-hidden="true">
-            <div class="modal-dialog modal-lg" role="document">
-                <div class="modal-content">
-
-                    <div class="modal-header">
-                        <h5 class="modal-title">New Customer</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div id="alert-container-cust"></div>
-                    <div class="modal-body">
-                        <div class="mb-3">
-                            <input type="hidden" id="branch_id" value="">
-                            <label class="form-label">Customer Name</label>
-                            <input id="customer_name" required type="text" name="customer_name" class="form-control"  placeholder="Add Customer Name">
-                        </div>
-                    </div>
-                    <div class="modal-body">
-                        <div class="row">
-                            <div class="col-lg-6">
-                                <div>
-                                    <label class="form-label">Customer Address</label>
-                                    <textarea id="customer_address" required name="customer_address" class="form-control" rows="3"></textarea>
-                                </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div>
-                                    <label class="form-label">Customer Phone No</label>
-                                    <input id="customer_phone_no" required type="text" name="customer_phone_no" class="form-control"  placeholder="Add phone no">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <a href="#" class="btn btn-link link-secondary" data-bs-dismiss="modal">
-                        Cancel
-                        </a>
-                        <a id="saveCustBtn" href="#" class="btn btn-primary ms-auto">
-                        <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
-                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 5l0 14" /><path d="M5 12l14 0" /></svg>
-                        Create new Customer
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
+    
 
     
     
@@ -267,6 +228,7 @@
                 var orderFrom    = $('#searchableSelectFrom').val();
                 var orderTo      = $('#searchableSelectTo').val();
                 var cust         = $('#searchableCust').val();
+                alert(cust);
                 var item_metal   = $('#item_metal').val();
                 var item_name    = $('#item_name').val();
                 var item_melting = $('#item_melting').val();
@@ -353,51 +315,7 @@
             });
 
 
-            $('#saveCustBtn').click(function(e) {
-                e.preventDefault(); 
-                var custName    = $('#customer_name').val();
-                var custAddress = $('#customer_address').val();
-                var custPhone   = $('#customer_phone_no').val();
-                
-                // var branchId = $('#branch_id').val();
-                console.log(custAddress,custName)
-                if (custName && custPhone) {
-                    $.ajax({
-                        url: "{{ route('add_edit_cust') }}",  // Adjust the route as needed
-                        type: 'POST',
-                        data: {
-                            _token           : csrfToken,
-                            customer_name    : custName,
-                            customer_address : custAddress,
-                            customer_phone_no:custPhone,
-                            customer_id      : null,
-                        },
-                        success: function(response) {
-                            // Handle success
-                            
-                            if (response.status==200) {
-                                $('#modal-report').modal('hide');  // Hide the modal
-                                $('#customer_name').val();
-                                $('#customer_address').val();
-                                $('#customer_phone_no').val();
-                                showAlertCust('success', response.message);
-                                // alert(response.message);
-
-                            } else {
-                                // alert('Error creating branch: ' + response.message);
-                                showAlertCust('warning', response.message);
-                            }
-                        },
-                        error: function(xhr, status, error) {
-                            // alert('An error occurred: ' + error);
-                            showAlertCust('warning', error);
-                        }
-                    });
-                } else {
-                    // alert('Please fill in both fields.');
-                    showAlertCust('warining', 'Please fill in both fields, Name and address');
-                }
-            });
+          
         });
 
         var userInput = '';
@@ -453,52 +371,204 @@
                 cache: true 
             }
         });
+
+    
         
-        $('#searchableCust').on('select2:open', function() {
-                $('.select2-search__field').on('input', function() {
-                    userInput = $(this).val();
-                });
-            });
-            var csrfToken = $('meta[name="csrf-token"]').attr('content');
-            $('#searchableCust').select2({
+        // $('#searchableCust').on('select2:open', function() {
+        //         $('.select2-search__field').on('input', function() {
+        //             userInput = $(this).val();
+        //         });
+        //     });
+        //     var csrfToken = $('meta[name="csrf-token"]').attr('content');
+        //     $('#searchableCust').select2({
                 
-                placeholder: "Select an option",
-                allowClear: true,
-                ajax: {
-                    url: "{{route('customer_list')}}", 
-                dataType: 'json',
-                type: 'POST',
-                headers: {
-                        'X-CSRF-TOKEN': csrfToken  // Add CSRF token in the header
-                },
-                delay: 250, 
-                data: function (params) {
-                    return {
+        //         placeholder: "Select an option",
+                
+        //         allowClear: true,
+        //         ajax: {
+        //             url: "{{route('customer_list')}}", 
+        //         dataType: 'json',
+        //         type: 'POST',
+        //         headers: {
+        //                 'X-CSRF-TOKEN': csrfToken  // Add CSRF token in the header
+        //         },
+        //         delay: 250, 
+        //         data: function (params) {
+        //             return {
                        
-                        search: params.term, 
-                        per_page: 10,
-                        page: params.page || 1 
-                    };
-                },
-                processResults: function (data) {
+        //                 search: params.term, 
+        //                 per_page: 10,
+        //                 page: params.page || 1 
+        //             };
+        //         },
+        //         processResults: function (data) {
                     
-                    return {
-                        results: data.data.cust.map(function (item) {
+        //             return {
+        //                 results: data.data.cust.map(function (item) {
+        //                     return {
+        //                         id: item.cust_id,
+        //                         text: item.cust_name
+        //                     };
+        //                 }),
+        //                 pagination: {
+        //                     more: data.data.length >= 10 // Check if there are more results
+        //                 }
+        //             };
+        //         },
+        //         cache: true 
+        //     },
+            
+        // });
+
+        // $('#searchableCust').on('select2:open', function() {
+        //     $('.select2-search__field').on('input', function() {
+        //         userInput = $(this).val();
+        //     });
+        // });
+        $(document).ready(function () {
+
+                $('#searchableCust').on('select2:open', function() {
+                    $('.select2-search__field').on('input', function() {
+                        userInput = $(this).val();
+                    });
+                });
+
+                $('#searchableCust').on('select2:select', function (e) {
+                    console.log("Event triggered", e.params.data);
+                    if (e.params.data.newOption) {
+                        console.log("New customer added");
+                        $('#cust_div').removeClass('d-none');
+                    } else {
+                        $('#cust_div').addClass('d-none');
+                    }
+                });
+                var csrfToken = $('meta[name="csrf-token"]').attr('content');
+
+                $('#searchableCust').select2({
+                    placeholder: "Search or add a customer",
+                    allowClear: true,
+                    tags: true, // Enable adding new tags
+                    ajax: {
+                        url: "{{route('customer_list')}}", // Backend route for fetching customers
+                        dataType: 'json',
+                        type: 'POST',
+                        headers: {
+                            'X-CSRF-TOKEN': csrfToken // CSRF token for security
+                        },
+                        delay: 250, // Debounce for better performance
+                        data: function (params) {
                             return {
-                                id: item.cust_id,
-                                text: item.cust_name
+                                search: params.term, // User input for search
+                                per_page: 10, // Number of results per page
+                                page: params.page || 1 // Current page
                             };
-                        }),
-                        pagination: {
-                            more: data.data.length >= 10 // Check if there are more results
+                        },
+                        processResults: function (data) {
+                            return {
+                                results: data.data.cust.map(function (item) {
+                                    return {
+                                        id: item.cust_id,
+                                        text: item.cust_name
+                                    };
+                                }),
+                                pagination: {
+                                    more: data.data.length >= 10 // Check if there are more results
+                                }
+                            };
+                        },
+                        cache: true
+                    },
+                    createTag: function (params) {
+                        // Allow adding new customer only if input is non-empty
+                        if ($.trim(params.term) === '') {
+                            return null;
                         }
-                    };
-                },
-                cache: true 
-            }
+                        return {
+                            id: 'new:' + params.term, // Mark it as a new option
+                            text: params.term,
+                            newOption: true
+                        };
+                    },
+                    templateResult: function (data) {
+                        // Highlight the "Add new customer" option
+                        if (data.newOption) {
+                            return $('<span><em>Create ": </em>' + data.text + '"</span>');
+                        }
+                        return data.text;
+                    },
+                    templateSelection: function (data) {
+                        // Display the selected item properly
+
+                        return data.text;
+                    }
+                })
+            });
+
+            $('#searchableCust').on('select2:select', function (e) {
+                console.log("Event triggered:", e.params.data);
+
+                // Check if the selected option is a new customer
+                if (e.params.data.newOption) {
+                    console.log("New customer selected");
+                    $('#cust_div').removeClass('d-none'); // Remove the 'd-none' class
+                } else {
+                    console.log("Existing customer selected");
+                    $('#cust_div').addClass('d-none'); // Add the 'd-none' class
+                }
+            });
+
+
+            $('#saveCustBtn').click(function(e) {
+                e.preventDefault(); 
+                var custName    = userInput;
+                var custAddress = $('#customer_address').val();
+                var custPhone   = $('#cust_phone_no').val();
+                
+                // var branchId = $('#branch_id').val();
+                console.log("Customer Info",custAddress,custName);
+                if (custName && custPhone) {
+                    $.ajax({
+                        url: "{{ route('add_edit_cust') }}",  // Adjust the route as needed
+                        type: 'POST',
+                        data: {
+                            _token           : csrfToken,
+                            customer_name    : custName,
+                            customer_address : custAddress,
+                            customer_phone_no:custPhone,
+                            customer_id      : null,
+                        },
+                        success: function(response) {
+                            // Handle success
+                            
+                            if (response.status==200) {
+                                console.log("Resposne of cust",response.data);
+                                UserInput = '';
+                                $('#customer_address').val();
+                                $('#cust_phone_no').val();
+                                
+                                var newOption = new Option(response.data.cust_name, response.data.cust_id, true, true);
+                                $('#searchableCust').append(newOption).trigger('change');
+                                $('#searchableCust').val(response.data.cust_id).trigger('change');
+
+                                showAlert('success', response.message);
+                                // alert(response.message);
+
+                            } else {
+                                // alert('Error creating branch: ' + response.message);
+                                showAlert('warning', response.message);
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            // alert('An error occurred: ' + error);
+                            showAlert('warning', error);
+                        }
+                    });
+                } else {
+                    // alert('Please fill in both fields.');
+                    showAlert('warining', 'Please fill in both fields, Name and address');
+                }
+            });
         });
-        
-    });
 
         function formatDate(date) {
             var d = new Date(date);

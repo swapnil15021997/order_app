@@ -104,7 +104,7 @@
                     </div>
                 </div>
             </div>
-            <div class="row">
+            <div class="row mb-3">
                 <div class="col-lg-6">
                     <div>
                         <label class="form-label">Melting</label>
@@ -297,6 +297,47 @@
                 alert('Please fill in all fields.');
                 showAlert('warning', 'Please fill in all fields orderDate, orderType and Order To');
 
+            }
+        });
+
+
+    
+            var csrfToken = $('meta[name="csrf-token"]').attr('content');
+            $('#edit_searchableSelectTo').select2({
+                
+                placeholder: "Select an option",
+                allowClear: true,
+                ajax: {
+                    url: "{{route('branch_list')}}", 
+                dataType: 'json',
+                type: 'POST',
+                headers: {
+                        'X-CSRF-TOKEN': csrfToken  // Add CSRF token in the header
+                },
+                delay: 250, 
+                data: function (params) {
+                    return {
+                       
+                        search: params.term, 
+                        per_page: 10,
+                        page: params.page || 1 
+                    };
+                },
+                processResults: function (data) {
+                    
+                    return {
+                        results: data.data.branches.map(function (item) {
+                            return {
+                                id: item.branch_id,
+                                text: item.branch_name
+                            };
+                        }),
+                        pagination: {
+                            more: data.data.length >= 10 // Check if there are more results
+                        }
+                    };
+                },
+                cache: true 
             }
         });
     });

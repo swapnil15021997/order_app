@@ -54,8 +54,12 @@ class CustomerController extends Controller
             $customer->cust_address  = $params['customer_address'];
             $customer->save();
             return response()->json([
-                'status' => 200,
-                'message' => 'Customer added successfully' 
+                'status'  => 200,
+                'message' => 'Customer added successfully',
+                'data'    => [
+                    'cust_id'   => $customer->cust_id,
+                    'cust_name' =>$customer->cust_name
+                ]
             ]);
         }else{
             if(! in_array(2 ,$combined_permissions)){

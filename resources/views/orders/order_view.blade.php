@@ -52,7 +52,6 @@
                             <div style="width: 30%;">
                                 <div style="padding: 3px; text-align:center; border-left: 1px solid #cccccc;">
                                     <p><b>QR Code</b></p>
-                                    <p><b>{{$order['order_qr_code']}}</b></p>
                                      
                                 </div>
                             </div>

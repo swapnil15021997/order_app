@@ -21,7 +21,10 @@ class UserRole extends Model
         'deleted_at'
     ];
 
-
+    public function users()
+    {
+        return $this->hasMany(User::class, 'user_role_id', 'role_id');
+    }
     public static function get_role_by_id($role_id){
         $user = UserRole::where('role_id',$role_id)->first();
         return $user;
