@@ -319,16 +319,16 @@
                             response.data.notes.forEach(function(note) {
 
                               if (note.notes_type == 1){
-                                  notesBody.prepend(`
+                                  notesBody.append(`
                                   <div class="chat-bubble chat-bubble-me" >
                                       <div class="chat-bubble-title"></div>
                                       <div class="chat-bubble-body" >
-                                          <p>${note.notes_id} '---' ${note.notes_text}.</p> 
+                                          <p>${note.notes_text}.</p> 
                                       </div>
                                   </div>`); 
                               }else{
                                   if(note.file.file_type == 'pdf'){
-                                      notesBody.prepend(`
+                                      notesBody.append(`
                                       <div class="chat-bubble chat-bubble-me w-75">
                                           <p class="small text-decoration-underline">${note.file.file_original_name}</p>
                                           <embed src=""${note.file.file_url}" width="100%" height="auto" />
@@ -336,7 +336,7 @@
                                   }else{
 
                                   
-                                      notesBody.prepend(`
+                                      notesBody.append(`
                                       <div class="chat-bubble chat-bubble-me w-75">
                                           <p class="small text-decoration-underline">${note.file.file_original_name}</p>
                                           <img
@@ -352,10 +352,10 @@
 
                           page++;
 
-                          let scrollTopAfterLoad = notesBody[0].scrollHeight - firstNoteOffset;
-                          notesBody.scrollTop(scrollTopAfterLoad);
+                          // let scrollTopAfterLoad = notesBody[0].scrollHeight - firstNoteOffset;
+                          // notesBody.scrollTop(scrollTopAfterLoad);
 
-                          isLoading = false;
+                          // isLoading = false;
                   }
               });
 
@@ -363,31 +363,18 @@
       
 
           function handleScroll() {
-              // const notesBox = document.getElementById("notes_body");
-              // console.log("HandleScroll",notesBox);
-              // if (!notesBox) return;
+              const notesBox = document.getElementById("notes_body");
+              console.log("HandleScroll",notesBox);
+              if (!notesBox) return;
 
-              // const { scrollTop, scrollHeight, clientHeight } = notesBox;
-              // console.log(scrollTop, scrollHeight,clientHeight);
+              const { scrollTop, scrollHeight, clientHeight } = notesBox;
+              console.log(scrollTop, scrollHeight,clientHeight);
 
-              // if (scrollTop + clientHeight >= scrollHeight - 5) {
+              if (scrollTop + clientHeight >= scrollHeight - 5) {
                   
-              //     isLoading = false;
-              //     loadNotes();
-              // }
-
-              const notesBox = $('#notes_body');
-              if (!notesBox.length) return;
-
-              const scrollTop = notesBox.scrollTop();
-              console.log('Scroll position:', scrollTop);
-
-              // Check if user scrolled to the top of the notes container
-              if (scrollTop <= 5) {
-                  console.log('Scrolled to the top, loading more notes...');
+                  isLoading = false;
                   loadNotes();
-              }
-    
+              }    
           }
 
           // Initial load
@@ -405,7 +392,7 @@
                   
                   notesBox.addEventListener("scroll", handleScroll);
                   
-                  notesBox.scrollTop(notesBox[0].scrollHeight);
+                  // notesBox.scrollTop(notesBox[0].scrollHeight);
               }
           }, 500);
 
