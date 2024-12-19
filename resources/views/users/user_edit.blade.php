@@ -43,13 +43,15 @@
             <div class="row">
                 <div class="col-lg-6">
                     <div class="mb-3">
-                        <label class="form-label">User Role</label>
+                        <label class="form-label">User Role {{$user['user_role_id']}}</label>
                         <select id="select_role" class="form-select">
+                            @if(!empty($user['user_role_id']))
                             @foreach ($roles as $role)
                                 <option value="{{ $role['role_id'] }}"
                                 @if($role['role_id'] == $user['user_role_id']) selected @endif
                                 >{{ $role['role_name'] }}</option>
                             @endforeach
+                            @endif
                         </select>
                     </div>
                     
@@ -214,6 +216,7 @@
             }
  
             let preSelectedRoleId = $('#select_role').val();
+            console.log(preSelectedRoleId);
             fetchRoleDetails(preSelectedRoleId);
  
             $('#select_role').on('change', function () {

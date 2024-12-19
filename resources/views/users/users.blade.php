@@ -700,6 +700,9 @@
             });
             
 
+            
+            
+        });
         function edit_role(role_id) {
       
             // window.location.href = `/edit-role/${userId}`;
@@ -752,9 +755,6 @@
             $('#delete_role_id').val(order_id);
             $('#delete_role').modal('show');      
         }
-
-
-        });
             
          
         
