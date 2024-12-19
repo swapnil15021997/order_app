@@ -69,23 +69,34 @@ class ProfileController extends Controller
         $login = auth()->user();
         
         if(!empty($login)){
-            $userBranchIds = explode(',', $login['user_branch_ids']);
+            if($login['user_role_id'] != 1){
+
+                $userBranchIds = explode(',', $login['user_branch_ids']);
+                // branch array of user
+                $users_branch  = Branch::get_users_branch($userBranchIds);
+                
+            }else{
+                $users_branch  = Branch::get_all_branch();
+    
+            }
         }
 
         $activePage = 'profile';
         $branch       = Branch::get_all_branch();
-        $user_branch  = Branch::whereIn('branch_id', $userBranchIds)->get()->toArray();
         $settings = Settings::all()->filter(function ($setting) {
             return $setting->setting_name !== 'fcm_token';
         })->toArray();
-        
+        $user_permissions = session('combined_permissions', []);
+      
+       
         return view('profile.setting', [
             'user' => $request->user(),
             'login' => $login,
             'activePage' => $activePage,
             'branch'=>$branch,
-            'user_branch' => $user_branch,
-            'settings' => $settings
+            'user_branch' => $users_branch,
+            'settings' => $settings,
+            'user_permissions' => $user_permissions
 
         ]);
     
