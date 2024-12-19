@@ -115,7 +115,7 @@
                       </svg>
                     </span>
                     <span class="nav-link-title">
-                      Users
+                      Users & Roles
                     </span>
                   </a>
                 </li>
