@@ -24,17 +24,7 @@ class OrderController extends Controller
 
     public function view_order(Request $request,$id){
 
-        $order = Order::query()
-            ->leftJoin('branch AS from_branch', 'from_branch.branch_id', '=', 'orders.order_from_branch_id')  // Join to get 'order_from_branch' name
-            ->leftJoin('branch AS to_branch', 'to_branch.branch_id', '=', 'orders.order_to_branch_id')  // Join to get 'order_to_branch' name
-            ->select(
-                'orders.*', 
-                'from_branch.branch_name AS order_from_name',   
-                'to_branch.branch_name AS order_to_name'
-            )
-            ->with('items') 
-            ->where('orders.order_id', $id)  
-            ->first();  
+        $order = Order::get_order_by_order_id($id);  
 
         $login = auth()->user();
         
@@ -44,10 +34,11 @@ class OrderController extends Controller
 
                 $userBranchIds = explode(',', $login['user_branch_ids']);
                 // branch array of user
-                $users_branch  = Branch::whereIn('branch_id', $userBranchIds)->get()->toArray();
+                $users_branch  = Branch::get_users_branch($userBranchIds);
+                
             }else{
-                $users_branch  = Branch::where('is_delete', 0)->get()->toArray();
-
+                $users_branch  = Branch::get_all_branch();
+    
             }
         }
 
@@ -56,11 +47,11 @@ class OrderController extends Controller
         }
         $customer_order = [];
         if(!empty($order['order_customer_id'])){
-            $customer_order = Customers::where('cust_id',$order['order_customer_id'])->first()->toArray();
+            $customer_order = Customers::get_cust_by_id($order['order_customer_id']);
         }
         $payment = [];
         if($order['order_type']==1){
-            $payment = Payment::where('payment_order_id',$order['order_id'])->first()->toArray();
+            $payment = Payment::get_payment_by_id($order['order_id']);
         }
         $activePage       = 'orders';
         
@@ -83,8 +74,8 @@ class OrderController extends Controller
  
     }
     public function order_index(Request $request){
-        $metals        = DB::table('metals')->select('metal_name')->get();
-        $melting       = DB::table('melting')->select('melting_name')->get();
+        // $metals        = DB::table('metals')->select('metal_name')->get();
+        // $melting       = DB::table('melting')->select('melting_name')->get();
         $pageTitle     = 'Orders';
         $login         = auth()->user();
        
@@ -93,16 +84,17 @@ class OrderController extends Controller
 
                 $userBranchIds = explode(',', $login['user_branch_ids']);
                 // branch array of user
-                $user_branch  = Branch::whereIn('branch_id', $userBranchIds)->get()->toArray();
+                $user_branch  = Branch::get_users_branch($userBranchIds);
+                
             }else{
-                $user_branch  = Branch::where('is_delete', 0)->get()->toArray();
-
+                $user_branch  = Branch::get_all_branch();
+    
             }
         }
         $activePage       = 'orders';
         $user_permissions = session('combined_permissions', []);
       
-        return view('orders/order_master',compact('metals', 'melting','pageTitle','login','activePage','user_branch','user_permissions'));
+        return view('orders/order_master',compact('pageTitle','login','activePage','user_branch','user_permissions'));
     }
 
     public function order_add(Request $request){
@@ -288,10 +280,11 @@ class OrderController extends Controller
 
                 $userBranchIds = explode(',', $login['user_branch_ids']);
                 // branch array of user
-                $user_branch  = Branch::whereIn('branch_id', $userBranchIds)->get()->toArray();
+                $user_branch  = Branch::get_users_branch($userBranchIds);
+                
             }else{
-                $user_branch  = Branch::where('is_delete', 0)->get()->toArray();
-
+                $user_branch  = Branch::get_all_branch();
+    
             }
         }
 
@@ -328,7 +321,7 @@ class OrderController extends Controller
             $paymentArray = Payment::where('payment_order_id',$id)->first();
            
         }
-        $customer  = Customers::where('is_delete',0)->get()->toArray();
+        $customer  = Customers::get_all_customers();
         
         // $order['order_cust']
         $pageTitle     = 'Orders';
@@ -340,10 +333,11 @@ class OrderController extends Controller
 
                 $userBranchIds = explode(',', $login['user_branch_ids']);
                 // branch array of user
-                $user_branch  = Branch::whereIn('branch_id', $userBranchIds)->get()->toArray();
+                $user_branch  = Branch::get_users_branch($userBranchIds);
+                
             }else{
-                $user_branch  = Branch::where('is_delete', 0)->get()->toArray();
-
+                $user_branch  = Branch::get_all_branch();
+    
             }
         }
        

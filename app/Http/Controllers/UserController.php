@@ -28,24 +28,19 @@ class UserController extends Controller
 
                 $userBranchIds = explode(',', $login['user_branch_ids']);
                 // branch array of user
-                $users_branch  = Branch::whereIn('branch_id', $userBranchIds)->get()->toArray();
+                $users_branch  = Branch::get_users_branch($userBranchIds);
+                
             }else{
-                $users_branch  = Branch::where('is_delete', 0)->get()->toArray();
-
+                $users_branch  = Branch::get_all_branch();
+    
             }
         }
 
         $user_permissions = session('combined_permissions', []);
         
-        $roles = UserRole::whereNull('deleted_at')
-        ->withCount('users')
-        ->get()->toArray();
-         
-        
-        $modules = Modules::with('permissions:permission_id,permission_name,permission_module_id') 
-            ->select('module_id', 'module_name')
-            ->get()
-            ->toArray();
+        $roles = UserRole::get_roles_with_count();
+            
+        $modules = Modules::get_modules_with_permissions();
 
         return view('users/users',['users' => $users,
             'pageTitle'=>'Users','login'=>$login,
@@ -60,10 +55,7 @@ class UserController extends Controller
         $roles = UserRole::select('role_id', 'role_name')->get()->toArray();
         $login = auth()->user();
 
-        $modules = Modules::with('permissions:permission_id,permission_name,permission_module_id') 
-            ->select('module_id', 'module_name')
-            ->get()
-            ->toArray();
+        $modules = Modules::get_modules_with_permissions();
         $activePage = 'users';
         $branch     = Branch::get_all_branch();
 
@@ -72,10 +64,11 @@ class UserController extends Controller
 
                 $userBranchIds = explode(',', $login['user_branch_ids']);
                 // branch array of user
-                $users_branch  = Branch::whereIn('branch_id', $userBranchIds)->get()->toArray();
+                $users_branch  = Branch::get_users_branch($userBranchIds);
+                
             }else{
-                $users_branch  = Branch::where('is_delete', 0)->get()->toArray();
-
+                $users_branch  = Branch::get_all_branch();
+    
             }
         }
 
@@ -263,11 +256,7 @@ class UserController extends Controller
         }
         $roles = UserRole::select('role_id', 'role_name')->get()->toArray();
         
-        $modules = Modules::with('permissions:permission_id,permission_name,permission_module_id') 
-            ->select('module_id', 'module_name')
-            ->get()
-            ->toArray();
-        
+        $modules = Modules::get_modules_with_permissions();     
             
         $branch     = Branch::get_all_branch();
         $login = auth()->user();
@@ -277,10 +266,11 @@ class UserController extends Controller
 
                 $userBranchIds = explode(',', $login['user_branch_ids']);
                 // branch array of user
-                $users_branch  = Branch::whereIn('branch_id', $userBranchIds)->get()->toArray();
+                $users_branch  = Branch::get_users_branch($userBranchIds);
+                
             }else{
-                $users_branch  = Branch::where('is_delete', 0)->get()->toArray();
-
+                $users_branch  = Branch::get_all_branch();
+    
             }
         }
         $branch       = Branch::get_all_branch();

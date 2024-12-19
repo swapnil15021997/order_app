@@ -29,4 +29,11 @@ class UserRole extends Model
         $user = UserRole::where('role_id',$role_id)->first();
         return $user;
     }
+
+    public static function get_roles_with_count(){
+        $roles = UserRole::whereNull('deleted_at')
+        ->withCount('users')
+        ->get()->toArray();
+        return $roles;
+    }
 }

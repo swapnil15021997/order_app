@@ -23,7 +23,16 @@ class Modules extends Model
     {
 
         return $this->hasMany(Permission::class, 'permission_module_id', 'module_id');
-        }
- 
+    }
+    
+    public static function get_modules_with_permissions(){
+
+        $permissions = Modules::with('permissions:permission_id,permission_name,permission_module_id') 
+            ->select('module_id', 'module_name')
+            ->get()
+            ->toArray();
+        return $permissions;
+    }
+
     //
 }

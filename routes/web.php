@@ -30,9 +30,10 @@ Route::get('/dashboard', function () {
 
             $userBranchIds = explode(',', $login['user_branch_ids']);
             // branch array of user
-            $users_branch  = Branch::whereIn('branch_id', $userBranchIds)->get()->toArray();
+            $users_branch  = Branch::get_users_branch($userBranchIds);
+            
         }else{
-            $users_branch  = Branch::where('is_delete', 0)->get()->toArray();
+            $users_branch  = Branch::get_all_branch();
 
         }
     }

@@ -45,6 +45,22 @@ class Order extends Model
         return $order;
     }
 
+
+    public static function get_order_by_order_id($id){
+        $order = Order::query()
+            ->leftJoin('branch AS from_branch', 'from_branch.branch_id', '=', 'orders.order_from_branch_id')  // Join to get 'order_from_branch' name
+            ->leftJoin('branch AS to_branch', 'to_branch.branch_id', '=', 'orders.order_to_branch_id')  // Join to get 'order_to_branch' name
+            ->select(
+                'orders.*', 
+                'from_branch.branch_name AS order_from_name',   
+                'to_branch.branch_name AS order_to_name'
+            )
+            ->with('items') 
+            ->where('orders.order_id', $id)  
+            ->first();
+        return $order;
+    }
+
     public function items()
     {
         return $this->hasMany(Item::class, 'item_order_id', 'order_id');
