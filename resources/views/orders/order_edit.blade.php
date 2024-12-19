@@ -252,7 +252,7 @@
                 var itemImages = $('#edit_item_image_id')[0].files; 
                 var payment_advance = $('#payment_advance').val();
                 var payment_booking = $('#payment_booking').val();
-
+                var cust         = $('#searchableCust').val();
                 if (orderDate && orderType && orderFrom && orderTo) {
                     var formData = new FormData();
                     formData.append('_token', csrfToken);  
@@ -265,6 +265,8 @@
                     formData.append('item_name', itemName);
                     formData.append('item_melting', itemMelting);
                     formData.append('item_weight', itemWeight);
+                    formData.append('order_user_id', cust);
+
                     if(payment_advance){
                         formData.append('payment_advance', payment_advance);
                     }else{
