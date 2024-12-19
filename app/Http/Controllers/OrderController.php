@@ -629,7 +629,7 @@ class OrderController extends Controller
         $item->save();
 
         // payment update
-        if($params['order_type'] == 2){
+        if($params['order_type'] == 1){
             
             $payment = Payment::where('payment_order_id', $params['order_id'])->first();
             if(!empty($payment)){
