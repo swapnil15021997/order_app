@@ -12,7 +12,7 @@
                         <nav aria-label="breadcrumb">
                             <ol class="breadcrumb">
                                 <li class="breadcrumb-item"><a href="{{route('dashboard')}}">Home</a></li>
-                                <li class="breadcrumb-item" aria-current="page"><a href="{{route('user-master')}}">User</a></li>
+                                <li class="breadcrumb-item" aria-current="page"><a href="{{route('user-master')}}">Users & Permissions</a></li>
                                 <li class="breadcrumb-item active" aria-current="page"><a href="{{route('user-master')}}">User Add</a></li>
                             </ol>
                         </nav>
