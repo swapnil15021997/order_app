@@ -451,7 +451,12 @@ class OrderController extends Controller
         $perPage     = $request->input('per_page', 15);   
         $page        = $request->input('page', 1);   
         $offset      = ($page - 1) * $perPage;
-   
+        $sortColumn  = $request->input('sort', 'order_id'); // Default sort column
+        $sortOrder   = $request->input('sortOrder', 'desc'); // Default sort order (desc)
+        $allowedSortColumns = ['order_id', 'order_date'];
+        if (!in_array($sortColumn, $allowedSortColumns)) {
+            $sortColumn = 'order_id'; 
+        }
         $ordersQuery = Order::query()    
         ->leftJoin('branch AS from_branch', 'from_branch.branch_id', '=', 'orders.order_from_branch_id')  // Join to get 'order_from_branch' name
         ->leftJoin('branch AS to_branch', 'to_branch.branch_id', '=', 'orders.order_to_branch_id')  // Join to get 'order_to_branch' name
@@ -460,7 +465,8 @@ class OrderController extends Controller
             'from_branch.branch_name AS order_from_name',   
             'to_branch.branch_name AS order_to_name')
         ->where('orders.is_delete',0)
-        ->orderBy('order_id', 'desc');
+        ->orderBy($sortColumn, $sortOrder);
+        
         if (!empty($searchQuery)) {
             $ordersQuery->where(function ($query) use ($searchQuery) {
                 $query->where('order_number', 'like', "%{$searchQuery}%")

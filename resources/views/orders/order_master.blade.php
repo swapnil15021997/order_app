@@ -122,6 +122,8 @@
                         d.per_page = d.length;  
                         d.page     = d.start / d.length + 1;  
                         d.draw     = d.draw;  
+                        d.sort = d.order[0].column === 1 ? 'order_date' : 'order_id'; 
+                        d.sortOrder = d.order[0].dir;
                     },
                     headers: {
                         'X-CSRF-TOKEN': csrfToken  // Add CSRF token in the header
@@ -135,13 +137,13 @@
                     }
                 },
                 columns: [
-                    { data: 'serial_number', name: 'serial_number' },  
-                    { data: 'order_date', name: 'order_date' }, 
-                    { data: 'order_type', name: 'order_type' }, 
-                    { data: 'order_from_name', name: 'order_from_name' },  
-                    { data: 'order_to_name', name: 'order_to_name' },  
-                    { data: 'order_number', name: 'order_number' }, 
-                    { data: 'order_qr_code', name: 'order_qr_code' }, 
+                    { data: 'serial_number', name: 'serial_number',orderable: false  },  
+                    { data: 'order_date', name: 'order_date',orderable: true }, 
+                    { data: 'order_type', name: 'order_type',orderable: false  }, 
+                    { data: 'order_from_name', name: 'order_from_name',orderable: false  },  
+                    { data: 'order_to_name', name: 'order_to_name',orderable: false  },  
+                    { data: 'order_number', name: 'order_number',orderable: false  }, 
+                    { data: 'order_qr_code', name: 'order_qr_code',orderable: false  }, 
                         { 
                         data: 'order_id', 
                         name: 'operations', 

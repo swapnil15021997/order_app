@@ -355,7 +355,12 @@ class UserController extends Controller
         $perPage     = $request->input('per_page', 15);   
         $page        = $request->input('page', 1);   
         $offset      = ($page - 1) * $perPage;
-   
+        $sortColumn  = $request->input('sort', 'id'); 
+        $sortOrder   = $request->input('sortOrder', 'desc'); 
+        $allowedSortColumns = ['id', 'user_name'];
+        if (!in_array($sortColumn, $allowedSortColumns)) {
+            $sortColumn = 'id'; 
+        }
         $usersQuery = User::query()
         ->leftJoin('user_roles as roles', 'users.user_role_id', '=', 'roles.role_id')
         ->select(
@@ -363,7 +368,8 @@ class UserController extends Controller
             'users.user_name',
             'users.user_phone_number',
             'roles.role_name'
-        )->where('users.is_delete',0);       
+        )->where('users.is_delete',0)
+        ->orderBy($sortColumn, $sortOrder);       
         if (!empty($searchQuery)) {
             $usersQuery->where(function ($query) use ($searchQuery) {
                 $query->where('user_name', 'like', "%{$searchQuery}%")

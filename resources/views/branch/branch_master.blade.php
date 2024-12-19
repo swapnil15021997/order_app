@@ -183,9 +183,12 @@
                         d.per_page = d.length;  
                         d.page     = d.start / d.length + 1;  
                         d.draw     = d.draw;  
+                        d.sort = d.order[0].column === 1 ? 'branch_name' : 'branch_id'; 
+                        d.sortOrder = d.order[0].dir; 
+     
                     },
                     headers: {
-                        'X-CSRF-TOKEN': csrfToken  // Add CSRF token in the header
+                        'X-CSRF-TOKEN': csrfToken  
                     },
                     dataSrc: function(response) {
 
@@ -196,9 +199,9 @@
                     }
                 },
                 columns: [
-                    { data: 'serial_number', name: 'serial_number' },  
-                    { data: 'branch_name', name: 'branch_name' }, 
-                    { data: 'branch_address', name: 'branch_address' },  
+                    { data: 'serial_number', name: 'serial_number',orderable: true },  
+                    { data: 'branch_name', name: 'branch_name',orderable: true }, 
+                    { data: 'branch_address', name: 'branch_address',orderable: false },  
 
                     { 
                         data: 'branch_id', 
@@ -216,6 +219,7 @@
                         },     
                     }   
                 ],
+                order: [[0, 'desc']],
                 "pageLength": 10,  
                 "lengthMenu": [10, 25, 50, 100]  
             });

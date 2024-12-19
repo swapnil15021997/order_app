@@ -529,6 +529,9 @@
                         d.per_page = d.length;  
                         d.page     = d.start / d.length + 1;  
                         d.draw     = d.draw;  
+                        d.sort = d.order[0].column === 1 ? 'user_name' : 'id'; 
+                        d.sortOrder = d.order[0].dir; 
+     
                     },
                     headers: {
                         'X-CSRF-TOKEN': csrfToken  // Add CSRF token in the header
@@ -542,10 +545,10 @@
                     }
                 },
                 columns: [
-                    { data: 'serial_number', name: 'serial_number' },  
-                    { data: 'user_name', name: 'user_name' }, 
-                    { data: 'user_phone_number', name: 'user_phone_number' }, 
-                    { data: 'role_name', name: 'role_name' },  
+                    { data: 'serial_number', name: 'serial_number',orderable: true },  
+                    { data: 'user_name', name: 'user_name',orderable: true }, 
+                    { data: 'user_phone_number', name: 'user_phone_number',orderable: false }, 
+                    { data: 'role_name', name: 'role_name', orderable: false},  
                     { 
                         data: 'user_id', 
                         name: 'operations', 
@@ -565,6 +568,7 @@
                         },     
                     }   
                 ],
+                order: [[0, 'desc']],
                 "pageLength": 10,  
                 "lengthMenu": [10, 25, 50, 100]  
             });

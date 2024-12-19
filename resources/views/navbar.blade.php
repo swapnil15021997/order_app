@@ -4,7 +4,7 @@
             <span class="navbar-toggler-icon"></span>
           </button>
           <h1 class="navbar-brand navbar-brand-autodark d-none-navbar-horizontal pe-0 pe-md-3">
-            <a href=".">
+            <a href="{{route('dashboard')}}">
               <img src="{{ asset('static/sonic-large.svg')}}" width="110" height="35" alt="Tabler" class="navbar-brand-image">
             </a>
           </h1>

@@ -134,7 +134,14 @@ class BranchController extends Controller
         $perPage     = $request->input('per_page', 15);   
         $page        = $request->input('page', 1);  
         $offset      = ($page - 1) * $perPage;
-  
+        $sortColumn  = $request->input('sort', 'branch_id'); 
+        $sortOrder   = $request->input('sortOrder', 'desc'); 
+
+        $allowedSortColumns = ['branch_id', 'branch_name'];
+        if (!in_array($sortColumn, $allowedSortColumns)) {
+            $sortColumn = 'branch_id'; // Fallback to default
+        }
+
         $branchQuery  = Branch::query()->where('is_delete',0);      
          
         if (!empty($searchQuery)) {
@@ -142,7 +149,7 @@ class BranchController extends Controller
                 $query->where('branch_name', 'like', "%{$searchQuery}%");
             });
         }
-        $branchQuery->orderBy('branch_id', 'desc');
+        $branchQuery->orderBy($sortColumn, $sortOrder);
         $total_branches = $branchQuery->count();
         $branches = $branchQuery
             ->offset($offset)
