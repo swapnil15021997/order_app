@@ -268,12 +268,12 @@
                     if(payment_advance){
                         formData.append('payment_advance', payment_advance);
                     }else{
-                        formData.append('payment_advance', null);
+                        formData.append('payment_advance', '');
                     }
                     if(payment_booking){
                         formData.append('payment_booking', payment_booking);
                     }else{
-                        formData.append('payment_booking', null);
+                        formData.append('payment_booking', '');
                     }
                     // Append files to FormData
                     for (var i = 0; i < itemImages.length; i++) {
