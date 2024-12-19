@@ -232,11 +232,11 @@ class OrderController extends Controller
         }
         $item->item_file_images = implode(',', $fileIds);
         $item->save();
-
+        $active_branch = $login->user_active_branch;
         $trans = new Transactions();
         $trans->trans_from          = $params['order_from_branch_id'];
         $trans->trans_to            = $params['order_to_branch_id'];
-        $trans->trans_active_branch = $login->user_active_branch;
+        $trans->trans_active_branch = $active_branch ?? $params['order_from_branch_id'];;
         $trans->trans_user_id       = $login->id;
         $trans->trans_order_id      = $order->order_id;
         $trans->trans_item_id       = $item->item_id;
