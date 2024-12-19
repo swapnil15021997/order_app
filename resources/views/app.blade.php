@@ -294,7 +294,7 @@
           let isLoading = false; 
           // Function to load notes
           loadNotes = function () {
-              console.log('Loading notes',isLoading,page);
+             
               if (isLoading) return;
 
               isLoading = true;
@@ -311,9 +311,9 @@
                   },
                   success: function(response) {
                       const notesBody = $('#notes_body');
-                          console.log(response);
-                          response.data.notes.forEach(function(note) {
-                              console.log(note);
+
+                            response.data.notes.forEach(function(note) {
+
                               if (note.notes_type == 1){
                                   notesBody.append(`
                                   <div class="chat-bubble chat-bubble-me" >
@@ -362,7 +362,7 @@
               console.log(scrollTop, scrollHeight,clientHeight);
               // Check if the user scrolled to the bottom of #notes_box
               if (scrollTop + clientHeight >= scrollHeight - 5) {
-                  console.log("Scrolling");
+                  
                   isLoading = false;
                   loadNotes();
               }
@@ -380,7 +380,7 @@
           setTimeout(function() {
               const notesBox = document.getElementById("notes_body");
               if (notesBox) {
-                  console.log("Attaching scroll to:", notesBox);
+                  
                   notesBox.addEventListener("scroll", handleScroll);
               }
           }, 500);

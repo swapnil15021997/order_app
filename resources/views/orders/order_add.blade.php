@@ -441,7 +441,16 @@
                     } else {
                         $('#cust_div').addClass('d-none');
                     }
+
+                    
                 });
+
+                $(document).on('mouseup', '.select2-add-new', function (e) {
+                    console.log("Direct click on add new option");
+                    $('#cust_div').removeClass('d-none');
+                    e.preventDefault();
+                    e.stopPropagation();
+                })
                 var csrfToken = $('meta[name="csrf-token"]').attr('content');
 
                 $('#searchableCust').select2({
@@ -492,30 +501,38 @@
                     templateResult: function (data) {
                         // Highlight the "Add new customer" option
                         if (data.newOption) {
-                            return $('<span><em>Create ": </em>' + data.text + '"</span>');
+                            // return $('<span><em>Click Here to Create New": ' + data.text + '"</em></span>');
+                            return $('<div class="select2-add-new">' +
+                            '<span class="add-new-text">Click Here to Create New: "' + data.text + '"</span>' +
+                            '</div>');
                         }
                         return data.text;
                     },
                     templateSelection: function (data) {
                         // Display the selected item properly
 
+                        // if (data.newOption) {
+                        //     $('#cust_div').removeClass('d-none');
+                        // }else{
+                        //     $('#cust_div').addClass('d-none');
+                        // }
                         return data.text;
                     }
                 })
+                // $('#searchableCust').on('select2:select', function (e) {
+                //     console.log("Event triggered:", e.params.data);
+    
+                //     // Check if the selected option is a new customer
+                //     if (e.params.data.newOption) {
+                //         console.log("New customer selected");
+                //         $('#cust_div').removeClass('d-none'); // Remove the 'd-none' class
+                //     } else {
+                //         console.log("Existing customer selected");
+                //         $('#cust_div').addClass('d-none'); // Add the 'd-none' class
+                //     }
+                // });
             });
 
-            $('#searchableCust').on('select2:select', function (e) {
-                console.log("Event triggered:", e.params.data);
-
-                // Check if the selected option is a new customer
-                if (e.params.data.newOption) {
-                    console.log("New customer selected");
-                    $('#cust_div').removeClass('d-none'); // Remove the 'd-none' class
-                } else {
-                    console.log("Existing customer selected");
-                    $('#cust_div').addClass('d-none'); // Add the 'd-none' class
-                }
-            });
 
 
             $('#saveCustBtn').click(function(e) {

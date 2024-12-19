@@ -247,10 +247,10 @@
 
                             if (response.status==200) {
                                 $('#modal-report').modal('hide');  // Hide the modal
+                                $('#branch_id').val('');
+                                $('#branch_name').val('');
+                                $('#branch_address').val('');
                                 $('#branch_table').DataTable().ajax.reload();  // Reload the DataTable
-                                $('#branch_id').val();
-                                $('#branch_name').val();
-                                $('#branch_address').val();
                                 // alert(response.message);
                                 showSuccess('success', response.message);
 
@@ -292,10 +292,10 @@
 
                             if (response.status==200) {
                                 $('#modal-report').modal('hide');  // Hide the modal
+                                $('#edit_branch_id').val('');
+                                $('#edit_branch_name').val('');
+                                $('#edit_branch_address').val('');
                                 $('#branch_table').DataTable().ajax.reload();  // Reload the DataTable
-                                $('#edit_branch_id').val();
-                                $('#edit_branch_name').val();
-                                $('#edit_branch_address').val();
                                 alert(response.message);
                                 showSuccess('success',response.message);
                             } else {
