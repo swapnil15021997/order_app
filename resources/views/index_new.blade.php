@@ -166,7 +166,7 @@
                 <div class="col-md-6 col-lg-4">
                 <div class="card">
                         <div class="card-header">
-                            <h3 class="card-title">Latest Orders</h3>
+                            <h3 class="card-title">Latest Branch</h3>
                         </div>
                         <div class="card-table table-responsive">
                             <table class="table table-vcenter">
