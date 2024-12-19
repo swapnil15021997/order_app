@@ -24,9 +24,17 @@ class UserController extends Controller
         // $role  = UserRole::
         $activePage = 'users';
         if(!empty($login)){
-            $userBranchIds = explode(',', $login['user_branch_ids']);
+            if($login['user_role_id'] != 1){
+
+                $userBranchIds = explode(',', $login['user_branch_ids']);
+                // branch array of user
+                $users_branch  = Branch::whereIn('branch_id', $userBranchIds)->get()->toArray();
+            }else{
+                $users_branch  = Branch::where('is_delete', 0)->get()->toArray();
+
+            }
         }
-        $users_branch = Branch::whereIn('branch_id', $userBranchIds)->get()->toArray();
+
         $user_permissions = session('combined_permissions', []);
         
         $roles = UserRole::whereNull('deleted_at')
@@ -60,9 +68,17 @@ class UserController extends Controller
         $branch     = Branch::get_all_branch();
 
         if(!empty($login)){
-            $userBranchIds = explode(',', $login['user_branch_ids']);
+            if($login['user_role_id'] != 1){
+
+                $userBranchIds = explode(',', $login['user_branch_ids']);
+                // branch array of user
+                $users_branch  = Branch::whereIn('branch_id', $userBranchIds)->get()->toArray();
+            }else{
+                $users_branch  = Branch::where('is_delete', 0)->get()->toArray();
+
+            }
         }
-        $users_branch = Branch::whereIn('branch_id', $userBranchIds)->get()->toArray();
+
         $user_permissions = session('combined_permissions', []);
 
         return view('users/user_add',['users' => $users,'login'=>$login,
@@ -257,10 +273,18 @@ class UserController extends Controller
         $login = auth()->user();
 
         if(!empty($login)){
-            $userBranchIds = explode(',', $login['user_branch_ids']);
+            if($login['user_role_id'] != 1){
+
+                $userBranchIds = explode(',', $login['user_branch_ids']);
+                // branch array of user
+                $users_branch  = Branch::whereIn('branch_id', $userBranchIds)->get()->toArray();
+            }else{
+                $users_branch  = Branch::where('is_delete', 0)->get()->toArray();
+
+            }
         }
         $branch       = Branch::get_all_branch();
-        $users_branch = Branch::whereIn('branch_id', $userBranchIds)->get()->toArray();
+
         $user_permissions = session('combined_permissions', []);
       
         return view('users/user_edit',['user' => $user,'roles'=>$roles,'modules'=>$modules,'user_branch'=>$users_branch,'login'=>$login,

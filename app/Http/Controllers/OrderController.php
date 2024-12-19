@@ -40,7 +40,15 @@ class OrderController extends Controller
         
         $fileArray = [];
         if(!empty($login)){
-            $userBranchIds = explode(',', $login['user_branch_ids']);
+            if($login['user_role_id'] != 1){
+
+                $userBranchIds = explode(',', $login['user_branch_ids']);
+                // branch array of user
+                $users_branch  = Branch::whereIn('branch_id', $userBranchIds)->get()->toArray();
+            }else{
+                $users_branch  = Branch::where('is_delete', 0)->get()->toArray();
+
+            }
         }
 
         if (!empty($order['items'][0]['files'])){
@@ -55,7 +63,7 @@ class OrderController extends Controller
             $payment = Payment::where('payment_order_id',$order['order_id'])->first()->toArray();
         }
         $activePage       = 'orders';
-        $user_branch      = Branch::whereIn('branch_id', $userBranchIds)->get()->toArray();
+        
         $user_permissions = session('combined_permissions', []);
         if($order['order_type']==1){
             $type = 'Order';
@@ -69,7 +77,7 @@ class OrderController extends Controller
         );
         return view('orders/view_order',['order'=>$order,'fileArray'=>$fileArray,
             'pageTitle'=>'Order','login'=>$login,'activePage'=>$activePage,
-            'user_branch'=>$user_branch,'user_permissions'=>$user_permissions,
+            'user_branch'=>$users_branch,'user_permissions'=>$user_permissions,
             'customer_order'=>$customer_order,'payment'=>$payment,'qr_code'=>$qr_code
         ]);
  
@@ -81,10 +89,16 @@ class OrderController extends Controller
         $login         = auth()->user();
        
         if(!empty($login)){
-            $userBranchIds = explode(',', $login['user_branch_ids']);
+            if($login['user_role_id'] != 1){
+
+                $userBranchIds = explode(',', $login['user_branch_ids']);
+                // branch array of user
+                $user_branch  = Branch::whereIn('branch_id', $userBranchIds)->get()->toArray();
+            }else{
+                $user_branch  = Branch::where('is_delete', 0)->get()->toArray();
+
+            }
         }
-        $user_branch  = Branch::whereIn('branch_id', $userBranchIds)->get()->toArray();
-    
         $activePage       = 'orders';
         $user_permissions = session('combined_permissions', []);
       
@@ -268,13 +282,19 @@ class OrderController extends Controller
         $user_permissions = session('combined_permissions', []);
       
         $login = auth()->user();
-
+         
         if(!empty($login)){
-            $userBranchIds = explode(',', $login['user_branch_ids']);
+            if($login['user_role_id'] != 1){
+
+                $userBranchIds = explode(',', $login['user_branch_ids']);
+                // branch array of user
+                $user_branch  = Branch::whereIn('branch_id', $userBranchIds)->get()->toArray();
+            }else{
+                $user_branch  = Branch::where('is_delete', 0)->get()->toArray();
+
+            }
         }
 
-        // branch array of user
-        $user_branch  = Branch::whereIn('branch_id', $userBranchIds)->get()->toArray();
     
         return view('orders/order_add',compact('metals', 'melting','branchesArray','pageTitle','login','activePage','user_branch','user_permissions'));
     }
@@ -316,10 +336,17 @@ class OrderController extends Controller
         $activePage    = 'orders';
         $fileArray = [];
         if(!empty($login)){
-            $userBranchIds = explode(',', $login['user_branch_ids']);
+            if($login['user_role_id'] != 1){
+
+                $userBranchIds = explode(',', $login['user_branch_ids']);
+                // branch array of user
+                $user_branch  = Branch::whereIn('branch_id', $userBranchIds)->get()->toArray();
+            }else{
+                $user_branch  = Branch::where('is_delete', 0)->get()->toArray();
+
+            }
         }
-        $user_branch  = Branch::whereIn('branch_id', $userBranchIds)->get()->toArray();
-    
+       
         if (!empty($order['items'][0]['files'])){
             $fileArray = $order['items'][0]['files']->toArray();
         }

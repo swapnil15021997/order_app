@@ -18,10 +18,15 @@ class BranchController extends Controller
         $login      = auth()->user();
         $activePage = 'branch';
 
-        if(!empty($login)){
+        if($login['user_role_id'] != 1){
+
             $userBranchIds = explode(',', $login['user_branch_ids']);
+            // branch array of user
+            $users_branch  = Branch::whereIn('branch_id', $userBranchIds)->get()->toArray();
+        }else{
+            $users_branch  = Branch::where('is_delete', 0)->get()->toArray();
+
         }
-        $users_branch = Branch::whereIn('branch_id', $userBranchIds)->get()->toArray();        
         $combined_permissions = session('combined_permissions', []);
 
         return view('branch/branch_master',['pageTitle'=>'Branch','login'=>$login,'activePage'=>$activePage,'user_branch'=>$users_branch,'user_permissions'=>$combined_permissions]);

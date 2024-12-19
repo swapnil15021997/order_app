@@ -25,9 +25,18 @@ Route::get('/', function () {
 Route::get('/dashboard', function () {
     $login = auth()->user()->toArray();
     if(!empty($login)){
-        $userBranchIds = explode(',', $login['user_branch_ids']);
+
+        if($login['user_role_id'] != 1){
+
+            $userBranchIds = explode(',', $login['user_branch_ids']);
+            // branch array of user
+            $users_branch  = Branch::whereIn('branch_id', $userBranchIds)->get()->toArray();
+        }else{
+            $users_branch  = Branch::where('is_delete', 0)->get()->toArray();
+
+        }
     }
-    $users_branch = Branch::whereIn('branch_id', $userBranchIds)->get()->toArray();
+
     $branch_count = Branch::where('is_delete',0)->count();
     $user_count   = User::where('is_delete',0)->count();
     $orders_count = Order::where('is_delete',0)->count();
