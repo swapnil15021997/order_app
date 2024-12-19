@@ -605,27 +605,28 @@ class OrderController extends Controller
         $item->item_name = $params['item_name'];
         $item->item_melting = $params['item_melting'];
         $item->item_weight = $params['item_weight'];
-        
-        $new_file_ids = [];
+    
+        $fileIds = [];
         if ($request->hasFile('item_file_images')) {
-            foreach ($request->file('item_file_images') as $file) {
+            $files = $request->file('item_file_images');
+            \Log::info('Files uploaded: ' . count($files));
+            foreach ($files as $file) {
 
-                $file_path = $file->store('uploads', 'public');
-                
-                $new_file = new File();
-                $new_file->file_name = $file->getClientOriginalName();
-                $new_file->file_path = $file_path;
-                $new_file->file_url = asset('storage/' . $file_path);
-                $new_file->save();
-
-                $new_file_ids[] = $new_file->file_id;
+                $filePath = $file->store('uploads', 'public'); 
+                $fileModel = new File();
+                $fileModel->file_name = $file->hashName(); 
+                $fileModel->file_original_name = $file->getClientOriginalName();
+                $fileModel->file_path = $filePath;
+                $fileModel->file_url = asset('storage/' . $filePath); 
+                $fileModel->file_type = $file->getClientMimeType();
+                $fileModel->file_size = $file->getSize();
+                $fileModel->save();
+                $fileIds[] = $fileModel->file_id;
             }
-
-            $existing_file_ids = explode(',', $item->item_file_images);
-            $all_file_ids = array_merge($existing_file_ids, $new_file_ids);
-            $item->item_file_images = implode(',', $all_file_ids);  // Update the item_file_images with the new IDs
         }
-
+        $existing_file_ids = explode(',', $item->item_file_images);
+        $all_file_ids = array_merge($existing_file_ids, $fileIds);
+        $item->item_file_images = implode(',', $all_file_ids);
         $item->save();
 
         // payment update

@@ -64,7 +64,7 @@
             
               <div class="d-flex flex-column justify-content-between" >
                 <div class="space-y-1 scrollable pb-2 pe-1" id="notes_body">
-                
+                    <div id="notes-container"></div>
                     <!-- <div class="chat-bubble chat-bubble-me" >
                         <div class="chat-bubble-title"></div>
                         <div class="chat-bubble-body" >
@@ -290,14 +290,17 @@
       var csrfToken = $('meta[name="csrf-token"]').attr('content');
       let page = 1; 
       let loadNotes;
+      let isLoading = false; 
       document.addEventListener("DOMContentLoaded", function () {
-          let isLoading = false; 
           // Function to load notes
           loadNotes = function () {
-             
+              console.log('Loading notes I am here...',isLoading);
               if (isLoading) return;
 
               isLoading = true;
+              const notesBody = $('#notes_body');
+              const scrollTopBeforeLoad = notesBody.scrollTop();
+              console.log("Loading notes",isLoading);
               $.ajax({
                   url: "{{ route('notes_list') }}", 
                   type: 'POST',
@@ -311,11 +314,12 @@
                   },
                   success: function(response) {
                       const notesBody = $('#notes_body');
+                      let firstNoteOffset = notesBody[0].scrollHeight;
 
                             response.data.notes.forEach(function(note) {
 
                               if (note.notes_type == 1){
-                                  notesBody.append(`
+                                  notesBody.prepend(`
                                   <div class="chat-bubble chat-bubble-me" >
                                       <div class="chat-bubble-title"></div>
                                       <div class="chat-bubble-body" >
@@ -324,7 +328,7 @@
                                   </div>`); 
                               }else{
                                   if(note.file.file_type == 'pdf'){
-                                      notesBody.append(`
+                                      notesBody.prepend(`
                                       <div class="chat-bubble chat-bubble-me w-75">
                                           <p class="small text-decoration-underline">${note.file.file_original_name}</p>
                                           <embed src=""${note.file.file_url}" width="100%" height="auto" />
@@ -332,7 +336,7 @@
                                   }else{
 
                                   
-                                      notesBody.append(`
+                                      notesBody.prepend(`
                                       <div class="chat-bubble chat-bubble-me w-75">
                                           <p class="small text-decoration-underline">${note.file.file_original_name}</p>
                                           <img
@@ -347,6 +351,11 @@
                           });
 
                           page++;
+
+                          let scrollTopAfterLoad = notesBody[0].scrollHeight - firstNoteOffset;
+                          notesBody.scrollTop(scrollTopAfterLoad);
+
+                          isLoading = false;
                   }
               });
 
@@ -354,18 +363,31 @@
       
 
           function handleScroll() {
-              const notesBox = document.getElementById("notes_body");
-              console.log("HandleScroll",notesBox);
-              if (!notesBox) return;
+              // const notesBox = document.getElementById("notes_body");
+              // console.log("HandleScroll",notesBox);
+              // if (!notesBox) return;
 
-              const { scrollTop, scrollHeight, clientHeight } = notesBox;
-              console.log(scrollTop, scrollHeight,clientHeight);
-              // Check if the user scrolled to the bottom of #notes_box
-              if (scrollTop + clientHeight >= scrollHeight - 5) {
+              // const { scrollTop, scrollHeight, clientHeight } = notesBox;
+              // console.log(scrollTop, scrollHeight,clientHeight);
+
+              // if (scrollTop + clientHeight >= scrollHeight - 5) {
                   
-                  isLoading = false;
+              //     isLoading = false;
+              //     loadNotes();
+              // }
+
+              const notesBox = $('#notes_body');
+              if (!notesBox.length) return;
+
+              const scrollTop = notesBox.scrollTop();
+              console.log('Scroll position:', scrollTop);
+
+              // Check if user scrolled to the top of the notes container
+              if (scrollTop <= 5) {
+                  console.log('Scrolled to the top, loading more notes...');
                   loadNotes();
               }
+    
           }
 
           // Initial load
@@ -382,6 +404,8 @@
               if (notesBox) {
                   
                   notesBox.addEventListener("scroll", handleScroll);
+                  
+                  notesBox.scrollTop(notesBox[0].scrollHeight);
               }
           }, 500);
 
@@ -410,7 +434,7 @@
                       'X-CSRF-TOKEN': csrfToken 
                   },
                   success: function (response) {
-                      showAlert('success',response.message);
+                      showAlertNotes('success',response.message);
                       isLoading=false;
                       loadNotes();
                   }
@@ -443,20 +467,50 @@
                               'X-CSRF-TOKEN': csrfToken 
                           },
                           success: function (response) {
-                              showAlert('success',response.message);
+                              showAlertNotes('success',response.message);
                               $('#TextNotes').val('');
                               isLoading=false;
+                              page = 1; 
                               loadNotes();
+                              console.log("Success Add");
                           }
                       });
                       
                   } else {
                       alert("Please enter some text.");
-                      showAlert('warning','Please enter some text');
+                      showAlertNotes('warning','Please enter some text');
                   }
               }
           });
       });
+
+      function showAlertNotes(type, message) {
+            const alertContainer = document.getElementById('notes-container');
+            const alertHTML = `
+                <div class="alert alert-${type} alert-dismissible" role="alert">
+                    <div class="d-flex">
+                        <div>
+                            ${type === 'success' ? `
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon alert-icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                <path d="M5 12l5 5l10 -10" />
+                            </svg>` : `
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon alert-icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                <path d="M10.24 3.957l-8.422 14.06a1.989 1.989 0 0 0 1.7 2.983h16.845a1.989 1.989 0 0 0 1.7 -2.983l-8.423 -14.06a1.989 1.989 0 0 0 -3.4 0z" />
+                                <path d="M12 9v4" />
+                                <path d="M12 17h.01" />
+                            </svg>`}
+                        </div>
+                        <div>${message}</div>
+                    </div>
+                    <a class="btn-close" data-bs-dismiss="alert" aria-label="close"></a>
+                </div>
+            `;
+            alertContainer.innerHTML = alertHTML;
+            console.log("here");
+        }
+
   </script>
   </body>
 </html>

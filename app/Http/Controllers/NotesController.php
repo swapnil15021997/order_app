@@ -191,6 +191,7 @@ class NotesController extends Controller
         $notes = $notesQuery
             ->offset($offset)
             ->limit($perPage)
+            
             ->get();
         $total_pages = ceil($total_notes / $perPage);
         
