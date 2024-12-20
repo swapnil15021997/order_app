@@ -85,7 +85,6 @@ Route::post('customer-list',     [CustomerController::class, 'customer_list'])->
 
 Route::get('order-add', [OrderController::class, 'order_add_page'])->name('order-add-page');
 Route::get('edit-order/{id}', [OrderController::class, 'order_edit_page'])->name('order_edit_page');
-Route::get('view-order/{id}', [OrderController::class, 'view_order'])->name('view-order');
 
 
 
@@ -133,6 +132,8 @@ Route::post('password', [PasswordController::class, 'update'])->name('password.u
 
 
 Route::post('order-approve',  [OrderController::class, 'order_approve'])->name('order_approve');
+Route::get('view-order/{id}', [OrderController::class, 'view_order'])->name('view-order');
+
 
 Route::get('firebase_json.js', [DashboardController::class, 'firebase_config']);
 Route::post('update-fcm', [DashboardController::class, 'update_fcm'])->name('update-fcm');

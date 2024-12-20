@@ -67,7 +67,7 @@ class OrderController extends Controller
         //         $order['order_qr_code']
         //     ])
         // ); 
-        $orderUrl = route('order_approve', ['trans_id' => $order['order_qr_code']]);
+        $orderUrl = route('view-order', ['trans_id' => $order['order_qr_code']]);
         $qr_code = QrCode::size(50)->generate($orderUrl);
         return view('orders/view_order',['order'=>$order,'fileArray'=>$fileArray,
             'pageTitle'=>'Order','login'=>$login,'activePage'=>$activePage,
@@ -833,6 +833,31 @@ class OrderController extends Controller
         } 
 
         $order = Order::get_order_by_qr_number_id($params['trans_id']);  
+        $order = $order->toArray();
+        
+        $trans = Transactions::get_trans_by_order_id($order['order_id']);
+         
+        if (empty($trans)){
+            return response()->json([
+                'status' => 500,
+                'message' => 'Order does not exist'
+            ]);
+        }
+        $trans->trans_status = 1;
+        $trans->save();
+        $order = Order::get_order_by_id($trans->trans_order_id);
+        $order->order_status        = 1;
+        $order->save();
+        return response()->json([
+            'status' => 200,
+            'message' => "Order Received Successfully" 
+        ]);
+    }
+
+
+    public function order_get_approve(Request $request,$id){
+
+        $order = Order::get_order_by_qr_number_id($id);  
         $order = $order->toArray();
         
         $trans = Transactions::get_trans_by_order_id($order['order_id']);
