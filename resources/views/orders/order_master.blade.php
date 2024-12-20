@@ -51,6 +51,8 @@
                             <th>To Branch</th>
 
                             <th>order_number</th>
+                            <th>Item Current Brach</th>
+                            
                             <th>qr_number</th>
                             <th>Operations</th>
                         </tr>
@@ -70,7 +72,7 @@
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Trasfer Order</h5>
+                    <h5 class="modal-title">Transfer Order</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -173,8 +175,9 @@
                     { data: 'order_date', name: 'order_date',orderable: true }, 
                     { data: 'order_type', name: 'order_type',orderable: false  }, 
                     { data: 'order_from_name', name: 'order_from_name',orderable: false  },  
-                    { data: 'order_to_name', name: 'order_to_name',orderable: false  },  
+                    { data: 'order_to_name', name: 'order_to_name',orderable: false  },
                     { data: 'order_number', name: 'order_number',orderable: false  }, 
+                    { data: 'order_current_branch', name: 'order_current_branch',orderable: false  },   
                     { data: 'order_qr_code', name: 'order_qr_code',orderable: false  }, 
                         { 
                         data: 'order_id', 
@@ -443,10 +446,14 @@
                                 }, 2000);
                             } else {
                                 alert('Error Transferring order: ' + response.message);
+                                $('#searchableSelectTo').val('');
+
                             }
                         },
                         error: function(xhr, status, error) {
                             alert('An error occurred: ' + error);
+                            $('#searchableSelectTo').val('');
+
                         }
                     });
                 } else {

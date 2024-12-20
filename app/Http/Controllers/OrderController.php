@@ -463,12 +463,15 @@ class OrderController extends Controller
         $ordersQuery = Order::with('transactions')    
         ->leftJoin('branch AS from_branch', 'from_branch.branch_id', '=', 'orders.order_from_branch_id')  
         ->leftJoin('branch AS to_branch', 'to_branch.branch_id', '=', 'orders.order_to_branch_id')  
+        ->leftJoin('branch AS current_branch', 'current_branch.branch_id', '=', 'orders.order_current_branch')  
+        
         // ->leftJoin('transactions', 'transactions.trans_order_id', '=', 'orders.order_id')  
   
         ->select(
             'orders.*', 
             'from_branch.branch_name AS order_from_name',   
             'to_branch.branch_name AS order_to_name',
+            'current_branch.branch_name AS order_current_branch'
             )
             ->distinct()  
         ->where('orders.is_delete',0)
@@ -783,7 +786,7 @@ class OrderController extends Controller
             ]);
         }
         $items = $order->items->toArray();
-        $order->order_current_branch= $params['transfer_to'];
+        // $order->order_current_branch= $params['transfer_to'];
         $order->order_status        = 0;
         $order->save();
 
@@ -847,6 +850,7 @@ class OrderController extends Controller
         $trans->save();
         $order = Order::get_order_by_id($trans->trans_order_id);
         $order->order_status        = 1;
+        $order->order_current_branch= $trans->trans_to;
         $order->save();
         return response()->json([
             'status' => 200,
@@ -854,28 +858,35 @@ class OrderController extends Controller
         ]);
     }
 
+    public function success(){
+        return view('orders/order_success');
+    }
 
     public function order_get_approve(Request $request,$id){
 
         $order = Order::get_order_by_qr_number_id($id);  
         $order = $order->toArray();
         
+        if (empty($order)) {
+            return redirect()->route('success')->with('error', 'Order does not exist');
+        }
+    
         $trans = Transactions::get_trans_by_order_id($order['order_id']);
          
-        if (empty($trans)){
-            return response()->json([
-                'status' => 500,
-                'message' => 'Order does not exist'
-            ]);
+        if (empty($trans)) {
+            return redirect()->route('success')->with('error', 'Transaction does not exist for this order');
         }
+    
         $trans->trans_status = 1;
         $trans->save();
         $order = Order::get_order_by_id($trans->trans_order_id);
         $order->order_status        = 1;
+        $order->order_current_branch= $trans->trans_to;
         $order->save();
-        return response()->json([
-            'status' => 200,
-            'message' => "Order Received Successfully" 
-        ]);
+        // return response()->json([
+        //     'status' => 200,
+        //     'message' => "Order Received Successfully" 
+        // ]);
+        return redirect()->route('success')->with('success', 'Order received successfully');
     }
 }
