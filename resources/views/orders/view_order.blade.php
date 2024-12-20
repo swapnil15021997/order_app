@@ -4,6 +4,7 @@
 <div class="page-header d-print-none">
         <div class="container-xl">
         <div class="row g-2 align-items-center">
+          <div id="alert-site"></div>
             <div class="col">
             <!-- Page pre-title -->
             <!-- <div class="page-pretitle">
@@ -21,6 +22,15 @@
                 </nav>
             </div>
             <div class="col-auto ms-auto d-print-none">
+              @foreach ($order['transactions'] as $transaction) 
+
+                    @if ((int)$login['user_active_branch'] === (int)$transaction['trans_to'] && $transaction['trans_status'] === 0)
+                        <!-- If both conditions are satisfied, show the "Approve" button -->
+                        <a class="btn btn-primary" href="#" onclick="approve_order({{ $transaction['trans_id'] }})">
+                            Approve Order
+                        </a>
+                    @endif
+                @endforeach   
             </div>
         </div>
     </div>
@@ -468,6 +478,61 @@
             </div>
           </div>
 </div>
+<script>
+      function approve_order(transaction_id){
+        if (transaction_id) {
+            $.ajax({
+                url: "{{ route('order_approve') }}",  
+                type: 'POST',
+                data: {
+                    _token        : csrfToken,
+                    trans_id      : transaction_id,
+                },
+                success: function(response) {
+                    if (response.status==200) {
+                        
+                        location.reload(); 
+                        showAlert('success', response.message);
+                    } else {
+                        showAlert('warning', response.message);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    showAlert('warning', error.message);
+                }
+            });
+        } else {
+            showAlert('warning', 'Please select Transaction id');
+        }
+    }
 
+    
+    function showAlert(type, message) {
+        const alertContainer = document.getElementById('alert-site');
+        const alertHTML = `
+            <div class="alert alert-${type} alert-dismissible" role="alert">
+                <div class="d-flex">
+                    <div>
+                        ${type === 'success' ? `
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon alert-icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                            <path d="M5 12l5 5l10 -10" />
+                        </svg>` : `
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon alert-icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                            <path d="M10.24 3.957l-8.422 14.06a1.989 1.989 0 0 0 1.7 2.983h16.845a1.989 1.989 0 0 0 1.7 -2.983l-8.423 -14.06a1.989 1.989 0 0 0 -3.4 0z" />
+                            <path d="M12 9v4" />
+                            <path d="M12 17h.01" />
+                        </svg>`}
+                    </div>
+                    <div>${message}</div>
+                </div>
+                <a class="btn-close" data-bs-dismiss="alert" aria-label="close"></a>
+            </div>
+        `;
+        alertContainer.innerHTML = alertHTML;
+        console.log("here");
+  }
+</script>
   @endsection
  

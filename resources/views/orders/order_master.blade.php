@@ -65,10 +65,41 @@
 
 
   
+    <input type="hidden" name="" id="transfer_order_id">
+    <div class="modal modal-blur fade" id="transfer_order" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Trasfer Order</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <label class="form-label">Order To</label>
+                    <select id="searchableSelectTo" class="form-select select2">
+                        
+                    
+                    </select>
+                </div>
+               
+                
+                <div class="modal-footer">
+                    <a href="#" class="btn btn-link link-secondary" data-bs-dismiss="modal">
+                    Cancel
+                    </a>
+                    <a id="TransferOrderBtn" href="#" class="btn btn-primary ms-auto">
+                            Transfer This Order
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
     <input type="hidden" name="" id="delete_order_id">
     <div class="modal modal-blur fade" id="delete_order" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
+                <div id="transfer-container"></div>
                 <div class="modal-header">
                     <h5 class="modal-title">Delete Order</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -110,7 +141,8 @@
             $('#item_weight').val('');
             $('#item_image_id').val('');
             var csrfToken = $('meta[name="csrf-token"]').attr('content');
-
+            let userActiveBranch = {{ $login['user_active_branch'] }};
+    
             $('#branch_table').DataTable({
                 processing: true,
                 serverSide: true,
@@ -148,7 +180,8 @@
                         data: 'order_id', 
                         name: 'operations', 
                         render: function(data, type, row) {
-                            return `<button data-bs-toggle="dropdown" type="button" class="btn dropdown-toggle dropdown-toggle-split"></button>
+                            console.log(row);
+                            let dropdown = `<button data-bs-toggle="dropdown" type="button" class="btn dropdown-toggle dropdown-toggle-split"></button>
                                 <div class="dropdown-menu dropdown-menu-end">
                                   <a class="dropdown-item" href="#" onclick="edit_order(${row.order_id})">
                                     Edit
@@ -156,13 +189,37 @@
                                   <a class="dropdown-item" href="#" onclick="view_order(${row.order_id})">
                                     View
                                   </a>
-                                  <a class="dropdown-item" href="#" onclick="view_qr_code(${row.order_id})">
-                                    Show QR 
+                                  <a class="dropdown-item" href="#" onclick="transfer_order(${row.order_id})">
+                                    Transfer Order 
                                   </a>
                                   <a class="dropdown-item" href="#" onclick="delete_order(${row.order_id})">
                                     Delete
-                                  </a>
-                                </div>`;
+                                  </a>`;
+
+                                let showApprove = false;
+                                let transaction_id;
+                                row.transactions.forEach(transaction => {
+                                    console.log(transaction,userActiveBranch);
+                                    if (parseInt(userActiveBranch) === parseInt(transaction.trans_to) && transaction.trans_status === 0) {
+                                        showApprove    = true;
+                                        console.log(transaction.trans_id,userActiveBranch);
+                                        transaction_id = transaction.trans_id;
+                                    }
+                                });
+                                // if (parseInt(userActiveBranch) === parseInt(row.trans_to) && row.trans_status === 0) {
+                                //     dropdown += `
+                                //         <a class="dropdown-item" href="#" onclick="approve_order(${row.order_id})">
+                                //             Approve this
+                                //         </a>`;
+                                // }
+                                if (showApprove) {
+                                    dropdown += `
+                                        <a class="dropdown-item" href="#" onclick="approve_order(${transaction_id})">
+                                            Approve this
+                                        </a>`;
+                                }
+                                dropdown += `</div>`;
+                            return dropdown;
                                 
                         },     
                     }   
@@ -298,6 +355,158 @@
             `;
             alertContainer.innerHTML = alertHTML;
             console.log("here");
+        }
+
+            
+
+
+        
+        function transfer_order(order_id){
+            
+            $('#transfer_order_id').val(order_id);
+            $('#transfer_order').modal('show');
+      
+        }
+        $(document).ready(function() {
+            
+            $('#searchableSelectTo').on('select2:open', function() {
+                $('.select2-search__field').on('input', function() {
+                    userInput = $(this).val();
+                });
+            });
+            var csrfToken = $('meta[name="csrf-token"]').attr('content');
+            $('#searchableSelectTo').select2({
+                
+                placeholder: "Select an option",
+                allowClear: true,
+                ajax: {
+                    url: "{{route('branch_list')}}", 
+                    dataType: 'json',
+                    type: 'POST',
+                    headers: {
+                            'X-CSRF-TOKEN': csrfToken  // Add CSRF token in the header
+                    },
+                    delay: 250, 
+                    data: function (params) {
+                        return {
+                        
+                            search: params.term, 
+                            per_page: 10,
+                            page: params.page || 1 
+                        };
+                    },
+                    processResults: function (data) {
+                        
+                        return {
+                            results: data.data.branches.map(function (item) {
+                                return {
+                                    id: item.branch_id,
+                                    text: item.branch_name
+                                };
+                            }),
+                            pagination: {
+                                more: data.data.length >= 10 // Check if there are more results
+                            }
+                        };
+                    },
+                    cache: true 
+                }
+            });
+
+
+            $('#TransferOrderBtn').click(function(e) {
+                e.preventDefault(); 
+
+                var orderId         = $('#transfer_order_id').val();
+                var transferTo      = $('#searchableSelectTo').val();
+            
+                if (orderId) {
+                    $.ajax({
+                        url: "{{ route('order_transfer') }}",  
+                        type: 'POST',
+                        data: {
+                            _token        : csrfToken,
+                            order_id     : orderId,
+                            transfer_to  : transferTo
+                            
+                        },
+                        success: function(response) {
+                            if (response.status==200) {
+                                $('#transfer_order_id').val('');
+                                $('#searchableSelectTo').val('');
+                                $('#branch_table').DataTable().ajax.reload(); 
+                                alert(response.message);
+                                showAlertTransfer('success', response.message);
+
+                                setTimeout(function() {
+                                    $('#transfer_order').modal('hide');
+                                }, 2000);
+                            } else {
+                                alert('Error Transferring order: ' + response.message);
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            alert('An error occurred: ' + error);
+                        }
+                    });
+                } else {
+                    alert('Please fill in both fields.');
+                }
+            });  
+
+            function showAlertTransfer(type, message) {
+                const alertContainer = document.getElementById('transfer-container');
+                const alertHTML = `
+                    <div class="alert alert-${type} alert-dismissible" role="alert">
+                        <div class="d-flex">
+                            <div>
+                                ${type === 'success' ? `
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icon alert-icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                    <path d="M5 12l5 5l10 -10" />
+                                </svg>` : `
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icon alert-icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                    <path d="M10.24 3.957l-8.422 14.06a1.989 1.989 0 0 0 1.7 2.983h16.845a1.989 1.989 0 0 0 1.7 -2.983l-8.423 -14.06a1.989 1.989 0 0 0 -3.4 0z" />
+                                    <path d="M12 9v4" />
+                                    <path d="M12 17h.01" />
+                                </svg>`}
+                            </div>
+                            <div>${message}</div>
+                        </div>
+                        <a class="btn-close" data-bs-dismiss="alert" aria-label="close"></a>
+                    </div>
+                `;
+                alertContainer.innerHTML = alertHTML;
+                console.log("here");
+            }
+
+        });
+        function approve_order(transaction_id){
+            if (transaction_id) {
+                $.ajax({
+                    url: "{{ route('order_approve') }}",  
+                    type: 'POST',
+                    data: {
+                        _token        : csrfToken,
+                        trans_id      : transaction_id,
+                    },
+                    success: function(response) {
+                        if (response.status==200) {
+                           
+                            $('#branch_table').DataTable().ajax.reload(); 
+                            showAlert('success', response.message);
+                        } else {
+                            showAlert('warning', response.message);
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        showAlert('warning', error.message);
+                    }
+                });
+            } else {
+                showAlert('warning', 'Please select Transaction id');
+            }
         }
 
     </script>

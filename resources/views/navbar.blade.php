@@ -176,6 +176,7 @@
                      
                       // alert(response.message);
                       showAlert('success', response.message);
+                      location.reload();
 
                   } else {
                       // alert('Error creating branch: ' + response.message);

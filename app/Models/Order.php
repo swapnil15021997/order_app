@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Models\Item;
+use App\Models\Transactions;
+
 use DB;
 class Order extends Model
 {
@@ -47,7 +49,7 @@ class Order extends Model
 
 
     public static function get_order_by_order_id($id){
-        $order = Order::query()
+        $order = Order::with('transactions')
             ->leftJoin('branch AS from_branch', 'from_branch.branch_id', '=', 'orders.order_from_branch_id')  // Join to get 'order_from_branch' name
             ->leftJoin('branch AS to_branch', 'to_branch.branch_id', '=', 'orders.order_to_branch_id')  // Join to get 'order_to_branch' name
             ->select(
@@ -56,6 +58,7 @@ class Order extends Model
                 'to_branch.branch_name AS order_to_name'
             )
             ->with('items') 
+            ->distinct()
             ->where('orders.order_id', $id)  
             ->first();
         return $order;
@@ -64,6 +67,21 @@ class Order extends Model
     public function items()
     {
         return $this->hasMany(Item::class, 'item_order_id', 'order_id');
+    }
+
+    public function transactions()
+    {
+        return $this->hasMany(Transactions::class, 'trans_order_id', 'order_id');
+    }
+
+    public function fromBranch()
+    {
+        return $this->belongsTo(Branch::class, 'order_from_branch_id', 'branch_id');
+    }
+
+    public function toBranch()
+    {
+        return $this->belongsTo(Branch::class, 'order_to_branch_id', 'branch_id');
     }
 
     // public static function get_order_with_items($order_id)

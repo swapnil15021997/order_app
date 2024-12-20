@@ -22,7 +22,16 @@ class Transactions extends Model
         'trans_item_id',
         'trans_date',
         'trans_time',
-        'is_delete'
+        'is_delete',
+        'trans_status'
     ];
+
+    public static function get_trans_by_id($trans_id){
+        $trasnaction = Transactions::where('trans_id', $trans_id)
+        ->where('trans_status',0)
+        ->get()
+        ->first();
+        return $trasnaction;
+    }
 
 }

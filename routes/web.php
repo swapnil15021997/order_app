@@ -96,6 +96,8 @@ Route::post('order-list',    [OrderController::class, 'order_list'])->name('orde
 Route::post('order-details', [OrderController::class, 'order_details'])->name('order_details');
 Route::post('order-remove',  [OrderController::class, 'order_remove'])->name('order_remove');
 Route::get('qr-code/{id}',   [OrderController::class, 'order_qr_code'])->name('order_qr_code');
+Route::post('order-transfer',  [OrderController::class, 'order_transfer'])->name('order_transfer');
+Route::post('order-approve',  [OrderController::class, 'order_approve'])->name('order_approve');
 
 
 

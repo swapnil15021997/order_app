@@ -25,7 +25,7 @@ class OrderController extends Controller
     public function view_order(Request $request,$id){
 
         $order = Order::get_order_by_order_id($id);  
-
+        $order = $order->toArray();
         $login = auth()->user();
         
         $fileArray = [];
@@ -45,6 +45,7 @@ class OrderController extends Controller
         if (!empty($order['items'][0]['files'])){
             $fileArray = $order['items'][0]['files']->toArray();
         }
+
         $customer_order = [];
         if(!empty($order['order_customer_id'])){
             $customer_order = Customers::get_cust_by_id($order['order_customer_id']);
@@ -65,7 +66,7 @@ class OrderController extends Controller
             implode('|', [
                 $order['order_qr_code']
             ])
-        );
+        ); 
         return view('orders/view_order',['order'=>$order,'fileArray'=>$fileArray,
             'pageTitle'=>'Order','login'=>$login,'activePage'=>$activePage,
             'user_branch'=>$users_branch,'user_permissions'=>$user_permissions,
@@ -236,7 +237,7 @@ class OrderController extends Controller
         $trans = new Transactions();
         $trans->trans_from          = $params['order_from_branch_id'];
         $trans->trans_to            = $params['order_to_branch_id'];
-        $trans->trans_active_branch = $active_branch ?? $params['order_from_branch_id'];;
+        $trans->trans_active_branch = $active_branch ?? $params['order_from_branch_id'];
         $trans->trans_user_id       = $login->id;
         $trans->trans_order_id      = $order->order_id;
         $trans->trans_item_id       = $item->item_id;
@@ -451,22 +452,27 @@ class OrderController extends Controller
         $perPage     = $request->input('per_page', 15);   
         $page        = $request->input('page', 1);   
         $offset      = ($page - 1) * $perPage;
-        $sortColumn  = $request->input('sort', 'order_id'); // Default sort column
-        $sortOrder   = $request->input('sortOrder', 'desc'); // Default sort order (desc)
+        $sortColumn  = $request->input('sort', 'order_id'); 
+        $sortOrder   = $request->input('sortOrder', 'desc');
         $allowedSortColumns = ['order_id', 'order_date'];
         if (!in_array($sortColumn, $allowedSortColumns)) {
             $sortColumn = 'order_id'; 
         }
-        $ordersQuery = Order::query()    
-        ->leftJoin('branch AS from_branch', 'from_branch.branch_id', '=', 'orders.order_from_branch_id')  // Join to get 'order_from_branch' name
-        ->leftJoin('branch AS to_branch', 'to_branch.branch_id', '=', 'orders.order_to_branch_id')  // Join to get 'order_to_branch' name
+        $ordersQuery = Order::with('transactions')    
+        ->leftJoin('branch AS from_branch', 'from_branch.branch_id', '=', 'orders.order_from_branch_id')  
+        ->leftJoin('branch AS to_branch', 'to_branch.branch_id', '=', 'orders.order_to_branch_id')  
+        // ->leftJoin('transactions', 'transactions.trans_order_id', '=', 'orders.order_id')  
+  
         ->select(
             'orders.*', 
             'from_branch.branch_name AS order_from_name',   
-            'to_branch.branch_name AS order_to_name')
+            'to_branch.branch_name AS order_to_name',
+            )
+            ->distinct()  
         ->where('orders.is_delete',0)
+
         ->orderBy($sortColumn, $sortOrder);
-        
+       
         if (!empty($searchQuery)) {
             $ordersQuery->where(function ($query) use ($searchQuery) {
                 $query->where('order_number', 'like', "%{$searchQuery}%")
@@ -483,8 +489,10 @@ class OrderController extends Controller
         $orders->each(function ($order, $index) {
             $order->serial_number = $index + 1; 
         });
-        $total_pages = ceil($total_orders / $perPage);
 
+        
+        $total_pages = ceil($total_orders / $perPage);
+        
         return response()->json([
             'status' => 200,
             'message' => 'Orders list fetched successfully!',
@@ -719,6 +727,113 @@ class OrderController extends Controller
             'status'  => 200,
             'message' => 'Order removed successfully'
 
+        ]);
+    }
+
+
+
+    public function order_transfer(Request $request){
+
+
+        $params = $request->all();
+             
+        $rules = [   
+            
+            'order_id'    => ['required','string'],
+            'transfer_to' => ['required','string'],           
+        ]; 
+        $messages = [
+ 
+                'order_id.required'         => 'Order id is required.',
+                'order_id.string'           => 'Order id must be a string.',
+                'transfer_to.required'         => 'Transfer to is required.',
+                'transfer_to.string'           => 'Transfer to must be a string.'
+
+            ]; 
+            
+        $validator = Validator::make($params, $rules, $messages);
+        
+        if($validator->fails()){
+            return response()->json([
+                'status' => 500,
+                'message' => Arr::flatten($validator->errors()->toArray())[0], 
+                'errors'  => $validator->errors(), 
+            ]);
+        } 
+
+        $order = Order::get_order_with_items($params['order_id']);
+        if (empty($order)){
+            return response()->json([
+                'status' => 500,
+                'message' => 'Order does not exist'
+            ]);
+        }
+        if( $order->order_to_branch_id == $params['transfer_to']){
+            return response()->json([
+                'status' => 500,
+                'message' => 'Cant transfer to the same branch'
+            ]);
+        }
+        $items = $order->items->toArray();
+
+        $login                      = auth()->user()->toArray();
+        $active_branch              = $login['user_active_branch'];
+        $trans                      = new Transactions();
+        $trans->trans_from          = $order->order_from_branch_id;
+        $trans->trans_to            = $params['transfer_to'];
+        $trans->trans_active_branch = $active_branch ?? $order->order_from_branch_id;
+        $trans->trans_user_id       = $login['id'];
+        $trans->trans_order_id      = $order->order_id;
+        $trans->trans_item_id       = $items[0]['item_id'];
+        $trans->trans_date          = Carbon::now()->toDateString();
+        $trans->trans_time          = Carbon::now()->toDateTimeString(); 
+        $trans->trans_status        = 0;
+        $trans->save();
+        return response()->json([
+            'status'  => 200,
+            'message' => "Item Transfered successfully" 
+        ]);
+    }
+
+
+    public function order_approve(Request $request){
+
+        $params = $request->all();
+             
+        $rules = [   
+            
+            'trans_id'    => ['required','string'],
+        ]; 
+        $messages = [
+
+            'trans_id.required'         => 'Trans id is required.',
+            'trans_id.string'           => 'Trans id must be a string.',
+                
+        ]; 
+            
+        $validator = Validator::make($params, $rules, $messages);
+        
+        if($validator->fails()){
+            return response()->json([
+                'status' => 500,
+                'message' => Arr::flatten($validator->errors()->toArray())[0], 
+                'errors'  => $validator->errors(), 
+            ]);
+        } 
+
+        $trans = Transactions::get_trans_by_id($params['trans_id']);
+        
+        if (empty($trans)){
+            return response()->json([
+                'status' => 500,
+                'message' => 'Order does not exist'
+            ]);
+        }
+        $trans->trans_status = 1;
+        $trans->save();
+        return response()->json([
+            'status' => 200,
+            'message' => "Order Received Successfully" 
         ]);
     }
 }
