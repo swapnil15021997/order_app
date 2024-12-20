@@ -28,13 +28,26 @@ class Order extends Model
         'order_from_branch_id',
         'order_to_branch_id',
         'order_user_id',
-        'order_type'
+        'order_type',
+        'order_status'
     ];
 
 
     public static function get_order_by_qr_number_id($qr_number){
-        $order = Order::where('order_qr_number',$qr_number)->where('is_delete',1)->first();
-        return $order;
+
+        $order = Order::with('transactions')
+        ->leftJoin('branch AS from_branch', 'from_branch.branch_id', '=', 'orders.order_from_branch_id')  // Join to get 'order_from_branch' name
+        ->leftJoin('branch AS to_branch', 'to_branch.branch_id', '=', 'orders.order_to_branch_id')  // Join to get 'order_to_branch' name
+        ->select(
+            'orders.*', 
+            'from_branch.branch_name AS order_from_name',   
+            'to_branch.branch_name AS order_to_name'
+        )
+        ->with('items') 
+        ->distinct()
+        ->where('orders.order_qr_code', $qr_number)  
+        ->first();
+    return $order;
     }
 
     public static function get_order_by_number_id($order_number){

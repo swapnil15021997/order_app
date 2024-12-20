@@ -24,7 +24,7 @@ class OrderController extends Controller
 
     public function view_order(Request $request,$id){
 
-        $order = Order::get_order_by_order_id($id);  
+        $order = Order::get_order_by_qr_number_id($id);  
         $order = $order->toArray();
         $login = auth()->user();
         
@@ -62,11 +62,13 @@ class OrderController extends Controller
         }else{
             $type = 'Reparing';
         }
-        $qr_code = QrCode::size(50)->generate(
-            implode('|', [
-                $order['order_qr_code']
-            ])
-        ); 
+        // $qr_code = QrCode::size(50)->generate(
+        //     implode('|', [
+        //         $order['order_qr_code']
+        //     ])
+        // ); 
+        $orderUrl = route('order_approve', ['trans_id' => $order['order_qr_code']]);
+        $qr_code = QrCode::size(50)->generate($orderUrl);
         return view('orders/view_order',['order'=>$order,'fileArray'=>$fileArray,
             'pageTitle'=>'Order','login'=>$login,'activePage'=>$activePage,
             'user_branch'=>$users_branch,'user_permissions'=>$user_permissions,
@@ -774,7 +776,16 @@ class OrderController extends Controller
                 'message' => 'Cant transfer to the same branch'
             ]);
         }
+        if ($order->order_status==0){
+            return response()->json([
+                'status' => 500,
+                'message' => 'Cant transfer item right now'
+            ]);
+        }
         $items = $order->items->toArray();
+        $order->order_current_branch= $params['transfer_to'];
+        $order->order_status        = 0;
+        $order->save();
 
         $login                      = auth()->user()->toArray();
         $active_branch              = $login['user_active_branch'];
@@ -821,8 +832,11 @@ class OrderController extends Controller
             ]);
         } 
 
-        $trans = Transactions::get_trans_by_id($params['trans_id']);
+        $order = Order::get_order_by_qr_number_id($params['trans_id']);  
+        $order = $order->toArray();
         
+        $trans = Transactions::get_trans_by_order_id($order['order_id']);
+        dd($trans);
         if (empty($trans)){
             return response()->json([
                 'status' => 500,
@@ -831,6 +845,9 @@ class OrderController extends Controller
         }
         $trans->trans_status = 1;
         $trans->save();
+        $order = Order::get_order_by_id($trans->trans_order_id);
+        $order->order_status        = 1;
+        $order->save();
         return response()->json([
             'status' => 200,
             'message' => "Order Received Successfully" 

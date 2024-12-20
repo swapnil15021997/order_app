@@ -186,7 +186,7 @@
                                   <a class="dropdown-item" href="#" onclick="edit_order(${row.order_id})">
                                     Edit
                                   </a>
-                                  <a class="dropdown-item" href="#" onclick="view_order(${row.order_id})">
+                                  <a class="dropdown-item" href="#" onclick="view_order(${row.order_qr_code})">
                                     View
                                   </a>
                                   <a class="dropdown-item" href="#" onclick="transfer_order(${row.order_id})">
@@ -214,7 +214,7 @@
                                 // }
                                 if (showApprove) {
                                     dropdown += `
-                                        <a class="dropdown-item" href="#" onclick="approve_order(${transaction_id})">
+                                        <a class="dropdown-item" href="#" onclick="approve_order(${row.order_qr_code})">
                                             Approve this
                                         </a>`;
                                 }

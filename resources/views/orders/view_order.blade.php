@@ -24,9 +24,9 @@
             <div class="col-auto ms-auto d-print-none">
               @foreach ($order['transactions'] as $transaction) 
 
-                    @if ((int)$login['user_active_branch'] === (int)$transaction['trans_to'] && $transaction['trans_status'] === 0)
+                    @if ($transaction['trans_status'] === 0)
                         <!-- If both conditions are satisfied, show the "Approve" button -->
-                        <a class="btn btn-primary" href="#" onclick="approve_order({{ $transaction['trans_id'] }})">
+                        <a class="btn btn-primary" href="#" onclick="approve_order({{ $order['order_qr_code'] }})">
                             Approve Order
                         </a>
                     @endif
