@@ -141,7 +141,7 @@
             $('#item_weight').val('');
             $('#item_image_id').val('');
             var csrfToken = $('meta[name="csrf-token"]').attr('content');
-            let userActiveBranch = {{ $login['user_active_branch'] }};
+            let userActiveBranch = "{{ $login['user_active_branch'] }}";
     
             $('#branch_table').DataTable({
                 processing: true,
