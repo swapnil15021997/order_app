@@ -67,7 +67,7 @@ class OrderController extends Controller
         //         $order['order_qr_code']
         //     ])
         // ); 
-        $orderUrl = route('view-order', ['id' => $order['order_qr_code']]);
+        $orderUrl = route('order_get_approve', ['id' => $order['order_qr_code']]);
         $qr_code = QrCode::size(50)->generate($orderUrl);
         return view('orders/view_order',['order'=>$order,'fileArray'=>$fileArray,
             'pageTitle'=>'Order','login'=>$login,'activePage'=>$activePage,
