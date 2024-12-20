@@ -836,7 +836,7 @@ class OrderController extends Controller
         $order = $order->toArray();
         
         $trans = Transactions::get_trans_by_order_id($order['order_id']);
-        dd($trans);
+         
         if (empty($trans)){
             return response()->json([
                 'status' => 500,
