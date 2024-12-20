@@ -97,7 +97,6 @@ Route::post('order-details', [OrderController::class, 'order_details'])->name('o
 Route::post('order-remove',  [OrderController::class, 'order_remove'])->name('order_remove');
 Route::get('qr-code/{id}',   [OrderController::class, 'order_qr_code'])->name('order_qr_code');
 Route::post('order-transfer',  [OrderController::class, 'order_transfer'])->name('order_transfer');
-Route::post('order-approve',  [OrderController::class, 'order_approve'])->name('order_approve');
 
 
 
@@ -133,6 +132,7 @@ Route::post('password', [PasswordController::class, 'update'])->name('password.u
 });
 
 
+Route::post('order-approve',  [OrderController::class, 'order_approve'])->name('order_approve');
 
 Route::get('firebase_json.js', [DashboardController::class, 'firebase_config']);
 Route::post('update-fcm', [DashboardController::class, 'update_fcm'])->name('update-fcm');
