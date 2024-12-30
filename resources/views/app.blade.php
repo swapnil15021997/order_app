@@ -266,9 +266,9 @@
         });
 
         // Handle errors
-        window.addEventListener('error', function(e) {
-            resultDiv.innerHTML = `<p style="color: red;">Error: ${e.message}</p>`;
-        });
+        // window.addEventListener('error', function(e) {
+        //     resultDiv.innerHTML = `<p style="color: red;">Error: ${e.message}</p>`;
+        // });
     });
 </script>
 <script type="module">
