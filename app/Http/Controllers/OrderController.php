@@ -773,12 +773,12 @@ class OrderController extends Controller
                 'message' => 'Order does not exist'
             ]);
         }
-        if( $order->order_to_branch_id == $params['transfer_to']){
-            return response()->json([
-                'status' => 500,
-                'message' => 'Cant transfer to the same branch'
-            ]);
-        }
+        // if( $order->order_to_branch_id == $params['transfer_to']){
+        //     return response()->json([
+        //         'status' => 500,
+        //         'message' => 'Cant transfer to the same branch'
+        //     ]);
+        // }
         if ($order->order_status==0){
             return response()->json([
                 'status' => 500,
@@ -872,7 +872,7 @@ class OrderController extends Controller
         }
     
         $trans = Transactions::get_trans_by_order_id($order['order_id']);
-         
+
         if (empty($trans)) {
             return redirect()->route('success')->with('error', 'Transaction does not exist for this order');
         }
