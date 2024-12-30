@@ -35,13 +35,19 @@ class OrderController extends Controller
                 $userBranchIds = explode(',', $login['user_branch_ids']);
                 // branch array of user
                 $users_branch  = Branch::get_users_branch($userBranchIds);
+
                 
             }else{
                 $users_branch  = Branch::get_all_branch();
     
             }
         }
-
+        foreach ($users_branch as $branch) {
+            if ($branch['branch_id'] == $login['user_active_branch']) {
+                $activeBranchName = $branch['branch_name'];
+                break;
+            }
+        }
         if (!empty($order['items'][0]['files'])){
             $fileArray = $order['items'][0]['files']->toArray();
         }
@@ -72,7 +78,8 @@ class OrderController extends Controller
         return view('orders/view_order',['order'=>$order,'fileArray'=>$fileArray,
             'pageTitle'=>'Order','login'=>$login,'activePage'=>$activePage,
             'user_branch'=>$users_branch,'user_permissions'=>$user_permissions,
-            'customer_order'=>$customer_order,'payment'=>$payment,'qr_code'=>$qr_code
+            'customer_order'=>$customer_order,'payment'=>$payment,'qr_code'=>$qr_code,
+            'activeBranchName'=>$activeBranchName
         ]);
  
     }
@@ -93,11 +100,18 @@ class OrderController extends Controller
                 $user_branch  = Branch::get_all_branch();
     
             }
+            foreach ($user_branch as $branch) {
+                if ($branch['branch_id'] == $login['user_active_branch']) {
+                    $activeBranchName = $branch['branch_name'];
+                    break;
+                }
+            }
         }
+
         $activePage       = 'orders';
         $user_permissions = session('combined_permissions', []);
       
-        return view('orders/order_master',compact('pageTitle','login','activePage','user_branch','user_permissions'));
+        return view('orders/order_master',compact('pageTitle','login','activePage','user_branch','user_permissions','activeBranchName'));
     }
 
     public function order_add(Request $request){
@@ -725,7 +739,9 @@ class OrderController extends Controller
             $item->is_delete = 1;
             $item->save();
             $file_ids = explode(',', $item->item_file_images);  
-            File::whereIn('file_id', $file_ids)->update(['is_delete' => 1]);
+            if (!empty($file_ids)){
+                File::whereIn('file_id', $file_ids)->update(['is_delete' => 1]);
+            }
         }
 
         return response()->json([

@@ -22,6 +22,8 @@
 
     <div class="page-body">
         <div class="container-xl">
+            @if($login['user_role_id'] == 1)
+
             <div class="row row-deck row-cards mb-3">
                 <div class="col-12">
                     <div class="row row-cards">
@@ -123,12 +125,13 @@
                 </div>
                 
             </div>
+            @endif
 
             <div class="row">
                 <div class="col-md-12 col-lg-8">
                     <div class="card">
                         <div class="card-header">
-                            <h3 class="card-title">Latest Orders</h3>
+                            <h3 class="card-title">Latest Approved Orders</h3>
                         </div>
                         <div class="card-table table-responsive">
                             <table class="table table-vcenter">
@@ -154,7 +157,7 @@
                                     <td class="text-secondary">{{$order['order_from_name']}}</td>
                                     <td class="text-secondary">{{$order['order_to_name']}}</td>
                                     <td class="text-end w-1">
-                                        <a href="#" onclick="ViewOrder({{$order['order_id']}})">View</a>
+                                        <a href="#" onclick="ViewOrder({{$order['order_qr_code']}})">View</a>
                                     </td>
                                 </tr>
                                 @endforeach

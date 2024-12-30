@@ -34,6 +34,12 @@ class UserController extends Controller
                 $users_branch  = Branch::get_all_branch();
     
             }
+            foreach ($users_branch as $branch) {
+                if ($branch['branch_id'] == $login['user_active_branch']) {
+                    $activeBranchName = $branch['branch_name'];
+                    break;
+                }
+            }
         }
 
         $user_permissions = session('combined_permissions', []);
@@ -46,7 +52,8 @@ class UserController extends Controller
             'pageTitle'=>'Users','login'=>$login,
             'activePage'=>$activePage,'user_branch'=>$users_branch,
             'user_permissions'=>$user_permissions,
-            'roles'=>$roles, 'modules'=>$modules
+            'roles'=>$roles, 'modules'=>$modules,
+            'activeBranchName'=>$activeBranchName
         ]);
     }
 
@@ -70,13 +77,19 @@ class UserController extends Controller
                 $users_branch  = Branch::get_all_branch();
     
             }
+            foreach ($users_branch as $b) {
+                if ($b['branch_id'] == $login['user_active_branch']) {
+                    $activeBranchName = $b['branch_name'];
+                    break;
+                }
+            }
         }
 
         $user_permissions = session('combined_permissions', []);
-
+        
         return view('users/user_add',['users' => $users,'login'=>$login,
         'activePage'=>$activePage,'branch'=>$branch,
-        'roles' => $roles, 'modules'=>$modules,'user_branch'=>$users_branch,'user_permissions'=>$user_permissions]);
+        'roles' => $roles, 'modules'=>$modules,'user_branch'=>$users_branch,'user_permissions'=>$user_permissions,'activeBranchName'=>$activeBranchName]);
     }
 
 
@@ -272,13 +285,19 @@ class UserController extends Controller
                 $users_branch  = Branch::get_all_branch();
     
             }
+            foreach ($users_branch as $branch) {
+                if ($branch['branch_id'] == $login['user_active_branch']) {
+                    $activeBranchName = $branch['branch_name'];
+                    break;
+                }
+            }
         }
         $branch       = Branch::get_all_branch();
 
         $user_permissions = session('combined_permissions', []);
       
         return view('users/user_edit',['user' => $user,'roles'=>$roles,'modules'=>$modules,'user_branch'=>$users_branch,'login'=>$login,
-        'activePage'=>'users','branch'=>$branch,'user_permissions'=>$user_permissions]);
+        'activePage'=>'users','branch'=>$branch,'user_permissions'=>$user_permissions,'activeBranchName'=>$activeBranchName]);
     }
 
     public function user_remove(Request $request)

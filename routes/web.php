@@ -36,6 +36,12 @@ Route::get('/dashboard', function () {
             $users_branch  = Branch::get_all_branch();
 
         }
+        foreach ($users_branch as $branch) {
+            if ($branch['branch_id'] == $login['user_active_branch']) {
+                $activeBranchName = $branch['branch_name'];
+                break;
+            }
+        }
     }
 
     $branch_count = Branch::where('is_delete',0)->count();
@@ -57,7 +63,7 @@ Route::get('/dashboard', function () {
     return view('index_new',['login'=>$login,'activePage'=>'dashboard',
     'user_branch'=>$users_branch,'order_count'=>$orders_count,
     'user_count'=>$user_count,'branch_count'=>$branch_count,
-    'total_role'=>$total_role,'order'=>$order,'branch'=>$branch,'user_permissions'=>$combined_permissions]);
+    'total_role'=>$total_role,'order'=>$order,'branch'=>$branch,'user_permissions'=>$combined_permissions,'activeBranchName'=>$activeBranchName]);
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {

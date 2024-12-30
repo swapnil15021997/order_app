@@ -116,6 +116,7 @@ class Order extends Model
             'from_branch.branch_name AS order_from_name',   
             'to_branch.branch_name AS order_to_name')
         ->where('orders.is_delete',0)
+        ->where('orders.order_status',1)
         ->take(5)
         ->orderBy('order_id', 'desc')
         ->get()

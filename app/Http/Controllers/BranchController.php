@@ -27,9 +27,15 @@ class BranchController extends Controller
             $users_branch  = Branch::where('is_delete', 0)->get()->toArray();
 
         }
+        foreach ($users_branch as $branch) {
+            if ($branch['branch_id'] == $login['user_active_branch']) {
+                $activeBranchName = $branch['branch_name'];
+                break;
+            }
+        }
         $combined_permissions = session('combined_permissions', []);
 
-        return view('branch/branch_master',['pageTitle'=>'Branch','login'=>$login,'activePage'=>$activePage,'user_branch'=>$users_branch,'user_permissions'=>$combined_permissions]);
+        return view('branch/branch_master',['pageTitle'=>'Branch','login'=>$login,'activePage'=>$activePage,'user_branch'=>$users_branch,'user_permissions'=>$combined_permissions,'activeBranchName'=>$activeBranchName]);
     }
 
     // Bracnh add edit ajax call

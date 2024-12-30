@@ -76,22 +76,17 @@
                             <label class="form-label">Branch Name</label>
                             <input id="branch_name" required type="text" name="branch_name" class="form-control"  placeholder="Add branch Name">
                         </div>
-                    </div>
-                    <div class="modal-body">
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <div>
-                                    <label class="form-label">Branch Address</label>
-                                    <textarea id="branch_address" required name="branch_address" class="form-control" rows="3"></textarea>
-                                </div>
-                            </div>
+                        <div class="mb-3">
+                            <label class="form-label">Branch Address</label>
+                                <textarea id="branch_address" required name="branch_address" class="form-control" rows="3"></textarea>
                         </div>
                     </div>
+                 
                     <div class="modal-footer">
-                        <a href="#" class="btn btn-link link-secondary" data-bs-dismiss="modal">
+                        <a href="#" class="btn btn-secondary" data-bs-dismiss="modal">
                         Cancel
                         </a>
-                        <a id="saveBranchBtn" href="#" class="btn btn-primary ms-auto">
+                        <a id="saveBranchBtn" href="#" class="btn btn-primary">
                         <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
                         <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 5l0 14" /><path d="M5 12l14 0" /></svg>
                         Create new branch
@@ -105,7 +100,7 @@
             <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">New report</h5>
+                        <h5 class="modal-title">Edit Branch</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
@@ -116,25 +111,23 @@
                             <label class="form-label">Branch Name</label>
                             <input id="edit_branch_name" type="text" name="branch_name" class="form-control"  placeholder="Add branch Name">
                         </div>
-                    </div>
-                    <div class="modal-body">
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <div>
-                                    <label class="form-label">Branch Address</label>
-                                    <textarea id="edit_branch_address" name="branch_address" class="form-control" rows="3"></textarea>
-                                </div>
-                            </div>
+                        <div class="mb-3">
+                            <label class="form-label">Branch Address</label>
+                            <textarea id="edit_branch_address" name="branch_address" class="form-control" rows="3"></textarea>
                         </div>
                     </div>
+                   
                     <div class="modal-footer">
-                        <a href="#" class="btn btn-link link-secondary" data-bs-dismiss="modal">
+                        <a href="#" class="btn btn-secondary" data-bs-dismiss="modal">
                         Cancel
                         </a>
-                        <a id="editBranchBtn" href="#" class="btn btn-primary ms-auto" data-bs-dismiss="modal">
+                        <a id="editBranchBtn" href="#" class="btn btn-primary " data-bs-dismiss="modal">
                         <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
-                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 5l0 14" /><path d="M5 12l14 0" /></svg>
-                        Create new branch
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-pencil-square me-2" viewBox="0 0 16 16">
+                            <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                            <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"/>
+                        </svg>
+                        Update branch
                         </a>
                     </div>
                 </div>

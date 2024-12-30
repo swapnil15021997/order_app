@@ -22,20 +22,56 @@
                 </nav>
             </div>
             <div class="col-auto ms-auto d-print-none">
-              @foreach ($order['transactions'] as $transaction) 
-
-                    @if ($transaction['trans_status'] === 0)
-                        <!-- If both conditions are satisfied, show the "Approve" button -->
-                        <a class="btn btn-primary" href="#" onclick="approve_order({{ $order['order_qr_code'] }})">
-                            Approve Order
-                        </a>
-                    @endif
-                @endforeach   
+            @php
+                $lastTransaction = end($order['transactions']); // Get the last transaction
+            @endphp
+               
+            @if ($lastTransaction && $lastTransaction['trans_status'] === 0)
+                <!-- If both conditions are satisfied, show the "Approve" button -->
+                <a class="btn btn-primary" href="#" onclick="approve_order({{ $order['order_qr_code'] }})">
+                    Approve Order
+                </a>
+            @else
+                <a class="btn btn-primary" href="#" onclick="transfer_order({{$order['order_id']}})">
+                  Transfer Order 
+                </a>
+            @endif
+                
+            </div>
+        </div>
+    </div>
+    <input type="hidden" name="" id="transfer_order_id">
+    <div class="modal modal-blur fade" id="transfer_order" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Transfer Order</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <label class="form-label">Order To</label>
+                    <select id="searchableSelectTo" class="form-select select2">
+                        
+                    
+                    </select>
+                </div>
+               
+                
+                <div class="modal-footer">
+                    <a href="#" class="btn btn-link link-secondary" data-bs-dismiss="modal">
+                    Cancel
+                    </a>
+                    <a id="TransferOrderBtn" href="#" class="btn btn-primary ms-auto">
+                            Transfer This Order
+                    </a>
+                </div>
             </div>
         </div>
     </div>
     <div class="page-body">
         <div class="container-xl">
+            <div class="row" id="transfer-container">
+            </div>
             <div class="row">  
 
               <div>
@@ -215,7 +251,7 @@
                     "
                   >
                     <div style="padding: 4px; width: 100%; max-width: 4%">
-                      <p>SI No.</p>
+                      <p>Sr No.</p>
                     </div>
                     <div
                       style="
@@ -233,6 +269,7 @@
                         border-left: 1px solid #cccccc;
                         width: 100%;
                         max-width: 10%;
+                        text-align: center;
                       "
                     >
                       <p>HSN/SAC</p>
@@ -243,6 +280,7 @@
                         border-left: 1px solid #cccccc;
                         width: 100%;
                         max-width: 10%;
+                        text-align: center;
                       "
                     >
                       <p>Gross Weight</p>
@@ -309,7 +347,7 @@
                         max-width: 35%;
                       "
                     >
-                      <p style="text-align: end">{{$order['items'][0]['item_name']}}</p>
+                      <p style="text-align: center">{{$order['items'][0]['item_name']}}</p>
                     </div>
                     <div
                       style="
@@ -378,9 +416,10 @@
                         border-left: 1px solid #cccccc;
                         width: 100%;
                         max-width: 35%;
+                        text-align: center;
                       "
                     >
-                      <p style="text-align: end">Total</p>
+                      <p style="text-align: center">Total</p>
                     </div>
                     <div
                       style="
@@ -396,6 +435,7 @@
                         border-left: 1px solid #cccccc;
                         width: 100%;
                         max-width: 10%;
+                        text-align: center;
                       "
                     >{{$order['items'][0]['item_weight']}} GRM</div>
                     <div
@@ -479,6 +519,87 @@
           </div>
 </div>
 <script>
+
+          
+      function transfer_order(order_id){  
+        $('#transfer_order_id').val(order_id);
+        $('#transfer_order').modal('show');
+  
+      }
+
+
+      $('#TransferOrderBtn').click(function(e) {
+            e.preventDefault(); 
+
+            var orderId         = $('#transfer_order_id').val();
+            var transferTo      = $('#searchableSelectTo').val();
+        
+            if (orderId) {
+                $.ajax({
+                    url: "{{ route('order_transfer') }}",  
+                    type: 'POST',
+                    data: {
+                        _token        : csrfToken,
+                        order_id     : orderId,
+                        transfer_to  : transferTo
+                        
+                    },
+                    success: function(response) {
+                        if (response.status==200) {
+                            $('#transfer_order_id').val('');
+                            $('#searchableSelectTo').val('');
+                            $('#transfer_order').modal('hide');
+                            alert(response.message);
+                            showAlertTransfer('success', response.message);
+
+                            setTimeout(function() {
+                              location.href = "{{ route('order-master') }}";
+                            }, 2000);
+                        } else {
+                            alert('Error Transferring order: ' + response.message);
+                            $('#searchableSelectTo').val('');
+
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        alert('An error occurred: ' + error);
+                        $('#searchableSelectTo').val('');
+
+                    }
+                });
+            } else {
+                alert('Please fill in both fields.');
+            }
+        });  
+
+        function showAlertTransfer(type, message) {
+              const alertContainer = document.getElementById('transfer-container');
+              const alertHTML = `
+                  <div class="alert alert-${type} alert-dismissible" role="alert">
+                      <div class="d-flex">
+                          <div>
+                              ${type === 'success' ? `
+                              <svg xmlns="http://www.w3.org/2000/svg" class="icon alert-icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                  <path d="M5 12l5 5l10 -10" />
+                              </svg>` : `
+                              <svg xmlns="http://www.w3.org/2000/svg" class="icon alert-icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                  <path d="M10.24 3.957l-8.422 14.06a1.989 1.989 0 0 0 1.7 2.983h16.845a1.989 1.989 0 0 0 1.7 -2.983l-8.423 -14.06a1.989 1.989 0 0 0 -3.4 0z" />
+                                  <path d="M12 9v4" />
+                                  <path d="M12 17h.01" />
+                              </svg>`}
+                          </div>
+                          <div>${message}</div>
+                      </div>
+                      <a class="btn-close" data-bs-dismiss="alert" aria-label="close"></a>
+                  </div>
+              `;
+              alertContainer.innerHTML = alertHTML;
+              console.log("here");
+          }
+
+
       function approve_order(transaction_id){
         if (transaction_id) {
             $.ajax({
@@ -533,6 +654,52 @@
         alertContainer.innerHTML = alertHTML;
         console.log("here");
   }
+
+    $(document).ready(function() {     
+      $('#searchableSelectTo').on('select2:open', function() {
+          $('.select2-search__field').on('input', function() {
+              userInput = $(this).val();
+          });
+      });
+      var csrfToken = $('meta[name="csrf-token"]').attr('content');
+      $('#searchableSelectTo').select2({
+          
+          placeholder: "Select an option",
+          allowClear: true,
+          ajax: {
+              url: "{{route('branch_list')}}", 
+              dataType: 'json',
+              type: 'POST',
+              headers: {
+                      'X-CSRF-TOKEN': csrfToken  // Add CSRF token in the header
+              },
+              delay: 250, 
+              data: function (params) {
+                  return {
+                  
+                      search: params.term, 
+                      per_page: 10,
+                      page: params.page || 1 
+                  };
+              },
+              processResults: function (data) {
+                  
+                  return {
+                      results: data.data.branches.map(function (item) {
+                          return {
+                              id: item.branch_id,
+                              text: item.branch_name
+                          };
+                      }),
+                      pagination: {
+                          more: data.data.length >= 10 // Check if there are more results
+                      }
+                  };
+              },
+              cache: true 
+          }
+      });
+    });
 </script>
   @endsection
  

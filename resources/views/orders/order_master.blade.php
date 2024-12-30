@@ -39,7 +39,7 @@
 
             <div class="row row-deck row-cards">    
 
-                <div class="table-responsive">
+                <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
                     <table id="branch_table" class="table card-table table-vcenter text-nowrap datatable">
                         <thead>
                         <tr>
@@ -113,10 +113,10 @@
                 </div>
                 
                 <div class="modal-footer">
-                    <a href="#" class="btn btn-link link-secondary" data-bs-dismiss="modal">
+                    <a href="#" class="btn btn-secondary" data-bs-dismiss="modal">
                     Cancel
                     </a>
-                    <a id="DeleteOrderBtn" href="#" class="btn btn-primary ms-auto" data-bs-dismiss="modal">
+                    <a id="DeleteOrderBtn" href="#" class="btn btn-primary" data-bs-dismiss="modal">
                             Delete This Order
                     </a>
                 </div>
@@ -185,7 +185,7 @@
                         render: function(data, type, row) {
                             console.log(row);
                             let dropdown = `<button data-bs-toggle="dropdown" type="button" class="btn dropdown-toggle dropdown-toggle-split"></button>
-                                <div class="dropdown-menu dropdown-menu-end">
+                                <div class="dropdown-menu dropdown-menu-end drop-option">
                                   <a class="dropdown-item" href="#" onclick="edit_order(${row.order_id})">
                                     Edit
                                   </a>

@@ -48,3 +48,10 @@
     .select2-container--open{
       z-index: 9999;
     }
+
+    #my-qr-reader .html5-qrcode-button-camera-start,
+    #my-qr-reader .html5-qrcode-button-camera-stop {
+        /* Your custom styles */
+        background-color: #ff5733 !important;
+        color: #ffffff !important;
+    }
