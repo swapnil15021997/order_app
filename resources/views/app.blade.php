@@ -213,13 +213,14 @@
 
         function onScanSuccess(result) {
             // Display the result
-            alert(`Scanned QR Code: ${result}`);
+            const scannedText = result.data || result;
+            alert(`Scanned QR Code: ${scannedText}`);
 
-            resultDiv.innerHTML = `<p>Scanned QR Code: ${result}</p>`;
+            resultDiv.innerHTML = `<p>Scanned QR Code: ${scannedText}</p>`;
             
             // If the result is a URL, open it in a new tab
-            if (result.startsWith('http')) {
-                window.open(result, '_blank');
+            if (scannedText.startsWith('http')) {
+                window.open(scannedText, '_blank');
             }
             
             // Stop scanning
