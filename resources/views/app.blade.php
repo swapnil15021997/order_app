@@ -166,9 +166,12 @@
         </div>
       </div>
     </div>
-
-    <div id="my-qr-reader" style="display: none;"></div>
+ 
+    <div id="my-qr-reader" style="display: none;">
+        <video id="videoElem" style="width: 100%;"></video>
+    </div>    
     <button class="btn btn-primary" id="start-scanner">Start Scanner</button>
+    <div id="result"></div>
             
 <!-- Libs JS -->
 <script src="{{ asset('libs/apexcharts/apexcharts.min.js')}}" defer></script>
@@ -189,14 +192,12 @@
 <script src="https://www.gstatic.com/firebasejs/8.3.2/firebase.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.2.0/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.2.0/firebase-messaging.js"></script> 
-<script src="https://unpkg.com/html5-qrcode"></script>
+<!-- <script src="https://unpkg.com/html5-qrcode"></script> -->
 
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/qr-scanner/1.4.2/qr-scanner.umd.min.js"></script>
 <script>
     function domReady(fn) {
-        if (
-            document.readyState === "complete" ||
-            document.readyState === "interactive"
-        ) {
+        if (document.readyState === "complete" || document.readyState === "interactive") {
             setTimeout(fn, 1000);
         } else {
             document.addEventListener("DOMContentLoaded", fn);
@@ -204,32 +205,70 @@
     }
 
     domReady(function () {
+        // Get DOM elements
+        const videoElem = document.getElementById("videoElem");
+        const startButton = document.getElementById("start-scanner");
+        const resultDiv = document.getElementById("result");
+        let qrScanner = null;
 
-        function onScanSuccess(decodeText, decodeResult) {
-            alert("Your QR code is: " + decodeText);
-            // window.location.href = decodeText; 
-            // Optionally stop scanning after successful read
-            htmlscanner.clear();
-            document.getElementById("my-qr-reader").style.display = "none";
+        function onScanSuccess(result) {
+            // Display the result
+            alert(`Scanned QR Code: ${result}`);
+
+            resultDiv.innerHTML = `<p>Scanned QR Code: ${result}</p>`;
+            
+            // If the result is a URL, open it in a new tab
+            if (result.startsWith('http')) {
+                window.open(result, '_blank');
+            }
+            
+            // Stop scanning
+            stopScanner();
         }
 
-        // Initialize the scanner (but don't start immediately)
-        const htmlscanner = new Html5QrcodeScanner(
-            "my-qr-reader",
-            { fps: 10, qrbox: 250 }
-        );
-
-        // Button click event to show the scanner
-        document.getElementById("start-scanner").addEventListener("click", function () {
+        function startScanner() {
+            // Show the video element
             document.getElementById("my-qr-reader").style.display = "block";
-            htmlscanner.render(onScanSuccess);
-            setTimeout(function () {
-                document.querySelector(".html5-qrcode-button-camera-start").style.backgroundColor = "#ff5733";
-                document.querySelector(".html5-qrcode-button-camera-stop").style.backgroundColor = "#ff5733";
-            }, 1000);
+            startButton.textContent = "Stop Scanner";
+
+            // Initialize QR scanner if not already created
+            if (!qrScanner) {
+                qrScanner = new QrScanner(
+                    videoElem,
+                    onScanSuccess,
+                    {
+                        highlightScanRegion: true,
+                        highlightCodeOutline: true,
+                    }
+                );
+            }
+
+            // Start scanning
+            qrScanner.start();
+        }
+
+        function stopScanner() {
+            if (qrScanner) {
+                qrScanner.stop();
+            }
+            document.getElementById("my-qr-reader").style.display = "none";
+            startButton.textContent = "Start Scanner";
+        }
+
+        // Toggle scanner on button click
+        startButton.addEventListener("click", function() {
+            if (qrScanner && qrScanner.isScanning()) {
+                stopScanner();
+            } else {
+                startScanner();
+            }
+        });
+
+        // Handle errors
+        window.addEventListener('error', function(e) {
+            resultDiv.innerHTML = `<p style="color: red;">Error: ${e.message}</p>`;
         });
     });
-   
 </script>
 <script type="module">
 
