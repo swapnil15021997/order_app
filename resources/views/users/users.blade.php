@@ -21,7 +21,7 @@
                     <div class="text-secondary mt-1" id="pagination_code"></div>
                 </div>
                 <!-- Page title actions -->
-               
+
             </div>
         </div>
     </div>
@@ -29,7 +29,7 @@
     <div class="page-body">
         <div class="container-xl">
                 <!-- <div class="col-md-6 col-lg-3">
-                   
+
                 </div> -->
                 @if(in_array(13, $user_permissions))
 
@@ -40,7 +40,7 @@
                             <div class="card-body">
                                 <div class="d-flex align-items-center">
                                 <div class="subheader">Total Users {{ $role['users_count'] }}</div>
-                                    
+
                                 </div>
                                 <div class="h1 mb-3">Role Name: {{$role['role_name']}}</div>
                                 <div class="d-flex flex-wrap gap-1 mt-3">
@@ -59,7 +59,7 @@
                                         Delete Role
                                     </a>
                                 </div>
-                              
+
                             </div>
                         </div>
                     </div>
@@ -71,7 +71,7 @@
                         <div class="card">
                             <div class="card-body">
                                 <div class="d-flex align-items-center">
-                                    <div class="subheader">Create New Role</div>                                    
+                                    <div class="subheader">Create New Role</div>
                                 </div>
                                 <div class="mt-3">
                                 <a href="#" data-bs-toggle="modal" data-bs-target="#modal-role" class="btn btn-primary w-100">
@@ -80,7 +80,7 @@
                                         New Role
                                     </a>
                                 </div>
-                              
+
                             </div>
                         </div>
                     </div>
@@ -89,24 +89,24 @@
                     <div class="col-auto ms-auto d-print-none">
                         <div class="d-flex">
                         <!-- <input type="search" class="form-control d-inline-block w-9 me-3" placeholder="Search user…"/> -->
-                        
+
                         <a href="{{route('user-add')}}" class="btn btn-primary">
                             <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
                             <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 5l0 14" /><path d="M5 12l14 0" /></svg>
                             New user
                         </a>
-    
-                    
+
+
                         </div>
                     </div>
                 </div>
-                <div class="row row-deck row-cards">    
+                <div class="row row-deck row-cards">
                     <div class="table-responsive">
                         <table id="branch_table" class="table card-table table-vcenter text-nowrap datatable">
                             <thead>
                             <tr>
                                 <th class="w-1"><input class="form-check-input m-0 align-middle" type="checkbox" aria-label="Select all invoices"></th>
-                                
+
                                 <th>User Name</th>
                                 <th>Phone No</th>
                                 <th>Role</th>
@@ -118,10 +118,10 @@
                         </table>
                     </div>
                 </div>
-<!--             
+<!--
             <div class="d-flex mt-4">
               <ul class="pagination ms-auto" id="paginationLinks">
-               
+
               </ul>
             </div> -->
         </div>
@@ -137,18 +137,18 @@
                 </div>
                 <div id="alert-container"></div>
                 <div class="model-body">
-                     
-                      
+
+
                 </div>
-                <div class="modal-body">
+                <div class="modal-body overflow-x-auto">
                     <div id="save-role-container"></div>
-                
+
                     <div class="mb-3">
                         <label class="form-label">Role Name</label>
                         <input type="text" id="role_name" class="form-control" placeholder="User Name">
                     </div>
-                  
-                    <table class="table table-bordered">
+
+                    <table class="table table-bordered table-responsive">
                         <thead>
                             <tr>
                                 <th>Module Name</th>
@@ -165,12 +165,12 @@
 
                                     @foreach ($module['permissions'] as $permission)
                                         <td>
-                                            <input 
-                                                type="checkbox" 
-                                                id="save_permission_{{ $permission['permission_id'] }}" 
-                                                name="permission_{{ $permission['permission_id'] }}" 
-                                                name="permission_{{ $permission['permission_id'] }}" 
-                                                data-module-id="{{ $module['module_id'] }}"  
+                                            <input
+                                                type="checkbox"
+                                                id="save_permission_{{ $permission['permission_id'] }}"
+                                                name="permission_{{ $permission['permission_id'] }}"
+                                                name="permission_{{ $permission['permission_id'] }}"
+                                                data-module-id="{{ $module['module_id'] }}"
                                                 @if (in_array($permission, array_column($module['permissions'], 'permission_name')))  @endif
                                             >
                                         </td>
@@ -206,14 +206,14 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div id="update-role-container"></div>
-                
-                <div class="modal-body">
+
+                <div class="modal-body overflow-x-auto">
                     <div class="mb-3">
                         <label class="form-label">Role Name</label>
                         <input type="text" id="edit_role_name" class="form-control" placeholder="User Name">
                     </div>
-                  
-                    <table class="table table-bordered">
+
+                    <table class="table table-bordered table-responsive">
                         <thead>
                             <tr>
                                 <th>Module Name</th>
@@ -230,12 +230,12 @@
 
                                     @foreach ($module['permissions'] as $permission)
                                         <td>
-                                            <input 
-                                                type="checkbox" 
-                                                id="role_permission_{{ $permission['permission_id'] }}" 
-                                                name="permission_{{ $permission['permission_id'] }}" 
-                                                name="permission_{{ $permission['permission_id'] }}" 
-                                                data-module-id="{{ $module['module_id'] }}"  
+                                            <input
+                                                type="checkbox"
+                                                id="role_permission_{{ $permission['permission_id'] }}"
+                                                name="permission_{{ $permission['permission_id'] }}"
+                                                name="permission_{{ $permission['permission_id'] }}"
+                                                data-module-id="{{ $module['module_id'] }}"
                                                 @if (in_array($permission, array_column($module['permissions'], 'permission_name')))  @endif
                                             >
                                         </td>
@@ -266,7 +266,7 @@
     </div>
 
     <div class="modal modal-blur fade" id="add_user" tabindex="-1" role="dialog" aria-hidden="true">
-    
+
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -276,7 +276,7 @@
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-lg-6">
-                        
+
                             <div class="mb-3">
 
                                 <label class="form-label">User Name</label>
@@ -290,15 +290,15 @@
                             </div>
                         </div>
                     </div>
-                
+
                     <div class="row">
-                    
+
                         <div class="col-lg-6">
                             <div class="mb-3">
                                 <label class="form-label">User Role</label>
 
                             </div>
-                            
+
                         </div>
                     <div class="col-lg-6">
                         <div class="mb-3">
@@ -307,9 +307,9 @@
 
                         </div>
                     </div>
-                    </div>            
+                    </div>
                 </div>
-           
+
                 <div class="modal-footer">
                     <a href="#" class="btn btn-link link-secondary" data-bs-dismiss="modal">
                         Cancel
@@ -319,12 +319,12 @@
                         <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 5l0 14" /><path d="M5 12l14 0" /></svg>
                         Save User
                     </a>
-            
+
                 </div>
             </div>
         </div>
     </div>
-    
+
 
     <input type="hidden" name="" id="delete_user_id">
     <div class="modal modal-blur fade" id="delete_user" tabindex="-1" role="dialog" aria-hidden="true">
@@ -339,7 +339,7 @@
                         Do you want to delete this user?
                         </div>
                 </div>
-                
+
                 <div class="modal-footer">
                     <a href="#" class="btn btn-link link-secondary" data-bs-dismiss="modal">
                     Cancel
@@ -352,7 +352,7 @@
         </div>
     </div>
 
-    
+
     <input type="hidden" name="" id="delete_role_id">
     <div class="modal modal-blur fade" id="delete_role" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
@@ -366,7 +366,7 @@
                         Do you want to delete this role?
                         </div>
                 </div>
-                
+
                 <div class="modal-footer">
                     <a href="#" class="btn btn-link link-secondary" data-bs-dismiss="modal">
                     Cancel
@@ -395,9 +395,9 @@
             });
             $('#saveRole').on('click', function (e) {
 
-                e.preventDefault();  
+                e.preventDefault();
                 const userName = $('#role_name').val();
-             
+
                 // Validate data
                 if (!userName ) {
                     alert('Please fill all fields and select at least one permission.');
@@ -406,9 +406,9 @@
                 const permissionIds = [];
                 const moduleIds = [];
                 $('input[type="checkbox"]:checked').each(function () {
-                   
+
                     const permissionId = $(this).attr('id').replace('save_permission_', '');  // Extract permission_id from id
-                    const moduleId = $(this).data('module-id'); 
+                    const moduleId = $(this).data('module-id');
                     permissionIds.push(permissionId);
                     if (!moduleIds.includes(moduleId)) {
                         moduleIds.push(moduleId);
@@ -416,16 +416,16 @@
                 });
                 // Prepare data to be sent
                 const data = {
-                    _token: $('meta[name="csrf-token"]').attr('content'), 
+                    _token: $('meta[name="csrf-token"]').attr('content'),
                     role_id          :null,
                     role_name        : userName,
-                    user_permission  : permissionIds.join(','), 
+                    user_permission  : permissionIds.join(','),
                     user_module      : moduleIds.join(','),
-                    
+
                 };
 
                 $.ajax({
-                    url: "{{ route('role_add_and_edit') }}", 
+                    url: "{{ route('role_add_and_edit') }}",
                     type: 'POST',
                     data: data,
                     success: function (response) {
@@ -449,7 +449,7 @@
                 });
             });
         });
-        
+
         $(document).ready(function () {
             // Fetch users on page load
             // fetchUsers();
@@ -467,13 +467,13 @@
             // });
 
             // function fetchUsers(page = 1, search = '') {
-            //     const perPage = 5; 
+            //     const perPage = 5;
 
             //     $.ajax({
-            //         url: '{{ route("user-list")}}', 
+            //         url: '{{ route("user-list")}}',
             //         type: 'POST',
             //         data: {
-            //             _token: $('meta[name="csrf-token"]').attr('content'), 
+            //             _token: $('meta[name="csrf-token"]').attr('content'),
             //             search: search,
             //             per_page: perPage,
             //             page: page,
@@ -489,7 +489,7 @@
             //                                 <span class="avatar avatar-xl mb-3 rounded" style="background-image: url(/path/to/user/image)"></span>
             //                                 <h3 class="m-0 mb-1"><a href="#">${user.user_name}</a></h3>
             //                                 <div class="text-secondary">${user.role_name}</div>
-                                             
+
             //                             </div>
             //                             <div class="d-flex">
             //                                 <a href="#" class="card-btn" onclick="editUser(${user.id})">Edit</a>
@@ -518,23 +518,23 @@
             //     });
             // }
 
-           
+
             var csrfToken = $('meta[name="csrf-token"]').attr('content');
 
             $('#branch_table').DataTable({
                 processing: true,
                 serverSide: true,
                 ajax: {
-                    url: "{{ route('user-list') }}", 
+                    url: "{{ route('user-list') }}",
                     type: 'POST',
                     data: function(d) {
-                        d.search   = d.search.value; 
-                        d.per_page = d.length;  
-                        d.page     = d.start / d.length + 1;  
-                        d.draw     = d.draw;  
-                        d.sort = d.order[0].column === 1 ? 'user_name' : 'id'; 
-                        d.sortOrder = d.order[0].dir; 
-     
+                        d.search   = d.search.value;
+                        d.per_page = d.length;
+                        d.page     = d.start / d.length + 1;
+                        d.draw     = d.draw;
+                        d.sort = d.order[0].column === 1 ? 'user_name' : 'id';
+                        d.sortOrder = d.order[0].dir;
+
                     },
                     headers: {
                         'X-CSRF-TOKEN': csrfToken  // Add CSRF token in the header
@@ -542,19 +542,19 @@
                     dataSrc: function(response) {
                         console.log(response.data);
                         if (response.status === 200) {
-                            return response.data.users; 
+                            return response.data.users;
                         }
                         return [];  // Return an empty array if no data
                     }
                 },
                 columns: [
-                    { data: 'serial_number', name: 'serial_number',orderable: true },  
-                    { data: 'user_name', name: 'user_name',orderable: true }, 
-                    { data: 'user_phone_number', name: 'user_phone_number',orderable: false }, 
-                    { data: 'role_name', name: 'role_name', orderable: false},  
-                    { 
-                        data: 'user_id', 
-                        name: 'operations', 
+                    { data: 'serial_number', name: 'serial_number',orderable: true },
+                    { data: 'user_name', name: 'user_name',orderable: true },
+                    { data: 'user_phone_number', name: 'user_phone_number',orderable: false },
+                    { data: 'role_name', name: 'role_name', orderable: false},
+                    {
+                        data: 'user_id',
+                        name: 'operations',
                         render: function(data, type, row) {
                             console.log(row);
                             return `<button data-bs-toggle="dropdown" type="button" class="btn dropdown-toggle dropdown-toggle-split"></button>
@@ -562,18 +562,18 @@
                                   <a class="dropdown-item" href="#" onclick="editUser(${row.id})">
                                     Edit
                                   </a>
-                                  
+
                                   <a class="dropdown-item" href="#" onclick="delete_user(${row.id})">
                                     Delete
                                   </a>
                                 </div>`;
-                                
-                        },     
-                    }   
+
+                        },
+                    }
                 ],
                 order: [[0, 'desc']],
-                "pageLength": 10,  
-                "lengthMenu": [10, 25, 50, 100]  
+                "pageLength": 10,
+                "lengthMenu": [10, 25, 50, 100]
             });
             $('input[aria-controls="branch_table"]').on('keyup', function() {
                 table.search(this.value).draw();
@@ -583,12 +583,12 @@
                 var csrfToken = $('meta[name="csrf-token"]').attr('content');
 
                 alert();
-                e.preventDefault(); 
+                e.preventDefault();
 
                 var userId = $('#delete_user_id').val();
                 if (userId) {
                     $.ajax({
-                        url: "{{ route('user_remove') }}",  
+                        url: "{{ route('user_remove') }}",
                         type: 'POST',
                         data: {
                             _token        : csrfToken,
@@ -611,12 +611,12 @@
                 } else {
                     alert('Please fill in both fields.');
                 }
-            });  
+            });
 
 
             $('#UpdateRole').on('click', function (e) {
 
-                e.preventDefault();  
+                e.preventDefault();
                 const role_id      = $('#edit_role_id').val();
                 const role_name    = $('#edit_role_name').val();
 
@@ -629,9 +629,9 @@
                 const permissionIds = [];
                 const moduleIds = [];
                 $('input[type="checkbox"]:checked').each(function () {
-                
+
                     const permissionId = $(this).attr('id').replace('role_permission_', '');  // Extract permission_id from id
-                    const moduleId = $(this).data('module-id'); 
+                    const moduleId = $(this).data('module-id');
                     permissionIds.push(permissionId);
                     if (!moduleIds.includes(moduleId)) {
                         moduleIds.push(moduleId);
@@ -639,21 +639,21 @@
                 });
                 // Prepare data to be sent
                 const data = {
-                    _token: $('meta[name="csrf-token"]').attr('content'), 
+                    _token: $('meta[name="csrf-token"]').attr('content'),
                     role_id          : role_id,
                     role_name        : role_name,
-                    
-                    user_permission  : permissionIds.join(','), 
+
+                    user_permission  : permissionIds.join(','),
                     user_module      : moduleIds.join(','),
                 };
 
                 $.ajax({
-                    url: "{{ route('role_add_and_edit') }}", 
+                    url: "{{ route('role_add_and_edit') }}",
                     type: 'POST',
                     data: data,
                     success: function (response) {
                         if (response.status==200) {
-                            
+
                             showAlertUpdateRole('success','Role Updated Successfully');
                             $('#update-role').modal('hide');
                             location.href = "{{route('user-master')}}";
@@ -675,13 +675,13 @@
                 var csrfToken = $('meta[name="csrf-token"]').attr('content');
 
                 alert();
-                e.preventDefault(); 
+                e.preventDefault();
 
                 var userId = $('#delete_role_id').val();
 
                 if (userId) {
                     $.ajax({
-                        url: "{{ route('role_remove') }}",  
+                        url: "{{ route('role_remove') }}",
                         type: 'POST',
                         data: {
                             _token        : csrfToken,
@@ -705,13 +705,13 @@
                     alert('Please fill in both fields.');
                 }
             });
-            
 
-            
-            
+
+
+
         });
         function edit_role(role_id) {
-      
+
             // window.location.href = `/edit-role/${userId}`;
             document.querySelectorAll('input[type="checkbox"]').forEach(function(checkbox) {
                 checkbox.checked = false; // Uncheck all checkboxes
@@ -720,7 +720,7 @@
             var csrfToken = $('meta[name="csrf-token"]').attr('content');
 
             $.ajax({
-                url: "{{ route('role-details') }}",  
+                url: "{{ route('role-details') }}",
                 type: 'POST',
                 data: {
                     _token        : csrfToken,
@@ -728,15 +728,15 @@
                 },
                 success: function(response) {
                     // Handle success
-                   
+
                     if (response.status==200) {
-                       
+
                         var role_permission_ids = response.data.role_permission_ids;
                         console.log("role_permission_ids",role_permission_ids);
                         if (role_permission_ids != null){
                             const permissionArray   = role_permission_ids.split(',');
                             document.querySelectorAll('input[type="checkbox"]').forEach(function(checkbox) {
-                                const permissionId = checkbox.id.replace('role_permission_', ''); 
+                                const permissionId = checkbox.id.replace('role_permission_', '');
                                 if (permissionArray.includes(permissionId)) {
                                     checkbox.checked = true;
                                 }
@@ -760,12 +760,12 @@
 
         function delete_role(order_id){
             $('#delete_role_id').val(order_id);
-            $('#delete_role').modal('show');      
+            $('#delete_role').modal('show');
         }
-            
-         
-        
-       
+
+
+
+
         function editUser(userId) {
             alert(userId);
             // Redirect to the edit page and pass the user ID
@@ -775,7 +775,7 @@
         function delete_user(order_id){
             $('#delete_user_id').val(order_id);
             $('#delete_user').modal('show');
-    
+
         }
 
 
@@ -862,7 +862,7 @@
         }
 
 
-        
+
 
     </script>
 @endsection

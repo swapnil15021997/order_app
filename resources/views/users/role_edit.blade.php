@@ -26,16 +26,16 @@
             <div class="row row-cards">
 
                 <div class="col-lg-6">
-                
+
                     <div class="mb-3">
-                      
+
                         <label class="form-label">Role Name</label>
                         <input type="hidden" name="" id="user_id" value="{{$role['role_id']}}">
                         <input type="text" id="user_name" value="{{$role['role_name']}}" class="form-control" placeholder="Role Name">
                     </div>
                 </div>
             </div>
-                
+
 
             <div class="row">
 
@@ -46,7 +46,7 @@
                                 <h3 class="card-title">Modules and Permissions</h3>
                             </div>
                             <div class="card-body">
-                                <table class="table table-bordered">
+                                <table class="table table-bordered table-responsive">
                                     <thead>
                                         <tr>
                                             <th>Module Name</th>
@@ -63,15 +63,15 @@
 
                                                 @foreach ($module['permissions'] as $permission)
                                                     <td>
-                                                        <input 
-                                                            type="checkbox" 
-                                                            id="permission_{{ $permission['permission_id'] }}" 
-                                                            name="permission_{{ $permission['permission_id'] }}" 
-                                                            name="permission_{{ $permission['permission_id'] }}" 
-                                                            data-module-id="{{ $module['module_id'] }}"  
+                                                        <input
+                                                            type="checkbox"
+                                                            id="permission_{{ $permission['permission_id'] }}"
+                                                            name="permission_{{ $permission['permission_id'] }}"
+                                                            name="permission_{{ $permission['permission_id'] }}"
+                                                            data-module-id="{{ $module['module_id'] }}"
                                                             @if (in_array($permission, array_column($module['permissions'], 'permission_name')))  @endif
                                                             @if (in_array($permission['permission_id'], $rolePermissions)) checked @endif
-   
+
                                                         >
                                                     </td>
                                                 @endforeach
@@ -103,14 +103,14 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <script>
-        
+
             $(document).ready(function () {
                 $('#saveUser').on('click', function (e) {
 
-                    e.preventDefault();  
+                    e.preventDefault();
                     const userId      = $('#user_id').val();
                     const userName    = $('#user_name').val();
-                    
+
 
                     // Validate data
                     if (!userName ) {
@@ -120,9 +120,9 @@
                     const permissionIds = [];
                     const moduleIds = [];
                     $('input[type="checkbox"]:checked').each(function () {
-                       
+
                         const permissionId = $(this).attr('id').replace('permission_', '');  // Extract permission_id from id
-                        const moduleId = $(this).data('module-id'); 
+                        const moduleId = $(this).data('module-id');
                         permissionIds.push(permissionId);
                         if (!moduleIds.includes(moduleId)) {
                             moduleIds.push(moduleId);
@@ -130,16 +130,16 @@
                     });
                     // Prepare data to be sent
                     const data = {
-                        _token: $('meta[name="csrf-token"]').attr('content'), 
+                        _token: $('meta[name="csrf-token"]').attr('content'),
                         role_id          : userId,
                         role_name        : userName,
-                        
-                        user_permission  : permissionIds.join(','), 
+
+                        user_permission  : permissionIds.join(','),
                         user_module      : moduleIds.join(','),
                     };
 
                     $.ajax({
-                        url: "{{ route('user_add_edit') }}", 
+                        url: "{{ route('user_add_edit') }}",
                         type: 'POST',
                         data: data,
                         success: function (response) {

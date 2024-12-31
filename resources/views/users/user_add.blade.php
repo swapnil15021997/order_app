@@ -27,7 +27,7 @@
                     <div class="" id="alert-container"></div>
 
                     <div class="col-lg-6">
-                    
+
                         <div class="mb-3">
 
                             <label class="form-label">User Name</label>
@@ -41,7 +41,7 @@
                         </div>
                     </div>
                 </div>
-                    
+
                 <div class="row row-cards">
                     <div class="col-lg-6">
                         <div class="mb-3">
@@ -52,7 +52,7 @@
                                 @endforeach
                             </select>
                         </div>
-                        
+
                     </div>
                     <div class="col-lg-6">
                         <div class="mb-3">
@@ -61,7 +61,7 @@
 
                         </div>
                     </div>
-                </div>  
+                </div>
 
                 <div class="row row-cards">
                     <div class="col-lg-6">
@@ -77,7 +77,7 @@
                                 <div class="form-label">Select multiple states</div>
                                 <select type="text" class="form-select" id="select-states" multiple>
                                 @if(!empty($branch))
-                                
+
                                 @foreach($branch as $b)
                                     <option value="{{ $b['branch_id'] }}">{{ $b['branch_name'] }}</option>
                                     @endforeach
@@ -86,17 +86,17 @@
                         </div>
                     </div>
                 </div>
-                
+
 
 
                 <div class="row row-cards">
 
                     <div class="col-lg-12">
                         <div class="mb-3">
-                           
+
                             <h3 class="card-title">Modules and Permissions</h3>
-                        
-                            <table class="table table-bordered">
+
+                            <table class="table table-bordered table-responsive">
                                 <thead>
                                     <tr>
                                         <th>Module Name</th>
@@ -113,12 +113,12 @@
 
                                             @foreach ($module['permissions'] as $permission)
                                                 <td>
-                                                    <input 
-                                                        type="checkbox" 
-                                                        id="permission_{{ $permission['permission_id'] }}" 
-                                                        name="permission_{{ $permission['permission_id'] }}" 
-                                                        name="permission_{{ $permission['permission_id'] }}" 
-                                                        data-module-id="{{ $module['module_id'] }}"  
+                                                    <input
+                                                        type="checkbox"
+                                                        id="permission_{{ $permission['permission_id'] }}"
+                                                        name="permission_{{ $permission['permission_id'] }}"
+                                                        name="permission_{{ $permission['permission_id'] }}"
+                                                        data-module-id="{{ $module['module_id'] }}"
                                                         @if (in_array($permission, array_column($module['permissions'], 'permission_name')))  @endif
                                                     >
                                                 </td>
@@ -127,7 +127,7 @@
                                     @endforeach
                                 </tbody>
                             </table>
-                                
+
                         </div>
                     </div>
 
@@ -149,7 +149,7 @@
 
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script src="{{ asset('libs/tom-select/dist/js/tom-select.base.min.js')}}?1692870487" defer></script>
-  
+
         <script>
             // @formatter:off
             document.addEventListener("DOMContentLoaded", function () {
@@ -182,19 +182,19 @@
 
                 if (roleId) {
                     $.ajax({
-                        url: "{{ route('role-details') }}", 
+                        url: "{{ route('role-details') }}",
                         type: 'POST',
                         data: {
                             'role_id' : roleId
                         },
                         headers: {
-                            'X-CSRF-TOKEN': csrfToken 
+                            'X-CSRF-TOKEN': csrfToken
                         },
                         success: function (response) {
                             console.log(response);
                             if (response.data.role_permission_ids != null){
                                 const rolePermissionIds = response.data.role_permission_ids.split(',').map(Number);
-                                
+
                                 $('input[type="checkbox"]').prop('checked', false);
                                 console.log(rolePermissionIds);
                                 rolePermissionIds.forEach(permissionId => {
@@ -209,10 +209,10 @@
                     });
                 }
             }
- 
+
             let preSelectedRoleId = $('#select_role').val();
             fetchRoleDetails(preSelectedRoleId);
- 
+
             $('#select_role').on('change', function () {
                 let roleId = $(this).val();
                 fetchRoleDetails(roleId);
@@ -226,14 +226,14 @@
             $(document).ready(function () {
                 $('#saveUser').on('click', function (e) {
 
-                    e.preventDefault();  
+                    e.preventDefault();
                     const userName = $('#user_name').val();
                     const userPhone = $('#user_phone_no').val();
                     const userAddress = $('#user_address').val();
                     const roleId = $('#select_role').val();
                     const user_email = $('#user_email').val();
                     const selected_sites = $('#select-states').val();
-                    
+
 
                     // Validate data
                     if (!userName || !userPhone || !roleId ) {
@@ -244,9 +244,9 @@
                     const permissionIds = [];
                     const moduleIds = [];
                     $('input[type="checkbox"]:checked').each(function () {
-                       
+
                         const permissionId = $(this).attr('id').replace('permission_', '');  // Extract permission_id from id
-                        const moduleId = $(this).data('module-id'); 
+                        const moduleId = $(this).data('module-id');
                         permissionIds.push(permissionId);
                         if (!moduleIds.includes(moduleId)) {
                             moduleIds.push(moduleId);
@@ -254,12 +254,12 @@
                     });
                     // Prepare data to be sent
                     const data = {
-                        _token: $('meta[name="csrf-token"]').attr('content'), 
+                        _token: $('meta[name="csrf-token"]').attr('content'),
                         user_name        : userName,
                         user_phone_number: parseInt(userPhone),
                         user_address     : userAddress,
                         user_role        : roleId,
-                        user_permission  : permissionIds.join(','), 
+                        user_permission  : permissionIds.join(','),
                         user_module      : moduleIds.join(','),
                         user_email       : user_email ,
                         user_branch      :selected_sites
@@ -267,7 +267,7 @@
                     };
 
                     $.ajax({
-                        url: "{{ route('user_add_edit') }}", 
+                        url: "{{ route('user_add_edit') }}",
                         type: 'POST',
                         data: data,
                         success: function (response) {
@@ -291,7 +291,7 @@
                     });
                 });
             });
-            
+
         function showAlert(type, message) {
             const alertContainer = document.getElementById('alert-container');
             const alertHTML = `
