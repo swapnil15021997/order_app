@@ -7,7 +7,7 @@
             <div class="row g-2 align-items-center">
               <div class="col">
                 <!-- Page pre-title -->
-              
+
                 <!-- <h2 class="page-title">
                   Branch
                 </h2> -->
@@ -38,16 +38,16 @@
         </div>
         <div class="page-body">
           <div class="container-xl">
-              
+
                 <div id="show_success"></div>
-                <div class="row row-deck row-cards">    
+                <div class="row row-deck row-cards custom-table-resposive">
 
                     <div class="table-responsive">
                         <table id="branch_table" class="table card-table table-vcenter text-nowrap datatable">
                             <thead>
                             <tr>
                                 <th class="w-1"><input class="form-check-input m-0 align-middle" type="checkbox" aria-label="Select all invoices"></th>
-                              
+
                                 <th>Branch Name</th>
                                 <th>Branch Address</th>
                                 <th>Operations</th>
@@ -81,7 +81,7 @@
                                 <textarea id="branch_address" required name="branch_address" class="form-control" rows="3"></textarea>
                         </div>
                     </div>
-                 
+
                     <div class="modal-footer">
                         <a href="#" class="btn btn-secondary" data-bs-dismiss="modal">
                         Cancel
@@ -116,7 +116,7 @@
                             <textarea id="edit_branch_address" name="branch_address" class="form-control" rows="3"></textarea>
                         </div>
                     </div>
-                   
+
                     <div class="modal-footer">
                         <a href="#" class="btn btn-secondary" data-bs-dismiss="modal">
                         Cancel
@@ -146,7 +146,7 @@
                             Do you want to delete this branch?
                          </div>
                     </div>
-                    
+
                     <div class="modal-footer">
                         <a href="#" class="btn btn-link link-secondary" data-bs-dismiss="modal">
                         Cancel
@@ -169,36 +169,36 @@
                 processing: true,
                 serverSide: true,
                 ajax: {
-                    url: "{{ route('branch_list') }}", 
+                    url: "{{ route('branch_list') }}",
                     type: 'POST',
                     data: function(d) {
-                        d.search   = d.search.value; 
-                        d.per_page = d.length;  
-                        d.page     = d.start / d.length + 1;  
-                        d.draw     = d.draw;  
-                        d.sort = d.order[0].column === 1 ? 'branch_name' : 'branch_id'; 
-                        d.sortOrder = d.order[0].dir; 
-     
+                        d.search   = d.search.value;
+                        d.per_page = d.length;
+                        d.page     = d.start / d.length + 1;
+                        d.draw     = d.draw;
+                        d.sort = d.order[0].column === 1 ? 'branch_name' : 'branch_id';
+                        d.sortOrder = d.order[0].dir;
+
                     },
                     headers: {
-                        'X-CSRF-TOKEN': csrfToken  
+                        'X-CSRF-TOKEN': csrfToken
                     },
                     dataSrc: function(response) {
 
                         if (response.status === 200) {
-                            return response.data.branches; 
+                            return response.data.branches;
                         }
                         return [];  // Return an empty array if no data
                     }
                 },
                 columns: [
-                    { data: 'serial_number', name: 'serial_number',orderable: true },  
-                    { data: 'branch_name', name: 'branch_name',orderable: true }, 
-                    { data: 'branch_address', name: 'branch_address',orderable: false },  
+                    { data: 'serial_number', name: 'serial_number',orderable: true },
+                    { data: 'branch_name', name: 'branch_name',orderable: true },
+                    { data: 'branch_address', name: 'branch_address',orderable: false },
 
-                    { 
-                        data: 'branch_id', 
-                        name: 'operations', 
+                    {
+                        data: 'branch_id',
+                        name: 'operations',
                         render: function(data, type, row) {
                             return `<button data-bs-toggle="dropdown" type="button" class="btn dropdown-toggle dropdown-toggle-split"></button>
                                 <div class="dropdown-menu dropdown-menu-end">
@@ -209,22 +209,22 @@
                                     Delete
                                   </a>
                                 </div>`;
-                        },     
-                    }   
+                        },
+                    }
                 ],
                 order: [[0, 'desc']],
-                "pageLength": 10,  
-                "lengthMenu": [10, 25, 50, 100]  
+                "pageLength": 10,
+                "lengthMenu": [10, 25, 50, 100]
             });
             $('input[aria-controls="branch_table"]').on('keyup', function() {
                 table.search(this.value).draw();
             });
-       
+
 
 
 
             $('#saveBranchBtn').click(function(e) {
-                e.preventDefault(); 
+                e.preventDefault();
                 var branchName    = $('#branch_name').val();
                 var branchAddress = $('#branch_address').val();
                 var branchId = $('#branch_id').val();
@@ -269,11 +269,11 @@
 
 
             $('#editBranchBtn').click(function(e) {
-                e.preventDefault(); 
+                e.preventDefault();
                 var branchName    = $('#edit_branch_name').val();
                 var branchAddress = $('#edit_branch_address').val();
                 var branchId = $('#edit_branch_id').val();
-                 
+
                 if (branchName && branchAddress) {
                     $.ajax({
                         url: "{{ route('add_edit_branch') }}",  // Adjust the route as needed
@@ -313,12 +313,12 @@
             });
 
             $('#DeleteBranchBtn').click(function(e) {
-                e.preventDefault(); 
+                e.preventDefault();
 
                 var branchId = $('#delete_branch_id').val();
                 if (branchId) {
                     $.ajax({
-                        url: "{{ route('branch_remove') }}",  
+                        url: "{{ route('branch_remove') }}",
                         type: 'POST',
                         data: {
                             _token        : csrfToken,
@@ -328,7 +328,7 @@
                             if (response.status==200) {
                                 $('#delete_branch_id').val();
                                 $('#delete_branch').modal('hide');
-                                $('#branch_table').DataTable().ajax.reload(); 
+                                $('#branch_table').DataTable().ajax.reload();
                                 alert(response.message);
                                 showSuccess('success',response.message);
                             } else {
@@ -342,16 +342,16 @@
                 } else {
                     alert('Please fill in both fields.');
                 }
-            });         
+            });
         });
         function delete_branch(branch_id){
             $('#delete_branch_id').val(branch_id);
             $('#delete_branch').modal('show');
-        
+
         }
 
 
-       
+
 
         function edit_branch(branch_id){
             var csrfToken = $('meta[name="csrf-token"]').attr('content');
@@ -367,9 +367,9 @@
                 success: function(response) {
                     // Handle success
                     console.log("Success",response.data);
-                   
+
                     if (response.status==200) {
-                        
+
                         $('#edit_branch_id').val(branch_id);
                         var branchName = $('#edit_branch_name').val(response.data.branch_name);
                         var branchAddress = $('#edit_branch_address').val(response.data.branch_address);
@@ -385,7 +385,7 @@
         }
 
 
-        
+
         function showAlert(type, message) {
             const alertContainer = document.getElementById('alert-container');
             const alertHTML = `

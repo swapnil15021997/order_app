@@ -166,7 +166,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-6 col-lg-4">
+                <div class="col-lg-4 mt-3 mt-lg-0">
                 <div class="card">
                         <div class="card-header">
                             <h3 class="card-title">Latest Branch</h3>

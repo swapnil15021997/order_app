@@ -1,5 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap");
-      
+
 .note-popver {
     bottom: 1rem;
     right: 1rem;
@@ -25,13 +25,13 @@
 
     height: 24rem;
         overflow-y: scroll !important;
-        
+
     }
     .d-flex {
         display: block; /* Ensure the parent doesn't interfere with child scrolling */
     }
 
-    
+
 .table_print {
     width: 100%;
     max-width: 90%;
@@ -41,7 +41,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
- 
+
     }
 
 
@@ -55,3 +55,13 @@
         background-color: #ff5733 !important;
         color: #ffffff !important;
     }
+
+
+@media (max-width:1024px) {
+    .custom-table-resposive{
+        width: calc(100dvw - 30px);
+        padding-bottom: 12px;
+        margin-left: 0 !important;
+        margin-right:  0 !important;
+    }
+}

@@ -43,16 +43,16 @@
                                     
                                 </div>
                                 <div class="h1 mb-3">Role Name: {{$role['role_name']}}</div>
-                                <div class="d-flex justify-content-between mt-3">
-                                    <a href="#" onclick="edit_role({{$role['role_id']}})" class="btn btn-primary d-none d-sm-inline-block">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
+                                <div class="d-flex flex-wrap gap-1 mt-3">
+                                    <a href="#" onclick="edit_role({{$role['role_id']}})" class="btn btn-primary  w-100">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil me-2" viewBox="0 0 16 16">
                                             <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325"/>
                                         </svg>
                                         Edit Role
                                     </a>
 
-                                    <a href="#" onclick="delete_role({{$role['role_id']}})" class="btn btn-primary d-none d-sm-inline-block">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+                                    <a href="#" onclick="delete_role({{$role['role_id']}})" class="btn btn-primary w-100">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash me-2" viewBox="0 0 16 16">
                                             <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/>
                                             <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"/>
                                         </svg>
@@ -73,8 +73,8 @@
                                 <div class="d-flex align-items-center">
                                     <div class="subheader">Create New Role</div>                                    
                                 </div>
-                                <div>
-                                <a href="#" data-bs-toggle="modal" data-bs-target="#modal-role" class="btn btn-primary d-none d-sm-inline-block">
+                                <div class="mt-3">
+                                <a href="#" data-bs-toggle="modal" data-bs-target="#modal-role" class="btn btn-primary w-100">
 
                                     <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 5l0 14" /><path d="M5 12l14 0" /></svg>
                                         New Role
@@ -90,7 +90,7 @@
                         <div class="d-flex">
                         <!-- <input type="search" class="form-control d-inline-block w-9 me-3" placeholder="Search user…"/> -->
                         
-                        <a href="{{route('user-add')}}" class="btn btn-primary d-none d-sm-inline-block">
+                        <a href="{{route('user-add')}}" class="btn btn-primary">
                             <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
                             <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 5l0 14" /><path d="M5 12l14 0" /></svg>
                             New user
