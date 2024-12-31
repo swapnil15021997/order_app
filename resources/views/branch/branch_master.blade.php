@@ -1,11 +1,11 @@
 @extends('app')
 
 @section('content')
-        <!-- Page header -->
-        <div class="page-header d-print-none">
-          <div class="container-xl">
-            <div class="row g-2 align-items-center">
-              <div class="col">
+<!-- Page header -->
+<div class="page-header d-print-none">
+    <div class="container-xl">
+        <div class="row g-2 align-items-center">
+            <div class="col">
                 <!-- Page pre-title -->
 
                 <!-- <h2 class="page-title">
@@ -17,152 +17,180 @@
                         <li class="breadcrumb-item active" aria-current="page">branch</li>
                     </ol>
                 </nav>
-              </div>
-              <div class="col-auto ms-auto d-print-none">
+            </div>
+            <div class="col-auto ms-auto d-print-none">
                 <div class="btn-list">
-                 @if(in_array(3,$user_permissions))
+                    @if(in_array(3, $user_permissions))
 
-                  <a href="#" class="btn btn-primary d-none d-sm-inline-block" data-bs-toggle="modal" data-bs-target="#modal-report">
-                    <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 5l0 14" /><path d="M5 12l14 0" /></svg>
-                    Create new branch
-                  </a>
-                  @endif
-                  <a href="#" class="btn btn-primary d-sm-none btn-icon" data-bs-toggle="modal" data-bs-target="#modal-report" aria-label="Create new report">
-                    <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 5l0 14" /><path d="M5 12l14 0" /></svg>
-                  </a>
+                        <a href="#" class="btn btn-primary d-none d-sm-inline-block" data-bs-toggle="modal"
+                            data-bs-target="#modal-report">
+                            <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24"
+                                stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                <path d="M12 5l0 14" />
+                                <path d="M5 12l14 0" />
+                            </svg>
+                            Create new branch
+                        </a>
+                    @endif
+                    <a href="#" class="btn btn-primary d-sm-none btn-icon" data-bs-toggle="modal"
+                        data-bs-target="#modal-report" aria-label="Create new report">
+                        <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24"
+                            stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
+                            stroke-linejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                            <path d="M12 5l0 14" />
+                            <path d="M5 12l14 0" />
+                        </svg>
+                    </a>
                 </div>
-              </div>
             </div>
         </div>
-        <div class="page-body">
-          <div class="container-xl">
+    </div>
+    <div class="page-body">
+        <div class="container-xl">
 
-                <div id="show_success"></div>
-                <div class="row row-deck row-cards custom-table-resposive">
+            <div id="show_success"></div>
+            <div class="row row-deck row-cards custom-table-resposive">
 
-                    <div class="table-responsive">
-                        <table id="branch_table" class="table card-table table-vcenter text-nowrap datatable">
-                            <thead>
+                <div class="table-responsive">
+                    <table id="branch_table" class="table card-table table-vcenter text-nowrap datatable">
+                        <thead>
                             <tr>
-                                <th class="w-1"><input class="form-check-input m-0 align-middle" type="checkbox" aria-label="Select all invoices"></th>
+                                <th class="w-1"><input class="form-check-input m-0 align-middle" type="checkbox"
+                                        aria-label="Select all invoices"></th>
 
                                 <th>Branch Name</th>
                                 <th>Branch Address</th>
                                 <th>Operations</th>
                             </tr>
-                            </thead>
-                            <tbody>
-                            </tbody>
-                        </table>
-                    </div>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
-        <input type="hidden" name="" id="delete_branch_id">
+    </div>
+    <input type="hidden" name="" id="delete_branch_id">
 
-        <div class="modal modal-blur fade" id="modal-report" tabindex="-1" role="dialog" aria-hidden="true">
-            <div class="modal-dialog modal-lg" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">New Branch</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    <div class="modal modal-blur fade" id="modal-report" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">New Branch</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div id="alert-container"></div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <input type="hidden" id="branch_id" value="">
+                        <label class="form-label">Branch Name</label>
+                        <input id="branch_name" required type="text" name="branch_name" class="form-control"
+                            placeholder="Add branch Name">
                     </div>
-                    <div id="alert-container"></div>
-                    <div class="modal-body">
-                        <div class="mb-3">
-                            <input type="hidden" id="branch_id" value="">
-                            <label class="form-label">Branch Name</label>
-                            <input id="branch_name" required type="text" name="branch_name" class="form-control"  placeholder="Add branch Name">
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Branch Address</label>
-                                <textarea id="branch_address" required name="branch_address" class="form-control" rows="3"></textarea>
-                        </div>
+                    <div class="mb-3">
+                        <label class="form-label">Branch Address</label>
+                        <textarea id="branch_address" required name="branch_address" class="form-control"
+                            rows="3"></textarea>
                     </div>
+                </div>
 
-                    <div class="modal-footer">
-                        <a href="#" class="btn btn-secondary" data-bs-dismiss="modal">
+                <div class="modal-footer">
+                    <a href="#" class="btn btn-secondary" data-bs-dismiss="modal">
                         Cancel
-                        </a>
-                        <a id="saveBranchBtn" href="#" class="btn btn-primary">
+                    </a>
+                    <a id="saveBranchBtn" href="#" class="btn btn-primary">
                         <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
-                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 5l0 14" /><path d="M5 12l14 0" /></svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24"
+                            stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
+                            stroke-linejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                            <path d="M12 5l0 14" />
+                            <path d="M5 12l14 0" />
+                        </svg>
                         Create new branch
-                        </a>
-                    </div>
+                    </a>
                 </div>
             </div>
         </div>
+    </div>
 
-        <div class="modal modal-blur fade" id="edit_branch" tabindex="-1" role="dialog" aria-hidden="true">
-            <div class="modal-dialog modal-lg" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Edit Branch</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    <div class="modal modal-blur fade" id="edit_branch" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Edit Branch</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="alert-container"></div>
+
+                    <div class="mb-3">
+                        <input type="hidden" id="edit_branch_id" value="">
+                        <label class="form-label">Branch Name</label>
+                        <input id="edit_branch_name" type="text" name="branch_name" class="form-control"
+                            placeholder="Add branch Name">
                     </div>
-                    <div class="modal-body">
-                        <div id="alert-container"></div>
-
-                        <div class="mb-3">
-                            <input type="hidden" id="edit_branch_id" value="">
-                            <label class="form-label">Branch Name</label>
-                            <input id="edit_branch_name" type="text" name="branch_name" class="form-control"  placeholder="Add branch Name">
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Branch Address</label>
-                            <textarea id="edit_branch_address" name="branch_address" class="form-control" rows="3"></textarea>
-                        </div>
+                    <div class="mb-3">
+                        <label class="form-label">Branch Address</label>
+                        <textarea id="edit_branch_address" name="branch_address" class="form-control"
+                            rows="3"></textarea>
                     </div>
+                </div>
 
-                    <div class="modal-footer">
-                        <a href="#" class="btn btn-secondary" data-bs-dismiss="modal">
+                <div class="modal-footer">
+                    <a href="#" class="btn btn-secondary" data-bs-dismiss="modal">
                         Cancel
-                        </a>
-                        <a id="editBranchBtn" href="#" class="btn btn-primary " data-bs-dismiss="modal">
+                    </a>
+                    <a id="editBranchBtn" href="#" class="btn btn-primary " data-bs-dismiss="modal">
                         <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-pencil-square me-2" viewBox="0 0 16 16">
-                            <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
-                            <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"/>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
+                            class="bi bi-pencil-square me-2" viewBox="0 0 16 16">
+                            <path
+                                d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
+                            <path fill-rule="evenodd"
+                                d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z" />
                         </svg>
                         Update branch
-                        </a>
-                    </div>
+                    </a>
                 </div>
             </div>
         </div>
+    </div>
 
-        <div class="modal modal-blur fade" id="delete_branch" tabindex="-1" role="dialog" aria-hidden="true">
-            <div class="modal-dialog modal-lg" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Delete Branch</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    <div class="modal modal-blur fade" id="delete_branch" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Delete Branch</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        Do you want to delete this branch?
                     </div>
-                    <div class="modal-body">
-                        <div class="mb-3">
-                            Do you want to delete this branch?
-                         </div>
-                    </div>
+                </div>
 
-                    <div class="modal-footer">
-                        <a href="#" class="btn btn-link link-secondary" data-bs-dismiss="modal">
+                <div class="modal-footer">
+                    <a href="#" class="btn btn-link link-secondary" data-bs-dismiss="modal">
                         Cancel
-                        </a>
-                        <a id="DeleteBranchBtn" href="#" class="btn btn-primary ms-auto" data-bs-dismiss="modal">
-                              Delete This branch
-                        </a>
-                    </div>
+                    </a>
+                    <a id="DeleteBranchBtn" href="#" class="btn btn-primary ms-auto" data-bs-dismiss="modal">
+                        Delete This branch
+                    </a>
                 </div>
             </div>
         </div>
+    </div>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
     <script>
-        $(document).ready(function() {
+        $(document).ready(function () {
             var csrfToken = $('meta[name="csrf-token"]').attr('content');
 
             $('#branch_table').DataTable({
@@ -171,11 +199,11 @@
                 ajax: {
                     url: "{{ route('branch_list') }}",
                     type: 'POST',
-                    data: function(d) {
-                        d.search   = d.search.value;
+                    data: function (d) {
+                        d.search = d.search.value;
                         d.per_page = d.length;
-                        d.page     = d.start / d.length + 1;
-                        d.draw     = d.draw;
+                        d.page = d.start / d.length + 1;
+                        d.draw = d.draw;
                         d.sort = d.order[0].column === 1 ? 'branch_name' : 'branch_id';
                         d.sortOrder = d.order[0].dir;
 
@@ -183,7 +211,7 @@
                     headers: {
                         'X-CSRF-TOKEN': csrfToken
                     },
-                    dataSrc: function(response) {
+                    dataSrc: function (response) {
 
                         if (response.status === 200) {
                             return response.data.branches;
@@ -192,14 +220,14 @@
                     }
                 },
                 columns: [
-                    { data: 'serial_number', name: 'serial_number',orderable: true },
-                    { data: 'branch_name', name: 'branch_name',orderable: true },
-                    { data: 'branch_address', name: 'branch_address',orderable: false },
+                    { data: 'serial_number', name: 'serial_number', orderable: true },
+                    { data: 'branch_name', name: 'branch_name', orderable: true },
+                    { data: 'branch_address', name: 'branch_address', orderable: false },
 
                     {
                         data: 'branch_id',
                         name: 'operations',
-                        render: function(data, type, row) {
+                        render: function (data, type, row) {
                             return `<button data-bs-toggle="dropdown" type="button" class="btn dropdown-toggle dropdown-toggle-split"></button>
                                 <div class="dropdown-menu dropdown-menu-end">
                                   <a class="dropdown-item" href="#" onclick="edit_branch(${row.branch_id})">
@@ -216,16 +244,16 @@
                 "pageLength": 10,
                 "lengthMenu": [10, 25, 50, 100]
             });
-            $('input[aria-controls="branch_table"]').on('keyup', function() {
+            $('input[aria-controls="branch_table"]').on('keyup', function () {
                 table.search(this.value).draw();
             });
 
 
 
 
-            $('#saveBranchBtn').click(function(e) {
+            $('#saveBranchBtn').click(function (e) {
                 e.preventDefault();
-                var branchName    = $('#branch_name').val();
+                var branchName = $('#branch_name').val();
                 var branchAddress = $('#branch_address').val();
                 var branchId = $('#branch_id').val();
 
@@ -234,15 +262,15 @@
                         url: "{{ route('add_edit_branch') }}",  // Adjust the route as needed
                         type: 'POST',
                         data: {
-                            _token        : csrfToken,
-                            branch_name   : branchName,
+                            _token: csrfToken,
+                            branch_name: branchName,
                             branch_address: branchAddress,
-                            branch_id     : branchId,
+                            branch_id: branchId,
                         },
-                        success: function(response) {
+                        success: function (response) {
                             // Handle success
 
-                            if (response.status==200) {
+                            if (response.status == 200) {
                                 $('#modal-report').modal('hide');  // Hide the modal
                                 $('#branch_id').val('');
                                 $('#branch_name').val('');
@@ -256,7 +284,7 @@
                                 showAlert('warning', response.message);
                             }
                         },
-                        error: function(xhr, status, error) {
+                        error: function (xhr, status, error) {
                             // alert('An error occurred: ' + error);
                             showAlert('warning', error);
                         }
@@ -268,9 +296,9 @@
             });
 
 
-            $('#editBranchBtn').click(function(e) {
+            $('#editBranchBtn').click(function (e) {
                 e.preventDefault();
-                var branchName    = $('#edit_branch_name').val();
+                var branchName = $('#edit_branch_name').val();
                 var branchAddress = $('#edit_branch_address').val();
                 var branchId = $('#edit_branch_id').val();
 
@@ -279,40 +307,40 @@
                         url: "{{ route('add_edit_branch') }}",  // Adjust the route as needed
                         type: 'POST',
                         data: {
-                            _token        : csrfToken,
-                            branch_name   : branchName,
+                            _token: csrfToken,
+                            branch_name: branchName,
                             branch_address: branchAddress,
-                            branch_id     : branchId,
+                            branch_id: branchId,
                         },
-                        success: function(response) {
+                        success: function (response) {
                             // Handle success
 
-                            if (response.status==200) {
+                            if (response.status == 200) {
                                 $('#modal-report').modal('hide');  // Hide the modal
                                 $('#edit_branch_id').val('');
                                 $('#edit_branch_name').val('');
                                 $('#edit_branch_address').val('');
                                 $('#branch_table').DataTable().ajax.reload();  // Reload the DataTable
                                 alert(response.message);
-                                showSuccess('success',response.message);
+                                showSuccess('success', response.message);
                             } else {
                                 alert('Error creating branch: ' + response.message);
-                                showAlert('warining',response.message);
+                                showAlert('warining', response.message);
                             }
                         },
-                        error: function(xhr, status, error) {
+                        error: function (xhr, status, error) {
                             alert('An error occurred: ' + error);
-                            showAlert('error',error);
+                            showAlert('error', error);
                         }
                     });
                 } else {
                     alert('Please fill in both fields.');
-                    showAlert('error','Please fill in both fields');
+                    showAlert('error', 'Please fill in both fields');
 
                 }
             });
 
-            $('#DeleteBranchBtn').click(function(e) {
+            $('#DeleteBranchBtn').click(function (e) {
                 e.preventDefault();
 
                 var branchId = $('#delete_branch_id').val();
@@ -321,21 +349,21 @@
                         url: "{{ route('branch_remove') }}",
                         type: 'POST',
                         data: {
-                            _token        : csrfToken,
-                            branch_id     : branchId,
+                            _token: csrfToken,
+                            branch_id: branchId,
                         },
-                        success: function(response) {
-                            if (response.status==200) {
+                        success: function (response) {
+                            if (response.status == 200) {
                                 $('#delete_branch_id').val();
                                 $('#delete_branch').modal('hide');
                                 $('#branch_table').DataTable().ajax.reload();
                                 alert(response.message);
-                                showSuccess('success',response.message);
+                                showSuccess('success', response.message);
                             } else {
                                 alert('Error creating branch: ' + response.message);
                             }
                         },
-                        error: function(xhr, status, error) {
+                        error: function (xhr, status, error) {
                             alert('An error occurred: ' + error);
                         }
                     });
@@ -344,7 +372,7 @@
                 }
             });
         });
-        function delete_branch(branch_id){
+        function delete_branch(branch_id) {
             $('#delete_branch_id').val(branch_id);
             $('#delete_branch').modal('show');
 
@@ -353,22 +381,22 @@
 
 
 
-        function edit_branch(branch_id){
+        function edit_branch(branch_id) {
             var csrfToken = $('meta[name="csrf-token"]').attr('content');
 
             $.ajax({
                 url: "{{ route('branch_details') }}",  // Adjust the route as needed
                 type: 'POST',
                 data: {
-                    _token        : csrfToken,
+                    _token: csrfToken,
 
-                    branch_id     : branch_id,
+                    branch_id: branch_id,
                 },
-                success: function(response) {
+                success: function (response) {
                     // Handle success
-                    console.log("Success",response.data);
+                    console.log("Success", response.data);
 
-                    if (response.status==200) {
+                    if (response.status == 200) {
 
                         $('#edit_branch_id').val(branch_id);
                         var branchName = $('#edit_branch_name').val(response.data.branch_name);
@@ -378,7 +406,7 @@
                         alert('Error fetching branch: ' + response.message);
                     }
                 },
-                error: function(xhr, status, error) {
+                error: function (xhr, status, error) {
                     alert('An error occurred: ' + error);
                 }
             });
@@ -414,7 +442,7 @@
         }
 
 
-        function showSuccess(type, message){
+        function showSuccess(type, message) {
             const alertContainer = document.getElementById('show_success');
             const alertHTML = `
                 <div class="alert alert-${type} alert-dismissible" role="alert">
@@ -442,4 +470,4 @@
         }
 
     </script>
-@endsection
+    @endsection
