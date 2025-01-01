@@ -55,6 +55,12 @@
                     <strong>Success!</strong> {{ session('success') }}
                 </div>
                 @endif
+                @if(session('error'))
+                <div class="alert alert-success" role="alert">
+                    <strong>Success!</strong> {{ session('success') }}
+                </div>
+                @endif
+                
             </div>
 
             <div class="row row-deck row-cards custom-table-resposive">
