@@ -276,6 +276,7 @@
             function onScanSuccess(result) {
                 // Display the result
                 const scannedText = result.data || result;
+                alert(scannedText);
                 // If the result is a URL, open it in a new tab
                 if (scannedText.startsWith('http')) {
                     window.open(scannedText, '_blank');
