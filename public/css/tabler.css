@@ -17430,6 +17430,12 @@ Navbar vertical
   margin-bottom: var(--tblr-page-padding-y);
 }
 
+@media (max-width:672px) {
+    .page-body {
+        margin-bottom: 0 !important;
+    }
+}
+
 .page-body-card {
   background: var(--tblr-bg-surface);
   border-top: var(--tblr-border-width) var(--tblr-border-style) var(--tblr-border-color-translucent);

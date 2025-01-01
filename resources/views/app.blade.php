@@ -1,11 +1,16 @@
 @include('head')
 
 <body>
-    @include('navbar')
+    <div class="d-none d-md-block" id="navbar-wrapper">
+        @include('navbar')
+    </div>
 
     <div class="page-wrapper">
-
         @yield('content')
+    </div>
+
+    <div class="d-md-none d-block" id="footer-wrapper">
+        @include('footer')
     </div>
 
     <div class="note-popver position-fixed">
@@ -91,7 +96,7 @@
                                     <a href="#" onclick="open_file_select()" class="link-secondary ms-2"
                                         data-bs-toggle="tooltip" aria-label="Please Select file to upload"
                                         data-bs-original-title="Please Select file to upload">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="20" height="20"
                                             viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
                                             stroke-linecap="round" stroke-linejoin="round">
                                             <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
@@ -151,6 +156,14 @@
     <!-- <script src="https://unpkg.com/html5-qrcode"></script> -->
 
     <script defer src="https://cdnjs.cloudflare.com/ajax/libs/qr-scanner/1.4.2/qr-scanner.umd.min.js"></script>
+    <style>
+        @media (max-width:768px) {
+            .page-body {
+                margin-bottom: 0 !important;
+                margin-top: 1rem !important;
+            }
+        }
+    </style>
     <script>
         function domReady(fn) {
             if (document.readyState === "complete" || document.readyState === "interactive") {
@@ -511,24 +524,24 @@
             loadNotes = function (isScrollUp = false) {
                 if (isLoading) return;
 
-            isLoading = true;
-            const notesBody = $('#notes_body');
-            const scrollTopBeforeLoad = notesBody.scrollTop();
+                isLoading = true;
+                const notesBody = $('#notes_body');
+                const scrollTopBeforeLoad = notesBody.scrollTop();
 
-            $.ajax({
-                url: "{{ route('notes_list') }}",
-                type: 'POST',
-                data: {
-                    search: '',
-                    per_page: 8,
-                    page: page
-                },
-                headers: {
-                    'X-CSRF-TOKEN': csrfToken
-                },
-                success: function (response) {
-                    const notesBody = $('#notes_body');
-                    let firstNoteOffset = notesBody[0].scrollHeight;
+                $.ajax({
+                    url: "{{ route('notes_list') }}",
+                    type: 'POST',
+                    data: {
+                        search: '',
+                        per_page: 8,
+                        page: page
+                    },
+                    headers: {
+                        'X-CSRF-TOKEN': csrfToken
+                    },
+                    success: function (response) {
+                        const notesBody = $('#notes_body');
+                        let firstNoteOffset = notesBody[0].scrollHeight;
 
                         // Add new notes below
                         if (!isScrollUp) {
@@ -630,41 +643,41 @@
             }, 500);
 
 
-        $(document).ready(function () {
-            // Handle file upload
+            $(document).ready(function () {
+                // Handle file upload
 
-            // Handle new text note submission
-            $("#TextNotes").on("keydown", function (event) {
-                if (event.key === "Enter") {
-                    event.preventDefault();
-                    const text = event.target.value.trim();
-                    if (text) {
-                        $.ajax({
-                            url: "{{ route('notes_add') }}",
-                            type: 'POST',
-                            data: {
-                                'notes_text': text,
-                                'notes_file': null
-                            },
-                            headers: {
-                                'X-CSRF-TOKEN': csrfToken
-                            },
-                            success: function (response) {
-                                showAlertNotes('success', response.message);
-                                $('#TextNotes').val('');
-                                isLoading = false;
-                                page = 1;
-                                loadNotes();
-                            }
-                        });
-                    } else {
-                        alert("Please enter some text.");
-                        showAlertNotes('warning', 'Please enter some text');
+                // Handle new text note submission
+                $("#TextNotes").on("keydown", function (event) {
+                    if (event.key === "Enter") {
+                        event.preventDefault();
+                        const text = event.target.value.trim();
+                        if (text) {
+                            $.ajax({
+                                url: "{{ route('notes_add') }}",
+                                type: 'POST',
+                                data: {
+                                    'notes_text': text,
+                                    'notes_file': null
+                                },
+                                headers: {
+                                    'X-CSRF-TOKEN': csrfToken
+                                },
+                                success: function (response) {
+                                    showAlertNotes('success', response.message);
+                                    $('#TextNotes').val('');
+                                    isLoading = false;
+                                    page = 1;
+                                    loadNotes();
+                                }
+                            });
+                        } else {
+                            alert("Please enter some text.");
+                            showAlertNotes('warning', 'Please enter some text');
+                        }
                     }
-                }
+                });
             });
         });
-    });
 
         function open_file_select() {
             $("#fileInput").click();
