@@ -33,7 +33,7 @@ class Branch extends Model
         return $branch;
     }
 
-    public static function get_users_branch(){
+    public static function get_users_branch($userBranchIds){
        $branch =  Branch::whereIn('branch_id', $userBranchIds)->where('is_delete',0)->get()->toArray();
         return $branch;
     }

@@ -80,7 +80,7 @@ class UserController extends Controller
                 $userBranchIds = explode(',', $login['user_branch_ids']);
                 $userBranchIds = array_map('trim', $userBranchIds); 
                 $userBranchIds = array_filter($userBranchIds); 
-              
+                dd($userBranchIds);
                 if(!empty($userBranchIds)){
 
                     $users_branch  = Branch::get_users_branch($userBranchIds);
@@ -264,8 +264,8 @@ class UserController extends Controller
             $user->user_address          = $params['user_address'];
             $user->user_phone_number     = $params['user_phone_number'];
             $user->email                 = $params['user_email'];
-            $user->user_module_ids       = $moduleIds;
-            $user->user_permission_ids   = $permissionIds;
+            $user->user_module_id        = $moduleIds;
+            $user->user_permission_id   = $permissionIds;
             $user->user_branch_ids       = $branchIds;        
             $user->save();
             return response()->json([
