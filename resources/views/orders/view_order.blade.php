@@ -491,13 +491,16 @@
                                 location.href = "{{ route('order-master') }}";
                             }, 2000);
                         } else {
-                            alert('Error Transferring order: ' + response.message);
+                            
+                            showAlertTransfer('success', response.message);
                             $('#searchableSelectTo').val('');
+
 
                         }
                     },
                     error: function (xhr, status, error) {
-                        alert('An error occurred: ' + error);
+                        showAlertTransfer('success', error);
+                            
                         $('#searchableSelectTo').val('');
 
                     }

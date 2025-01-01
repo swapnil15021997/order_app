@@ -27,8 +27,15 @@ class UserController extends Controller
             if($login['user_role_id'] != 1){
 
                 $userBranchIds = explode(',', $login['user_branch_ids']);
-                // branch array of user
-                $users_branch  = Branch::get_users_branch($userBranchIds);
+                $userBranchIds = array_map('trim', $userBranchIds); 
+                $userBranchIds = array_filter($userBranchIds); 
+              
+                if(!empty($userBranchIds)){
+
+                    $users_branch  = Branch::get_users_branch($userBranchIds);
+                }else{
+                    $users_branch  = [];
+                }
                 
             }else{
                 $users_branch  = Branch::get_all_branch();
@@ -40,6 +47,7 @@ class UserController extends Controller
                     break;
                 }
             }
+            $activeBranchName ='';
         }
 
         $user_permissions = session('combined_permissions', []);
@@ -70,8 +78,15 @@ class UserController extends Controller
             if($login['user_role_id'] != 1){
 
                 $userBranchIds = explode(',', $login['user_branch_ids']);
-                // branch array of user
-                $users_branch  = Branch::get_users_branch($userBranchIds);
+                $userBranchIds = array_map('trim', $userBranchIds); 
+                $userBranchIds = array_filter($userBranchIds); 
+              
+                if(!empty($userBranchIds)){
+
+                    $users_branch  = Branch::get_users_branch($userBranchIds);
+                }else{
+                    $users_branch  = [];
+                }
                 
             }else{
                 $users_branch  = Branch::get_all_branch();
@@ -83,6 +98,7 @@ class UserController extends Controller
                     break;
                 }
             }
+            $activeBranchName ='';
         }
 
         $user_permissions = session('combined_permissions', []);
@@ -278,8 +294,15 @@ class UserController extends Controller
             if($login['user_role_id'] != 1){
 
                 $userBranchIds = explode(',', $login['user_branch_ids']);
-                // branch array of user
-                $users_branch  = Branch::get_users_branch($userBranchIds);
+                $userBranchIds = array_map('trim', $userBranchIds); 
+                $userBranchIds = array_filter($userBranchIds); 
+              
+                if(!empty($userBranchIds)){
+
+                    $users_branch  = Branch::get_users_branch($userBranchIds);
+                }else{
+                    $users_branch  = [];
+                }
                 
             }else{
                 $users_branch  = Branch::get_all_branch();
@@ -291,6 +314,7 @@ class UserController extends Controller
                     break;
                 }
             }
+            $activeBranchName ='';
         }
         $branch       = Branch::get_all_branch();
 
@@ -610,6 +634,15 @@ class UserController extends Controller
         $activePage = 'Role';
         if(!empty($login)){
             $userBranchIds = explode(',', $login['user_branch_ids']);
+            $userBranchIds = array_map('trim', $userBranchIds); 
+            $userBranchIds = array_filter($userBranchIds); 
+        
+            if(!empty($userBranchIds)){
+
+                $users_branch  = Branch::get_users_branch($userBranchIds);
+            }else{
+                $users_branch  = [];
+            }
         }
         // $branch       = Branch::get_all_branch();
         $users_branch = Branch::whereIn('branch_id', $userBranchIds)->get()->toArray();

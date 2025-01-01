@@ -29,21 +29,36 @@ Route::get('/dashboard', function () {
         if($login['user_role_id'] != 1){
 
             $userBranchIds = explode(',', $login['user_branch_ids']);
-            // branch array of user
-            $users_branch  = Branch::get_users_branch($userBranchIds);
+            $userBranchIds = array_map('trim', $userBranchIds); 
+            $userBranchIds = array_filter($userBranchIds); 
+            if(!empty($userBranchIds)){
+
+                $users_branch  = Branch::get_users_branch($userBranchIds);
+            }else{
+                $users_branch  = [];
+            }  
             
         }else{
             $users_branch  = Branch::get_all_branch();
 
         }
-        foreach ($users_branch as $branch) {
-            if ($branch['branch_id'] == $login['user_active_branch']) {
-                $activeBranchName = $branch['branch_name'];
-                break;
-            }
-        }
-    }
+         
+        if(!empty($users_branch)){
 
+            foreach ($users_branch as $branch) {
+                if ($branch['branch_id'] == $login['user_active_branch']) {
+                    $activeBranchName = $branch['branch_name'];
+                    break;
+                }
+            }
+            $activeBranchName = '';
+        }else{
+            $activeBranchName = '';
+        }
+    }else{
+        $activeBranchName = '';
+    }
+ 
     $branch_count = Branch::where('is_delete',0)->count();
     $user_count   = User::where('is_delete',0)->count();
     $orders_count = Order::where('is_delete',0)->count();
@@ -52,7 +67,8 @@ Route::get('/dashboard', function () {
     $branch       = Branch::get_latest_branch();
 
     $user_permission = isset($login['user_permission_id']) ? explode(',', $login['user_permission_id']) : [];
-    $role            = UserRole::whereNull('deleted_at')->first()->toArray();
+    $role            = UserRole::whereNull('deleted_at')->where('role_id',$login['user_role_id'])->first()->toArray();
+
     $role_permission = [];
     if(!empty($role)){
         $role_permission = isset($role['role_permission_ids']) ? explode(',', $role['role_permission_ids']) : [];

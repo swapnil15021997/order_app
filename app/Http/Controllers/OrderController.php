@@ -30,11 +30,19 @@ class OrderController extends Controller
         
         $fileArray = [];
         if(!empty($login)){
+           
             if($login['user_role_id'] != 1){
 
                 $userBranchIds = explode(',', $login['user_branch_ids']);
-                // branch array of user
-                $users_branch  = Branch::get_users_branch($userBranchIds);
+                $userBranchIds = array_map('trim', $userBranchIds); 
+                $userBranchIds = array_filter($userBranchIds); 
+              
+                if(!empty($userBranchIds)){
+
+                    $users_branch  = Branch::get_users_branch($userBranchIds);
+                }else{
+                    $users_branch  = [];
+                }
 
                 
             }else{
@@ -49,6 +57,7 @@ class OrderController extends Controller
                     break;
                 }
             }
+            $activeBranchName = '';
         }else{
             $activeBranchName ='';
         }
@@ -97,19 +106,30 @@ class OrderController extends Controller
             if($login['user_role_id'] != 1){
 
                 $userBranchIds = explode(',', $login['user_branch_ids']);
-                // branch array of user
-                $user_branch  = Branch::get_users_branch($userBranchIds);
+                $userBranchIds = array_map('trim', $userBranchIds); 
+                $userBranchIds = array_filter($userBranchIds); 
+              
+                if(!empty($userBranchIds)){
+
+                    $user_branch  = Branch::get_users_branch($userBranchIds);
+                }else{
+                    $user_branch  = [];
+                }
                 
             }else{
                 $user_branch  = Branch::get_all_branch();
     
             }
-            foreach ($user_branch as $branch) {
-                if ($branch['branch_id'] == $login['user_active_branch']) {
-                    $activeBranchName = $branch['branch_name'];
-                    break;
+            if(!empty($user_branch)){
+                foreach ($user_branch as $branch) {
+                    if ($branch['branch_id'] == $login['user_active_branch']) {
+                        $activeBranchName = $branch['branch_name'];
+                        break;
+                    }
                 }
             }
+            $activeBranchName = '';
+
         }
 
         $activePage       = 'orders';
@@ -300,8 +320,15 @@ class OrderController extends Controller
             if($login['user_role_id'] != 1){
 
                 $userBranchIds = explode(',', $login['user_branch_ids']);
-                // branch array of user
-                $user_branch  = Branch::get_users_branch($userBranchIds);
+                $userBranchIds = array_map('trim', $userBranchIds); 
+                $userBranchIds = array_filter($userBranchIds); 
+              
+                if(!empty($userBranchIds)){
+
+                    $user_branch  = Branch::get_users_branch($userBranchIds);
+                }else{
+                    $user_branch  = [];
+                }
                 
             }else{
                 $user_branch  = Branch::get_all_branch();
@@ -353,8 +380,16 @@ class OrderController extends Controller
             if($login['user_role_id'] != 1){
 
                 $userBranchIds = explode(',', $login['user_branch_ids']);
-                // branch array of user
-                $user_branch  = Branch::get_users_branch($userBranchIds);
+                
+                $userBranchIds = array_map('trim', $userBranchIds); 
+                $userBranchIds = array_filter($userBranchIds); 
+              
+                if(!empty($userBranchIds)){
+
+                    $user_branch  = Branch::get_users_branch($userBranchIds);
+                }else{
+                    $user_branch  = [];
+                }
                 
             }else{
                 $user_branch  = Branch::get_all_branch();
@@ -795,6 +830,7 @@ class OrderController extends Controller
         }
 
         $user_permissions = session('combined_permissions', []);
+       
         if (!in_array(18, $user_permissions)) {
             return response()->json([
                 'status' => 500,
@@ -875,6 +911,8 @@ class OrderController extends Controller
             ]);
         }
         $user_permissions = session('combined_permissions', []);
+
+        
         if (!in_array(17, $user_permissions)) {
             return response()->json([
                 'status' => 500,

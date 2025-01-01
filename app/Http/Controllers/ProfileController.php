@@ -73,8 +73,15 @@ class ProfileController extends Controller
             if($login['user_role_id'] != 1){
 
                 $userBranchIds = explode(',', $login['user_branch_ids']);
-                // branch array of user
-                $users_branch  = Branch::get_users_branch($userBranchIds);
+                $userBranchIds = array_map('trim', $userBranchIds); 
+                $userBranchIds = array_filter($userBranchIds); 
+              
+                if(!empty($userBranchIds)){
+
+                    $users_branch  = Branch::get_users_branch($userBranchIds);
+                }else{
+                    $users_branch  = [];
+                }
                 
             }else{
                 $users_branch  = Branch::get_all_branch();
