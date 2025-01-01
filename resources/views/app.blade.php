@@ -487,6 +487,7 @@
 
                 isLoading = true;
                 const notesBody = $('#notes_body');
+                notesBody.html('');
                 const scrollTopBeforeLoad = notesBody.scrollTop();
 
                 $.ajax({
