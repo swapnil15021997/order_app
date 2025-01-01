@@ -68,7 +68,7 @@ class DashboardController extends Controller
         $filePath        = public_path('js/firebase_json.js'); 
         
         if (File::exists($filePath)) {  
-            dd("hee");
+             
             return response()->file($filePath, ['Content-Type' => 'text/javascript']);
         }
          else {
