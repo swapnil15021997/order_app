@@ -263,7 +263,7 @@ class UserController extends Controller
             $user->user_name             = $params['user_name'];
             $user->user_address          = $params['user_address'];
             $user->user_phone_number     = $params['user_phone_number'];
-            $user->user_email            = $params['user_email'];
+            $user->email                 = $params['user_email'];
             $user->user_module_ids       = $moduleIds;
             $user->user_permission_ids   = $permissionIds;
             $user->user_branch_ids       = $branchIds;        
@@ -290,13 +290,13 @@ class UserController extends Controller
         $branch     = Branch::get_all_branch();
         $login = auth()->user();
 
+
         if(!empty($login)){
             if($login['user_role_id'] != 1){
-
                 $userBranchIds = explode(',', $login['user_branch_ids']);
                 $userBranchIds = array_map('trim', $userBranchIds); 
                 $userBranchIds = array_filter($userBranchIds); 
-              
+
                 if(!empty($userBranchIds)){
 
                     $users_branch  = Branch::get_users_branch($userBranchIds);
@@ -316,11 +316,22 @@ class UserController extends Controller
             }
             $activeBranchName ='';
         }
+        $user_branch =  explode(',', $user['user_branch_ids']);
+        $userBranchId = array_map('trim', $user_branch); 
+        $userBranchId = array_filter($userBranchId); 
+
+        if(!empty($userBranchId)){
+
+            $user_branch  = Branch::get_users_branch($userBranchId);
+        }else{
+            $user_branch  = [];
+        }
+        
         $branch       = Branch::get_all_branch();
 
         $user_permissions = session('combined_permissions', []);
       
-        return view('users/user_edit',['user' => $user,'roles'=>$roles,'modules'=>$modules,'user_branch'=>$users_branch,'login'=>$login,
+        return view('users/user_edit',['user' => $user,'roles'=>$roles,'modules'=>$modules,'user_branch'=>$users_branch,'edit_user_branch'=>$user_branch,'login'=>$login,
         'activePage'=>'users','branch'=>$branch,'user_permissions'=>$user_permissions,'activeBranchName'=>$activeBranchName]);
     }
 

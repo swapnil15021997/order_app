@@ -78,10 +78,10 @@
                             <div class="form-label">Select multiple states</div>
                             <select type="text" class="form-select" id="select-states" multiple>
                             @if(!empty($branch))
-
+                            
                             @foreach($branch as $b)
                                 <option value="{{ $b['branch_id'] }}"
-                                @if (in_array($b['branch_id'], array_column($user_branch, 'branch_id'))) selected @endif
+                                @if (in_array($b['branch_id'], array_column($edit_user_branch, 'branch_id'))) selected @endif
                                 >{{ $b['branch_name'] }}</option>
                                 @endforeach
                             @endif
@@ -247,7 +247,7 @@
                     const userAddress = $('#user_address').val();
                     const roleId      = $('#select_role').val();
                     const user_email  = $('#user_email').val();
-
+                    const selected_sites = $('#select-states').val();
 
                     // Validate data
                     if (!userName || !userPhone || !roleId ) {
@@ -275,7 +275,9 @@
                         user_role        : roleId,
                         user_permission  : permissionIds.join(','),
                         user_module      : moduleIds.join(','),
-                        user_email       : user_email
+                        user_email       : user_email,
+                        user_branch      :selected_sites
+
 
                     };
 

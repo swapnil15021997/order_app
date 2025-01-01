@@ -141,7 +141,12 @@ class OrderController extends Controller
     public function order_add(Request $request){
         $params = $request->all();
         $login  = auth()->user();
-
+        if ($params['order_from_branch_id'] == null){
+            return response()->json([
+                'status' => 500,
+                'message' =>"Please select active branch"
+            ]);
+        }
         $rules = [   
             
             'order_date'           => ['required', 'date', 'date_format:Y-m-d'],  
@@ -213,6 +218,7 @@ class OrderController extends Controller
                 'message' =>"Please enter payment details"
             ]);
         }
+       
         $branch = Branch::get_branch_by_id($params['order_from_branch_id']);
 
         if (empty($branch)) {
