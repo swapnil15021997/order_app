@@ -49,6 +49,12 @@
     <div class="page-body">
         <div class="container-xl">
             <div id="alert-container"></div>
+            
+            @if(session('success'))
+            <div class="alert alert-success" role="alert">
+                <strong>Success!</strong> {{ session('success') }}
+            </div>
+            @endif
 
             <div class="row row-deck row-cards custom-table-resposive">
 

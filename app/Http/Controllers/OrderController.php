@@ -884,13 +884,13 @@ class OrderController extends Controller
         $order = $order->toArray();
         
         if (empty($order)) {
-            return redirect()->route('success')->with('error', 'Order does not exist');
+            return redirect()->back()->with('error', 'Order does not exist');
         }
     
         $trans = Transactions::get_trans_by_order_id($order['order_id']);
 
         if (empty($trans)) {
-            return redirect()->route('success')->with('error', 'Transaction does not exist for this order');
+            return redirect()->back()->with('error', 'Transaction does not exist for this order');
         }
     
         $trans->trans_status = 1;
@@ -903,6 +903,6 @@ class OrderController extends Controller
         //     'status' => 200,
         //     'message' => "Order Received Successfully" 
         // ]);
-        return redirect()->route('success')->with('success', 'Order received successfully');
+        return redirect()->route('order-master')->with('success', 'Order received successfully');
     }
 }
