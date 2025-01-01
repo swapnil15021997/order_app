@@ -42,11 +42,15 @@ class OrderController extends Controller
     
             }
         }
-        foreach ($users_branch as $branch) {
-            if ($branch['branch_id'] == $login['user_active_branch']) {
-                $activeBranchName = $branch['branch_name'];
-                break;
+        if(!empty($users_branch)){
+            foreach ($users_branch as $branch) {
+                if ($branch['branch_id'] == $login['user_active_branch']) {
+                    $activeBranchName = $branch['branch_name'];
+                    break;
+                }
             }
+        }else{
+            $activeBranchName ='';
         }
         if (!empty($order['items'][0]['files'])){
             $fileArray = $order['items'][0]['files']->toArray();
