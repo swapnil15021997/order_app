@@ -167,11 +167,11 @@
       </div>
     </div>
  
-    <div id="my-qr-reader" style="display: none;">
-        <video id="videoElem" style="width: 100%;"></video>
+    <div id="my-qr-reader" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1000; background: rgba(0, 0, 0, 0.8);">
+        <video id="videoElem" style="width: 100%; height: 100%; object-fit: cover;"></video>
     </div>    
     <button class="btn btn-primary" id="start-scanner">Start Scanner</button>
-    <div id="result"></div>
+    
             
 <!-- Libs JS -->
 <script src="{{ asset('libs/apexcharts/apexcharts.min.js')}}" defer></script>
@@ -214,10 +214,6 @@
         function onScanSuccess(result) {
             // Display the result
             const scannedText = result.data || result;
-            alert(`Scanned QR Code: ${scannedText}`);
-
-            resultDiv.innerHTML = `<p>Scanned QR Code: ${scannedText}</p>`;
-            
             // If the result is a URL, open it in a new tab
             if (scannedText.startsWith('http')) {
                 window.open(scannedText, '_blank');
