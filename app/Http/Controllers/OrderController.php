@@ -884,13 +884,13 @@ class OrderController extends Controller
         $order = $order->toArray();
         
         if (empty($order)) {
-            return redirect()->back()->with('error', 'Order does not exist');
+            return redirect()->back()->with('error', 'Order does not exist or already approved');
         }
     
         $trans = Transactions::get_trans_by_order_id($order['order_id']);
 
         if (empty($trans)) {
-            return redirect()->back()->with('error', 'Transaction does not exist for this order');
+            return redirect()->back()->with('error', 'Order does not exist or already approved');
         }
     
         $trans->trans_status = 1;
