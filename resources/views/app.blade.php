@@ -15,14 +15,24 @@
             </div>
         </div>
 
-        <div class="note-sidebar">
+        <div class="note-sidebar" id="note_sheet">
             <div class="card border-0">
-                <div class="card-header rounded-0 ">
+                <div class="card-header p-2 rounded-0 ">
                     <h5 class="card-title">Notes</h5>
+                    <button class="btn btn-tabler btn-ghost-secondary note-close-btn ms-auto btn-icon"
+                        onclick="toogleNoteSheet()">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            class="icon icon-tabler icons-tabler-outline x">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                            <path d="M18 6l-12 12" />
+                            <path d="M6 6l12 12" />
+                        </svg>
+                    </button>
                 </div>
             </div>
             <div id="notes-container"></div>
-            <div class="space-y-1 scrollable h-100  py-2 px-1" id="notes_body">
+            <div class="space-y-1 scrollable h-100 py-2 px-1" id="notes_body">
             </div>
             <div class="input-group input-group-flat rounded-0 border-top">
                 <input type="text" class="form-control rounded-0 border-0" autocomplete="off" placeholder="Type note..."
@@ -45,7 +55,19 @@
             </div>
         </div>
 
-        <div class="chat-"></div>
+        <div class="note-open-btn">
+            <button class="btn btn-tabler btn-ghost-secondary btn-icon" onclick="toogleNoteSheet()">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    class="icon icon-tabler icons-tabler-outline clipboard">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                    <path d="M9 5h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2h-2" />
+                    <path d="M9 3m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v0a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z" />
+                    <path d="M9 12h6" />
+                    <path d="M9 16h6" />
+                </svg>
+            </button>
+        </div>
 
 
         <div id="my-qr-reader"
@@ -105,6 +127,11 @@
             } else {
                 document.addEventListener("DOMContentLoaded", fn);
             }
+        }
+
+        function toogleNoteSheet() {
+            var element = document.getElementById("note_sheet");
+            element.classList.toggle("active");
         }
 
         domReady(function () {

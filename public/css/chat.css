@@ -104,7 +104,26 @@
     margin-left: auto;
 }
 
+.note-open-btn {
+    position: fixed;
+    right: 1rem;
+    bottom: 1rem;
+    display: none;
+}
+
+.note-close-btn {
+    display: none;
+}
+
 @media (max-width: 1024px) {
+    .note-open-btn {
+        display: block;
+    }
+
+    .note-close-btn {
+        display: flex;
+    }
+
     .custom-table-resposive {
         width: calc(100dvw - 30px);
         padding-bottom: 12px;
@@ -132,12 +151,22 @@
         border-right: 1px solid #486e9524;
         background-color: white;
         top: 0;
-        right: 0;
+        right: -2000px;
         border-radius: 0;
         -webkit-border-radius: 0;
         -moz-border-radius: 0;
         -ms-border-radius: 0;
         -o-border-radius: 0;
+        z-index: 999;
+        transition: 0.4s;
+        -webkit-transition: 0.4s;
+        -moz-transition: 0.4s;
+        -ms-transition: 0.4s;
+        -o-transition: 0.4s;
+    }
+
+    .note-sidebar.active {
+        right: 0;
     }
 
     .main-content {
