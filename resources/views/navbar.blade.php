@@ -148,7 +148,7 @@
 
                 </ul>
                 <div class="my-2 my-md-0 flex-grow-1 flex-md-grow-0 d-md-flex d-none">
-                    <button class="btn btn-ghost-primary" id="start-scanner">Start Scanner</button>
+                    <button class="btn btn-ghost-primary" id="start-scanne">Start Scanner</button>
                 </div>
             </div>
         </div>
