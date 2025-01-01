@@ -176,10 +176,10 @@
                 </div>
 
                 <div class="modal-footer">
-                    <a href="#" class="btn btn-link link-secondary" data-bs-dismiss="modal">
+                    <a href="#" class="btn btn-secondary" data-bs-dismiss="modal">
                         Cancel
                     </a>
-                    <a id="DeleteBranchBtn" href="#" class="btn btn-primary ms-auto" data-bs-dismiss="modal">
+                    <a id="DeleteBranchBtn" href="#" class="btn btn-primary" data-bs-dismiss="modal">
                         Delete This branch
                     </a>
                 </div>

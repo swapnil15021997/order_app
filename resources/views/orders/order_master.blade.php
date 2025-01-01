@@ -105,10 +105,10 @@
 
 
                 <div class="modal-footer">
-                    <a href="#" class="btn btn-link link-secondary" data-bs-dismiss="modal">
+                    <a href="#" class="btn btn-secondary" data-bs-dismiss="modal">
                         Cancel
                     </a>
-                    <a id="TransferOrderBtn" href="#" class="btn btn-primary ms-auto">
+                    <a id="TransferOrderBtn" href="#" class="btn btn-primary">
                         Transfer This Order
                     </a>
                 </div>

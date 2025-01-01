@@ -363,10 +363,10 @@
                 </div>
 
                 <div class="modal-footer">
-                    <a href="#" class="btn btn-link link-secondary" data-bs-dismiss="modal">
+                    <a href="#" class="btn btn-secondary" data-bs-dismiss="modal">
                     Cancel
                     </a>
-                    <a id="DeleteUserBtn" href="#" class="btn btn-primary ms-auto" data-bs-dismiss="modal">
+                    <a id="DeleteUserBtn" href="#" class="btn btn-primary" data-bs-dismiss="modal">
                             Delete This User
                     </a>
                 </div>
@@ -384,16 +384,16 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <div class="mb-3">
-                        Do you want to delete this role?
-                        </div>
+                     
+                    Do you want to delete this role?
+                         
                 </div>
 
                 <div class="modal-footer">
-                    <a href="#" class="btn btn-link link-secondary" data-bs-dismiss="modal">
+                    <a href="#" class="btn btn-secondary" data-bs-dismiss="modal">
                     Cancel
                     </a>
-                    <a id="DeleteRoleBtn" href="#" class="btn btn-primary ms-auto" data-bs-dismiss="modal">
+                    <a id="DeleteRoleBtn" href="#" class="btn btn-primary" data-bs-dismiss="modal">
                         Delete This Role
                     </a>
                 </div>
