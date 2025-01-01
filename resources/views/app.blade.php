@@ -1,138 +1,72 @@
 @include('head')
 
 <body>
-    <div class="d-none d-md-block" id="navbar-wrapper">
-        @include('navbar')
-    </div>
+    <div class="layout-wrapper">
 
-    <div class="page-wrapper">
-        @yield('content')
-    </div>
+        <div class="main-content">
+            <div class="d-none d-md-block" id="navbar-wrapper">
+                @include('navbar')
+            </div>
+            <div class="page-wrapper">
+                @yield('content')
+            </div>
+            <div class="d-md-none d-block" id="footer-wrapper">
+                @include('footer')
+            </div>
+        </div>
 
-    <div class="d-md-none d-block" id="footer-wrapper">
-        @include('footer')
-    </div>
-
-    <div class="note-popver position-fixed">
-        <div class="dropup">
-            <button class="btn btn-tabler btn-ghost-secondary btn-icon" data-bs-toggle="dropdown"
-                data-bs-auto-close="outside" role="button" aria-expanded="false">
-                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                    class="icon icon-tabler icons-tabler-outline clipboard">
-                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                    <path d="M9 5h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2h-2" />
-                    <path d="M9 3m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v0a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z" />
-                    <path d="M9 12h6" />
-                    <path d="M9 16h6" />
-                </svg>
-                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                    class="icon icon-tabler icons-tabler-outline x">
-                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                    <path d="M18 6l-12 12" />
-                    <path d="M6 6l12 12" />
-                </svg>
-            </button>
-            <div class="dropdown-menu p-2 pe-0">
-                <div class="dropdown-menu-columns">
-                    <div class="dropdown-menu-column ">
-
-                        <div class="d-flex flex-column justify-content-between">
-                            <div id="notes-container"></div>
-                            <div class="space-y-1 scrollable pb-2 pe-1" id="notes_body">
-                                <!-- <div class="chat-bubble chat-bubble-me" >
-                        <div class="chat-bubble-title"></div>
-                        <div class="chat-bubble-body" >
-                            <p>Sure Paweł, let me pull the latest updates.</p>
-                        </div>
-                    </div>
-                    <div class="chat-bubble chat-bubble-me mt-2" id="notes_body">
-                        <div class="chat-bubble-title"></div>
-                        <div class="chat-bubble-body" >
-                            <p>Sure Paweł, let me pull the latest updates.</p>
-                        </div>
-                    </div> -->
-                            </div>
-
-                            <div class="input-group input-group-flat pe-2">
-                                <input type="text" class="form-control" autocomplete="off" placeholder="Type message"
-                                    id="TextNotes" />
-                                <span class="input-group-text">
-                                    <input type="file" id="fileInput" style="display: none;"
-                                        onchange="handleFileUpload(event)" multiple />
-                                    <!-- <a
-                      href="#"
-                      class="link-secondary"
-                      data-bs-toggle="tooltip"
-                      aria-label="Clear search"
-                      data-bs-original-title="Clear search"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        class="icon"
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        stroke-width="2"
-                        stroke="currentColor"
-                        fill="none"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                      >
-                        <path
-                          stroke="none"
-                          d="M0 0h24v24H0z"
-                          fill="none"
-                        ></path>
-                        <path
-                          d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"
-                        ></path>
-                        <path d="M9 10l.01 0"></path>
-                        <path d="M15 10l.01 0"></path>
-                        <path d="M9.5 15a3.5 3.5 0 0 0 5 0"></path>
-                      </svg>
-                    </a> -->
-                                    <a href="#" onclick="open_file_select()" class="link-secondary ms-2"
-                                        data-bs-toggle="tooltip" aria-label="Please Select file to upload"
-                                        data-bs-original-title="Please Select file to upload">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="20" height="20"
-                                            viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
-                                            stroke-linecap="round" stroke-linejoin="round">
-                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                            <path
-                                                d="M15 7l-6.5 6.5a1.5 1.5 0 0 0 3 3l6.5 -6.5a3 3 0 0 0 -6 -6l-6.5 6.5a4.5 4.5 0 0 0 9 9l6.5 -6.5">
-                                            </path>
-                                        </svg>
-                                    </a>
-                                </span>
-                            </div>
-                        </div>
-                    </div>
+        <div class="note-sidebar">
+            <div class="card border-0">
+                <div class="card-header rounded-0 ">
+                    <h5 class="card-title">Notes</h5>
                 </div>
+            </div>
+            <div id="notes-container"></div>
+            <div class="space-y-1 scrollable h-100  py-2 px-1" id="notes_body">
+            </div>
+            <div class="input-group input-group-flat rounded-0 border-top">
+                <input type="text" class="form-control rounded-0 border-0" autocomplete="off" placeholder="Type note..."
+                    id="TextNotes" />
+                <span class="input-group-text rounded-0 border-0">
+                    <input type="file" id="fileInput" style="display: none;" onchange="handleFileUpload(event)"
+                        multiple />
+                    <a href="#" onclick="open_file_select()" class="link-secondary ms-2" data-bs-toggle="tooltip"
+                        aria-label="Please Select file to upload" data-bs-original-title="Please Select file to upload">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="20" height="20" viewBox="0 0 24 24"
+                            stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
+                            stroke-linejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                            <path
+                                d="M15 7l-6.5 6.5a1.5 1.5 0 0 0 3 3l6.5 -6.5a3 3 0 0 0 -6 -6l-6.5 6.5a4.5 4.5 0 0 0 9 9l6.5 -6.5">
+                            </path>
+                        </svg>
+                    </a>
+                </span>
+            </div>
+        </div>
+
+        <div class="chat-"></div>
+
+
+        <div id="my-qr-reader"
+            style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1000; background: rgba(0, 0, 0, 0.8);">
+            <video id="videoElem" style="width: 100%; height: 100%; object-fit: cover;"></video>
+            <div style="position:fixed; top: 1rem; right: 1rem; z-index: 1111;">
+                <button class="btn btn-secondary btn-icon">
+                    <svg fill="currentColor" height="24px" width="24px" version="1.1" id="Layer_1"
+                        xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                        viewBox="0 0 512 512" xml:space="preserve">
+                        <g>
+                            <g>
+                                <polygon points="512,59.076 452.922,0 256,196.922 59.076,0 0,59.076 196.922,256 0,452.922 59.076,512 256,315.076 452.922,512
+			512,452.922 315.076,256 		" />
+                            </g>
+                        </g>
+                    </svg>
+                </button>
             </div>
         </div>
     </div>
-
-    <div id="my-qr-reader"
-        style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1000; background: rgba(0, 0, 0, 0.8);">
-        <video id="videoElem" style="width: 100%; height: 100%; object-fit: cover;"></video>
-        <div style="position:fixed; top: 1rem; right: 1rem; z-index: 1111;">
-            <button class="btn btn-secondary btn-icon">
-                <svg fill="currentColor" height="24px" width="24px" version="1.1" id="Layer_1"
-                    xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 512 512"
-                    xml:space="preserve">
-                    <g>
-                        <g>
-                            <polygon points="512,59.076 452.922,0 256,196.922 59.076,0 0,59.076 196.922,256 0,452.922 59.076,512 256,315.076 452.922,512
-			512,452.922 315.076,256 		" />
-                        </g>
-                    </g>
-                </svg>
-            </button>
-        </div>
-    </div>
-
 
     <!-- Libs JS -->
     <script src="{{ asset('libs/apexcharts/apexcharts.min.js')}}" defer></script>
@@ -371,7 +305,7 @@
 
         //                         if (note.notes_type == 1){
         //                             notesBody.append(`
-        //                             <div class="chat-bubble chat-bubble-me" >
+        //                             <div class="my-note-box chat-bubble-me" >
         //                                 <div class="chat-bubble-title"></div>
         //                                 <div class="chat-bubble-body" >
         //                                     <p>${note.notes_text}.</p>
@@ -380,7 +314,7 @@
         //                         }else{
         //                             if(note.file.file_type == 'pdf'){
         //                                 notesBody.append(`
-        //                                 <div class="chat-bubble chat-bubble-me w-75">
+        //                                 <div class="my-note-box chat-bubble-me w-75">
         //                                     <p class="small text-decoration-underline">${note.file.file_original_name}</p>
         //                                     <embed src=""${note.file.file_url}" width="100%" height="auto" />
         //                                 </div>`);
@@ -388,7 +322,7 @@
 
 
         //                                 notesBody.append(`
-        //                                 <div class="chat-bubble chat-bubble-me w-75">
+        //                                 <div class="my-note-box chat-bubble-me w-75">
         //                                     <p class="small text-decoration-underline">${note.file.file_original_name}</p>
         //                                     <img
         //                                     src="${note.file.file_url}"
@@ -548,7 +482,7 @@
                             response.data.notes.forEach(function (note) {
                                 if (note.notes_type == 1) {
                                     notesBody.append(`
-                                    <div class="chat-bubble chat-bubble-me">
+                                    <div class="my-note-box">
                                         <div class="chat-bubble-title"></div>
                                         <div class="chat-bubble-body">
                                             <p>${note.notes_text}.</p>
@@ -557,13 +491,13 @@
                                 } else {
                                     if (note.file.file_type == 'pdf') {
                                         notesBody.append(`
-                                        <div class="chat-bubble chat-bubble-me w-75">
+                                        <div class="my-note-box w-75">
                                             <p class="small text-decoration-underline">${note.file.file_original_name}</p>
                                             <embed src="${note.file.file_url}" width="100%" height="auto" />
                                         </div>`);
                                     } else {
                                         notesBody.append(`
-                                        <div class="chat-bubble chat-bubble-me w-75">
+                                        <div class="my-note-box w-75">
                                             <p class="small text-decoration-underline">${note.file.file_original_name}</p>
                                             <img src="${note.file.file_url}" alt="" class="rounded img-fluid" />
                                         </div>`);
@@ -576,7 +510,7 @@
                             response.data.notes.forEach(function (note) {
                                 if (note.notes_type == 1) {
                                     newNotes = `
-                                    <div class="chat-bubble chat-bubble-me">
+                                    <div class="my-note-box">
                                         <div class="chat-bubble-title"></div>
                                         <div class="chat-bubble-body">
                                             <p>${note.notes_text}.</p>
@@ -585,13 +519,13 @@
                                 } else {
                                     if (note.file.file_type == 'pdf') {
                                         newNotes = `
-                                        <div class="chat-bubble chat-bubble-me w-75">
+                                        <div class="my-note-box w-75">
                                             <p class="small text-decoration-underline">${note.file.file_original_name}</p>
                                             <embed src="${note.file.file_url}" width="100%" height="auto" />
                                         </div>` + newNotes;
                                     } else {
                                         newNotes = `
-                                        <div class="chat-bubble chat-bubble-me w-75">
+                                        <div class="my-note-box w-75">
                                             <p class="small text-decoration-underline">${note.file.file_original_name}</p>
                                             <img src="${note.file.file_url}" alt="" class="rounded img-fluid" />
                                         </div>` + newNotes;
@@ -711,12 +645,11 @@
             }
         }
 
-
         function showAlertNotes(type, message) {
             const alertContainer = document.getElementById('notes-container');
             const alertHTML = `
-                <div class="alert alert-${type} alert-dismissible" role="alert">
-                    <div class="d-flex">
+                <div class="alert alert-${type} position-fixed  bg-white alert-dismissible" role="alert" style="top:1rem; right:1rem;width:350px;">
+                    <div class="d-flex ">
                         <div>
                             ${type === 'success' ? `
                             <svg xmlns="http://www.w3.org/2000/svg" class="icon alert-icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
