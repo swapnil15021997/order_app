@@ -134,12 +134,12 @@ Route::get('settings'   , [ProfileController::class, 'get_settings'])->name('set
 Route::post('password', [PasswordController::class, 'update'])->name('password.update');
 
 
-});
-
-
 Route::post('order-approve',  [OrderController::class, 'order_approve'])->name('order_approve');
 Route::get('view-order/{id}', [OrderController::class, 'view_order'])->name('view-order');
 Route::get('order-approve/{id}',  [OrderController::class, 'order_get_approve'])->name('order_get_approve');
+});
+
+
 Route::get('success', [OrderController::class, 'success'])->name('success');
 
 
