@@ -511,24 +511,24 @@
             loadNotes = function (isScrollUp = false) {
                 if (isLoading) return;
 
-                isLoading = true;
-                const notesBody = $('#notes_body');
-                const scrollTopBeforeLoad = notesBody.scrollTop();
+            isLoading = true;
+            const notesBody = $('#notes_body');
+            const scrollTopBeforeLoad = notesBody.scrollTop();
 
-                $.ajax({
-                    url: "{{ route('notes_list') }}",
-                    type: 'POST',
-                    data: {
-                        search: '',
-                        per_page: 8,
-                        page: page
-                    },
-                    headers: {
-                        'X-CSRF-TOKEN': csrfToken
-                    },
-                    success: function (response) {
-                        const notesBody = $('#notes_body');
-                        let firstNoteOffset = notesBody[0].scrollHeight;
+            $.ajax({
+                url: "{{ route('notes_list') }}",
+                type: 'POST',
+                data: {
+                    search: '',
+                    per_page: 8,
+                    page: page
+                },
+                headers: {
+                    'X-CSRF-TOKEN': csrfToken
+                },
+                success: function (response) {
+                    const notesBody = $('#notes_body');
+                    let firstNoteOffset = notesBody[0].scrollHeight;
 
                         // Add new notes below
                         if (!isScrollUp) {
@@ -630,41 +630,41 @@
             }, 500);
 
 
-            $(document).ready(function () {
-                // Handle file upload
+        $(document).ready(function () {
+            // Handle file upload
 
-                // Handle new text note submission
-                $("#TextNotes").on("keydown", function (event) {
-                    if (event.key === "Enter") {
-                        event.preventDefault();
-                        const text = event.target.value.trim();
-                        if (text) {
-                            $.ajax({
-                                url: "{{ route('notes_add') }}",
-                                type: 'POST',
-                                data: {
-                                    'notes_text': text,
-                                    'notes_file': null
-                                },
-                                headers: {
-                                    'X-CSRF-TOKEN': csrfToken
-                                },
-                                success: function (response) {
-                                    showAlertNotes('success', response.message);
-                                    $('#TextNotes').val('');
-                                    isLoading = false;
-                                    page = 1;
-                                    loadNotes();
-                                }
-                            });
-                        } else {
-                            alert("Please enter some text.");
-                            showAlertNotes('warning', 'Please enter some text');
-                        }
+            // Handle new text note submission
+            $("#TextNotes").on("keydown", function (event) {
+                if (event.key === "Enter") {
+                    event.preventDefault();
+                    const text = event.target.value.trim();
+                    if (text) {
+                        $.ajax({
+                            url: "{{ route('notes_add') }}",
+                            type: 'POST',
+                            data: {
+                                'notes_text': text,
+                                'notes_file': null
+                            },
+                            headers: {
+                                'X-CSRF-TOKEN': csrfToken
+                            },
+                            success: function (response) {
+                                showAlertNotes('success', response.message);
+                                $('#TextNotes').val('');
+                                isLoading = false;
+                                page = 1;
+                                loadNotes();
+                            }
+                        });
+                    } else {
+                        alert("Please enter some text.");
+                        showAlertNotes('warning', 'Please enter some text');
                     }
-                });
+                }
             });
         });
+    });
 
         function open_file_select() {
             $("#fileInput").click();

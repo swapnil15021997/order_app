@@ -104,6 +104,8 @@
                                         <th>Write</th>
                                         <th>Create</th>
                                         <th>Update</th>
+                                        <th>Order Transfer</th>
+                                        <th>Order Approve</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -111,7 +113,12 @@
                                         <tr>
                                             <td>{{ $module['module_name'] }}</td>
 
-                                            @foreach ($module['permissions'] as $permission)
+                                            @foreach (['read', 'update', 'create', 'delete', 'order transfer', 'order approve'] as $permission_name)
+                                            @php
+                                                $permission = collect($module['permissions'])->firstWhere('permission_name', $permission_name);
+                                            @endphp
+                                            
+                                            @if ($permission)
                                                 <td>
                                                     <input
                                                         type="checkbox"
@@ -122,6 +129,10 @@
                                                         @if (in_array($permission, array_column($module['permissions'], 'permission_name')))  @endif
                                                     >
                                                 </td>
+                                            @else
+                                                <td></td> 
+                                            @endif
+                                                
                                             @endforeach
                                         </tr>
                                     @endforeach

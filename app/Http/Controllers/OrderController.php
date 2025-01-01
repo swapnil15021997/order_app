@@ -793,6 +793,14 @@ class OrderController extends Controller
                 'message' => 'Order does not exist'
             ]);
         }
+
+        $user_permissions = session('combined_permissions', []);
+        if (!in_array(18, $user_permissions)) {
+            return response()->json([
+                'status' => 500,
+                'message' => 'You are not allowed to transfer this order'
+            ]);
+        }
         // if( $order->order_to_branch_id == $params['transfer_to']){
         //     return response()->json([
         //         'status' => 500,
@@ -866,6 +874,13 @@ class OrderController extends Controller
                 'message' => 'Order does not exist'
             ]);
         }
+        $user_permissions = session('combined_permissions', []);
+        if (!in_array(17, $user_permissions)) {
+            return response()->json([
+                'status' => 500,
+                'message' => 'You are not allowed to approve this order'
+            ]);
+        }
         $trans->trans_status = 1;
         $trans->save();
         $order = Order::get_order_by_id($trans->trans_order_id);
@@ -895,6 +910,13 @@ class OrderController extends Controller
 
         if (empty($trans)) {
             return redirect()->back()->with('error', 'Order does not exist or already approved');
+        }
+        $user_permissions = session('combined_permissions', []);
+        if (!in_array(17, $user_permissions)) {
+            return response()->json([
+                'status' => 500,
+                'message' => 'You are not allowed to approve this order'
+            ]);
         }
     
         $trans->trans_status = 1;
