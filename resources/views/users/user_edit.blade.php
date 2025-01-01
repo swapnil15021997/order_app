@@ -108,24 +108,34 @@
                                             <th>Write</th>
                                             <th>Create</th>
                                             <th>Update</th>
+                                            <th>Order Transfer</th>
+                                            <th>Order Approve</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($modules as $module)
-                                            <tr>
-                                                <td>{{ $module['module_name'] }}</td>
-
-                                                @foreach ($module['permissions'] as $permission)
-                                                    <td>
-                                                        <input
-                                                            type="checkbox"
-                                                            id="permission_{{ $permission['permission_id'] }}"
-                                                            name="permission_{{ $permission['permission_id'] }}"
-                                                            name="permission_{{ $permission['permission_id'] }}"
-                                                            data-module-id="{{ $module['module_id'] }}"
-                                                            @if (in_array($permission, array_column($module['permissions'], 'permission_name')))  @endif
-                                                        >
-                                                    </td>
+ 
+                                    @foreach ($modules as $module)
+                                        <tr>
+                                            <td>{{ $module['module_name'] }}</td>
+                                            @foreach (['read', 'update', 'create', 'delete', 'order transfer', 'order approve'] as $permission_name)
+                                            @php
+                                                $permission = collect($module['permissions'])->firstWhere('permission_name', $permission_name);
+                                            @endphp
+                                            
+                                            @if ($permission)
+                                                <td>
+                                                    <input
+                                                        type="checkbox"
+                                                        id="permission_{{ $permission['permission_id'] }}"
+                                                        name="permission_{{ $permission['permission_id'] }}"
+                                                        name="permission_{{ $permission['permission_id'] }}"
+                                                        data-module-id="{{ $module['module_id'] }}"
+                                                        @if (in_array($permission, array_column($module['permissions'], 'permission_name')))  @endif
+                                                    >
+                                                </td>
+                                            @else
+                                                <td></td> 
+                                            @endif
                                                 @endforeach
                                             </tr>
                                         @endforeach

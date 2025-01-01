@@ -121,5 +121,19 @@ class PermissionSeeder extends Seeder
             'created_at'          => Carbon::now(),
             'updated_at'          => Carbon::now(),
         ]);
+
+        // Transfer and Approve permissions
+        Permission::create([
+            'permission_name'     => 'order approve',
+            'permission_module_id'=> 2,
+            'created_at'          => Carbon::now(),
+            'updated_at'          => Carbon::now(),
+        ]);
+        Permission::create([
+            'permission_name'     => 'order transfer',
+            'permission_module_id'=> 2,
+            'created_at'          => Carbon::now(),
+            'updated_at'          => Carbon::now(),
+        ]);
     }
 }
