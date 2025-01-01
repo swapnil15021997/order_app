@@ -120,7 +120,7 @@
             }
         }
     </style>
-    <script>
+    <!-- <script>
         function domReady(fn) {
             if (document.readyState === "complete" || document.readyState === "interactive") {
                 setTimeout(fn, 1000);
@@ -196,7 +196,7 @@
             //     resultDiv.innerHTML = `<p style="color: red;">Error: ${e.message}</p>`;
             // });
         });
-    </script>
+    </script> -->
     <script type="module">
 
 

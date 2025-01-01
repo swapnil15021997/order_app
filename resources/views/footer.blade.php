@@ -115,7 +115,7 @@
 
             </div> -->
                 <div class="d-md-none d-flex align-items-center">
-                    <button class="btn btn-ghost-primary btn-icon" id="start-scanner" style="max-height:40px;">
+                    <button class="btn btn-ghost-primary btn-icon" id="start-scann" style="max-height:40px;">
                         <svg fill="currentColor" version="1.1" id="Capa_1" width="24" xmlns="http://www.w3.org/2000/svg"
                             xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 64 64" xml:space="preserve">
                             <g>
@@ -269,8 +269,8 @@
         domReady(function () {
             // Get DOM elements
             const videoElem = document.getElementById("videoElem");
-            const startButton = document.getElementById("start-scanner");
-            const resultDiv = document.getElementById("result");
+            const startButton = document.getElementById("start-scann");
+
             let qrScanner = null;
 
             function onScanSuccess(result) {
