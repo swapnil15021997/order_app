@@ -558,7 +558,7 @@
             isLoading = true;
             const notesBody = $('#notes_body');
             const scrollTopBeforeLoad = notesBody.scrollTop();
-
+            $('#notes_body').html('');
             $.ajax({
                 url: "{{ route('notes_list') }}",
                 type: 'POST',
@@ -683,6 +683,7 @@
                     event.preventDefault();
                     const text = event.target.value.trim();
                     if (text) {
+                        $('#TextNotes').val('');
                         $.ajax({
                             url: "{{ route('notes_add') }}",
                             type: 'POST',
