@@ -182,10 +182,10 @@ class UserController extends Controller
         $userModuleIds     = implode(',', $moduleIds);       
         $userPermissionIds = implode(',', $permissionIds);  
         $branchIds         = implode(',', $params['user_branch']);   
-
+        
         if (empty($params['user_id'])){
-
             $get_data = User::get_data_by_phone_no($params['user_phone_number']);
+            
            
             if (!empty($get_data)){
                 return response()->json([
@@ -208,6 +208,7 @@ class UserController extends Controller
                 ]); 
             }
             $combined_permissions = session('combined_permissions', []);
+             
             if(! in_array(11 ,$combined_permissions)){
                 return response()->json([
                     'status' => 500,
@@ -236,6 +237,7 @@ class UserController extends Controller
                 'user' => $user,
             ]);
         }else{
+           
             $user = User::get_user_by_id($params['user_id']);
             if (!$user) {
                 return response()->json([
@@ -260,12 +262,13 @@ class UserController extends Controller
                     ]); 
                 }
             }
+            
             $user->user_name             = $params['user_name'];
             $user->user_address          = $params['user_address'];
             $user->user_phone_number     = $params['user_phone_number'];
             $user->email                 = $params['user_email'];
             $user->user_module_id        = $moduleIds;
-            $user->user_permission_id   = $permissionIds;
+            $user->user_permission_id   = $userPermissionIds;
             $user->user_branch_ids       = $branchIds;        
             $user->save();
             return response()->json([
