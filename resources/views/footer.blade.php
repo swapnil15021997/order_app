@@ -200,14 +200,14 @@
                         </svg>
                     </button>
                 </div>
-                <div class="nav-item dropdown d-none d-xl-flex">
+                <div class="nav-item dropdown dropup">
                     <a href="#" class="nav-link d-flex lh-1 text-reset p-0" data-bs-toggle="dropdown"
                         aria-label="Open user menu">
                         <div class="ps-2">
                             <div>{{$login['name']}}</div>
                         </div>
                     </a>
-                    <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                    <div class="dropdown-menu dropdown-menu-end">
                         <!-- <a href="{{route('profile.edit')}}" class="dropdown-item">Profile</a> -->
                         <a href="{{route('settings')}}" class="dropdown-item">Settings</a>
                         <a href="" onclick="logout()" class="dropdown-item">Logout</a>
@@ -216,7 +216,6 @@
                 </div>
                 <div class="ps-2 nav-item dropdown dropup">
                     <a href="#" data-bs-toggle="dropdown" class="nav-link dropdown-toggle no-arrow">
-                        <span class="me-2">{{ $activeBranchName ?? '' }}</span>
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                             class="bi bi-building" viewBox="0 0 16 16">
                             <path

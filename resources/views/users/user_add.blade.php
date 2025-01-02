@@ -89,7 +89,7 @@
 
 
 
-                <div class="row row-cards">
+                <div class="row row-cards custom-table-resposive overflow-x-auto">
 
                     <div class="col-lg-12">
                         <div class="mb-3">

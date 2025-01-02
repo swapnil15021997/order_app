@@ -91,7 +91,7 @@
             </div>
 
 
-            <div class="row">
+            <div class="row row-cards ">
 
                 <div class="col-lg-12">
                     <div class="mb-3">
@@ -99,7 +99,7 @@
                             <div class="card-header">
                                 <h3 class="card-title">Modules and Permissions</h3>
                             </div>
-                            <div class="card-body">
+                            <div class="card-body custom-table-resposive overflow-x-auto">
                                 <table class="table table-bordered table-responsive">
                                     <thead>
                                         <tr>
