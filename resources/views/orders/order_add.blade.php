@@ -238,7 +238,7 @@
             var orderFrom = $('#searchableSelectFrom').val();
             var orderTo = $('#searchableSelectTo').val();
             var cust = $('#searchableCust').val();
-            alert(cust);
+             
             var item_metal = $('#item_metal').val();
             var item_name = $('#item_name').val();
             var item_melting = $('#item_melting').val();
@@ -292,8 +292,8 @@
                     success: function (response) {
                         if (response.status == 200) {
                             $('#branch_table').DataTable().ajax.reload();  // Reload table
-                            alert(response.message);
-                            showAlert('success', response.message);
+
+                            showOrderAlert('success', response.message);
 
                             $('#order_date').val('');
                             $('#order_type').val('');
@@ -309,18 +309,18 @@
                             }, 1000);
                         } else {
                             alert('Error creating order: ' + response.message);
-                            showAlert('warning', response.message);
+                            showOrderAlert('warning', response.message);
                         }
                     },
                     error: function (xhr, status, error) {
                         // alert('An error occurred: ' + error);
-                        showAlert('warning', error);
+                        showOrderAlert('warning', error);
                     }
                 });
             } else {
                 alert('Please fill in all fields.');
 
-                showAlert('warning', 'Please fill in all fields orderDate, orderType and Order To');
+                showOrderAlert('warning', 'Please fill in all fields orderDate, orderType and Order To');
             }
         });
 
@@ -577,22 +577,22 @@
                             $('#searchableCust').append(newOption).trigger('change');
                             $('#searchableCust').val(response.data.cust_id).trigger('change');
 
-                            showAlert('success', response.message);
+                            showOrderAlert('success', response.message);
                             // alert(response.message);
 
                         } else {
                             // alert('Error creating branch: ' + response.message);
-                            showAlert('warning', response.message);
+                            showOrderAlert('warning', response.message);
                         }
                     },
                     error: function (xhr, status, error) {
                         // alert('An error occurred: ' + error);
-                        showAlert('warning', error);
+                        showOrderAlert('warning', error);
                     }
                 });
             } else {
                 // alert('Please fill in both fields.');
-                showAlert('warining', 'Please fill in both fields, Name and address');
+                showOrderAlert('warining', 'Please fill in both fields, Name and address');
             }
         });
     });
@@ -641,7 +641,7 @@
     }
 
 
-    function showAlert(type, message) {
+    function showOrderAlert(type, message) {
         const alertContainer = document.getElementById('alert-container');
         const alertHTML = `
                 <div class="alert alert-${type} alert-dismissible" role="alert">

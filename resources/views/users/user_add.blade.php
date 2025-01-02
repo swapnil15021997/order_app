@@ -248,7 +248,7 @@
 
                     // Validate data
                     if (!userName || !userPhone || !roleId ) {
-                        showAlert('warning', 'Please fill all fields and select at least one permission');
+                        showAlertUser('warning', 'Please fill all fields and select at least one permission');
                         alert('Please fill all fields and select at least one permission.');
                         return;
                     }
@@ -284,18 +284,18 @@
                         success: function (response) {
                             if (response.status==200) {
                                 alert('User added successfully');
-                                showAlert('success', 'User added successfully');
+                                showAlertUser('success', 'User added successfully');
 
                                 location.href = "{{route('user-master')}}";
                             } else {
                                 alert('Failed to add user: ' + response.message);
-                                showAlert('warning', response.message);
+                                showAlertUser('warning', response.message);
 
                             }
                         },
                         error: function (xhr, status, error) {
                             // Handle error
-                            showAlert('warning', error);
+                            showAlertUser('warning', error);
 
                             alert('An error occurred: ' + xhr.responseJSON.message);
                         }
@@ -303,7 +303,7 @@
                 });
             });
 
-        function showAlert(type, message) {
+        function showAlertUser(type, message) {
             const alertContainer = document.getElementById('alert-container');
             const alertHTML = `
                 <div class="alert alert-${type} alert-dismissible" role="alert">

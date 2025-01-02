@@ -289,23 +289,23 @@
                             if (response.status==200) {
                                 alert('User updated successfully');
                                 location.href = "{{route('user-master')}}";
-                                showAlert('success',response.message);
+                                showAlertUser('success',response.message);
 
                             } else {
                                 alert('Failed to add user: ' + response.message);
-                                showAlert('warning',response.message);
+                                showAlertUser('warning',response.message);
                             }
                         },
                         error: function (xhr, status, error) {
                             // Handle error
                             alert('An error occurred: ' + xhr.responseJSON.message);
-                            showAlert('warning',error);
+                            showAlertUser('warning',error);
                         }
                     });
                 });
             });
 
-            function showAlert(type, message) {
+            function showAlertUser(type, message) {
                 const alertContainer = document.getElementById('alert-container');
                 const alertHTML = `
                     <div class="alert alert-${type} alert-dismissible" role="alert">

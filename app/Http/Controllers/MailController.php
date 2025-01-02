@@ -46,11 +46,11 @@ class MailController extends Controller
 
         ]);
         try{    
-            Mail::send(['text'=>'mail'],['data' => $data], function($message) use ($data,$subject) { 
-                    $message->to($data['mail_from'])
-                            ->subject($subject)
-                            ->from('noreply@order_app.in');
-            });
+            // Mail::send(['text'=>'mail'],['data' => $data], function($message) use ($data,$subject) { 
+            //         $message->to($data['mail_from'])
+            //                 ->subject($subject)
+            //                 ->from('noreply@order_app.in');
+            // });
             $mail->mail_status = 2;
             $mail->save();
         }catch (Swift_TransportException  $e) {
