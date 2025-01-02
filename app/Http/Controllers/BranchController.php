@@ -32,6 +32,7 @@ class BranchController extends Controller
                 $activeBranchName = $branch['branch_name'];
                 break;
             }
+            $activeBranchName = '';
         }
         $combined_permissions = session('combined_permissions', []);
 

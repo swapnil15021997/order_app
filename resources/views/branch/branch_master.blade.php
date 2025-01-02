@@ -281,17 +281,17 @@
 
                             } else {
                                 // alert('Error creating branch: ' + response.message);
-                                showAlert('warning', response.message);
+                                showSuccess('warning', response.message);
                             }
                         },
                         error: function (xhr, status, error) {
                             // alert('An error occurred: ' + error);
-                            showAlert('warning', error);
+                            showSuccess('warning', error);
                         }
                     });
                 } else {
                     // alert('Please fill in both fields.');
-                    showAlert('warining', 'Please fill in both fields, Name and address');
+                    showSuccess('warining', 'Please fill in both fields, Name and address');
                 }
             });
 
@@ -321,21 +321,21 @@
                                 $('#edit_branch_name').val('');
                                 $('#edit_branch_address').val('');
                                 $('#branch_table').DataTable().ajax.reload();  // Reload the DataTable
-                                alert(response.message);
+
                                 showSuccess('success', response.message);
                             } else {
-                                alert('Error creating branch: ' + response.message);
-                                showAlert('warining', response.message);
+
+                                showSuccess('warining', response.message);
                             }
                         },
                         error: function (xhr, status, error) {
-                            alert('An error occurred: ' + error);
-                            showAlert('error', error);
+
+                            showSuccess('error', error);
                         }
                     });
                 } else {
-                    alert('Please fill in both fields.');
-                    showAlert('error', 'Please fill in both fields');
+
+                    showSuccess('error', 'Please fill in both fields');
 
                 }
             });
@@ -357,14 +357,14 @@
                                 $('#delete_branch_id').val();
                                 $('#delete_branch').modal('hide');
                                 $('#branch_table').DataTable().ajax.reload();
-                                alert(response.message);
                                 showSuccess('success', response.message);
                             } else {
-                                alert('Error creating branch: ' + response.message);
+                                showSuccess('warning', response.message);
                             }
                         },
                         error: function (xhr, status, error) {
-                            alert('An error occurred: ' + error);
+                            showSuccess('warning', error);
+
                         }
                     });
                 } else {

@@ -19,6 +19,7 @@
             </div>
             <div class="col-auto ms-auto d-print-none">
                 <div class="btn-list">
+                    @if(in_array(7, $user_permissions))
 
                     <a href="{{route('order-add-page')}}" class="btn btn-primary d-none d-sm-inline-block">
                         <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
@@ -31,6 +32,7 @@
                         </svg>
                         Create new Order
                     </a>
+                    @endif
                     <a href="{{route('order-add-page')}}" class="btn btn-primary d-sm-none btn-icon" 
                         aria-label="Create new report">
                         <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
@@ -278,14 +280,17 @@
                                 $('#delete_order_id').val();
                                 $('#delete_order').modal('hide');
                                 $('#branch_table').DataTable().ajax.reload();
-                                alert(response.message);
-                                showAlert('success', response.message);
+
+                                showAlertOrder('success', response.message);
                             } else {
-                                alert('Error deleting order: ' + response.message);
+
+                                showAlertOrder('warning', response.message);
                             }
                         },
                         error: function (xhr, status, error) {
-                            alert('An error occurred: ' + error);
+ 
+                            showAlertOrder('warning', response.message);
+
                         }
                     });
                 } else {
@@ -360,7 +365,7 @@
         }
 
 
-        function showAlert(type, message) {
+        function showAlertOrder(type, message) {
             const alertContainer = document.getElementById('alert-container');
             const alertHTML = `
                 <div class="alert alert-${type} alert-dismissible" role="alert">
@@ -529,17 +534,17 @@
                         if (response.status == 200) {
 
                             $('#branch_table').DataTable().ajax.reload();
-                            showAlert('success', response.message);
+                            showAlertOrder('success', response.message);
                         } else {
-                            showAlert('warning', response.message);
+                            showAlertOrder('warning', response.message);
                         }
                     },
                     error: function (xhr, status, error) {
-                        showAlert('warning', error.message);
+                        showAlertOrder('warning', error.message);
                     }
                 });
             } else {
-                showAlert('warning', 'Please select Transaction id');
+                showAlertOrder('warning', 'Please select Transaction id');
             }
         }
 

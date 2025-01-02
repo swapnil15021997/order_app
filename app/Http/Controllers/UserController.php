@@ -272,6 +272,8 @@ class UserController extends Controller
             $user->user_module_id        = $moduleIds;
             $user->user_permission_id   = $userPermissionIds;
             $user->user_branch_ids       = $branchIds;        
+            $user->user_role_id          = $params['user_role'];
+            
             $user->save();
             return response()->json([
                 'status' => 200,

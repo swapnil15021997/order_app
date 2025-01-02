@@ -969,14 +969,14 @@ class OrderController extends Controller
             ]);
         }
     
+        SendEmailJob::dispatch($order->order_id,$type="Approve");
+        SendNotification::dispatch($order->order_id,$type="Approve");
         $trans->trans_status = 1;
         $trans->save();
         $order = Order::get_order_by_id($trans->trans_order_id);
         $order->order_status        = 1;
         $order->order_current_branch= $trans->trans_to;
         $order->save();
-        SendEmailJob::dispatch($order->order_id,$type="Approve");
-        SendNotification::dispatch($order->order_id,$type="Approve");
         // return response()->json([
         //     'status' => 200,
         //     'message' => "Order Received Successfully" 

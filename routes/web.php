@@ -74,6 +74,7 @@ Route::get('/dashboard', function () {
         $role_permission = isset($role['role_permission_ids']) ? explode(',', $role['role_permission_ids']) : [];
     }
     $combined_permissions = array_unique(array_merge((array)$user_permission, (array)$role_permission));
+     
     session(['combined_permissions' => $combined_permissions]);
 
     return view('index_new',['login'=>$login,'activePage'=>'dashboard',
