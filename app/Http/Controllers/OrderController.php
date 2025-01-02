@@ -26,6 +26,7 @@ class OrderController extends Controller
 
         $order = Order::get_order_by_qr_number_id($id);  
         $order = $order->toArray();
+        
         $login = auth()->user();
         
         $fileArray = [];
@@ -873,6 +874,8 @@ class OrderController extends Controller
         $trans->trans_time          = Carbon::now()->toDateTimeString(); 
         $trans->trans_status        = 0;
         $trans->save();
+        SendEmailJob::dispatch($order->order_id,$type="Transfer");
+        SendNotification::dispatch($order->order_id,$type="Transfer");
         return response()->json([
             'status'  => 200,
             'message' => "Item Transfered successfully" 
@@ -931,6 +934,9 @@ class OrderController extends Controller
         $order->order_status        = 1;
         $order->order_current_branch= $trans->trans_to;
         $order->save();
+        SendEmailJob::dispatch($order->order_id,$type="Approve");
+        SendNotification::dispatch($order->order_id,$type="Approve");
+        
         return response()->json([
             'status' => 200,
             'message' => "Order Received Successfully" 
@@ -969,6 +975,8 @@ class OrderController extends Controller
         $order->order_status        = 1;
         $order->order_current_branch= $trans->trans_to;
         $order->save();
+        SendEmailJob::dispatch($order->order_id,$type="Approve");
+        SendNotification::dispatch($order->order_id,$type="Approve");
         // return response()->json([
         //     'status' => 200,
         //     'message' => "Order Received Successfully" 

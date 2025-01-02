@@ -31,8 +31,8 @@
                         </svg>
                         Create new Order
                     </a>
-                    <a href="#" class="btn btn-primary d-sm-none btn-icon" data-bs-toggle="modal"
-                        data-bs-target="#modal-report" aria-label="Create new report">
+                    <a href="{{route('order-add-page')}}" class="btn btn-primary d-sm-none btn-icon" 
+                        aria-label="Create new report">
                         <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
                         <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24"
                             stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"

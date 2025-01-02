@@ -11,12 +11,19 @@ class MailController extends Controller
     //
 
     public function send_email($data){
+
         if($data['type']=='Add'){
 
             $subject = "Chalan Created for " .$data['order_name'];
             $message = "This is to inform you about a new chalan of type " .$data['order_name'];
-        }else{
+        }else if($data['type']=='Edit'){
             $subject = "Chalan Updated for " .$data['order_name'];
+            $message = "This is to inform you about a Update chalan of type " .$data['order_name'];
+        }else if($data['type']=='Approve'){
+            $subject = "Chalan Approved for " .$data['order_name'];
+            $message = "This is to inform you about a Approve chalan of type " .$data['order_name'];
+        }else if($data['type']=='Transfer'){
+            $subject = "Chalan Transfer for " .$data['order_name'];
             $message = "This is to inform you about a Update chalan of type " .$data['order_name'];
         }
         

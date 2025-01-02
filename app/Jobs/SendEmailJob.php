@@ -6,6 +6,8 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use App\Http\Controllers\MailController;
 use App\Models\Order;
+use App\Models\Transactions;
+use App\Models\Branch;
 use App\Models\Settings;
 
 
@@ -51,21 +53,46 @@ class SendEmailJob implements ShouldQueue
         }else{
             $order_type = 'Reparing';
         }
-        $mail_data = [
-            'mail_to'     => $settings['setting_value'],
-            'mail_from'   => 'noreply@example.com',
-            'order_form'  => $order['order_from_name'],
-            'order_to'    => $order['order_to_name'],
-            'order_id'    => $order['order_id'],
-            'order_type'  => $order['order_type'],
-            'order_name'  => $order_type,
-            'order_date'  => $order['order_date'],
-            'item_name'   => $order['item_name'],
-            'item_metal'  => $order['item_metal'],
-            'item_melting'=> $order['item_melting'],
-            'item_weight' => $order['item_weight'],
-            'type'        => $this->type,
-        ];
+        if($this->type == "Approve" || $this->type == "Transfer"){
+            $trans   = Transactions::get_trans_by_order_id($order['order_id']);
+            $to_site = $trans->trans_to;
+            $site    = Branch::get_branch_by_id($to_site);
+
+            $mail_data = [
+                'mail_to'     => $settings['setting_value'],
+                'mail_from'   => 'noreply@example.com',
+                'order_form'  => $order['order_from_name'],
+                'order_to'    => $site->branch_name,
+                'order_id'    => $order['order_id'],
+                'order_type'  => $order['order_type'],
+                'order_name'  => $order_type,
+                'order_date'  => $order['order_date'],
+                'item_name'   => $order['item_name'],
+                'item_metal'  => $order['item_metal'],
+                'item_melting'=> $order['item_melting'],
+                'item_weight' => $order['item_weight'],
+                'type'        => $this->type,
+            ];
+        }
+        
+        if($this->type == "Add" || $this->type == "Edit"){
+
+            $mail_data = [
+                'mail_to'     => $settings['setting_value'],
+                'mail_from'   => 'noreply@example.com',
+                'order_form'  => $order['order_from_name'],
+                'order_to'    => $order['order_to_name'],
+                'order_id'    => $order['order_id'],
+                'order_type'  => $order['order_type'],
+                'order_name'  => $order_type,
+                'order_date'  => $order['order_date'],
+                'item_name'   => $order['item_name'],
+                'item_metal'  => $order['item_metal'],
+                'item_melting'=> $order['item_melting'],
+                'item_weight' => $order['item_weight'],
+                'type'        => $this->type,
+            ];
+        }
     
         $mail = new MailController();
         $mail->send_email($mail_data);

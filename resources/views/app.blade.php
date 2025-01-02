@@ -202,7 +202,7 @@
 
         const serviceWorkerRegistration = await navigator
             .serviceWorker
-            .register('./firebase_json.js');
+            .register('/firebase_json.js', { scope: '/' });
 
         var firebaseConfig = {
             apiKey: "AIzaSyDGtmMCnDlvMJZ3G3LG4KPDaDaxEZceJ_Y",

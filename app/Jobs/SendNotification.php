@@ -6,6 +6,8 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use App\Models\Order;
 use App\Models\User;
+use App\Models\Transactions;
+use App\Models\Branch;
 use App\Models\Notification;
 use App\Http\Controllers\DashboardController;
 
@@ -72,14 +74,36 @@ class SendNotification implements ShouldQueue
 
             $subject = "Chalan Created for " .$data['order_name'];
             $message = "This is to inform you about a new chalan of type " .$data['order_name'];
-        }else{
+            $message.="\nFrom Branch Name: ".$order['order_form'];
+            $message.="\nTo Branch Name: ".$order['order_to'];
+         
+        }else if($this->type=='Edit'){
             $subject = "Chalan Updated for " .$data['order_name'];
             $message = "This is to inform you about a Update chalan of type " .$data['order_name'];
+            $message.="\nFrom Branch Name: ".$order['order_form'];
+            $message.="\nTo Branch Name: ".$order['order_to'];
+         
+        }else if($this->type=='Transfer'){
+            $subject = "Chalan Transfer for " .$data['order_name'];
+            $message = "This is to inform you about a Transfer chalan of type " .$data['order_name'];
+            $trans   = Transactions::get_trans_by_order_id($order['order_id']);
+            $to_site = $trans->trans_to;
+            $site    = Branch::get_branch_by_id($to_site);
+            $message.="\nFrom Branch Name: ".$order['order_form'];
+            $message.="\nTo Branch Name: ".$site->site_name;
+         
+        }else if($this->type=='Approve'){
+            $subject = "Chalan Approved for " .$data['order_name'];
+            $message = "This is to inform you about a Approval of chalan of type " .$data['order_name'];
+            $trans   = Transactions::get_trans_by_order_id($order['order_id']);
+            $to_site = $trans->trans_to;
+            $site    = Branch::get_branch_by_id($to_site);
+            $message.="\nFrom Branch Name: ".$order['order_form'];
+            $message.="\nTo Branch Name: ".$site->site_name;
+         
         }
         
 
-        $message.="\nFrom Branch Name: ".$order['order_form'];
-        $message.="\nTo Branch Name: ".$order['order_to'];
         $message.="\nOrder Date: ".$order['order_date'];
         $data['title'] = $message;
         $data['body'] = $subject;

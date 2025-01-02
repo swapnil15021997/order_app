@@ -38,6 +38,8 @@
                     </a>
                 @endif
 
+                <button type="button" class="btn btn-primary printMe" onclick="printDiv()">Print</button>
+ 
             </div>
         </div>
     </div>
@@ -69,8 +71,8 @@
             </div>
         </div>
     </div>
-    <div class="page-body">
-        <div class="container-xl">
+    <div class="page-body chalan">
+        <div class="container-xl ">
             <div class="row" id="transfer-container">
             </div>
             <div class="container">
@@ -455,6 +457,21 @@
             </div>
         </div>
     </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jQuery.print/1.6.0/jQuery.print.min.js"></script>
+
+<style type="text/css">
+
+	@media print {
+    /* Adjust the page margins */
+    @page {
+        margin: 0;
+        size: A4;
+    }
+
+}
+</style> 
     <script>
 
 
@@ -640,5 +657,15 @@
                 }
             });
         });
+        function printDiv() {
+            var printContents = document.getElementsByClassName('chalan')[0].innerHTML;
+            var originalContents = document.body.innerHTML;
+
+            document.body.innerHTML = printContents;
+            window.print();
+            document.body.innerHTML = originalContents;
+        }
+       
     </script>
+
     @endsection
