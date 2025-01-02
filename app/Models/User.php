@@ -78,7 +78,7 @@ class User extends Authenticatable
     }
 
     public static function get_data_by_email($user_email){
-        $user = User::where('email',$user_email)->where('is_delete',0)->first();
+        $user = User::where('email',$user_email)->first();
         return $user;
 
     }

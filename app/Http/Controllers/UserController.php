@@ -173,6 +173,7 @@ class UserController extends Controller
             ]);
         }    
         $existingPermissions = Permission::whereIn('permission_id', $permissionIds)->pluck('permission_id')->toArray();
+        
         if (count($existingPermissions) !== count($permissionIds)) {
             return response()->json([
                 'status' => 500,
@@ -194,6 +195,7 @@ class UserController extends Controller
                 ]); 
             }
             $get_data = User::get_data_by_email($params['user_email']);
+            
             if (!empty($get_data)){
                 return response()->json([
                     'status' => 500,
@@ -292,8 +294,7 @@ class UserController extends Controller
             
         $branch     = Branch::get_all_branch();
         $login = auth()->user();
-
-
+       
         if(!empty($login)){
             if($login['user_role_id'] != 1){
                 $userBranchIds = explode(',', $login['user_branch_ids']);
@@ -568,7 +569,6 @@ class UserController extends Controller
         } 
         $moduleIds = explode(',', $params['user_module']);
         $permissionIds = explode(',', $params['user_permission']);
-
         $existingModules = Modules::whereIn('module_id', $moduleIds)->pluck('module_id')->toArray();
         if (count($existingModules) !== count($moduleIds)) {
             return response()->json([
@@ -576,13 +576,7 @@ class UserController extends Controller
                 'message' => 'One or more modules do not exist.',
             ]);
         }    
-        $existingPermissions = Permission::whereIn('permission_id', $permissionIds)->pluck('permission_id')->toArray();
-        if (count($existingPermissions) !== count($permissionIds)) {
-            return response()->json([
-                'status' => 500,
-                'message' => 'One or more permissions do not exist.',
-            ]);
-        }
+        
 
        
         if (empty($params['role_id'])){

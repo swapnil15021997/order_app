@@ -251,7 +251,7 @@
                                         <td>
                                             <input
                                                 type="checkbox"
-                                                id="role_permission_{{ $permission['permission_id'] }}"
+                                                id="edit_role_permission_{{ $permission['permission_id'] }}"
                                                 name="permission_{{ $permission['permission_id'] }}"
                                                 name="permission_{{ $permission['permission_id'] }}"
                                                 data-module-id="{{ $module['module_id'] }}"
@@ -413,7 +413,7 @@
 
         $(document).ready(function () {
             document.querySelectorAll('input[type="checkbox"]').forEach(function(checkbox) {
-                checkbox.checked = false; // Uncheck all checkboxes
+                checkbox.checked = false;  
             });
             $('#saveRole').on('click', function (e) {
 
@@ -635,6 +635,9 @@
                 }
             });
 
+            $('input[type="checkbox"]').on('change', function () {
+                console.log(`Checkbox ${$(this).attr('id')} is now: ${$(this).is(':checked')}`);
+            });
 
             $('#UpdateRole').on('click', function (e) {
 
@@ -648,16 +651,28 @@
                     alert('Please fill all fields and select at least one permission.');
                     return;
                 }
-                const permissionIds = [];
-                const moduleIds = [];
-                $('input[type="checkbox"]:checked').each(function () {
+                const editpermissionIds = [];
+                const editmoduleIds = [];
+                // $('input[type="checkbox"]:checked').each(function () {
 
-                    const permissionId = $(this).attr('id').replace('role_permission_', '');  // Extract permission_id from id
-                    const moduleId = $(this).data('module-id');
-                    permissionIds.push(permissionId);
-                    if (!moduleIds.includes(moduleId)) {
-                        moduleIds.push(moduleId);
+                //     const permissionId = $(this).attr('id').replace('role_permission_', '');  // Extract permission_id from id
+                //     const moduleId = $(this).data('module-id');
+                //     permissionIds.push(permissionId);
+                //     if (!moduleIds.includes(moduleId)) {
+                //         moduleIds.push(moduleId);
+                //     }
+                // });
+                $('input[type="checkbox"]:checked').each(function () {
+                    
+                    const permissionId = $(this).attr('id').replace('edit_role_permission_', ''); 
+                    const moduleId = $(this).data('module-id'); 
+                    if (!editpermissionIds.includes(permissionId)) {
+                        editpermissionIds.push(permissionId);
                     }
+                    if (!editmoduleIds.includes(moduleId)) {
+                        editmoduleIds.push(moduleId);
+                    }
+                    
                 });
                 // Prepare data to be sent
                 const data = {
@@ -665,8 +680,8 @@
                     role_id          : role_id,
                     role_name        : role_name,
 
-                    user_permission  : permissionIds.join(','),
-                    user_module      : moduleIds.join(','),
+                    user_permission  : editpermissionIds.join(','),
+                    user_module      : editmoduleIds.join(','),
                 };
 
                 $.ajax({
@@ -735,9 +750,12 @@
         function edit_role(role_id) {
 
             // window.location.href = `/edit-role/${userId}`;
-            document.querySelectorAll('input[type="checkbox"]').forEach(function(checkbox) {
-                checkbox.checked = false; // Uncheck all checkboxes
-            });
+            // document.querySelectorAll('input[type="checkbox"]').forEach(function(checkbox) {
+            //     checkbox.checked = false; // Uncheck all checkboxes
+            // })
+            // ;
+            $('input[type="checkbox"]').prop('checked', false);
+
 
             var csrfToken = $('meta[name="csrf-token"]').attr('content');
 
@@ -758,11 +776,13 @@
                         if (role_permission_ids != null){
                             const permissionArray   = role_permission_ids.split(',');
                             document.querySelectorAll('input[type="checkbox"]').forEach(function(checkbox) {
-                                const permissionId = checkbox.id.replace('role_permission_', '');
+                                const permissionId = checkbox.id.replace('edit_role_permission_', '');
                                 if (permissionArray.includes(permissionId)) {
                                     checkbox.checked = true;
                                 }
                             });
+
+                            
                         }
                         $('#edit_role_id').val(role_id);
                         $('#edit_role_name').val(response.data.role_name);
