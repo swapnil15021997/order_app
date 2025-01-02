@@ -103,7 +103,7 @@
                                                             <div class="form-label">New Password</div>
                                                             <input type="password" class="form-control" name="password">
                                                         </div>
-                                                        <div class="col-auto">
+                                                        <div class="col-md">
                                                             <div class="form-label">Confirm Password</div>
                                                             <input type="password" class="form-control" name="password_confirmation">
                                                         </div>
