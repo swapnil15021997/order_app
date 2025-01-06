@@ -21,21 +21,17 @@
 
     <div class="page-body">
         <div class="container-xl">
+
+        <div class="card">
+            <div class="card-body">
             <div class="row row-cards">
                 <div class="" id="alert-container"></div>
                 <div class="col-lg-6">
-
                     <div class="mb-3">
 
                         <label class="form-label">User Name</label>
                         <input type="hidden" name="" id="user_id" value="{{$user['id']}}">
                         <input type="text" id="user_name" value="{{$user['user_name']}}" class="form-control" placeholder="User Name">
-                    </div>
-                </div>
-                <div class="col-lg-6">
-                    <div class="mb-3">
-                        <label class="form-label">Phone Number</label>
-                        <input type="text" id="user_phone_no" value="{{$user['user_phone_number']}}" class="form-control" placeholder="User Phone Number">
                     </div>
                 </div>
             </div>
@@ -58,9 +54,18 @@
                 </div>
                 <div class="col-lg-6">
                     <div class="mb-3">
+                        <label class="form-label">Phone Number</label>
+                        <input type="text" id="user_phone_no" value="{{$user['user_phone_number']}}" class="form-control" placeholder="User Phone Number">
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="row">
+            <div class="col-lg-12">
+                    <div class="mb-3">
                         <label class="form-label">User Address</label>
                         <textarea id="user_address" name="user_address" class="form-control" rows="3">{{$user['user_address']}}</textarea>
-
                     </div>
                 </div>
             </div>
@@ -78,7 +83,7 @@
                             <div class="form-label">Select multiple states</div>
                             <select type="text" class="form-select" id="select-states" multiple>
                             @if(!empty($branch))
-                            
+
                             @foreach($branch as $b)
                                 <option value="{{ $b['branch_id'] }}"
                                 @if (in_array($b['branch_id'], array_column($edit_user_branch, 'branch_id'))) selected @endif
@@ -90,8 +95,7 @@
                     </div>
             </div>
 
-
-            <div class="row row-cards ">
+            <div class="row row-cards">
 
                 <div class="col-lg-12">
                     <div class="mb-3">
@@ -113,7 +117,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
- 
+
                                     @foreach ($modules as $module)
                                         <tr>
                                             @php
@@ -133,13 +137,13 @@
                                                         name="permission_{{ $permission['permission_id'] }}"
                                                         data-module-id="{{ $module['module_id'] }}"
                                                         @if (in_array($permission, array_column($module['permissions'], 'permission_name')))  @endif
-                                                        @if (in_array($permission['permission_id'], $user_permission_ids)) 
-                                                            checked 
+                                                        @if (in_array($permission['permission_id'], $user_permission_ids))
+                                                            checked
                                                         @endif
                                                     >
                                                 </td>
                                             @else
-                                                <td></td> 
+                                                <td></td>
                                             @endif
                                                 @endforeach
                                             </tr>
@@ -153,8 +157,8 @@
 
             </div>
             <div class="row">
-                <div class="col-lg-6">
-                    <div class="mb-3">
+                <div class="col-lg-12">
+                    <div class="d-flex justify-content-end">
                         <a href="#" class="btn btn-primary ms-auto"  id="saveUser">
                             <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-pencil-square me-2" viewBox="0 0 16 16">
@@ -167,6 +171,8 @@
                 </div>
 
             </div>
+            </div>
+        </div>
         </div>
     <div>
 

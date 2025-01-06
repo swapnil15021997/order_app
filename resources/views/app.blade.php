@@ -1,7 +1,7 @@
 @include('head')
 
 <body>
-    <div class="layout-wrapper">
+    <div id="layout">
 
         <div class="main-content">
             <div class="d-none d-md-block" id="navbar-wrapper">
@@ -15,7 +15,7 @@
             </div>
         </div>
 
-        <div class="note-sidebar" id="note_sheet">
+        <div class="note-sidebar" id="note_sheet" style="display:none;">
             <div class="card border-0">
                 <div class="card-header p-2 rounded-0 ">
                     <h5 class="card-title">Notes</h5>
@@ -135,7 +135,7 @@
         // Check if "order-add" exists in the URL
         document.addEventListener("DOMContentLoaded", function () {
             const url = window.location.href;
-            const layoutWrapper = document.querySelector(".layout-wrapper");
+            const layoutWrapper = document.getElementById("layout");
             const noteSheet = document.getElementById("note_sheet");
 
             if (url.includes("order-add") || url.includes("edit-order")) {

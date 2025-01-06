@@ -23,6 +23,8 @@
 
         <div class="page-body">
             <div class="container-xl">
+            <div class="card">
+            <div class="card-body">
                 <div class="row row-cards">
                     <div class="" id="alert-container"></div>
 
@@ -34,15 +36,15 @@
                             <input type="text" id="user_name" class="form-control" placeholder="User Name">
                         </div>
                     </div>
-                    <div class="col-lg-6">
+                </div>
+
+                <div class="row row-cards">
+                <div class="col-lg-6">
                         <div class="mb-3">
                             <label class="form-label">Phone Number</label>
                             <input type="text" id="user_phone_no" class="form-control" placeholder="User Phone Number">
                         </div>
                     </div>
-                </div>
-
-                <div class="row row-cards">
                     <div class="col-lg-6">
                         <div class="mb-3">
                             <label class="form-label">User Role</label>
@@ -53,13 +55,6 @@
                             </select>
                         </div>
 
-                    </div>
-                    <div class="col-lg-6">
-                        <div class="mb-3">
-                            <label class="form-label">User Address</label>
-                            <textarea id="user_address" name="user_address" class="form-control" rows="3"></textarea>
-
-                        </div>
                     </div>
                 </div>
 
@@ -87,6 +82,15 @@
                     </div>
                 </div>
 
+                <div class="row row-cards">
+                <div class="col-lg-12">
+                        <div class="mb-3">
+                            <label class="form-label">User Address</label>
+                            <textarea id="user_address" name="user_address" class="form-control" rows="3"></textarea>
+
+                        </div>
+                    </div>
+                </div>
 
 
                 <div class="row row-cards custom-table-resposive overflow-x-auto">
@@ -117,7 +121,7 @@
                                             @php
                                                 $permission = collect($module['permissions'])->firstWhere('permission_name', $permission_name);
                                             @endphp
-                                            
+
                                             @if ($permission)
                                                 <td>
                                                     <input
@@ -130,9 +134,9 @@
                                                     >
                                                 </td>
                                             @else
-                                                <td></td> 
+                                                <td></td>
                                             @endif
-                                                
+
                                             @endforeach
                                         </tr>
                                     @endforeach
@@ -144,8 +148,8 @@
 
                 </div>
                 <div class="row row-cards">
-                    <div class="col-lg-6">
-                        <div class="mb-3">
+                    <div class="col-lg-12">
+                        <div class="d-flex justify-content-end">
                             <a href="#" class="btn btn-primary ms-auto"  id="saveUser">
                                 <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
                                 <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 5l0 14" /><path d="M5 12l14 0" /></svg>
@@ -154,6 +158,8 @@
                         </div>
                     </div>
 
+                </div>
+                </div>
                 </div>
             </div>
         <div>

@@ -25,6 +25,9 @@
 <div class="page-body">
     <div class="container-xl">
 
+    <div class="card">
+    <div class="card-body">
+
         <div class="row">
             <div id="alert-container"></div>
             <div class="col-lg-6">
@@ -103,6 +106,7 @@
                 </div>
             </div>
         </div>
+
         <div class="row mb-3">
             <div class="col-lg-6">
                 <div>
@@ -126,6 +130,7 @@
                 </div>
             </div>
         </div>
+
         <div class="row">
             <div class="col-lg-6">
                 <div class="mb-3">
@@ -166,6 +171,8 @@
             </div>
         </div>
 
+
+
         <div class="row">
             @if(!empty($fileArray))
                 @foreach($fileArray as $file)
@@ -182,6 +189,7 @@
                 <p class="text-center">No files available.</p>
             @endif
         </div>
+
         <div class="row d-none " id="payment">
             <div class="col-lg-6">
                 <div>
@@ -202,8 +210,8 @@
 
 
         <div class="row">
-            <div class="col-lg-6">
-                <div class="mb-3">
+            <div class="col-lg-12">
+                <div class="d-flex justify-content-end">
                     <a href="#" class="btn btn-primary ms-auto" id="updateOrderBtn">
                         <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
@@ -218,6 +226,10 @@
                 </div>
             </div>
         </div>
+
+        </div>
+        </div>
+
     </div>
 </div>
 
