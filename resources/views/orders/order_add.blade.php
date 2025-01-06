@@ -1,6 +1,7 @@
 @extends('app')
 
 @section('content')
+
 <!-- Page header -->
 <div class="page-header d-print-none">
     <div class="container-xl">
@@ -22,195 +23,235 @@
         </div>
     </div>
 </div>
+<div>
+    <div class="page-body">
+        <div class="container-xl">
+            <div id="alert-container"></div>
+            <div class="row">
 
-<div class="page-body">
-    <div class="container-xl">
-        <div id="alert-container"></div>
-        <div class="row">
+                <div class="col-lg-6">
 
-            <div class="col-lg-6">
-
-                <div class="mb-3">
-                    <label class="form-label">Order Date</label>
-                    <input type="date" id="order_date" class="form-control" form>
+                    <div class="mb-3">
+                        <label class="form-label">Order Date</label>
+                        <input type="date" id="order_date" class="form-control" form>
+                    </div>
                 </div>
-            </div>
-            <div class="col-lg-6">
-                <div class="mb-3">
-                    <!-- <label class="form-label">Order Type</label>
+                <div class="col-lg-6">
+                    <div class="mb-3">
+                        <!-- <label class="form-label">Order Type</label>
                         <select id="order_type"  class="form-select">
                             <option value="1" selected>Repairing</option>
                             <option value="2">Order</option>
                         </select> -->
-                    <label class="form-label">Order Type</label>
-                    <div class="d-flex align-items-center">
-                        <label class="form-check-label ms-2">Order</label>
-                        <label class="form-check form-switch m-0 ms-2">
-                            <input class="form-check-input" id="order_type" type="checkbox" checked>
-                        </label>
-                        <label class="form-check-label me-2 ms-2">Reparing</label>
+                        <label class="form-label">Order Type</label>
+                        <div class="d-flex align-items-center">
+                            <label class="form-check-label ms-2">Order</label>
+                            <label class="form-check form-switch m-0 ms-2">
+                                <input class="form-check-input" id="order_type" type="checkbox" checked>
+                            </label>
+                            <label class="form-check-label me-2 ms-2">Reparing</label>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+
+                <div class="col-lg-6">
+                    <div class="mb-3">
+                        <label class="form-label">Order From</label>
+
+                        <select id="searchableSelectFrom" class="form-select" type="text">
+
+                            @foreach ($user_branch as $branch)
+
+                                <option value="{{ $branch['branch_id'] }}" @if ($branch['branch_id'] == $login['user_active_branch']) selected @endif>
+                                    {{ $branch['branch_name'] }}
+                                </option>
+                            @endforeach
+                        </select>
                     </div>
 
                 </div>
-            </div>
-        </div>
+                <div class="col-lg-6">
+                    <div class="mb-3">
+                        <label class="form-label">Order To</label>
+                        <select id="searchableSelectTo" class="form-select select2">
 
-        <div class="row">
-
-            <div class="col-lg-6">
-                <div class="mb-3">
-                    <label class="form-label">Order From</label>
-
-                    <select id="searchableSelectFrom" class="form-select" type="text">
-
-                        @foreach ($user_branch as $branch)
-
-                            <option value="{{ $branch['branch_id'] }}" @if ($branch['branch_id'] == $login['user_active_branch']) selected @endif>
-                                {{ $branch['branch_name'] }}</option>
-                        @endforeach
-                    </select>
-                </div>
-
-            </div>
-            <div class="col-lg-6">
-                <div class="mb-3">
-                    <label class="form-label">Order To</label>
-                    <select id="searchableSelectTo" class="form-select select2">
-
-                        <!-- @foreach ($branchesArray as $branch)
+                            <!-- @foreach ($branchesArray as $branch)
                                 <option value="{{ $branch['branch_id'] }}">{{ $branch['branch_name'] }}</option>
                             @endforeach -->
-                    </select>
+                        </select>
+                    </div>
                 </div>
-            </div>
 
-            <!-- <div class="col-lg-2">
+                <!-- <div class="col-lg-2">
                     <div class="mb-3">
                         <label class="form-label">Create New</label>
                         <button class="btn btn-primary" onclick="create_new_branch()">Create New</button>
                     </div>
                 </div> -->
-        </div>
+            </div>
 
-        <div class="row">
-            <div class="col-lg-6">
-                <div class="mb-3">
-                    <label class="form-label">Item name</label>
-                    <input type="text" class="form-control" id="item_name">
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="mb-3">
+                        <label class="form-label">Item name</label>
+                        <input type="text" class="form-control" id="item_name">
+                    </div>
                 </div>
-            </div>
-            <div class="col-lg-6">
-                <div class="mb-3">
-                    <label class="form-label">Metal</label>
-                    <select class="form-select" id="item_metal">
-                        <option value="" disabled selected>Select a metal</option>
+                <div class="col-lg-6">
+                    <div class="mb-3">
+                        <label class="form-label">Metal</label>
+                        <select class="form-select" id="item_metal">
+                            <option value="" disabled selected>Select a metal</option>
 
-                        @foreach ($metals as $metal)
-                            <option value="{{ $metal->metal_name }}" selected>{{ $metal->metal_name }}</option>
-                        @endforeach
-                    </select>
+                            @foreach ($metals as $metal)
+                                <option value="{{ $metal->metal_name }}" selected>{{ $metal->metal_name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <div class="row mb-3">
-            <div class="col-lg-6">
-                <div>
-                    <label class="form-label">Melting</label>
-                    <select class="form-select" id="item_melting">
-                        <option value="" disabled selected>Select a melting</option>
-                        @foreach ($melting as $melt)
-                            <option value="{{ $melt->melting_name }}" selected>{{ $melt->melting_name }}</option>
-                        @endforeach
-                    </select>
+            <div class="row mb-3">
+                <div class="col-lg-6">
+                    <div>
+                        <label class="form-label">Melting</label>
+                        <select class="form-select" id="item_melting">
+                            <option value="" disabled selected>Select a melting</option>
+                            @foreach ($melting as $melt)
+                                <option value="{{ $melt->melting_name }}" selected>{{ $melt->melting_name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
                 </div>
-            </div>
-            <div class="col-lg-6">
-                <div>
-                    <label class="form-label">Weight</label>
-                    <input type="number" class="form-control" id="item_weight" name="example-text-input"
-                        placeholder="Weight of item">
+                <div class="col-lg-6">
+                    <div>
+                        <label class="form-label">Weight</label>
+                        <input type="number" class="form-control" id="item_weight" name="example-text-input"
+                            placeholder="Weight of item">
 
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="row">
-            <div class="col-lg-6">
-                <div class="mb-3">
-                    <label class="form-label">Item Images</label>
-                    <input type="file" class="form-control" id="item_image_id" multiple placeholder="Choose Images">
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="mb-3">
+                        <label class="form-label">Item Images</label>
+                        <input type="file" class="form-control" id="item_image_id" multiple placeholder="Choose Images">
+                    </div>
                 </div>
-            </div>
-            <div class="col-lg-4">
-                <div class="mb-3">
-                    <label class="form-label">Select Customer</label>
-                    <select id="searchableCust" class="form-select select2">
-                        <!-- @foreach ($branchesArray as $branch)
+                <div class="col-lg-4">
+                    <div class="mb-3">
+                        <label class="form-label">Select Customer</label>
+                        <select id="searchableCust" class="form-select select2">
+                            <!-- @foreach ($branchesArray as $branch)
                                 <option value="{{ $branch['branch_id'] }}">{{ $branch['branch_name'] }}</option>
                             @endforeach -->
-                    </select>
-                    <div class="d-none" id="cust_div">
-                        <div>
-                            <label class="form-label">Customer Phone Number</label>
-                            <input type="text" class="form-control" id="cust_phone_no" placeholder="Customer Phone No">
-                        </div>
-                        <div>
-                            <label class="form-label">Customer Address</label>
-                            <textarea id="customer_address" required name="customer_address" class="form-control"
-                                rows="3"></textarea>
-                        </div>
-                        <div>
-                            <label class="form-label">Create New</label>
-                            <button id="saveCustBtn" class="btn btn-primary">Create New</button>
+                        </select>
+                        <div class="d-none" id="cust_div">
+                            <div>
+                                <label class="form-label">Customer Phone Number</label>
+                                <input type="text" class="form-control" id="cust_phone_no"
+                                    placeholder="Customer Phone No">
+                            </div>
+                            <div>
+                                <label class="form-label">Customer Address</label>
+                                <textarea id="customer_address" required name="customer_address" class="form-control"
+                                    rows="3"></textarea>
+                            </div>
+                            <div>
+                                <label class="form-label">Create New</label>
+                                <button id="saveCustBtn" class="btn btn-primary">Create New</button>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
 
 
-        <div class="row d-none" id="payment">
-            <div class="col-lg-6">
-                <div>
-                    <label class="form-label">Payment Advance</label>
-                    <input type="number" class="form-control" id="payment_advance" name="example-text-input">
+            <div class="row d-none" id="payment">
+                <div class="col-lg-6">
+                    <div>
+                        <label class="form-label">Payment Advance</label>
+                        <input type="number" class="form-control" id="payment_advance" name="example-text-input">
 
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="mb-3">
+                        <label class="form-label">Payment Booking</label>
+                        <input type="number" class="form-control" id="payment_booking">
+                    </div>
                 </div>
             </div>
-            <div class="col-lg-6">
-                <div class="mb-3">
-                    <label class="form-label">Payment Booking</label>
-                    <input type="number" class="form-control" id="payment_booking">
-                </div>
-            </div>
-        </div>
 
 
-        <div class="row">
-            <div class="col-lg-6">
+            <div class="row">
+                <div class="col-lg-6">
 
-                <div class="mb-3">
+                    <div class="mb-3">
 
-                    <a href="#" class="btn btn-primary ms-auto" id="saveBranchBtn">
-                        <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
-                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24"
-                            stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
-                            stroke-linejoin="round">
-                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                            <path d="M12 5l0 14" />
-                            <path d="M5 12l14 0" />
-                        </svg>
-                        Create new Order
-                    </a>
+                        <a href="#" class="btn btn-primary ms-auto" id="saveBranchBtn">
+                            <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
+                                viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                <path d="M12 5l0 14" />
+                                <path d="M5 12l14 0" />
+                            </svg>
+                            Create new Order
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+
+
+    <div class="note-sidebar" id="note_sheet">
+        <div class="card border-0">
+            <div class="card-header p-2 rounded-0 ">
+                <h5 class="card-title">Notes</h5>
+                <button class="btn btn-tabler btn-ghost-secondary note-close-btn ms-auto btn-icon"
+                    onclick="toogleNoteSheet()">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        class="icon icon-tabler icons-tabler-outline x">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                        <path d="M18 6l-12 12" />
+                        <path d="M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <div id="notes-container"></div>
+        <div class="space-y-1 scrollable h-100 py-2 px-1" id="notes_body">
+        </div>
+        <div class="input-group input-group-flat rounded-0 border-top">
+            <input type="text" class="form-control rounded-0 border-0" autocomplete="off" placeholder="Type note..."
+                id="TextNotes" />
+            <span class="input-group-text rounded-0 border-0">
+                <input type="file" id="fileInput" style="display: none;" onchange="handleFileUpload(event)" multiple />
+                <a href="#" onclick="open_file_select()" class="link-secondary ms-2" data-bs-toggle="tooltip"
+                    aria-label="Please Select file to upload" data-bs-original-title="Please Select file to upload">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="20" height="20" viewBox="0 0 24 24"
+                        stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                        <path
+                            d="M15 7l-6.5 6.5a1.5 1.5 0 0 0 3 3l6.5 -6.5a3 3 0 0 0 -6 -6l-6.5 6.5a4.5 4.5 0 0 0 9 9l6.5 -6.5">
+                        </path>
+                    </svg>
+                </a>
+            </span>
+        </div>
+    </div>
+
 </div>
-
-
-
-
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>

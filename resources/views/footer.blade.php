@@ -243,92 +243,98 @@
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/qr-scanner/1.4.2/qr-scanner.umd.min.js"></script>
-    <style>
-        @media (max-width:768px) {
-            .page-body {
-                margin-bottom: 0 !important;
-                margin-top: 1rem !important;
-            }
+<style>
+    @media (max-width:768px) {
+        .page-body {
+            margin-bottom: 0 !important;
+            margin-top: 1rem !important;
         }
-    </style>
-    <script>
-        function domReady(fn) {
-            if (document.readyState === "complete" || document.readyState === "interactive") {
-                setTimeout(fn, 1000);
-            } else {
-                document.addEventListener("DOMContentLoaded", fn);
+    }
+</style>
+<script>
+    function domReady(fn) {
+        if (document.readyState === "complete" || document.readyState === "interactive") {
+            setTimeout(fn, 1000);
+        } else {
+            document.addEventListener("DOMContentLoaded", fn);
+        }
+    }
+
+    function toogleNoteSheet() {
+        var element = document.getElementById("note_sheet");
+        element.classList.toggle("active");
+    }
+
+    domReady(function () {
+        // Get DOM elements
+        const videoElem = document.getElementById("videoElem");
+        const startButton = document.getElementById("start-scann");
+
+        let qrScanner = null;
+
+        function onScanSuccess(result) {
+            // Display the result
+            const scannedText = result.data || result;
+            alert(scannedText);
+            // If the result is a URL, open it in a new tab
+            if (scannedText.startsWith('http')) {
+                window.open(scannedText, '_blank');
             }
+
+            // Stop scanning
+            stopScanner();
         }
 
-        function toogleNoteSheet() {
-            var element = document.getElementById("note_sheet");
-            element.classList.toggle("active");
+        function startScanner() {
+            // Show the video element
+            document.getElementById("my-qr-reader").style.display = "block";
+            startButton.textContent = "Stop Scanner";
+
+            // Initialize QR scanner if not already created
+            if (!qrScanner) {
+                qrScanner = new QrScanner(
+                    videoElem,
+                    onScanSuccess,
+                    {
+                        highlightScanRegion: true,
+                        highlightCodeOutline: true,
+                    }
+                );
+            }
+
+            // Start scanning
+            qrScanner.start();
         }
 
-        domReady(function () {
-            // Get DOM elements
-            const videoElem = document.getElementById("videoElem");
-            const startButton = document.getElementById("start-scann");
-
-            let qrScanner = null;
-
-            function onScanSuccess(result) {
-                // Display the result
-                const scannedText = result.data || result;
-                alert(scannedText);
-                // If the result is a URL, open it in a new tab
-                if (scannedText.startsWith('http')) {
-                    window.open(scannedText, '_blank');
-                }
-
-                // Stop scanning
-                stopScanner();
+        function stopScanner() {
+            if (qrScanner) {
+                qrScanner.stop();
             }
+            document.getElementById("my-qr-reader").style.display = "none";
+            startButton.textContent = "Start Scanner";
+        }
 
-            function startScanner() {
-                // Show the video element
-                document.getElementById("my-qr-reader").style.display = "block";
-                startButton.textContent = "Stop Scanner";
 
-                // Initialize QR scanner if not already created
-                if (!qrScanner) {
-                    qrScanner = new QrScanner(
-                        videoElem,
-                        onScanSuccess,
-                        {
-                            highlightScanRegion: true,
-                            highlightCodeOutline: true,
-                        }
-                    );
-                }
-
-                // Start scanning
-                qrScanner.start();
-            }
-
-            function stopScanner() {
-                if (qrScanner) {
-                    qrScanner.stop();
-                }
-                document.getElementById("my-qr-reader").style.display = "none";
-                startButton.textContent = "Start Scanner";
-            }
-
-            // Toggle scanner on button click
-            startButton.addEventListener("click", function () {
-                if (qrScanner && qrScanner.isScanning()) {
-                    stopScanner();
-                } else {
-                    startScanner();
-                }
-            });
-
-            // Handle errors
-            // window.addEventListener('error', function(e) {
-            //     resultDiv.innerHTML = `<p style="color: red;">Error: ${e.message}</p>`;
-            // });
+        document.getElementById("close_qr_code").addEventListener("click", function () {
+            stopScanner();
         });
-    </script>
+
+
+        // Toggle scanner on button click
+        startButton.addEventListener("click", function () {
+            if (qrScanner && qrScanner.isScanning()) {
+                stopScanner();
+            } else {
+                startScanner();
+            }
+        });
+
+        // Handle errors
+        // window.addEventListener('error', function(e) {
+        //     resultDiv.innerHTML = `<p style="color: red;">Error: ${e.message}</p>`;
+        // });
+    });
+</script>
 <script>
     function logout() {
         var csrfToken = $('meta[name="csrf-token"]').attr('content');

@@ -37,6 +37,17 @@
             <div class="input-group input-group-flat rounded-0 border-top">
                 <input type="text" class="form-control rounded-0 border-0" autocomplete="off" placeholder="Type note..."
                     id="TextNotes" />
+                <span class="input-group-text rounded-0 border-0 pe-0">
+                    <input type="file" id="fileInput" style="display: none;" onchange="handleFileUpload(event)"
+                        multiple />
+                    <a href="#" onclick="open_file_select()" class="link-secondary ms-2" data-bs-toggle="tooltip"
+                        aria-label="Please Select file to upload" data-bs-original-title="Audio File">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 1024 1024">
+                            <path fill="currentColor"
+                                d="M842 454c0-4.4-3.6-8-8-8h-60c-4.4 0-8 3.6-8 8c0 140.3-113.7 254-254 254S258 594.3 258 454c0-4.4-3.6-8-8-8h-60c-4.4 0-8 3.6-8 8c0 168.7 126.6 307.9 290 327.6V884H326.7c-13.7 0-24.7 14.3-24.7 32v36c0 4.4 2.8 8 6.2 8h407.6c3.4 0 6.2-3.6 6.2-8v-36c0-17.7-11-32-24.7-32H548V782.1c165.3-18 294-158 294-328.1M512 624c93.9 0 170-75.2 170-168V232c0-92.8-76.1-168-170-168s-170 75.2-170 168v224c0 92.8 76.1 168 170 168m-94-392c0-50.6 41.9-92 94-92s94 41.4 94 92v224c0 50.6-41.9 92-94 92s-94-41.4-94-92z" />
+                        </svg>
+                    </a>
+                </span>
                 <span class="input-group-text rounded-0 border-0">
                     <input type="file" id="fileInput" style="display: none;" onchange="handleFileUpload(event)"
                         multiple />
@@ -74,7 +85,7 @@
             style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1000; background: rgba(0, 0, 0, 0.8);">
             <video id="videoElem" style="width: 100%; height: 100%; object-fit: cover;"></video>
             <div style="position:fixed; top: 1rem; right: 1rem; z-index: 1111;">
-                <button class="btn btn-secondary btn-icon">
+                <button class="btn btn-secondary btn-icon" id="close_qr_code">
                     <svg fill="currentColor" height="24px" width="24px" version="1.1" id="Layer_1"
                         xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
                         viewBox="0 0 512 512" xml:space="preserve">
@@ -120,6 +131,25 @@
             }
         }
     </style>
+    <script>
+        // Check if "order-add" exists in the URL
+        document.addEventListener("DOMContentLoaded", function () {
+            const url = window.location.href;
+            const layoutWrapper = document.querySelector(".layout-wrapper");
+            const noteSheet = document.getElementById("note_sheet");
+
+            if (url.includes("order-add") || url.includes("edit-order")) {
+                layoutWrapper.classList.add("layout-wrapper");
+
+                noteSheet.style.display = "block";
+            } else {
+                layoutWrapper.classList.remove("layout-wrapper");
+                noteSheet.style.display = "none";
+            }
+        });
+
+
+    </script>
     <!-- <script>
         function domReady(fn) {
             if (document.readyState === "complete" || document.readyState === "interactive") {

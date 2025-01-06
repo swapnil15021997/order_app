@@ -60,7 +60,7 @@
     padding-right: 272px;
 }
 
-.main-content {
+.layout-wrapper .main-content {
     width: 100%;
     height: 100%;
     overflow: hidden;
@@ -98,9 +98,9 @@
     -moz-border-radius: 4px;
     -ms-border-radius: 4px;
     -o-border-radius: 4px;
-    padding: 4px;
-    text-align: end;
-    width: fit-content;
+    padding: 4px 8px;
+    text-align: start;
+    width: 100%;
     margin-left: auto;
 }
 
