@@ -2,234 +2,278 @@
 
 @section('content')
 <!-- Page header -->
-<div class="page-header d-print-none">
-    <div class="container-xl">
-        <div class="row g-2 align-items-center">
-            <div class="col">
-                <!-- <h2 class="page-title">
-                    Edit Order
-                    </h2> -->
-                <nav aria-label="breadcrumb">
-                    <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="{{route('dashboard')}}">Home</a></li>
-                        <li class="breadcrumb-item" aria-current="page"><a href="{{route('order-master')}}">Orders</a>
-                        </li>
-                        <li class="breadcrumb-item active" aria-current="page">Edit Order</li>
-                    </ol>
-                </nav>
-            </div>
-        </div>
-    </div>
-</div>
 
-<div class="page-body">
-    <div class="container-xl">
+<div class="container-xl">
+    <div class="order-from-page">
+        <div class="w-full">
+            <div>
+                <div class="page-body">
+                    <div class="d-flex flex-column gap-3">
+                        <div id="alert-container"></div>
+                        <div class="d-flex align-items-center justify-content-between">
+                            <div>
+                                <img src="{{ asset('static/logo_order.png')}}" alt="Tabler" class="img-fluid "
+                                    width="80px" height="40px" />
+                                <p class="mb-0 mt-1">Pansuriya Ashok <br /> +91 9898989898</p>
+                            </div>
+                            <img src="{{ asset('static/qr_code.png')}}" alt="Tabler" class="img-fluid" width="100px">
+                        </div>
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-4">
+                                        <label for="order_nu" class="form-label">Order Number</label>
+                                        <input type="text" class="form-control" id="order_nu">
+                                    </div>
+                                    <div class="col-4">
+                                        <label for="order_date" class="form-label">Order Date</label>
+                                        <input type="date" id="order_date" class="form-control"
+                                            value="{{$order['order_date']}}" form>
+                                    </div>
+                                    <div class="col-4">
+                                        <label for="order_type" class="form-label">Order Type</label>
+                                        <select id="order_type" class="form-select" type="text">
+                                            <option value="" disabled selected>Select type</option>
+                                            <option value="order">Order</option>
+                                            <option value="reparing">Reparing</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row mt-3">
+                                    <div class="col-4">
+                                        <label for="order_customer_details" class="form-label">Customer
+                                            Details</label>
+                                        <input type="text" placeholder="Enter details" id="order_customer_details"
+                                            class="form-control" form>
+                                    </div>
+                                    <div class="col-4">
+                                        <label for="order_customer_name" class="form-label">Customer name</label>
+                                        <input type="text" placeholder="Enter name" id="order_customer_name"
+                                            class="form-control" form>
+                                    </div>
+                                    <div class="col-4">
+                                        <label for="cust_phone_no" class="form-label">Phone number</label>
+                                        <input type="text" placeholder="Enter number" id="cust_phone_no"
+                                            class="form-control" form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="h2">Branch & Transfer</h4>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <label for="searchableSelectFrom" class="form-label">From</label>
 
-    <div class="card">
-    <div class="card-body">
+                                        <select id="searchableSelectFrom" class="form-select" type="text">
 
-        <div class="row">
-            <div id="alert-container"></div>
-            <div class="col-lg-6">
+                                            @foreach ($user_branch as $branch)
 
-                <div class="mb-3">
-                    <input type="hidden" id="edit_order_id" value="{{$order['order_id']}}">
-                    <label class="form-label">Order Date</label>
-                    <input type="date" id="edit_order_date" value="{{$order['order_date']}}" class="form-control" form>
-                </div>
-            </div>
-            <div class="col-lg-6">
-                <div class="mb-3">
-                    <label class="form-label">Order Type</label>
-                    <div class="d-flex align-items-center">
-                        <label class="form-check-label me-2">Order</label>
-                        <label class="form-check form-switch m-0">
-                            <input class="form-check-input" id="order_type" type="checkbox" @if($order['order_type'] == 2)
-                            checked @endif>
-                        </label>
-                        <label class="form-check-label ms-2">Reparing</label>
+                                                <option value="{{ $branch['branch_id'] }}" @if ($branch['branch_id'] == $login['user_active_branch']) selected @endif>
+                                                    {{ $branch['branch_name'] }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="col-6">
+                                        <label for="searchableSelectTo" class="form-label">To</label>
+
+                                        <select id="searchableSelectTo" class="form-select w-100" type="text">
+
+                                            @foreach ($branchesArray as $branch)
+                                                <option value="{{ $branch['branch_id'] }}">{{ $branch['branch_name'] }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="h2">Item Details</h4>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <label for="item_name" class="form-label">Name</label>
+                                        <input type="text" class="form-control" id="item_name" placeholder="Select Item"
+                                            value="{{$order['items'][0]['item_name']}}" />
+                                    </div>
+                                    <div class="col-6">
+                                        <label for="item_metal" class="form-label">Metal</label>
+                                        <select class="form-select" id="item_metal">
+                                            <option value="" disabled selected>Select a metal</option>
+
+                                            @foreach ($metals as $metal)
+                                                <option value="{{ $metal->metal_name }}" selected>
+                                                    {{ $metal->metal_name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row mt-3">
+                                    <div class="col-4">
+                                        <label for="item_melting" class="form-label">Melting</label>
+                                        <select class="form-select" id="item_melting">
+                                            <option value="" disabled selected>Select a melting</option>
+                                            @foreach ($melting as $melt)
+                                                <option value="{{ $melt->melting_name }}" selected>
+                                                    {{ $melt->melting_name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="col-4">
+                                        <label for="item_weight" class="form-label">Weight</label>
+                                        <input type="number" class="form-control" id="item_weight"
+                                            name="example-text-input" value="{{$order['items'][0]['item_weight']}}"
+                                            placeholder="Weight of item" />
+                                    </div>
+                                    <div class="col-4">
+                                        <label for="item_colors" class="form-label">Colors</label>
+                                        <select class="form-select" id="item_colors">
+                                            <option value="" disabled selected>Select color</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row mt-3">
+                                    <div class="col-12">
+                                        <input type="file" class="form-control" id="item_image_id" multiple
+                                            placeholder="Choose Images" />
+                                    </div>
+                                </div>
+                                <div class="row mt-3">
+                                    <div class="col-4">
+                                        <div class="selected-files">
+                                            <div class="d-flex align-items-center gap-2">
+                                                <img src="https://images.unsplash.com/photo-1736148912326-aeeda15df88f?q=80&w=1964&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                                                    alt="select image" width="35px" />
+                                                <div>
+                                                    <p>Image potrait.jpg</p>
+                                                    <small>500kb</small>
+                                                </div>
+                                            </div>
+                                            <button>
+                                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
+                                                    xmlns="http://www.w3.org/2000/svg">
+                                                    <path
+                                                        d="M12.59 6L10 8.59L7.41 6L6 7.41L8.59 10L6 12.59L7.41 14L10 11.41L12.59 14L14 12.59L11.41 10L14 7.41L12.59 6ZM10 0C4.47 0 0 4.47 0 10C0 15.53 4.47 20 10 20C15.53 20 20 15.53 20 10C20 4.47 15.53 0 10 0ZM10 18C5.59 18 2 14.41 2 10C2 5.59 5.59 2 10 2C14.41 2 18 5.59 18 10C18 14.41 14.41 18 10 18Z"
+                                                        fill="#858585" />
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="h2">Payment Details</h4>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <label for="payment_advance" class="form-label">Advance cash deposit</label>
+                                        <input type="number" placeholder="Enter here" class="form-control"
+                                            id="payment_advance"
+                                            value="{{ optional($paymentArray)['payment_advance_cash'] }}"
+                                            name="example-text-input">
+                                    </div>
+                                    <div class="col-6">
+                                        <label for="payment_booking" class="form-label">Rate</label>
+                                        <input type="number" class="form-control" id="payment_booking"
+                                            value="{{ optional($paymentArray)['payment_advance_cash'] }}"
+                                            placeholder="Enter here">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-end">
+                                    <a href="#" class="btn btn-primary ms-auto" id="saveBranchBtn">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
+                                            viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                            stroke-linecap="round" stroke-linejoin="round">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                            <path d="M12 5l0 14" />
+                                            <path d="M5 12l14 0" />
+                                        </svg>
+                                        Create new Order
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-
                 </div>
+
             </div>
         </div>
+        <div class="note-sidebar" id="note_sheet">
 
-        <div class="row">
-
-            <div class="col-lg-6">
-                <div class="mb-3">
-                    <label class="form-label">Order From</label>
-                    <select id="edit_searchableSelectFrom" class="form-select" type="text">
-
-                        @foreach ($branchesArray as $branch)
-                            <option value="{{ $branch['branch_id'] }}" @if ($branch['branch_id'] == $order['order_from_branch_id']) selected @endif>
-                                {{ $branch['branch_name'] }}</option>
-                        @endforeach
-                    </select>
-                </div>
-
+            <div class="note-header">
+                <h5 class="mb-0">Notes</h5>
+                <button class="btn btn-tabler btn-ghost-secondary note-close-btn ms-auto btn-icon"
+                    onclick="toogleNoteSheet()">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        class="icon icon-tabler icons-tabler-outline x">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                        <path d="M18 6l-12 12" />
+                        <path d="M6 6l12 12" />
+                    </svg>
+                </button>
             </div>
-            <div class="col-lg-6">
-                <div class="mb-3">
-                    <label class="form-label">Order To</label>
-                    <select id="edit_searchableSelectTo" class="form-select">
-
-                        @foreach ($branchesArray as $branch)
-                            <option value="{{ $branch['branch_id'] }}" @if ($branch['branch_id'] == $order['order_to_branch_id']) selected @endif>
-                                {{ $branch['branch_name'] }}</option>
-                        @endforeach
-                    </select>
-                </div>
-            </div>
-
-        </div>
-
-        <div class="row">
-            <div class="col-lg-6">
-                <div class="mb-3">
-                    <label class="form-label">Item name</label>
-                    <input type="text" class="form-control" value="{{$order['items'][0]['item_name']}}"
-                        id="edit_item_name">
-                </div>
-            </div>
-            <div class="col-lg-6">
-                <div class="mb-3">
-                    <label class="form-label">Metal</label>
-                    <select class="form-select" id="edit_item_metal">
-                        <option value="" disabled selected>Select a metal</option>
-
-                        @foreach ($metals as $metal)
-                            <option value="{{ $metal->metal_name }}" @if ($metal->metal_name == $order['items'][0]['item_metal']) selected @endif>
-                                {{ $metal->metal_name }}</option>
-                        @endforeach
-                    </select>
-                </div>
-            </div>
-        </div>
-
-        <div class="row mb-3">
-            <div class="col-lg-6">
-                <div>
-                    <label class="form-label">Melting</label>
-                    <select class="form-select" id="edit_item_melting">
-                        <option value="" disabled selected>Select a melting</option>
-                        @foreach ($melting as $melt)
-                            <option value="{{ $melt->melting_name }}" @if ($melt->melting_name == $order['items'][0]['item_melting']) selected @endif>
-                                {{ $melt->melting_name }}</option>
-                        @endforeach
-                    </select>
-                </div>
-            </div>
-            <div class="col-lg-6">
-                <div>
-                    <label class="form-label">Weight</label>
-                    <input type="text" class="form-control" id="edit_item_weight"
-                        value="{{$order['items'][0]['item_weight']}}" name="example-text-input"
-                        placeholder="Weight of item">
-
-                </div>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-lg-6">
-                <div class="mb-3">
-                    <label class="form-label">Item Images</label>
-                    <input type="file" class="form-control" id="edit_item_image_id" multiple
-                        placeholder="Choose Images">
-                </div>
-            </div>
-            <div class="col-lg-4">
-                <div class="mb-3">
-                    <label class="form-label">Select Customer</label>
-                    <select id="searchableCust" class="form-select select2">
-
-                        <!-- @foreach ($branchesArray as $branch)
-                                <option value="{{ $branch['branch_id'] }}">{{ $branch['branch_name'] }}</option>
-                            @endforeach -->
-                        @foreach ($customer as $branch)
-                            <option value="{{ $branch['cust_id'] }}" @if ($branch['cust_id'] == $order['order_customer_id'])
-                            selected @endif>{{ $branch['cust_name'] }}</option>
-                        @endforeach
-                    </select>
-                    <div class="d-none" id="cust_div">
-                        <div>
-                            <label class="form-label">Customer Phone Number</label>
-                            <input type="text" class="form-control" id="cust_phone_no" placeholder="Customer Phone No">
-                        </div>
-                        <div>
-                            <label class="form-label">Customer Address</label>
-                            <textarea id="customer_address" required name="customer_address" class="form-control"
-                                rows="3"></textarea>
-                        </div>
-                        <div>
-                            <label class="form-label">Create New</label>
-                            <button id="saveCustBtn" class="btn btn-primary">Create New</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-
-
-        <div class="row">
-            @if(!empty($fileArray))
-                @foreach($fileArray as $file)
-                    <div class="col-sm-6 col-lg-4">
-                        <div class="card card-sm">
-                            <a href="{{ $file['file_url'] ?? '#' }}" class="d-block" target="_blank">
-                                <img src="{{ $file['file_url'] ?? './static/photos/default-image.jpg' }}" class="card-img-top"
-                                    alt="{{ $file['file_name'] ?? 'File Image' }}">
-                            </a>
-                        </div>
-                    </div>
-                @endforeach
-            @else
-                <p class="text-center">No files available.</p>
-            @endif
-        </div>
-
-        <div class="row d-none " id="payment">
-            <div class="col-lg-6">
-                <div>
-                    <label class="form-label">Payment Advance</label>
-                    <input type="number" class="form-control" id="payment_advance"
-                        value="{{ optional($paymentArray)['payment_advance_cash'] }}" name="example-text-input">
-
-                </div>
-            </div>
-            <div class="col-lg-6">
-                <div class="mb-3">
-                    <label class="form-label">Payment Booking</label>
-                    <input type="number" class="form-control" id="payment_booking"
-                        value="{{ optional($paymentArray)['payment_advance_cash'] }}">
-                </div>
-            </div>
-        </div>
-
-
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="d-flex justify-content-end">
-                    <a href="#" class="btn btn-primary ms-auto" id="updateOrderBtn">
-                        <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
-                            class="bi bi-pencil-square me-2" viewBox="0 0 16 16">
+            <div id="notes-container"></div>
+            <div class="space-y-2 scrollable h-100 py-2 px-1" id="notes_body"></div>
+            <div class="note-footer">
+                <input type="text" autocomplete="off" placeholder="Write your message" id="TextNotes" />
+                <span class="custom-btn">
+                    <input type="file" id="fileInput" style="display: none;" onchange="handleFileUpload(event)"
+                        multiple />
+                    <a href="#" onclick="open_file_select()" data-bs-toggle="tooltip"
+                        aria-label="Please Select file to upload" data-bs-original-title="Please Select file to upload">
+                        <svg width="18" height="20" viewBox="0 0 18 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path
-                                d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
-                            <path fill-rule="evenodd"
-                                d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z" />
+                                d="M10.879 6.37503L5.39297 11.861C4.56697 12.687 4.56697 14.027 5.39297 14.853V14.853C6.21897 15.679 7.55897 15.679 8.38497 14.853L15.617 7.62103C17.132 6.10603 17.132 3.65003 15.617 2.13503V2.13503C14.102 0.620029 11.646 0.620029 10.131 2.13503L2.89897 9.36703C0.694972 11.571 0.694972 15.143 2.89897 17.347V17.347C5.10297 19.551 8.67497 19.551 10.879 17.347L15.268 12.958"
+                                stroke="#000E08" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
                         </svg>
-                        Update Order
                     </a>
-                </div>
+                </span>
+                <span class="custom-btn">
+                    <input type="file" id="fileInput" style="display: none;" onchange="handleFileUpload(event)"
+                        multiple />
+                    <a href="#" onclick="open_file_select()" data-bs-toggle="tooltip"
+                        aria-label="Please Select file to upload" data-bs-original-title="Audio File">
+                        <svg width="22" height="20" viewBox="0 0 22 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M6 4V4.75C6.25076 4.75 6.48494 4.62467 6.62404 4.41603L6 4ZM7.40627 1.8906L6.78223 1.47457V1.47457L7.40627 1.8906ZM14.5937 1.8906L15.2178 1.47457L14.5937 1.8906ZM16 4L15.376 4.41603C15.5151 4.62467 15.7492 4.75 16 4.75V4ZM13.25 11.5C13.25 12.7426 12.2426 13.75 11 13.75V15.25C13.0711 15.25 14.75 13.5711 14.75 11.5H13.25ZM11 13.75C9.75736 13.75 8.75 12.7426 8.75 11.5H7.25C7.25 13.5711 8.92893 15.25 11 15.25V13.75ZM8.75 11.5C8.75 10.2574 9.75736 9.25 11 9.25V7.75C8.92893 7.75 7.25 9.42893 7.25 11.5H8.75ZM11 9.25C12.2426 9.25 13.25 10.2574 13.25 11.5H14.75C14.75 9.42893 13.0711 7.75 11 7.75V9.25ZM6.62404 4.41603L8.0303 2.30662L6.78223 1.47457L5.37596 3.58397L6.62404 4.41603ZM9.07037 1.75H12.9296V0.25H9.07037V1.75ZM13.9697 2.30662L15.376 4.41603L16.624 3.58397L15.2178 1.47457L13.9697 2.30662ZM12.9296 1.75C13.3476 1.75 13.7379 1.95888 13.9697 2.30662L15.2178 1.47457C14.7077 0.709528 13.8491 0.25 12.9296 0.25V1.75ZM8.0303 2.30662C8.26214 1.95888 8.65243 1.75 9.07037 1.75V0.25C8.1509 0.25 7.29226 0.709528 6.78223 1.47457L8.0303 2.30662ZM20.25 8V15H21.75V8H20.25ZM17 18.25H5V19.75H17V18.25ZM1.75 15V8H0.25V15H1.75ZM5 18.25C3.20507 18.25 1.75 16.7949 1.75 15H0.25C0.25 17.6234 2.37665 19.75 5 19.75V18.25ZM20.25 15C20.25 16.7949 18.7949 18.25 17 18.25V19.75C19.6234 19.75 21.75 17.6234 21.75 15H20.25ZM17 4.75C18.7949 4.75 20.25 6.20507 20.25 8H21.75C21.75 5.37665 19.6234 3.25 17 3.25V4.75ZM5 3.25C2.37665 3.25 0.25 5.37665 0.25 8H1.75C1.75 6.20507 3.20507 4.75 5 4.75V3.25ZM5 4.75H6V3.25H5V4.75ZM17 3.25H16V4.75H17V3.25Z"
+                                fill="#000E08" />
+                        </svg>
+                    </a>
+                </span>
+                <span class="custom-btn">
+                    <input type="file" id="fileInput" style="display: none;" onchange="handleFileUpload(event)"
+                        multiple />
+                    <a href="#" onclick="open_file_select()" data-bs-toggle="tooltip"
+                        aria-label="Please Select file to upload" data-bs-original-title="Audio File">
+                        <svg width="16" height="22" viewBox="0 0 16 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M15 10V11C15 14.866 11.866 18 8 18M1 10V11C1 14.866 4.13401 18 8 18M8 18V21M8 21H11M8 21H5M8 15C5.79086 15 4 13.2091 4 11V5C4 2.79086 5.79086 1 8 1C10.2091 1 12 2.79086 12 5V11C12 13.2091 10.2091 15 8 15Z"
+                                stroke="#000E08" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                    </a>
+                </span>
+                <button class="note-submit-btn">
+                    <svg width="19" height="18" viewBox="0 0 19 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" clip-rule="evenodd"
+                            d="M4.43013 2.72003L15.3787 8.19293C15.6845 8.34573 15.8777 8.65821 15.8777 9.00004C15.8777 9.34187 15.6845 9.65435 15.3787 9.80715L4.43013 15.28C4.11287 15.4387 3.73208 15.3968 3.4569 15.173C3.18171 14.9492 3.06316 14.5849 3.15391 14.2419L4.54235 9.00004L3.15391 3.75813C3.06316 3.41521 3.18171 3.05093 3.4569 2.82709C3.73208 2.60325 4.11287 2.56136 4.43013 2.72003Z"
+                            fill="white" />
+                        <path d="M8.66223 9.0001H4.54236" stroke="#0054a6" stroke-width="1.5" stroke-linecap="round"
+                            stroke-linejoin="round" />
+                    </svg>
+                </button>
             </div>
         </div>
-
-        </div>
-        </div>
-
     </div>
 </div>
 

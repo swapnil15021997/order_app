@@ -305,4 +305,6 @@
 .selected-files p {
     margin-bottom: 0;
     font-weight: 600;
+    text-wrap: nowrap;
+    overflow: hidden;
 }

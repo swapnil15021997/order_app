@@ -13,8 +13,8 @@
                         <div id="alert-container"></div>
                         <div class="d-flex align-items-center justify-content-between">
                             <div>
-                                <img src="{{ asset('static/logo_order.png')}}" alt="Tabler" class="img-fluid"
-                                    width="100px">
+                                <img src="{{ asset('static/logo_order.png')}}" alt="Tabler" class="img-fluid "
+                                    width="80px" height="40px" />
                                 <p class="mb-0 mt-1">Pansuriya Ashok <br /> +91 9898989898</p>
                             </div>
                             <img src="{{ asset('static/qr_code.png')}}" alt="Tabler" class="img-fluid" width="100px">
