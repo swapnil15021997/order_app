@@ -15,56 +15,7 @@
             </div>
         </div>
 
-        <div class="note-sidebar" id="note_sheet" style="display:none;">
-            <div class="card border-0">
-                <div class="card-header p-2 rounded-0 ">
-                    <h5 class="card-title">Notes</h5>
-                    <button class="btn btn-tabler btn-ghost-secondary note-close-btn ms-auto btn-icon"
-                        onclick="toogleNoteSheet()">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                            class="icon icon-tabler icons-tabler-outline x">
-                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                            <path d="M18 6l-12 12" />
-                            <path d="M6 6l12 12" />
-                        </svg>
-                    </button>
-                </div>
-            </div>
-            <div id="notes-container"></div>
-            <div class="space-y-1 scrollable h-100 py-2 px-1" id="notes_body">
-            </div>
-            <div class="input-group input-group-flat rounded-0 border-top">
-                <input type="text" class="form-control rounded-0 border-0" autocomplete="off" placeholder="Type note..."
-                    id="TextNotes" />
-                <span class="input-group-text rounded-0 border-0 pe-0">
-                    <input type="file" id="fileInput" style="display: none;" onchange="handleFileUpload(event)"
-                        multiple />
-                    <a href="#" onclick="open_file_select()" class="link-secondary ms-2" data-bs-toggle="tooltip"
-                        aria-label="Please Select file to upload" data-bs-original-title="Audio File">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 1024 1024">
-                            <path fill="currentColor"
-                                d="M842 454c0-4.4-3.6-8-8-8h-60c-4.4 0-8 3.6-8 8c0 140.3-113.7 254-254 254S258 594.3 258 454c0-4.4-3.6-8-8-8h-60c-4.4 0-8 3.6-8 8c0 168.7 126.6 307.9 290 327.6V884H326.7c-13.7 0-24.7 14.3-24.7 32v36c0 4.4 2.8 8 6.2 8h407.6c3.4 0 6.2-3.6 6.2-8v-36c0-17.7-11-32-24.7-32H548V782.1c165.3-18 294-158 294-328.1M512 624c93.9 0 170-75.2 170-168V232c0-92.8-76.1-168-170-168s-170 75.2-170 168v224c0 92.8 76.1 168 170 168m-94-392c0-50.6 41.9-92 94-92s94 41.4 94 92v224c0 50.6-41.9 92-94 92s-94-41.4-94-92z" />
-                        </svg>
-                    </a>
-                </span>
-                <span class="input-group-text rounded-0 border-0">
-                    <input type="file" id="fileInput" style="display: none;" onchange="handleFileUpload(event)"
-                        multiple />
-                    <a href="#" onclick="open_file_select()" class="link-secondary ms-2" data-bs-toggle="tooltip"
-                        aria-label="Please Select file to upload" data-bs-original-title="Please Select file to upload">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="20" height="20" viewBox="0 0 24 24"
-                            stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
-                            stroke-linejoin="round">
-                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                            <path
-                                d="M15 7l-6.5 6.5a1.5 1.5 0 0 0 3 3l6.5 -6.5a3 3 0 0 0 -6 -6l-6.5 6.5a4.5 4.5 0 0 0 9 9l6.5 -6.5">
-                            </path>
-                        </svg>
-                    </a>
-                </span>
-            </div>
-        </div>
+
 
         <div class="note-open-btn">
             <button class="btn btn-tabler btn-ghost-secondary btn-icon" onclick="toogleNoteSheet()">
@@ -132,21 +83,21 @@
         }
     </style>
     <script>
-        // Check if "order-add" exists in the URL
-        document.addEventListener("DOMContentLoaded", function () {
-            const url = window.location.href;
-            const layoutWrapper = document.getElementById("layout");
-            const noteSheet = document.getElementById("note_sheet");
+        // // Check if "order-add" exists in the URL
+        // document.addEventListener("DOMContentLoaded", function () {
+        //     const url = window.location.href;
+        //     const layoutWrapper = document.getElementById("layout");
+        //     const noteSheet = document.getElementById("note_sheet");
 
-            if (url.includes("order-add") || url.includes("edit-order")) {
-                layoutWrapper.classList.add("layout-wrapper");
+        //     if (url.includes("order-add") || url.includes("edit-order")) {
+        //         layoutWrapper.classList.add("layout-wrapper");
 
-                noteSheet.style.display = "block";
-            } else {
-                layoutWrapper.classList.remove("layout-wrapper");
-                noteSheet.style.display = "none";
-            }
-        });
+        //         noteSheet.style.display = "flex";
+        //     } else {
+        //         layoutWrapper.classList.remove("layout-wrapper");
+        //         noteSheet.style.display = "none";
+        //     }
+        // });
 
 
     </script>

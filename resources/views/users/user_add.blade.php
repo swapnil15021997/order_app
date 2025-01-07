@@ -162,7 +162,8 @@
                 </div>
                 </div>
             </div>
-        <div>
+        </div>
+
 
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script src="{{ asset('libs/tom-select/dist/js/tom-select.base.min.js')}}?1692870487" defer></script>
