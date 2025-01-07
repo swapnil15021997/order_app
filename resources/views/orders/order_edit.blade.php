@@ -21,40 +21,40 @@
                         <div class="card">
                             <div class="card-body">
                                 <div class="row">
-                                    <div class="col-4">
-                                        <label for="order_nu" class="form-label">Order Number</label>
-                                        <input type="text" class="form-control" id="order_nu">
+                                    <div class="col-6">
+                                        <h2 class="font-bold">#1234</h2>
+                                        <div class="col-12">
+                                            <label for="order_date" class="form-label">Order Date</label>
+                                            <input type="date" id="order_date" value="{{$order['order_date']}}"
+                                                class="form-control" form>
+                                        </div>
+                                        <div class="col-12 mt-3">
+                                            <label for="order_type" class="form-label">Order Type</label>
+                                            <select id="order_type" class="form-select" type="text">
+                                                <option value="" disabled selected>Select type</option>
+                                                <option value="order">Order</option>
+                                                <option value="reparing">Reparing</option>
+                                            </select>
+                                        </div>
                                     </div>
-                                    <div class="col-4">
-                                        <label for="order_date" class="form-label">Order Date</label>
-                                        <input type="date" id="order_date" class="form-control"
-                                            value="{{$order['order_date']}}" form>
-                                    </div>
-                                    <div class="col-4">
-                                        <label for="order_type" class="form-label">Order Type</label>
-                                        <select id="order_type" class="form-select" type="text">
-                                            <option value="" disabled selected>Select type</option>
-                                            <option value="order">Order</option>
-                                            <option value="reparing">Reparing</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="row mt-3">
-                                    <div class="col-4">
-                                        <label for="order_customer_details" class="form-label">Customer
-                                            Details</label>
-                                        <input type="text" placeholder="Enter details" id="order_customer_details"
-                                            class="form-control" form>
-                                    </div>
-                                    <div class="col-4">
-                                        <label for="order_customer_name" class="form-label">Customer name</label>
-                                        <input type="text" placeholder="Enter name" id="order_customer_name"
-                                            class="form-control" form>
-                                    </div>
-                                    <div class="col-4">
-                                        <label for="cust_phone_no" class="form-label">Phone number</label>
-                                        <input type="text" placeholder="Enter number" id="cust_phone_no"
-                                            class="form-control" form>
+                                    <div class="col-6">
+                                        <h4>Customer Details</h4>
+                                        <div class="mt-4">
+                                            <label for="order_customer_name" class="form-label">Customer name</label>
+                                            <input type="text" placeholder="Enter name" id="order_customer_name"
+                                                class="form-control" form>
+                                        </div>
+                                        <div class="mt-3">
+                                            <label for="cust_phone_no" class="form-label">Phone number</label>
+                                            <input type="text" placeholder="Enter number" id="cust_phone_no"
+                                                class="form-control" form>
+                                        </div>
+                                        <div class="mt-3">
+                                            <label for="order_customer_details" class="form-label">Address
+                                            </label>
+                                            <textarea type="text" placeholder="Enter Address"
+                                                id="order_customer_details" class="form-control" form></textarea>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -190,7 +190,7 @@
                         <div class="card">
                             <div class="card-body">
                                 <div class="d-flex justify-content-end">
-                                    <a href="#" class="btn btn-primary ms-auto" id="saveBranchBtn">
+                                    <a href="#" class="btn btn-primary ms-auto" id="updateOrderBtn">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
                                             viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
                                             stroke-linecap="round" stroke-linejoin="round">
@@ -198,7 +198,7 @@
                                             <path d="M12 5l0 14" />
                                             <path d="M5 12l14 0" />
                                         </svg>
-                                        Create new Order
+                                        Update Order
                                     </a>
                                 </div>
                             </div>
