@@ -127,7 +127,7 @@
 }
 
 .my-note-box {
-    background-color: var(--tblr-border-color-translucent);
+    background-color: #f2f2fa;
     border-radius: 4px;
     -webkit-border-radius: 4px;
     -moz-border-radius: 4px;
@@ -281,4 +281,28 @@
     -moz-transform: translateY(50%);
     -ms-transform: translateY(50%);
     -o-transform: translateY(50%);
+}
+
+.selected-files {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px;
+    border: 1px solid #e7e7e7;
+    border-radius: 12px;
+    -webkit-border-radius: 12px;
+    -moz-border-radius: 12px;
+    -ms-border-radius: 12px;
+    -o-border-radius: 12px;
+}
+
+.selected-files button {
+    background-color: transparent;
+    border: 0;
+    outline: none;
+}
+
+.selected-files p {
+    margin-bottom: 0;
+    font-weight: 600;
 }

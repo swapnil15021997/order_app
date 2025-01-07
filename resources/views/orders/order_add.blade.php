@@ -13,12 +13,11 @@
                         <div id="alert-container"></div>
                         <div class="d-flex align-items-center justify-content-between">
                             <div>
-                                <img src="{{ asset('static/logo_order.png')}}"  alt="Tabler"
-                                    class="img-fluid" width="100px">
+                                <img src="{{ asset('static/logo_order.png')}}" alt="Tabler" class="img-fluid"
+                                    width="100px">
                                 <p class="mb-0 mt-1">Pansuriya Ashok <br /> +91 9898989898</p>
                             </div>
-                            <img src="{{ asset('static/qr_code.png')}}"  alt="Tabler"
-                            class="img-fluid" width="100px">
+                            <img src="{{ asset('static/qr_code.png')}}" alt="Tabler" class="img-fluid" width="100px">
                         </div>
                         <div class="card">
                             <div class="card-body">
@@ -80,7 +79,7 @@
                                     <div class="col-6">
                                         <label for="searchableSelectTo" class="form-label">To</label>
 
-                                        <select id="searchableSelectTo" class="form-select" type="text">
+                                        <select id="searchableSelectTo" class="form-select w-100" type="text">
 
                                             @foreach ($branchesArray as $branch)
                                                 <option value="{{ $branch['branch_id'] }}">{{ $branch['branch_name'] }}
@@ -143,6 +142,28 @@
                                             placeholder="Choose Images" />
                                     </div>
                                 </div>
+                                <div class="row mt-3">
+                                    <div class="col-4">
+                                        <div class="selected-files">
+                                            <div class="d-flex align-items-center gap-2">
+                                                <img src="https://images.unsplash.com/photo-1736148912326-aeeda15df88f?q=80&w=1964&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                                                    alt="select image" width="35px" />
+                                                <div>
+                                                    <p>Image potrait.jpg</p>
+                                                    <small>500kb</small>
+                                                </div>
+                                            </div>
+                                            <button>
+                                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
+                                                    xmlns="http://www.w3.org/2000/svg">
+                                                    <path
+                                                        d="M12.59 6L10 8.59L7.41 6L6 7.41L8.59 10L6 12.59L7.41 14L10 11.41L12.59 14L14 12.59L11.41 10L14 7.41L12.59 6ZM10 0C4.47 0 0 4.47 0 10C0 15.53 4.47 20 10 20C15.53 20 20 15.53 20 10C20 4.47 15.53 0 10 0ZM10 18C5.59 18 2 14.41 2 10C2 5.59 5.59 2 10 2C14.41 2 18 5.59 18 10C18 14.41 14.41 18 10 18Z"
+                                                        fill="#858585" />
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div class="card">
@@ -199,8 +220,7 @@
                 </button>
             </div>
             <div id="notes-container"></div>
-            <div class="space-y-1 scrollable h-100 py-2 px-1" id="notes_body">
-            </div>
+            <div class="space-y-2 scrollable h-100 py-2 px-1" id="notes_body"></div>
             <div class="note-footer">
                 <input type="text" autocomplete="off" placeholder="Write your message" id="TextNotes" />
                 <span class="custom-btn">
