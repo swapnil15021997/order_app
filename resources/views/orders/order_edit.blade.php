@@ -281,6 +281,39 @@
 
             </div>
         </div>
+        <input type="hidden" name="" id="transfer_order_id">
+
+        <div class="modal modal-blur fade" id="transfer_order" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+
+                    <div class="modal-header">
+                        <h5 class="modal-title">Transfer Order</h5>
+                        <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> -->
+                    </div>
+                    <div class="modal-body">
+                        <label class="form-label">Order To</label>
+                        <select id="TransfersearchableSelectTo" class="form-select w-100" type="text">
+
+
+                        </select>
+                    </div>
+
+
+                    <div class="modal-footer">
+                        <a href="#" class="btn btn-secondary" data-bs-dismiss="modal">
+                            Cancel
+                        </a>
+                        <a id="TransferOrderBtn" href="#" class="btn btn-primary">
+                            Transfer This Order
+                        </a>
+                    </div>
+                
+                </div>
+            </div>
+        </div>
+
+
         <div class="note-sidebar" id="note_sheet">
 
             <div class="note-header">
@@ -347,34 +380,7 @@
                 </button>
             </div>
         </div>
-        <input type="hidden" name="" id="transfer_order_id">
-        <div class="modal modal-blur fade" id="transfer_order_model" tabindex="-1" role="dialog" aria-hidden="true">
-            <div class="modal-dialog modal-lg" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Transfer Order</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <label class="form-label">Order To</label>
-                        <select id="TransfersearchableSelectTo" class="form-select select2">
-
-
-                        </select>
-                    </div>
-
-
-                    <div class="modal-footer">
-                        <a href="#" class="btn btn-secondary" data-bs-dismiss="modal">
-                            Cancel
-                        </a>
-                        <a id="TransferOrderBtn" href="#" class="btn btn-primary">
-                            Transfer This Order
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
+       
     </div>
 </div>
 
@@ -385,59 +391,7 @@
 <script>
 
     
-        function transfer_order(order_id) {
-            $('#transfer_order_id').val(order_id);
-            $('#transfer_order_model').modal('show');
-
-        }
-
-        // Searchable
-        $(document).ready(function () {
-            $('#TransfersearchableSelectTo').on('select2:open', function () {
-                $('.select2-search__field').on('input', function () {
-                    userInput = $(this).val();
-                });
-            });
-            var csrfToken = $('meta[name="csrf-token"]').attr('content');
-            $('#TransfersearchableSelectTo').select2({
-
-                placeholder: "Select an option",
-                allowClear: true,
-                ajax: {
-                    url: "{{route('branch_list')}}",
-                    dataType: 'json',
-                    type: 'POST',
-                    headers: {
-                        'X-CSRF-TOKEN': csrfToken  // Add CSRF token in the header
-                    },
-                    delay: 250,
-                    data: function (params) {
-                        return {
-
-                            search: params.term,
-                            per_page: 10,
-                            page: params.page || 1
-                        };
-                    },
-                    processResults: function (data) {
-
-                        return {
-                            results: data.data.branches.map(function (item) {
-                                return {
-                                    id: item.branch_id,
-                                    text: item.branch_name
-                                };
-                            }),
-                            pagination: {
-                                more: data.data.length >= 10 // Check if there are more results
-                            }
-                        };
-                    },
-                    cache: true
-                }
-            });
-        });
-
+    
         // Upload Images and show the preview
 
         function previewSelectedImages() {
@@ -740,6 +694,9 @@
         });
 
 
+      
+        
+
         $('#saveCustBtn').click(function (e) {
             e.preventDefault();
             var custName = userInput;
@@ -792,6 +749,54 @@
         });
     });
 
+    $(document).ready(function () {
+
+        var csrfToken = $('meta[name="csrf-token"]').attr('content');
+        $('#TransfersearchableSelectTo').select2({
+
+            placeholder: "Select an option",
+            allowClear: true,
+            ajax: {
+                url: "{{route('branch_list')}}",
+                dataType: 'json',
+                type: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': csrfToken  // Add CSRF token in the header
+                },
+                delay: 250,
+                data: function (params) {
+                    return {
+
+                        search: params.term,
+                        per_page: 10,
+                        page: params.page || 1
+                    };
+                },
+                processResults: function (data) {
+
+                    return {
+                        results: data.data.branches.map(function (item) {
+                            return {
+                                id: item.branch_id,
+                                text: item.branch_name
+                            };
+                        }),
+                        pagination: {
+                            more: data.data.length >= 10 // Check if there are more results
+                        }
+                    };
+                },
+                cache: true
+            }
+        });
+    });
+
+
+    function transfer_order(order_id) {
+        
+        $('#transfer_order_id').val(order_id);
+        $('#transfer_order').modal('show');
+    }
 
     $('#TransferOrderBtn').click(function (e) {
         e.preventDefault();
@@ -842,80 +847,80 @@
         
 
 
-        function approve_order(transaction_id) {
-            if (transaction_id) {
-                $.ajax({
-                    url: "{{ route('order_approve') }}",
-                    type: 'POST',
-                    data: {
-                        _token: csrfToken,
-                        trans_id: transaction_id,
-                    },
-                    success: function (response) {
-                        if (response.status == 200) {
+    function approve_order(transaction_id) {
+        if (transaction_id) {
+            $.ajax({
+                url: "{{ route('order_approve') }}",
+                type: 'POST',
+                data: {
+                    _token: csrfToken,
+                    trans_id: transaction_id,
+                },
+                success: function (response) {
+                    if (response.status == 200) {
 
-                            location.reload();
-                            showAlert('success', response.message);
-                        } else {
-                            showAlert('warning', response.message);
-                        }
-                    },
-                    error: function (xhr, status, error) {
-                        showAlert('warning', error.message);
+                        location.reload();
+                        showAlert('success', response.message);
+                    } else {
+                        showAlert('warning', response.message);
                     }
-                });
-            } else {
-                showAlert('warning', 'Please select Transaction id');
-            }
-        }
-
-
-        
-        $(document).ready(function () {
-            $('#searchableSelectTo').on('select2:open', function () {
-                $('.select2-search__field').on('input', function () {
-                    userInput = $(this).val();
-                });
-            });
-            var csrfToken = $('meta[name="csrf-token"]').attr('content');
-            $('#searchableSelectTo').select2({
-
-                placeholder: "Select an option",
-                allowClear: true,
-                ajax: {
-                    url: "{{route('branch_list')}}",
-                    dataType: 'json',
-                    type: 'POST',
-                    headers: {
-                        'X-CSRF-TOKEN': csrfToken  // Add CSRF token in the header
-                    },
-                    delay: 250,
-                    data: function (params) {
-                        return {
-
-                            search: params.term,
-                            per_page: 10,
-                            page: params.page || 1
-                        };
-                    },
-                    processResults: function (data) {
-
-                        return {
-                            results: data.data.branches.map(function (item) {
-                                return {
-                                    id: item.branch_id,
-                                    text: item.branch_name
-                                };
-                            }),
-                            pagination: {
-                                more: data.data.length >= 10 // Check if there are more results
-                            }
-                        };
-                    },
-                    cache: true
+                },
+                error: function (xhr, status, error) {
+                    showAlert('warning', error.message);
                 }
             });
+        } else {
+            showAlert('warning', 'Please select Transaction id');
+        }
+    }
+
+
+    
+    $(document).ready(function () {
+        $('#searchableSelectTo').on('select2:open', function () {
+            $('.select2-search__field').on('input', function () {
+                userInput = $(this).val();
+            });
         });
+        var csrfToken = $('meta[name="csrf-token"]').attr('content');
+        $('#searchableSelectTo').select2({
+
+            placeholder: "Select an option",
+            allowClear: true,
+            ajax: {
+                url: "{{route('branch_list')}}",
+                dataType: 'json',
+                type: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': csrfToken  // Add CSRF token in the header
+                },
+                delay: 250,
+                data: function (params) {
+                    return {
+
+                        search: params.term,
+                        per_page: 10,
+                        page: params.page || 1
+                    };
+                },
+                processResults: function (data) {
+
+                    return {
+                        results: data.data.branches.map(function (item) {
+                            return {
+                                id: item.branch_id,
+                                text: item.branch_name
+                            };
+                        }),
+                        pagination: {
+                            more: data.data.length >= 10 // Check if there are more results
+                        }
+                    };
+                },
+                cache: true
+            }
+        });
+    });
 
     function showAlert(type, message) {
         const alertContainer = document.getElementById('alert-container');
@@ -943,5 +948,9 @@
         alertContainer.innerHTML = alertHTML;
         console.log("here");
     }
+
+    $(document).ready(function () {
+       
+    });
 </script>
 @endsection

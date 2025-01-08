@@ -308,3 +308,6 @@
     text-wrap: nowrap;
     overflow: hidden;
 }
+.select2-container--open {
+    z-index: 9999; /* Higher than other elements */
+}
