@@ -278,6 +278,9 @@
 
 <script>
     $(document).ready(function () {
+        // default selected date
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('order_date').value = today;
 
         $('#order_type').on('change', function () {
             const paymentDiv = $('#payment');
@@ -369,7 +372,7 @@
                                 location.href = "{{ route('order-master') }}";
                             }, 1000);
                         } else {
-                            alert('Error creating order: ' + response.message);
+                            
                             showOrderAlert('warning', response.message);
                         }
                     },
@@ -379,7 +382,7 @@
                     }
                 });
             } else {
-                alert('Please fill in all fields.');
+
 
                 showOrderAlert('warning', 'Please fill in all fields orderDate, orderType and Order To');
             }

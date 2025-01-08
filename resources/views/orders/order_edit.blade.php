@@ -349,26 +349,24 @@
                     success: function (response) {
                         if (response.status == 200) {
 
-                            alert(response.message);
                             showAlert('success', response.message);
                             setTimeout(function () {
                                 location.href = "{{ route('order-master') }}";
                             }, 1000);
 
                         } else {
-                            alert('Error updating order: ' + response.message);
+
                             showAlert('warning', response.message);
 
                         }
                     },
                     error: function (xhr, status, error) {
-                        alert('An error occurred: ' + error);
+
                         showAlert('warning', error);
 
                     }
                 });
             } else {
-                alert('Please fill in all fields.');
                 showAlert('warning', 'Please fill in all fields orderDate, orderType and Order To');
 
             }

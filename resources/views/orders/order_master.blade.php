@@ -470,26 +470,27 @@
                                 $('#transfer_order_id').val('');
                                 $('#searchableSelectTo').val('');
                                 $('#branch_table').DataTable().ajax.reload();
-                                alert(response.message);
+
                                 showAlertTransfer('success', response.message);
 
                                 setTimeout(function () {
                                     $('#transfer_order').modal('hide');
                                 }, 2000);
                             } else {
-                                alert('Error Transferring order: ' + response.message);
+                                showAlertTransfer('warning', response.message);
                                 $('#searchableSelectTo').val('');
 
                             }
                         },
                         error: function (xhr, status, error) {
-                            alert('An error occurred: ' + error);
+                            showAlertTransfer('warning', error);
+
                             $('#searchableSelectTo').val('');
 
                         }
                     });
                 } else {
-                    alert('Please fill in both fields.');
+                    showAlertTransfer('warning', 'Please fill in both fields.');
                 }
             });
 

@@ -53,7 +53,7 @@
     <div class="page-body">
         <div class="container-xl">
 
-            <div id="show_success"></div>
+            
             <div class="row row-deck row-cards custom-table-resposive">
 
                 <div class="table-responsive">
@@ -368,7 +368,8 @@
                         }
                     });
                 } else {
-                    alert('Please fill in both fields.');
+                    showSuccess('warning', 'Please fill in both fields.');
+                    // alert('Please fill in both fields.');
                 }
             });
         });
@@ -403,6 +404,7 @@
                         var branchAddress = $('#edit_branch_address').val(response.data.branch_address);
                         $('#edit_branch').modal('show');
                     } else {
+                        
                         alert('Error fetching branch: ' + response.message);
                     }
                 },
@@ -443,7 +445,7 @@
 
 
         function showSuccess(type, message) {
-            const alertContainer = document.getElementById('show_success');
+            const alertContainer = document.getElementById('alert-container');
             const alertHTML = `
                 <div class="alert alert-${type} alert-dismissible" role="alert">
                     <div class="d-flex">
