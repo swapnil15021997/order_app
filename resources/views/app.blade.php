@@ -455,231 +455,232 @@
         // });
 
 
+        // old code
 
-        var csrfToken = $('meta[name="csrf-token"]').attr('content');
-        let page = 1;
-        let loadNotes;
-        let isLoading = false;
+        // var csrfToken = $('meta[name="csrf-token"]').attr('content');
+        // let page = 1;
+        // let loadNotes;
+        // let isLoading = false;
 
-        document.addEventListener("DOMContentLoaded", function () {
-            // Function to load notes
-            loadNotes = function (isScrollUp = false) {
-                if (isLoading) return;
+        // document.addEventListener("DOMContentLoaded", function () {
+        //     // Function to load notes
+        //     loadNotes = function (isScrollUp = false) {
+        //         if (isLoading) return;
 
-                isLoading = true;
-                const notesBody = $('#notes_body');
-                notesBody.html('');
-                const scrollTopBeforeLoad = notesBody.scrollTop();
+        //         isLoading = true;
+        //         const notesBody = $('#notes_body');
+        //         notesBody.html('');
+        //         const scrollTopBeforeLoad = notesBody.scrollTop();
 
-                $.ajax({
-                    url: "{{ route('notes_list') }}",
-                    type: 'POST',
-                    data: {
-                        search: '',
-                        per_page: 8,
-                        page: page
-                    },
-                    headers: {
-                        'X-CSRF-TOKEN': csrfToken
-                    },
-                    success: function (response) {
-                        const notesBody = $('#notes_body');
-                        let firstNoteOffset = notesBody[0].scrollHeight;
+        //         $.ajax({
+        //             url: "{{ route('notes_list') }}",
+        //             type: 'POST',
+        //             data: {
+        //                 search: '',
+        //                 per_page: 8,
+        //                 page: page
+        //             },
+        //             headers: {
+        //                 'X-CSRF-TOKEN': csrfToken
+        //             },
+        //             success: function (response) {
+        //                 const notesBody = $('#notes_body');
+        //                 let firstNoteOffset = notesBody[0].scrollHeight;
 
-                        // Add new notes below
-                        if (!isScrollUp) {
-                            response.data.notes.forEach(function (note) {
-                                if (note.notes_type == 1) {
-                                    notesBody.append(`
-                                    <div class="my-note-box">
-                                        <div class="chat-bubble-title"></div>
-                                        <div class="chat-bubble-body">
-                                            <p>${note.notes_text}.</p>
-                                        </div>
-                                    </div>`);
-                                } else {
-                                    if (note.file.file_type == 'pdf') {
-                                        notesBody.append(`
-                                        <div class="my-note-box w-75">
-                                            <p class="small text-decoration-underline">${note.file.file_original_name}</p>
-                                            <embed src="${note.file.file_url}" width="100%" height="auto" />
-                                        </div>`);
-                                    } else {
-                                        notesBody.append(`
-                                        <div class="my-note-box w-75">
-                                            <p class="small text-decoration-underline">${note.file.file_original_name}</p>
-                                            <img src="${note.file.file_url}" alt="" class="rounded img-fluid" />
-                                        </div>`);
-                                    }
-                                }
-                            });
-                        } else {
-                            // Add older notes to the top when scrolling up
-                            let newNotes = '';
-                            response.data.notes.forEach(function (note) {
-                                if (note.notes_type == 1) {
-                                    newNotes = `
-                                    <div class="my-note-box">
-                                        <div class="chat-bubble-title"></div>
-                                        <div class="chat-bubble-body">
-                                            <p>${note.notes_text}.</p>
-                                        </div>
-                                    </div>` + newNotes;
-                                } else {
-                                    if (note.file.file_type == 'pdf') {
-                                        newNotes = `
-                                        <div class="my-note-box w-75">
-                                            <p class="small text-decoration-underline">${note.file.file_original_name}</p>
-                                            <embed src="${note.file.file_url}" width="100%" height="auto" />
-                                        </div>` + newNotes;
-                                    } else {
-                                        newNotes = `
-                                        <div class="my-note-box w-75">
-                                            <p class="small text-decoration-underline">${note.file.file_original_name}</p>
-                                            <img src="${note.file.file_url}" alt="" class="rounded img-fluid" />
-                                        </div>` + newNotes;
-                                    }
-                                }
-                            });
-                            notesBody.prepend(newNotes);
-                        }
+        //                 // Add new notes below
+        //                 if (!isScrollUp) {
+        //                     response.data.notes.forEach(function (note) {
+        //                         if (note.notes_type == 1) {
+        //                             notesBody.append(`
+        //                             <div class="my-note-box">
+        //                                 <div class="chat-bubble-title"></div>
+        //                                 <div class="chat-bubble-body">
+        //                                     <p>${note.notes_text}.</p>
+        //                                 </div>
+        //                             </div>`);
+        //                         } else {
+        //                             if (note.file.file_type == 'pdf') {
+        //                                 notesBody.append(`
+        //                                 <div class="my-note-box w-75">
+        //                                     <p class="small text-decoration-underline">${note.file.file_original_name}</p>
+        //                                     <embed src="${note.file.file_url}" width="100%" height="auto" />
+        //                                 </div>`);
+        //                             } else {
+        //                                 notesBody.append(`
+        //                                 <div class="my-note-box w-75">
+        //                                     <p class="small text-decoration-underline">${note.file.file_original_name}</p>
+        //                                     <img src="${note.file.file_url}" alt="" class="rounded img-fluid" />
+        //                                 </div>`);
+        //                             }
+        //                         }
+        //                     });
+        //                 } else {
+        //                     // Add older notes to the top when scrolling up
+        //                     let newNotes = '';
+        //                     response.data.notes.forEach(function (note) {
+        //                         if (note.notes_type == 1) {
+        //                             newNotes = `
+        //                             <div class="my-note-box">
+        //                                 <div class="chat-bubble-title"></div>
+        //                                 <div class="chat-bubble-body">
+        //                                     <p>${note.notes_text}.</p>
+        //                                 </div>
+        //                             </div>` + newNotes;
+        //                         } else {
+        //                             if (note.file.file_type == 'pdf') {
+        //                                 newNotes = `
+        //                                 <div class="my-note-box w-75">
+        //                                     <p class="small text-decoration-underline">${note.file.file_original_name}</p>
+        //                                     <embed src="${note.file.file_url}" width="100%" height="auto" />
+        //                                 </div>` + newNotes;
+        //                             } else {
+        //                                 newNotes = `
+        //                                 <div class="my-note-box w-75">
+        //                                     <p class="small text-decoration-underline">${note.file.file_original_name}</p>
+        //                                     <img src="${note.file.file_url}" alt="" class="rounded img-fluid" />
+        //                                 </div>` + newNotes;
+        //                             }
+        //                         }
+        //                     });
+        //                     notesBody.prepend(newNotes);
+        //                 }
 
-                        page++;
+        //                 page++;
 
-                        // Scroll position handling after load
-                        if (isScrollUp) {
-                            notesBody.scrollTop(notesBody[0].scrollHeight - firstNoteOffset);
-                        } else {
-                            notesBody.scrollTop(notesBody[0].scrollHeight);
-                        }
+        //                 // Scroll position handling after load
+        //                 if (isScrollUp) {
+        //                     notesBody.scrollTop(notesBody[0].scrollHeight - firstNoteOffset);
+        //                 } else {
+        //                     notesBody.scrollTop(notesBody[0].scrollHeight);
+        //                 }
 
-                        isLoading = false;
-                    }
-                });
-            }
+        //                 isLoading = false;
+        //             }
+        //         });
+        //     }
 
-            // Initial load (start from the bottom)
-            loadNotes();
+        //     // Initial load (start from the bottom)
+        //     loadNotes();
 
-            // Handle scroll event
-            function handleScroll() {
-                const notesBox = document.getElementById("notes_body");
-                if (!notesBox) return;
+        //     // Handle scroll event
+        //     function handleScroll() {
+        //         const notesBox = document.getElementById("notes_body");
+        //         if (!notesBox) return;
 
-                const { scrollTop, scrollHeight, clientHeight } = notesBox;
+        //         const { scrollTop, scrollHeight, clientHeight } = notesBox;
 
-                if (scrollTop + clientHeight >= scrollHeight - 5) {
-                    // Load more notes at the bottom
-                    loadNotes();
-                } else if (scrollTop === 0) {
-                    // Load older notes when scrolling up
-                    loadNotes(true);
-                }
-            }
+        //         if (scrollTop + clientHeight >= scrollHeight - 5) {
+        //             // Load more notes at the bottom
+        //             loadNotes();
+        //         } else if (scrollTop === 0) {
+        //             // Load older notes when scrolling up
+        //             loadNotes(true);
+        //         }
+        //     }
 
-            // Attach scroll event
-            setTimeout(function () {
-                const notesBox = document.getElementById("notes_body");
-                if (notesBox) {
-                    notesBox.addEventListener("scroll", handleScroll);
-                }
-            }, 500);
+        //     // Attach scroll event
+        //     setTimeout(function () {
+        //         const notesBox = document.getElementById("notes_body");
+        //         if (notesBox) {
+        //             notesBox.addEventListener("scroll", handleScroll);
+        //         }
+        //     }, 500);
 
 
-            $(document).ready(function () {
-                // Handle file upload
+        //     $(document).ready(function () {
+        //         // Handle file upload
 
-                // Handle new text note submission
-                $("#TextNotes").on("keydown", function (event) {
-                    if (event.key === "Enter") {
-                        event.preventDefault();
-                        const text = event.target.value.trim();
-                        if (text) {
-                            $.ajax({
-                                url: "{{ route('notes_add') }}",
-                                type: 'POST',
-                                data: {
-                                    'notes_text': text,
-                                    'notes_file': null
-                                },
-                                headers: {
-                                    'X-CSRF-TOKEN': csrfToken
-                                },
-                                success: function (response) {
-                                    showAlertNotes('success', response.message);
-                                    $('#TextNotes').val('');
-                                    isLoading = false;
-                                    page = 1;
-                                    loadNotes();
-                                }
-                            });
-                        } else {
-                            alert("Please enter some text.");
-                            showAlertNotes('warning', 'Please enter some text');
-                        }
-                    }
-                });
-            });
-        });
+        //         // Handle new text note submission
+        //         $("#TextNotes").on("keydown", function (event) {
+        //             if (event.key === "Enter") {
+        //                 event.preventDefault();
+        //                 const text = event.target.value.trim();
+        //                 if (text) {
+        //                     $.ajax({
+        //                         url: "{{ route('notes_add') }}",
+        //                         type: 'POST',
+        //                         data: {
+        //                             'notes_text': text,
+        //                             'notes_file': null
+        //                         },
+        //                         headers: {
+        //                             'X-CSRF-TOKEN': csrfToken
+        //                         },
+        //                         success: function (response) {
+        //                             showAlertNotes('success', response.message);
+        //                             $('#TextNotes').val('');
+        //                             isLoading = false;
+        //                             page = 1;
+        //                             loadNotes();
+        //                         }
+        //                     });
+        //                 } else {
+        //                     alert("Please enter some text.");
+        //                     showAlertNotes('warning', 'Please enter some text');
+        //                 }
+        //             }
+        //         });
+        //     });
+        // });
 
-        function open_file_select() {
-            $("#fileInput").click();
-        }
+        // function open_file_select() {
+        //     $("#fileInput").click();
+        // }
 
-        function handleFileUpload(event) {
-            const file = event.target.files;
-            if (file) {
-                const formData = new FormData();
-                formData.append('notes_text', '');
-                for (var i = 0; i < file.length; i++) {
-                    formData.append('notes_file[]', file[i]);
-                }
-                $.ajax({
-                    url: "{{ route('notes_add') }}",
-                    type: 'POST',
-                    data: formData,
-                    contentType: false,
-                    processData: false,
-                    headers: {
-                        'X-CSRF-TOKEN': csrfToken
-                    },
-                    success: function (response) {
-                        showAlertNotes('success', response.message);
-                        isLoading = false;
-                        loadNotes();
-                    }
-                });
-            } else {
-                console.log("No file selected");
-            }
-        }
+        // function handleFileUpload(event) {
+        //     const file = event.target.files;
+        //     if (file) {
+        //         const formData = new FormData();
+        //         formData.append('notes_text', '');
+        //         for (var i = 0; i < file.length; i++) {
+        //             formData.append('notes_file[]', file[i]);
+        //         }
+        //         $.ajax({
+        //             url: "{{ route('notes_add') }}",
+        //             type: 'POST',
+        //             data: formData,
+        //             contentType: false,
+        //             processData: false,
+        //             headers: {
+        //                 'X-CSRF-TOKEN': csrfToken
+        //             },
+        //             success: function (response) {
+        //                 showAlertNotes('success', response.message);
+        //                 isLoading = false;
+        //                 loadNotes();
+        //             }
+        //         });
+        //     } else {
+        //         console.log("No file selected");
+        //     }
+        // }
 
-        function showAlertNotes(type, message) {
-            const alertContainer = document.getElementById('notes-container');
-            const alertHTML = `
-                <div class="alert alert-${type} position-fixed  bg-white alert-dismissible" role="alert" style="top:1rem; right:1rem;width:350px;">
-                    <div class="d-flex ">
-                        <div>
-                            ${type === 'success' ? `
-                            <svg xmlns="http://www.w3.org/2000/svg" class="icon alert-icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                                <path d="M5 12l5 5l10 -10" />
-                            </svg>` : `
-                            <svg xmlns="http://www.w3.org/2000/svg" class="icon alert-icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                                <path d="M10.24 3.957l-8.422 14.06a1.989 1.989 0 0 0 1.7 2.983h16.845a1.989 1.989 0 0 0 1.7 -2.983l-8.423 -14.06a1.989 1.989 0 0 0 -3.4 0z" />
-                                <path d="M12 9v4" />
-                                <path d="M12 17h.01" />
-                            </svg>`}
-                        </div>
-                        <div>${message}</div>
-                    </div>
-                    <a class="btn-close" data-bs-dismiss="alert" aria-label="close"></a>
-                </div>
-            `;
-            alertContainer.innerHTML = alertHTML;
-            console.log("here");
-        }
+        // function showAlertNotes(type, message) {
+        //     const alertContainer = document.getElementById('notes-container');
+        //     const alertHTML = `
+        //         <div class="alert alert-${type} position-fixed  bg-white alert-dismissible" role="alert" style="top:1rem; right:1rem;width:350px;">
+        //             <div class="d-flex ">
+        //                 <div>
+        //                     ${type === 'success' ? `
+        //                     <svg xmlns="http://www.w3.org/2000/svg" class="icon alert-icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        //                         <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+        //                         <path d="M5 12l5 5l10 -10" />
+        //                     </svg>` : `
+        //                     <svg xmlns="http://www.w3.org/2000/svg" class="icon alert-icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        //                         <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+        //                         <path d="M10.24 3.957l-8.422 14.06a1.989 1.989 0 0 0 1.7 2.983h16.845a1.989 1.989 0 0 0 1.7 -2.983l-8.423 -14.06a1.989 1.989 0 0 0 -3.4 0z" />
+        //                         <path d="M12 9v4" />
+        //                         <path d="M12 17h.01" />
+        //                     </svg>`}
+        //                 </div>
+        //                 <div>${message}</div>
+        //             </div>
+        //             <a class="btn-close" data-bs-dismiss="alert" aria-label="close"></a>
+        //         </div>
+        //     `;
+        //     alertContainer.innerHTML = alertHTML;
+        //     console.log("here");
+        // }
 
     </script>
 

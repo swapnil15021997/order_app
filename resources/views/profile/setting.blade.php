@@ -66,7 +66,18 @@
                                                     <div class="form-label">Phone No</div>
                                                     <input type="text" class="form-control" name="user_phone_number" value="{{$login['user_phone_number']}}">
                                                 </div>
-                                                
+                                                <div class="col-md mb-3">
+                                                    <div class="form-label">Change Active Branch</div>
+                                                    <select class="form-select" onchange="changeBranch(this.value)">
+                                                        @foreach($user_branch as $branch)
+                                                            <option value="{{ $branch['branch_id'] }}" 
+                                                                    @if($branch['branch_id'] == $login['user_active_branch']) selected @endif>
+                                                                {{ $branch['branch_name'] }}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
+
+                                                </div>
                                                 <div>
                                                     <div class="row g-2">
                                                     
@@ -107,7 +118,8 @@
                                                             <div class="form-label">Confirm Password</div>
                                                             <input type="password" class="form-control" name="password_confirmation">
                                                         </div>
-                                                    
+
+                                                       
                                                     </div>
                                                 </div>
                                                 
@@ -218,6 +230,38 @@
                 @endforeach
             });
         @endif 
+
+        function changeBranch(branch_id) {
+            var csrfToken = $('meta[name="csrf-token"]').attr('content');
+
+            $.ajax({
+                url: "{{ route('branch-active') }}",  // Adjust the route as needed
+                type: 'POST',
+                data: {
+                    _token: csrfToken,
+                    branch_id: branch_id,
+                },
+                success: function (response) {
+                    // Handle success
+
+                    if (response.status == 200) {
+
+                        // alert(response.message);
+                        showAlert('success', response.message);
+                        location.reload();
+
+                    } else {
+                        // alert('Error creating branch: ' + response.message);
+                        showAlert('warning', response.message);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    // alert('An error occurred: ' + error);
+                    showAlert('warning', error);
+                }
+            });
+        }
+        
         function showAlert(type, message) {
             const alertContainer = document.getElementById('alert-profile');
             const alertHTML = `

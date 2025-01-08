@@ -361,7 +361,7 @@ class OrderController extends Controller
         $branchesArray = $branches->toArray();
         $order         = Order::get_order_with_items($id);
         $order         = $order->toArray();
-
+        
         if (empty($order)){
             return response()->json([
                 'status' => 500,

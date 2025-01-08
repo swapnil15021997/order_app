@@ -10,6 +10,7 @@
             <div>
                 <div class="page-body">
                     <div class="d-flex flex-column gap-3">
+                        <div id="alert-site"></div>
                         <div id="alert-container"></div>
                         <div class="d-flex align-items-center justify-content-between">
                             <div>

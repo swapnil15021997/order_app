@@ -32,6 +32,8 @@
         <!-- <div class="col-md-6 col-lg-3">
 
                 </div> -->
+        <div id="alert-site"></div>
+                        
         @if(in_array(13, $user_permissions))
 
             <div class="row row-deck row-cards mb-3">
@@ -744,11 +746,11 @@
                         return `<button data-bs-toggle="dropdown" type="button" class="btn dropdown-toggle dropdown-toggle-split"></button>
                                 <div class="dropdown-menu dropdown-menu-end">
                                   <a class="dropdown-item" href="#" onclick="editUser(${row.id})">
-                                    Edit
+                                    Edit User
                                   </a>
 
                                   <a class="dropdown-item" href="#" onclick="delete_user(${row.id})">
-                                    Delete
+                                    Delete User
                                   </a>
                                 </div>`;
 

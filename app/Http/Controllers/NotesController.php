@@ -19,7 +19,8 @@ class NotesController extends Controller
             'notes_text'          => ['nullable','string'],
             'notes_file'          => ['nullable'],  
             'notes_file.*'        => ['file', 'mimes:jpeg,jpg,png,pdf', 'max:10240'],  
-   
+            'notes_order_id'      => ['required','string'],
+            
         ]; 
         $messages = [
             'notes_text.string'     => 'Please provide valid string in notes text.',
@@ -27,6 +28,8 @@ class NotesController extends Controller
             'notes_file.*.file'     => 'Each item file image must be a valid file.',
             'notes_file.*.mimes'    => 'Each item file image must be a jpeg, jpg, png, or pdf file.',
             'notes_file.*.max'      => 'Each item file image cannot exceed 10MB.',
+            'notes_order_id.string'     => 'Notes id must be string.',
+            'notes_order_id.required'      => 'Notes order required.',
     
         ]; 
         $validator = Validator::make($params, $rules, $messages);
@@ -43,7 +46,7 @@ class NotesController extends Controller
         $notes_save = new Notes();
         $notes_save->notes_text = $params['notes_text'];
         $notes_save->notes_type = $notes_type;
-
+        $notes_save->notes_order_id = $params['notes_order_id'];
         $fileIds = [];
 
         if ($request->hasFile('notes_file')) {
@@ -178,6 +181,7 @@ class NotesController extends Controller
         $searchQuery = $request->input('search', ''); 
         $perPage     = $request->input('per_page', 15);   
         $page        = $request->input('page', 1);  
+        $order_id    = $request->input('order_id');  
         $offset      = ($page - 1) * $perPage;
   
         $notesQuery  = Notes::query()->with('file');       
@@ -189,6 +193,7 @@ class NotesController extends Controller
 
         $total_notes = $notesQuery->count();
         $notes = $notesQuery
+            ->where('notes_order_id',$order_id)
             ->offset($offset)
             ->limit($perPage)
             

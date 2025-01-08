@@ -80,7 +80,7 @@ class UserController extends Controller
                 $userBranchIds = explode(',', $login['user_branch_ids']);
                 $userBranchIds = array_map('trim', $userBranchIds); 
                 $userBranchIds = array_filter($userBranchIds); 
-                dd($userBranchIds);
+                 
                 if(!empty($userBranchIds)){
 
                     $users_branch  = Branch::get_users_branch($userBranchIds);
@@ -104,7 +104,7 @@ class UserController extends Controller
         $user_permissions = session('combined_permissions', []);
         
         return view('users/user_add',['users' => $users,'login'=>$login,
-        'activePage'=>$activePage,'branch'=>$branch,
+        'activePage'=>$activePage,'branch'=>$branch,'pageTitle'=>'User Add',
         'roles' => $roles, 'modules'=>$modules,'user_branch'=>$users_branch,'user_permissions'=>$user_permissions,'activeBranchName'=>$activeBranchName]);
     }
 
@@ -340,8 +340,9 @@ class UserController extends Controller
         return view('users/user_edit',['user' => $user,'roles'=>$roles,
             'modules'=>$modules,'user_branch'=>$users_branch,
             'edit_user_branch'=>$user_branch,'login'=>$login,
-            'pageTitle'=>'User Management','activePage'=>'users',
+            'pageTitle'=>'User Edit','activePage'=>'users',
             'branch'=>$branch,'user_permissions'=>$user_permissions,
+
             'activeBranchName'=>$activeBranchName
         ]);
     }

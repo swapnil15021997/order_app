@@ -23,7 +23,7 @@
     <div class="page-body">
         <div class="container-xl">
             @if($login['user_role_id'] == 1)
-
+            <div id="alert-site"></div>
             <div class="row row-deck row-cards mb-3">
                 <div class="col-12">
                     <div class="row row-cards">

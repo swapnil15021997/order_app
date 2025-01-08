@@ -10,6 +10,7 @@
                 <div class="page-body">
                     <div class="d-flex flex-column gap-3">
                         <div id="alert-container"></div>
+                        <div id="alert-site"></div>
                         <div class="d-flex align-items-center justify-content-between">
                             <div>
                                 <img src="{{ asset('static/logo_order.png')}}" alt="Tabler" class="img-fluid "
@@ -37,6 +38,7 @@
                             
                             <!-- <img src="{{ asset('static/qr_code.png')}}" alt="Tabler" class="img-fluid" width="100px"> -->
                         </div>
+                        <input type="hidden" name="" id="order_id" value="{{$order['order_id']}}" >
                         <div class="card">
                             <div class="card-body">
                                 <div class="row">
@@ -264,13 +266,13 @@
                             <div class="card-body">
                                 <div class="d-flex justify-content-end">
                                     <a href="#" class="btn btn-primary ms-auto" id="updateOrderBtn">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
-                                            viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
-                                            stroke-linecap="round" stroke-linejoin="round">
-                                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                            <path d="M12 5l0 14" />
-                                            <path d="M5 12l14 0" />
-                                        </svg>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
+                                        class="bi bi-pencil-square me-2" viewBox="0 0 16 16">
+                                        <path
+                                            d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
+                                        <path fill-rule="evenodd"
+                                            d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z" />
+                                    </svg>
                                         Update Order
                                     </a>
                                 </div>
@@ -332,7 +334,7 @@
             <div id="notes-container"></div>
             <div class="space-y-2 scrollable h-100 py-2 px-1" id="notes_body"></div>
             <div class="note-footer">
-                <input type="text" autocomplete="off" placeholder="Write your message" id="TextNotes" />
+                <input type="text"  autocomplete="off" placeholder="Write your message" id="TextNotes" />
                 <span class="custom-btn">
                     <input type="file" id="fileInput" style="display: none;" onchange="handleFileUpload(event)"
                         multiple />
@@ -349,7 +351,7 @@
                     <input type="file" id="fileInput" style="display: none;" onchange="handleFileUpload(event)"
                         multiple />
                     <a href="#" onclick="open_file_select()" data-bs-toggle="tooltip"
-                        aria-label="Please Select file to upload" data-bs-original-title="Audio File">
+                        aria-label="Please Select file to upload" data-bs-original-title="Images File">
                         <svg width="22" height="20" viewBox="0 0 22 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path
                                 d="M6 4V4.75C6.25076 4.75 6.48494 4.62467 6.62404 4.41603L6 4ZM7.40627 1.8906L6.78223 1.47457V1.47457L7.40627 1.8906ZM14.5937 1.8906L15.2178 1.47457L14.5937 1.8906ZM16 4L15.376 4.41603C15.5151 4.62467 15.7492 4.75 16 4.75V4ZM13.25 11.5C13.25 12.7426 12.2426 13.75 11 13.75V15.25C13.0711 15.25 14.75 13.5711 14.75 11.5H13.25ZM11 13.75C9.75736 13.75 8.75 12.7426 8.75 11.5H7.25C7.25 13.5711 8.92893 15.25 11 15.25V13.75ZM8.75 11.5C8.75 10.2574 9.75736 9.25 11 9.25V7.75C8.92893 7.75 7.25 9.42893 7.25 11.5H8.75ZM11 9.25C12.2426 9.25 13.25 10.2574 13.25 11.5H14.75C14.75 9.42893 13.0711 7.75 11 7.75V9.25ZM6.62404 4.41603L8.0303 2.30662L6.78223 1.47457L5.37596 3.58397L6.62404 4.41603ZM9.07037 1.75H12.9296V0.25H9.07037V1.75ZM13.9697 2.30662L15.376 4.41603L16.624 3.58397L15.2178 1.47457L13.9697 2.30662ZM12.9296 1.75C13.3476 1.75 13.7379 1.95888 13.9697 2.30662L15.2178 1.47457C14.7077 0.709528 13.8491 0.25 12.9296 0.25V1.75ZM8.0303 2.30662C8.26214 1.95888 8.65243 1.75 9.07037 1.75V0.25C8.1509 0.25 7.29226 0.709528 6.78223 1.47457L8.0303 2.30662ZM20.25 8V15H21.75V8H20.25ZM17 18.25H5V19.75H17V18.25ZM1.75 15V8H0.25V15H1.75ZM5 18.25C3.20507 18.25 1.75 16.7949 1.75 15H0.25C0.25 17.6234 2.37665 19.75 5 19.75V18.25ZM20.25 15C20.25 16.7949 18.7949 18.25 17 18.25V19.75C19.6234 19.75 21.75 17.6234 21.75 15H20.25ZM17 4.75C18.7949 4.75 20.25 6.20507 20.25 8H21.75C21.75 5.37665 19.6234 3.25 17 3.25V4.75ZM5 3.25C2.37665 3.25 0.25 5.37665 0.25 8H1.75C1.75 6.20507 3.20507 4.75 5 4.75V3.25ZM5 4.75H6V3.25H5V4.75ZM17 3.25H16V4.75H17V3.25Z"
@@ -369,7 +371,7 @@
                         </svg>
                     </a>
                 </span>
-                <button class="note-submit-btn">
+                <button class="note-submit-btn" id="SendNotes" >
                     <svg width="19" height="18" viewBox="0 0 19 18" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path fill-rule="evenodd" clip-rule="evenodd"
                             d="M4.43013 2.72003L15.3787 8.19293C15.6845 8.34573 15.8777 8.65821 15.8777 9.00004C15.8777 9.34187 15.6845 9.65435 15.3787 9.80715L4.43013 15.28C4.11287 15.4387 3.73208 15.3968 3.4569 15.173C3.18171 14.9492 3.06316 14.5849 3.15391 14.2419L4.54235 9.00004L3.15391 3.75813C3.06316 3.41521 3.18171 3.05093 3.4569 2.82709C3.73208 2.60325 4.11287 2.56136 4.43013 2.72003Z"
@@ -802,7 +804,7 @@
         e.preventDefault();
 
         var orderId = $('#transfer_order_id').val();
-        var transferTo = $('#searchableSelectTo').val();
+        var transferTo = $('#TransfersearchableSelectTo').val();
 
         if (orderId) {
             $.ajax({
@@ -817,17 +819,17 @@
                 success: function (response) {
                     if (response.status == 200) {
                         $('#transfer_order_id').val('');
-                        $('#searchableSelectTo').val('');
+                        $('#TransfersearchableSelectTo').val('');
                         $('#transfer_order').modal('hide');
                         showAlert('success', response.message);
 
                         setTimeout(function () {
-                            location.href = "{{ route('order-master') }}";
+                            location.reload();
                         }, 2000);
                     } else {
                         
                         showAlert('success', response.message);
-                        $('#searchableSelectTo').val('');
+                        $('#TransfersearchableSelectTo').val('');
 
 
                     }
@@ -835,7 +837,7 @@
                 error: function (xhr, status, error) {
                     showAlert('success', error);
                         
-                    $('#searchableSelectTo').val('');
+                    $('#TransfersearchableSelectTo').val('');
 
                 }
             });
@@ -949,8 +951,268 @@
         console.log("here");
     }
 
-    $(document).ready(function () {
-       
-    });
+    
+
+    // Code for notes
+
+        var csrfToken = $('meta[name="csrf-token"]').attr('content');
+        let page = 1;
+        let loadNotes;
+        let isLoading = false;
+
+        document.addEventListener("DOMContentLoaded", function () {
+            // Function to load notes
+            loadNotes = function (isScrollUp = false) {
+                if (isLoading) return;
+
+                isLoading = true;
+                const notesBody = $('#notes_body');
+                const order_id  = $('#order_id').val();
+                console.log("Order ID: " + order_id);
+                notesBody.html('');
+                const scrollTopBeforeLoad = notesBody.scrollTop();
+
+                $.ajax({
+                    url: "{{ route('notes_list') }}",
+                    type: 'POST',
+                    data: {
+                        search: '',
+                        per_page: 8,
+                        page: page,
+                        order_id: order_id,
+                    },
+                    headers: {
+                        'X-CSRF-TOKEN': csrfToken
+                    },
+                    success: function (response) {
+                        const notesBody = $('#notes_body');
+                        let firstNoteOffset = notesBody[0].scrollHeight;
+
+                        // Add new notes below
+                        if (!isScrollUp) {
+                            response.data.notes.forEach(function (note) {
+                                if (note.notes_type == 1) {
+                                    notesBody.append(`
+                                    <div class="my-note-box">
+                                        <div class="chat-bubble-title"></div>
+                                        <div class="chat-bubble-body">
+                                            <p>${note.notes_text}.</p>
+                                        </div>
+                                    </div>`);
+                                } else {
+                                    if (note.file.file_type == 'pdf') {
+                                        notesBody.append(`
+                                        <div class="my-note-box w-75">
+                                            <p class="small text-decoration-underline">${note.file.file_original_name}</p>
+                                            <embed src="${note.file.file_url}" width="100%" height="auto" />
+                                        </div>`);
+                                    } else {
+                                        notesBody.append(`
+                                        <div class="my-note-box w-75">
+                                            <p class="small text-decoration-underline">${note.file.file_original_name}</p>
+                                            <img src="${note.file.file_url}" alt="" class="rounded img-fluid" />
+                                        </div>`);
+                                    }
+                                }
+                            });
+                        } else {
+                            // Add older notes to the top when scrolling up
+                            let newNotes = '';
+                            response.data.notes.forEach(function (note) {
+                                if (note.notes_type == 1) {
+                                    newNotes = `
+                                    <div class="my-note-box">
+                                        <div class="chat-bubble-title"></div>
+                                        <div class="chat-bubble-body">
+                                            <p>${note.notes_text}.</p>
+                                        </div>
+                                    </div>` + newNotes;
+                                } else {
+                                    if (note.file.file_type == 'pdf') {
+                                        newNotes = `
+                                        <div class="my-note-box w-75">
+                                            <p class="small text-decoration-underline">${note.file.file_original_name}</p>
+                                            <embed src="${note.file.file_url}" width="100%" height="auto" />
+                                        </div>` + newNotes;
+                                    } else {
+                                        newNotes = `
+                                        <div class="my-note-box w-75">
+                                            <p class="small text-decoration-underline">${note.file.file_original_name}</p>
+                                            <img src="${note.file.file_url}" alt="" class="rounded img-fluid" />
+                                        </div>` + newNotes;
+                                    }
+                                }
+                            });
+                            notesBody.prepend(newNotes);
+                        }
+
+                        page++;
+
+                        // Scroll position handling after load
+                        if (isScrollUp) {
+                            notesBody.scrollTop(notesBody[0].scrollHeight - firstNoteOffset);
+                        } else {
+                            notesBody.scrollTop(notesBody[0].scrollHeight);
+                        }
+
+                        isLoading = false;
+                    }
+                });
+            }
+
+            // Initial load (start from the bottom)
+            loadNotes();
+
+            // Handle scroll event
+            function handleScroll() {
+                const notesBox = document.getElementById("notes_body");
+                if (!notesBox) return;
+
+                const { scrollTop, scrollHeight, clientHeight } = notesBox;
+
+                if (scrollTop + clientHeight >= scrollHeight - 5) {
+                    // Load more notes at the bottom
+                    loadNotes();
+                } else if (scrollTop === 0) {
+                    // Load older notes when scrolling up
+                    loadNotes(true);
+                }
+            }
+
+            // Attach scroll event
+            setTimeout(function () {
+                const notesBox = document.getElementById("notes_body");
+                if (notesBox) {
+                    notesBox.addEventListener("scroll", handleScroll);
+                }
+            }, 500);
+
+
+            $(document).ready(function () {
+                // Handle file upload
+
+                // Handle new text note submission
+                $("#TextNotes").on("keydown", function (event) {
+                    if (event.key === "Enter") {
+                        event.preventDefault();
+                        const text = event.target.value.trim();
+                        const order_id = $('#order_id').val();
+                        if (text) {
+                            $.ajax({
+                                url: "{{ route('notes_add') }}",
+                                type: 'POST',
+                                data: {
+                                    'notes_text': text,
+                                    'notes_file': null,
+                                    'notes_order_id':order_id
+                                },
+                                headers: {
+                                    'X-CSRF-TOKEN': csrfToken
+                                },
+                                success: function (response) {
+                                    showAlertNotes('success', response.message);
+                                    $('#TextNotes').val('');
+                                    isLoading = false;
+                                    page = 1;
+                                    loadNotes();
+                                }
+                            });
+                        } else {
+                            alert("Please enter some text.");
+                            showAlertNotes('warning', 'Please enter some text');
+                        }
+                    }
+                });
+
+                $("#SendNotes").on("click", function () {
+                    const text = $("#TextNotes").val().trim();
+                    const order_id = $('#order_id').val();
+                    if (text) {
+                        $.ajax({
+                            url: "{{ route('notes_add') }}",
+                            type: 'POST',
+                            data: {
+                                'notes_text': text,
+                                'notes_file': null,
+                                'notes_order_id':order_id
+                            },
+                            headers: {
+                                'X-CSRF-TOKEN': csrfToken
+                            },
+                            success: function (response) {
+                                showAlertNotes('success', response.message);
+                                $('#TextNotes').val('');
+                                isLoading = false;
+                                page = 1;
+                                loadNotes();
+                            }
+                        });
+                    } else {
+                        alert("Please enter some text.");
+                        showAlertNotes('warning', 'Please enter some text');
+                    }
+                
+                });  
+            });
+        });
+
+        function open_file_select() {
+            $("#fileInput").click();
+        }
+
+        function handleFileUpload(event) {
+            const file = event.target.files;
+            if (file) {
+                const formData = new FormData();
+                formData.append('notes_text', '');
+                for (var i = 0; i < file.length; i++) {
+                    formData.append('notes_file[]', file[i]);
+                }
+                $.ajax({
+                    url: "{{ route('notes_add') }}",
+                    type: 'POST',
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    headers: {
+                        'X-CSRF-TOKEN': csrfToken
+                    },
+                    success: function (response) {
+                        showAlertNotes('success', response.message);
+                        isLoading = false;
+                        loadNotes();
+                    }
+                });
+            } else {
+                console.log("No file selected");
+            }
+        }
+
+        function showAlertNotes(type, message) {
+            const alertContainer = document.getElementById('notes-container');
+            const alertHTML = `
+                <div class="alert alert-${type} position-fixed  bg-white alert-dismissible" role="alert" style="top:1rem; right:1rem;width:350px;">
+                    <div class="d-flex ">
+                        <div>
+                            ${type === 'success' ? `
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon alert-icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                <path d="M5 12l5 5l10 -10" />
+                            </svg>` : `
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon alert-icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                <path d="M10.24 3.957l-8.422 14.06a1.989 1.989 0 0 0 1.7 2.983h16.845a1.989 1.989 0 0 0 1.7 -2.983l-8.423 -14.06a1.989 1.989 0 0 0 -3.4 0z" />
+                                <path d="M12 9v4" />
+                                <path d="M12 17h.01" />
+                            </svg>`}
+                        </div>
+                        <div>${message}</div>
+                    </div>
+                    <a class="btn-close" data-bs-dismiss="alert" aria-label="close"></a>
+                </div>
+            `;
+            alertContainer.innerHTML = alertHTML;
+            console.log("here");
+        }
 </script>
 @endsection

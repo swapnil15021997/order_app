@@ -23,6 +23,7 @@
 
         <div class="page-body">
             <div class="container-xl">
+            <div id="alert-site"></div>
             <div class="card">
             <div class="card-body">
                 <div class="row row-cards">
