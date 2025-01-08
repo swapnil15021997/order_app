@@ -585,7 +585,7 @@
 
             // Validate data
             if (!userName) {
-                alert('Please fill all fields and select at least one permission.');
+                showAlertSaveRole('warning', 'Please fill all fields and select at least one permission.');
                 return;
             }
             const permissionIds = [];
@@ -615,12 +615,12 @@
                 data: data,
                 success: function (response) {
                     if (response.status == 200) {
-                        alert('Role added successfully');
+                        
                         location.href = "{{route('user-master')}}";
                         $('#modal-role').modal('hide');
                         showAlertSaveRole('success', response.message);
                     } else {
-                        alert('Failed to add user: ' + response.message);
+
                         showAlertSaveRole('warning', response.message);
 
                     }
@@ -629,7 +629,6 @@
                     // Handle error
                     showAlertSaveRole('warning', xhr.responseJSON.message);
 
-                    alert('An error occurred: ' + xhr.responseJSON.message);
                 }
             });
         });
@@ -766,8 +765,6 @@
 
         $('#DeleteUserBtn').click(function (e) {
             var csrfToken = $('meta[name="csrf-token"]').attr('content');
-
-            alert();
             e.preventDefault();
 
             var userId = $('#delete_user_id').val();
@@ -784,17 +781,18 @@
                             $('#delete_user_id').val();
                             $('#delete_user').modal('hide');
                             location.reload();
-                            alert(response.message);
+                            showAlert('success',response.message );
+
                         } else {
-                            alert('Error deleting order: ' + response.message);
+                            showAlert('warning',response.message );
                         }
                     },
                     error: function (xhr, status, error) {
-                        alert('An error occurred: ' + error);
+                        showAlert('warning',error );
                     }
                 });
             } else {
-                alert('Please fill in both fields.');
+                showAlert('success','Please fill in both fields' );
             }
         });
 
@@ -811,7 +809,7 @@
 
                 // Validate data
                 if (!role_name ) {
-                    alert('Please fill all fields and select at least one permission.');
+                    showAlertUpdateRole('warning', 'Please fill all fields and select at least one permission.');
                     return;
                 }
                 const permissionIds = [];
@@ -847,13 +845,13 @@
                         location.href = "{{route('user-master')}}";
 
                     } else {
-                        alert('Failed to add user: ' + response.message);
+
                         showAlertUpdateRole('warning', response.message);
                     }
                 },
                 error: function (xhr, status, error) {
                     // Handle error
-                    alert('An error occurred: ' + xhr.responseJSON.message);
+                    showAlertUpdateRole('warning',xhr.responseJSON.message);
                 }
             });
         });
@@ -862,7 +860,6 @@
         $('#DeleteRoleBtn').click(function (e) {
             var csrfToken = $('meta[name="csrf-token"]').attr('content');
 
-            alert();
             e.preventDefault();
 
             var userId = $('#delete_role_id').val();
@@ -880,17 +877,22 @@
                             $('#delete_role_id').val();
                             $('#delete_role').modal('hide');
                             location.reload();
-                            alert(response.message);
+                            showAlert('success', response.message);
+
                         } else {
-                            alert('Error deleting order: ' + response.message);
+                            showAlert('warning', response.message);
+
                         }
                     },
                     error: function (xhr, status, error) {
-                        alert('An error occurred: ' + error);
+                        showAlert('warning', error);
+
+
                     }
                 });
             } else {
-                alert('Please fill in both fields.');
+                showAlert('warning', 'Please fill in both fields.');
+
             }
         });
 
@@ -920,7 +922,6 @@
                 if (response.status == 200) {
 
                         var role_permission_ids = response.data.role_permission_ids;
-                        console.log("role_permission_ids",role_permission_ids);
                         if (role_permission_ids != null){
                             const permissionArray   = role_permission_ids.split(',');
                             document.querySelectorAll('input[type="checkbox"]').forEach(function(checkbox) {
@@ -934,12 +935,12 @@
                         $('#edit_role_name').val(response.data.role_name);
                         $('#update-role').modal('show');
                     } else {
-                        alert('Error fetching branch: ' + response.message);
+
                         showAlertUpdateRole('warning',response.message);
                     }
                 },
                 error: function(xhr, status, error) {
-                    alert('An error occurred: ' + error);
+
                     showAlertUpdateRole('warning',error);
                 }
             });
@@ -955,7 +956,7 @@
 
 
     function editUser(userId) {
-        alert(userId);
+
         // Redirect to the edit page and pass the user ID
         window.location.href = `/edit-user/${userId}`;
     }

@@ -14,46 +14,98 @@
                             <div>
                                 <img src="{{ asset('static/logo_order.png')}}" alt="Tabler" class="img-fluid "
                                     width="80px" height="40px" />
-                                <p class="mb-0 mt-1">Pansuriya Ashok <br /> +91 9898989898</p>
+                                    <p class="mb-0 mt-1">{{$login['name']}} <br /> +91 {{$login['user_phone_number']}} </p>
                             </div>
-                            <img src="{{ asset('static/qr_code.png')}}" alt="Tabler" class="img-fluid" width="100px">
+                            <div>
+                            @php
+                                $lastTransaction = end($order['transactions']); // Get the last transaction
+                            @endphp
+
+                            @if ($lastTransaction && $lastTransaction['trans_status'] === 0)
+                                <!-- If both conditions are satisfied, show the "Approve" button -->
+                                <a class="btn btn-primary" href="#" onclick="approve_order({{ $order['order_qr_code'] }})">
+                                    Approve Order
+                                </a>
+                            @else
+                                <a class="btn btn-primary" href="#" onclick="transfer_order({{$order['order_id']}})">
+                                    Transfer Order
+                                </a>
+                            @endif
+
+                            </div>
+                            {{$qr_code}}
+                            
+                            <!-- <img src="{{ asset('static/qr_code.png')}}" alt="Tabler" class="img-fluid" width="100px"> -->
                         </div>
                         <div class="card">
                             <div class="card-body">
                                 <div class="row">
                                     <div class="col-6">
-                                        <h2 class="font-bold">#1234</h2>
+                                        <h2 class="font-bold">{{$order['order_number']}}</h2>
                                         <div class="col-12">
-                                            <label for="order_date" class="form-label">Order Date</label>
+                                            <label for="order_date" class="form-label">Order Date
+                                            <span style="color: red;">*</span>
+                                            </label>
                                             <input type="date" id="order_date" value="{{$order['order_date']}}"
                                                 class="form-control" form>
                                         </div>
                                         <div class="col-12 mt-3">
-                                            <label for="order_type" class="form-label">Order Type</label>
-                                            <select id="order_type" class="form-select" type="text">
+                                            <label for="order_type" class="form-label">Order Type
+                                            <span style="color: red;">*</span>
+                                            </label>
+                                            <!-- <select id="order_type" class="form-select" type="text">
                                                 <option value="" disabled selected>Select type</option>
                                                 <option value="order">Order</option>
                                                 <option value="reparing">Reparing</option>
-                                            </select>
+                                            </select> -->
+                                            <div class="d-flex align-items-center">
+                                                <label class="form-check-label me-2">Order
+
+                                                </label>
+                                                <label class="form-check form-switch m-0">
+                                                    <input class="form-check-input" id="order_type" type="checkbox" @if($order['order_type'] == 2)
+                                                    checked @endif>
+                                                </label>
+                                                <label class="form-check-label ms-2">Reparing</label>
+                                            </div>
+                                            
                                         </div>
                                     </div>
                                     <div class="col-6">
                                         <h4>Customer Details</h4>
+                                        
                                         <div class="mt-4">
-                                            <label for="order_customer_name" class="form-label">Customer name</label>
-                                            <input type="text" placeholder="Enter name" id="order_customer_name"
-                                                class="form-control" form>
+                                            <label class="form-label">Select Customer</label>
+                                            <select id="searchableCust" class="form-select select2">
+                                                @foreach ($customer as $branch)
+                                                    <option value="{{ $branch['cust_id'] }}" @if ($branch['cust_id'] == $order['order_customer_id'])
+                                                    selected @endif>{{ $branch['cust_name'] }}</option>
+                                                @endforeach
+                                            </select>
                                         </div>
-                                        <div class="mt-3">
-                                            <label for="cust_phone_no" class="form-label">Phone number</label>
-                                            <input type="text" placeholder="Enter number" id="cust_phone_no"
-                                                class="form-control" form>
-                                        </div>
-                                        <div class="mt-3">
-                                            <label for="order_customer_details" class="form-label">Address
-                                            </label>
-                                            <textarea type="text" placeholder="Enter Address"
-                                                id="order_customer_details" class="form-control" form></textarea>
+                                        <div class="d-none" id="cust_div">
+                    
+                                            <div class="mt-4">
+                                                <label for="order_customer_name" class="form-label">Customer name
+                                                <span style="color: red;">*</span>
+                                                </label>
+                                                <input type="text" placeholder="Enter name" id="order_customer_name"
+                                                    class="form-control" form>
+                                            </div>
+                                            <div class="mt-3">
+                                                <label for="cust_phone_no" class="form-label">Phone number
+                                                <span style="color: red;">*</span>
+                                                </label>
+                                                <input type="text" placeholder="Enter number" id="cust_phone_no"
+                                                    class="form-control" form>
+                                            </div>
+                                            <div class="mt-3">
+                                                <label for="order_customer_details" class="form-label">Address
+                                                <span style="color: red;">*</span>
+                                                </label>
+                                                <textarea type="text" placeholder="Enter Address"
+                                                    id="order_customer_details" class="form-control" form></textarea>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -64,7 +116,9 @@
                                 <h4 class="h2">Branch & Transfer</h4>
                                 <div class="row">
                                     <div class="col-6">
-                                        <label for="searchableSelectFrom" class="form-label">From</label>
+                                        <label for="searchableSelectFrom" class="form-label">From
+                                        <span style="color: red;">*</span>
+                                        </label>
 
                                         <select id="searchableSelectFrom" class="form-select" type="text">
 
@@ -77,7 +131,9 @@
                                         </select>
                                     </div>
                                     <div class="col-6">
-                                        <label for="searchableSelectTo" class="form-label">To</label>
+                                        <label for="searchableSelectTo" class="form-label">To
+                                        <span style="color: red;">*</span>
+                                        </label>
 
                                         <select id="searchableSelectTo" class="form-select w-100" type="text">
 
@@ -95,12 +151,16 @@
                                 <h4 class="h2">Item Details</h4>
                                 <div class="row">
                                     <div class="col-6">
-                                        <label for="item_name" class="form-label">Name</label>
+                                        <label for="item_name" class="form-label">Name
+                                        <span style="color: red;">*</span>
+                                        </label>
                                         <input type="text" class="form-control" id="item_name" placeholder="Select Item"
                                             value="{{$order['items'][0]['item_name']}}" />
                                     </div>
                                     <div class="col-6">
-                                        <label for="item_metal" class="form-label">Metal</label>
+                                        <label for="item_metal" class="form-label">Metal
+                                        <span style="color: red;">*</span>
+                                        </label>
                                         <select class="form-select" id="item_metal">
                                             <option value="" disabled selected>Select a metal</option>
 
@@ -114,7 +174,9 @@
                                 </div>
                                 <div class="row mt-3">
                                     <div class="col-4">
-                                        <label for="item_melting" class="form-label">Melting</label>
+                                        <label for="item_melting" class="form-label">Melting
+                                        <span style="color: red;">*</span>
+                                        </label>
                                         <select class="form-select" id="item_melting">
                                             <option value="" disabled selected>Select a melting</option>
                                             @foreach ($melting as $melt)
@@ -125,7 +187,9 @@
                                         </select>
                                     </div>
                                     <div class="col-4">
-                                        <label for="item_weight" class="form-label">Weight</label>
+                                        <label for="item_weight" class="form-label">Weight
+                                        <span style="color: red;">*</span>
+                                        </label>
                                         <input type="number" class="form-control" id="item_weight"
                                             name="example-text-input" value="{{$order['items'][0]['item_weight']}}"
                                             placeholder="Weight of item" />
@@ -139,31 +203,40 @@
                                 </div>
                                 <div class="row mt-3">
                                     <div class="col-12">
-                                        <input type="file" class="form-control" id="item_image_id" multiple
-                                            placeholder="Choose Images" />
+                                        <input type="file" class="form-control" id="item_image_id"
+                                        onchange="previewSelectedImages()"
+                                        multiple
+                                        placeholder="Choose Images" />
                                     </div>
                                 </div>
-                                <div class="row mt-3">
-                                    <div class="col-4">
-                                        <div class="selected-files">
-                                            <div class="d-flex align-items-center gap-2">
-                                                <img src="https://images.unsplash.com/photo-1736148912326-aeeda15df88f?q=80&w=1964&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                                                    alt="select image" width="35px" />
-                                                <div>
-                                                    <p>Image potrait.jpg</p>
-                                                    <small>500kb</small>
+                                <div class="row mt-3" id="uploaded-images">
+                                    @foreach($order['items'] as $file)
+                                    @if(!empty($file['files']))
+
+                                    @foreach($file['files'] as $file)
+                                        <div class="col-4">
+                                            <div class="selected-files">
+                                                <div class="d-flex align-items-center gap-2">
+                                                    <img src="{{ asset($file->file_url) }}"
+                                                        alt="select image" width="35px" />
+                                                    <div>
+                                                    <p>{{ strlen($file->file_original_name) > 15 ? substr($file->file_original_name, 0, 15) . '...' : $file->file_original_name }}</p>
+                                                    <small>{{ number_format($file->file_size / 1024, 1) }} KB</small>
+                                                    </div>
                                                 </div>
+                                                <button>
+                                                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
+                                                        xmlns="http://www.w3.org/2000/svg">
+                                                        <path
+                                                            d="M12.59 6L10 8.59L7.41 6L6 7.41L8.59 10L6 12.59L7.41 14L10 11.41L12.59 14L14 12.59L11.41 10L14 7.41L12.59 6ZM10 0C4.47 0 0 4.47 0 10C0 15.53 4.47 20 10 20C15.53 20 20 15.53 20 10C20 4.47 15.53 0 10 0ZM10 18C5.59 18 2 14.41 2 10C2 5.59 5.59 2 10 2C14.41 2 18 5.59 18 10C18 14.41 14.41 18 10 18Z"
+                                                            fill="#858585" />
+                                                    </svg>
+                                                </button>
                                             </div>
-                                            <button>
-                                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
-                                                    xmlns="http://www.w3.org/2000/svg">
-                                                    <path
-                                                        d="M12.59 6L10 8.59L7.41 6L6 7.41L8.59 10L6 12.59L7.41 14L10 11.41L12.59 14L14 12.59L11.41 10L14 7.41L12.59 6ZM10 0C4.47 0 0 4.47 0 10C0 15.53 4.47 20 10 20C15.53 20 20 15.53 20 10C20 4.47 15.53 0 10 0ZM10 18C5.59 18 2 14.41 2 10C2 5.59 5.59 2 10 2C14.41 2 18 5.59 18 10C18 14.41 14.41 18 10 18Z"
-                                                        fill="#858585" />
-                                                </svg>
-                                            </button>
                                         </div>
-                                    </div>
+                                        @endforeach 
+                                    @endif
+                                    @endforeach
                                 </div>
                             </div>
                         </div>
@@ -274,6 +347,34 @@
                 </button>
             </div>
         </div>
+        <input type="hidden" name="" id="transfer_order_id">
+        <div class="modal modal-blur fade" id="transfer_order_model" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Transfer Order</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <label class="form-label">Order To</label>
+                        <select id="TransfersearchableSelectTo" class="form-select select2">
+
+
+                        </select>
+                    </div>
+
+
+                    <div class="modal-footer">
+                        <a href="#" class="btn btn-secondary" data-bs-dismiss="modal">
+                            Cancel
+                        </a>
+                        <a id="TransferOrderBtn" href="#" class="btn btn-primary">
+                            Transfer This Order
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -282,6 +383,129 @@
 
 
 <script>
+
+    
+        function transfer_order(order_id) {
+            $('#transfer_order_id').val(order_id);
+            $('#transfer_order_model').modal('show');
+
+        }
+
+        // Searchable
+        $(document).ready(function () {
+            $('#TransfersearchableSelectTo').on('select2:open', function () {
+                $('.select2-search__field').on('input', function () {
+                    userInput = $(this).val();
+                });
+            });
+            var csrfToken = $('meta[name="csrf-token"]').attr('content');
+            $('#TransfersearchableSelectTo').select2({
+
+                placeholder: "Select an option",
+                allowClear: true,
+                ajax: {
+                    url: "{{route('branch_list')}}",
+                    dataType: 'json',
+                    type: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': csrfToken  // Add CSRF token in the header
+                    },
+                    delay: 250,
+                    data: function (params) {
+                        return {
+
+                            search: params.term,
+                            per_page: 10,
+                            page: params.page || 1
+                        };
+                    },
+                    processResults: function (data) {
+
+                        return {
+                            results: data.data.branches.map(function (item) {
+                                return {
+                                    id: item.branch_id,
+                                    text: item.branch_name
+                                };
+                            }),
+                            pagination: {
+                                more: data.data.length >= 10 // Check if there are more results
+                            }
+                        };
+                    },
+                    cache: true
+                }
+            });
+        });
+
+        // Upload Images and show the preview
+
+        function previewSelectedImages() {
+            const input = document.getElementById("item_image_id");
+            const uploadedImages = document.getElementById("uploaded-images");
+            uploadedImages.innerHTML = ""; 
+
+            const files = Array.from(input.files);
+
+            if (files.length === 0) {
+            uploadedImages.innerHTML = "<p>No files selected.</p>";
+            return;
+            }
+
+            files.forEach((file, index) => {
+            const reader = new FileReader();
+
+            reader.onload = function (e) {
+                const imageSrc = e.target.result;
+                const col      = document.createElement("div");
+                col.classList.add("col-4");
+                col.setAttribute("data-file-index", index); 
+                const maxFileNameLength = 15;
+                const trimmedFileName =
+                    file.name.length > maxFileNameLength
+                        ? file.name.slice(0, maxFileNameLength) + "..."
+                        : file.name;
+
+                const selectedFile = `
+                    <div class="selected-files">
+                        <div class="d-flex align-items-center gap-2">
+                            <img src="${imageSrc}" alt="${trimmedFileName}" width="35px" />
+                            <div>
+                                <p>${trimmedFileName}</p>
+                                <small>${(file.size / 1024).toFixed(1)} KB</small>
+                            </div>
+                        </div>
+                        <button onclick="removeImage(this, ${index})">
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M12.59 6L10 8.59L7.41 6L6 7.41L8.59 10L6 12.59L7.41 14L10 11.41L12.59 14L14 12.59L11.41 10L14 7.41L12.59 6ZM10 0C4.47 0 0 4.47 0 10C0 15.53 4.47 20 10 20C15.53 20 20 15.53 20 10C20 4.47 15.53 0 10 0ZM10 18C5.59 18 2 14.41 2 10C2 5.59 5.59 2 10 2C14.41 2 18 5.59 18 10C18 14.41 14.41 18 10 18Z"
+                                    fill="#858585"
+                                />
+                            </svg>
+                        </button>
+                    </div>
+                `;
+
+                col.innerHTML = selectedFile;
+                uploadedImages.appendChild(col);
+            };
+
+            reader.readAsDataURL(file);
+        });
+    }
+
+    function removeImage(button,index) {
+        const col   = button.closest(".col-4");
+        col.remove();
+        const input = document.getElementById("item_image_id");
+        const files = Array.from(input.files);
+        const updatedFiles = files.filter((_, i) => i !== index);
+        const dataTransfer = new DataTransfer();
+        updatedFiles.forEach((file) => dataTransfer.items.add(file));
+
+        input.files = dataTransfer.files;
+    }
+
     $(document).ready(function () {
 
         $('#order_type').on('change', function () {
@@ -495,7 +719,7 @@
             },
             templateSelection: function (data) {
                 // Display the selected item properly
-
+                $('#order_customer_name').val(data.text);
                 return data.text;
             }
         })
@@ -507,10 +731,11 @@
             // Check if the selected option is a new customer
             if (e.params.data.newOption) {
                 console.log("New customer selected");
-                $('#cust_div').removeClass('d-none'); // Remove the 'd-none' class
+                $('#cust_div').removeClass('d-none'); 
+                $('#order_customer_name').val(e.params.data.newOption);
             } else {
                 console.log("Existing customer selected");
-                $('#cust_div').addClass('d-none'); // Add the 'd-none' class
+                $('#cust_div').addClass('d-none'); 
             }
         });
 
@@ -568,6 +793,129 @@
     });
 
 
+    $('#TransferOrderBtn').click(function (e) {
+        e.preventDefault();
+
+        var orderId = $('#transfer_order_id').val();
+        var transferTo = $('#searchableSelectTo').val();
+
+        if (orderId) {
+            $.ajax({
+                url: "{{ route('order_transfer') }}",
+                type: 'POST',
+                data: {
+                    _token: csrfToken,
+                    order_id: orderId,
+                    transfer_to: transferTo
+
+                },
+                success: function (response) {
+                    if (response.status == 200) {
+                        $('#transfer_order_id').val('');
+                        $('#searchableSelectTo').val('');
+                        $('#transfer_order').modal('hide');
+                        showAlert('success', response.message);
+
+                        setTimeout(function () {
+                            location.href = "{{ route('order-master') }}";
+                        }, 2000);
+                    } else {
+                        
+                        showAlert('success', response.message);
+                        $('#searchableSelectTo').val('');
+
+
+                    }
+                },
+                error: function (xhr, status, error) {
+                    showAlert('success', error);
+                        
+                    $('#searchableSelectTo').val('');
+
+                }
+            });
+        } else {
+            alert('Please fill in both fields.');
+        }
+    });
+
+        
+
+
+        function approve_order(transaction_id) {
+            if (transaction_id) {
+                $.ajax({
+                    url: "{{ route('order_approve') }}",
+                    type: 'POST',
+                    data: {
+                        _token: csrfToken,
+                        trans_id: transaction_id,
+                    },
+                    success: function (response) {
+                        if (response.status == 200) {
+
+                            location.reload();
+                            showAlert('success', response.message);
+                        } else {
+                            showAlert('warning', response.message);
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        showAlert('warning', error.message);
+                    }
+                });
+            } else {
+                showAlert('warning', 'Please select Transaction id');
+            }
+        }
+
+
+        
+        $(document).ready(function () {
+            $('#searchableSelectTo').on('select2:open', function () {
+                $('.select2-search__field').on('input', function () {
+                    userInput = $(this).val();
+                });
+            });
+            var csrfToken = $('meta[name="csrf-token"]').attr('content');
+            $('#searchableSelectTo').select2({
+
+                placeholder: "Select an option",
+                allowClear: true,
+                ajax: {
+                    url: "{{route('branch_list')}}",
+                    dataType: 'json',
+                    type: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': csrfToken  // Add CSRF token in the header
+                    },
+                    delay: 250,
+                    data: function (params) {
+                        return {
+
+                            search: params.term,
+                            per_page: 10,
+                            page: params.page || 1
+                        };
+                    },
+                    processResults: function (data) {
+
+                        return {
+                            results: data.data.branches.map(function (item) {
+                                return {
+                                    id: item.branch_id,
+                                    text: item.branch_name
+                                };
+                            }),
+                            pagination: {
+                                more: data.data.length >= 10 // Check if there are more results
+                            }
+                        };
+                    },
+                    cache: true
+                }
+            });
+        });
 
     function showAlert(type, message) {
         const alertContainer = document.getElementById('alert-container');

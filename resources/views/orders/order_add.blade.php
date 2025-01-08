@@ -15,45 +15,75 @@
                             <div>
                                 <img src="{{ asset('static/logo_order.png')}}" alt="Tabler" class="img-fluid "
                                     width="80px" height="40px" />
-                                <p class="mb-0 mt-1">Pansuriya Ashok <br /> +91 9898989898</p>
+                                <p class="mb-0 mt-1">{{$login['name']}} <br /> +91 {{$login['user_phone_number']}} </p>
                             </div>
-                            <img src="{{ asset('static/qr_code.png')}}" alt="Tabler" class="img-fluid" width="100px">
+                            {{$qr_code}}
+                            <input type="hidden" name="qr_code_number" value="{{$qr_code_number}}" id="qr_code_number">
+
+    
+                            <!-- <img src="{{ asset('static/qr_code.png')}}" alt="Tabler" class="img-fluid" width="100px"> -->
                         </div>
                         <div class="card">
                             <div class="card-body">
                                 <div class="row">
                                     <div class="col-6">
-                                        <h2 class="font-bold">#1234</h2>
+                                        <h2 class="font-bold" >{{$order_number}}</h2>
+                                        <input type="hidden" id="order_number" name="order_number" value="{{$order_number}}">
+
                                         <div class="col-12">
-                                            <label for="order_date" class="form-label">Order Date</label>
-                                            <input type="date" id="order_date" class="form-control" form>
+                                            <label for="order_date" class="form-label" required>Order Date
+                                                <span style="color: red;">*</span>
+                                            </label>
+                                            <input type="date" id="order_date" required class="form-control" form>
                                         </div>
                                         <div class="col-12 mt-3">
                                             <label for="order_type" class="form-label">Order Type</label>
-                                            <select id="order_type" class="form-select" type="text">
+                                            <!-- <select id="order_type" class="form-select" type="text">
                                                 <option value="" disabled selected>Select type</option>
                                                 <option value="order">Order</option>
                                                 <option value="reparing">Reparing</option>
-                                            </select>
+                                            </select> -->
+                                            <div class="d-flex align-items-center">
+                                                <label class="form-check-label ms-2">Order</label>
+                                                <label class="form-check form-switch m-0 ms-2">
+                                                    <input class="form-check-input" id="order_type" type="checkbox" checked>
+                                                </label>
+                                                <label class="form-check-label me-2 ms-2">Reparing</label>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="col-6">
-                                        <h4>Customer Details</h4>
+                                        <h4>Customer Details
+                                        <span style="color: red;">*</span>
+                                        </h4>
                                         <div class="mt-4">
-                                            <label for="order_customer_name" class="form-label">Customer name</label>
-                                            <input type="text" placeholder="Enter name" id="order_customer_name"
-                                                class="form-control" form>
+                                            <select id="searchableCust" class="form-select select2">
+                                                
+                                            </select>
                                         </div>
-                                        <div class="mt-3">
-                                            <label for="cust_phone_no" class="form-label">Phone number</label>
-                                            <input type="text" placeholder="Enter number" id="cust_phone_no"
-                                                class="form-control" form>
-                                        </div>
-                                        <div class="mt-3">
-                                            <label for="order_customer_details" class="form-label">Address
-                                            </label>
-                                            <textarea type="text" placeholder="Enter Address"
-                                                id="order_customer_details" class="form-control" form></textarea>
+                                        <div class="d-none" id="cust_div">
+                                
+                                            <div class="mt-4">
+                                                <label for="order_customer_name" class="form-label">Customer name
+                                                    <span style="color: red;">*</span>
+                                                </label>
+                                                <input type="text" placeholder="Enter name" id="order_customer_name"
+                                                    class="form-control" form>
+                                            </div>
+                                            <div class="mt-3">
+                                                <label for="cust_phone_no" class="form-label">Phone number
+                                                <span style="color: red;">*</span>
+                                                </label>
+                                                <input type="text" placeholder="Enter number" id="cust_phone_no"
+                                                    class="form-control" form>
+                                            </div>
+                                            <div class="mt-3">
+                                                <label for="order_customer_details" class="form-label">Address
+                                                <span style="color: red;">*</span>
+                                                </label>
+                                                <textarea type="text" placeholder="Enter Address"
+                                                    id="order_customer_details" class="form-control" form></textarea>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -64,7 +94,9 @@
                                 <h4 class="h2">Branch & Transfer</h4>
                                 <div class="row">
                                     <div class="col-6">
-                                        <label for="searchableSelectFrom" class="form-label">From</label>
+                                        <label for="searchableSelectFrom" class="form-label">From
+                                        <span style="color: red;">*</span>
+                                        </label>
 
                                         <select id="searchableSelectFrom" class="form-select" type="text">
 
@@ -77,7 +109,9 @@
                                         </select>
                                     </div>
                                     <div class="col-6">
-                                        <label for="searchableSelectTo" class="form-label">To</label>
+                                        <label for="searchableSelectTo" class="form-label">To
+                                        <span style="color: red;">*</span>
+                                        </label>
 
                                         <select id="searchableSelectTo" class="form-select w-100" type="text">
 
@@ -95,13 +129,18 @@
                                 <h4 class="h2">Item Details</h4>
                                 <div class="row">
                                     <div class="col-6">
-                                        <label for="item_name" class="form-label">Name</label>
+                                        <label for="item_name" class="form-label">Name
+                                        <span style="color: red;">*</span>
+                                        </label>
                                         <input type="text" class="form-control" id="item_name"
                                             placeholder="Select Item" />
                                     </div>
                                     <div class="col-6">
-                                        <label for="item_metal" class="form-label">Metal</label>
+                                        <label for="item_metal" class="form-label">Metal
+                                        <span style="color: red;">*</span>
+                                        </label>
                                         <select class="form-select" id="item_metal">
+
                                             <option value="" disabled selected>Select a metal</option>
 
                                             @foreach ($metals as $metal)
@@ -114,7 +153,9 @@
                                 </div>
                                 <div class="row mt-3">
                                     <div class="col-4">
-                                        <label for="item_melting" class="form-label">Melting</label>
+                                        <label for="item_melting" class="form-label">Melting
+                                        <span style="color: red;">*</span>
+                                        </label>
                                         <select class="form-select" id="item_melting">
                                             <option value="" disabled selected>Select a melting</option>
                                             @foreach ($melting as $melt)
@@ -125,7 +166,9 @@
                                         </select>
                                     </div>
                                     <div class="col-4">
-                                        <label for="item_weight" class="form-label">Weight</label>
+                                        <label for="item_weight" class="form-label">Weight
+                                        <span style="color: red;">*</span>
+                                        </label>
                                         <input type="number" class="form-control" id="item_weight"
                                             name="example-text-input" placeholder="Weight of item" />
                                     </div>
@@ -138,12 +181,14 @@
                                 </div>
                                 <div class="row mt-3">
                                     <div class="col-12">
-                                        <input type="file" class="form-control" id="item_image_id" multiple
-                                            placeholder="Choose Images" />
+                                        <input type="file" class="form-control"
+                                        id="item_image_id" multiple
+                                        onchange="previewSelectedImages()"
+                                        placeholder="Choose Images" />
                                     </div>
                                 </div>
-                                <div class="row mt-3">
-                                    <div class="col-4">
+                                <div class="row mt-3" id="uploaded-images">
+                                    <!-- <div class="col-4">
                                         <div class="selected-files">
                                             <div class="d-flex align-items-center gap-2">
                                                 <img src="https://images.unsplash.com/photo-1736148912326-aeeda15df88f?q=80&w=1964&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
@@ -162,25 +207,27 @@
                                                 </svg>
                                             </button>
                                         </div>
-                                    </div>
+                                    </div> -->
                                 </div>
                             </div>
                         </div>
                         <div class="card">
-                            <div class="card-body">
-                                <h4 class="h2">Payment Details</h4>
-                                <div class="row">
-                                    <div class="col-6">
-                                        <label for="payment_advance" class="form-label">Advance cash deposit</label>
-                                        <input type="number" placeholder="Enter here" class="form-control"
-                                            id="payment_advance" name="example-text-input">
+                            <div class="card-body row d-none" id="payment" >
+
+                                    <h4 class="h2">Payment Details</h4>
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <label for="payment_advance" class="form-label">Advance cash deposit</label>
+                                            <input type="number" placeholder="Enter here" class="form-control"
+                                                id="payment_advance" name="example-text-input">
+                                        </div>
+                                        <div class="col-6">
+                                            <label for="payment_booking" class="form-label">Rate</label>
+                                            <input type="number" class="form-control" id="payment_booking"
+                                                placeholder="Enter here">
+                                        </div>
                                     </div>
-                                    <div class="col-6">
-                                        <label for="payment_booking" class="form-label">Rate</label>
-                                        <input type="number" class="form-control" id="payment_booking"
-                                            placeholder="Enter here">
-                                    </div>
-                                </div>
+                                
                             </div>
                         </div>
                         <div class="card">
@@ -285,9 +332,9 @@
         $('#order_type').on('change', function () {
             const paymentDiv = $('#payment');
             if (this.checked) {
-                paymentDiv.addClass('d-none'); // Hide payment div
+                paymentDiv.addClass('d-none'); 
             } else {
-                paymentDiv.removeClass('d-none'); // Show payment div
+                paymentDiv.removeClass('d-none'); 
             }
         });
 
@@ -295,8 +342,10 @@
         $('#saveBranchBtn').click(function (e) {
 
             e.preventDefault();
-            var orderDate = $('#order_date').val();
-            var orderType = document.getElementById('order_type');
+            var orderDate   = $('#order_date').val();
+            var orderNumber = $('#order_number').val();
+            var orderQRCode = $('#qr_code_number').val();
+            var orderType   = document.getElementById('order_type');
 
             const orderTypeValue = orderType.checked ? 2 : 1;
             var orderFrom = $('#searchableSelectFrom').val();
@@ -320,10 +369,11 @@
                 formData.append('order_from_branch_id', orderFrom);
                 formData.append('order_to_branch_id', orderTo);
                 formData.append('order_user_id', cust);
-
-
                 formData.append('item_metal', item_metal);
                 formData.append('item_name', item_name);
+                formData.append('order_number', orderNumber);                
+                formData.append('qr_code_number', orderQRCode);
+
                 if (payment_advance) {
 
                     formData.append('payment_advance', payment_advance);
@@ -368,6 +418,8 @@
                             $('#item_melting').val('');
                             $('#item_weight').val('');
                             $('#item_image_id').val('');
+                            $('#order_number').val('');
+                            $('#qr_code_number').val('');
                             setTimeout(function () {
                                 location.href = "{{ route('order-master') }}";
                             }, 1000);
@@ -391,6 +443,76 @@
 
 
     });
+
+    
+        // Upload Images and show the preview
+
+        function previewSelectedImages() {
+            const input = document.getElementById("item_image_id");
+            const uploadedImages = document.getElementById("uploaded-images");
+            uploadedImages.innerHTML = ""; 
+
+            const files = Array.from(input.files);
+
+            if (files.length === 0) {
+            uploadedImages.innerHTML = "<p>No files selected.</p>";
+            return;
+            }
+
+            files.forEach((file, index) => {
+            const reader = new FileReader();
+
+            reader.onload = function (e) {
+                const imageSrc = e.target.result;
+                const col      = document.createElement("div");
+                col.classList.add("col-4");
+                col.setAttribute("data-file-index", index); 
+                const maxFileNameLength = 15;
+                const trimmedFileName =
+                    file.name.length > maxFileNameLength
+                        ? file.name.slice(0, maxFileNameLength) + "..."
+                        : file.name;
+
+                const selectedFile = `
+                    <div class="selected-files">
+                        <div class="d-flex align-items-center gap-2">
+                            <img src="${imageSrc}" alt="${trimmedFileName}" width="35px" />
+                            <div>
+                                <p>${trimmedFileName}</p>
+                                <small>${(file.size / 1024).toFixed(1)} KB</small>
+                            </div>
+                        </div>
+                        <button onclick="removeImage(this, ${index})">
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M12.59 6L10 8.59L7.41 6L6 7.41L8.59 10L6 12.59L7.41 14L10 11.41L12.59 14L14 12.59L11.41 10L14 7.41L12.59 6ZM10 0C4.47 0 0 4.47 0 10C0 15.53 4.47 20 10 20C15.53 20 20 15.53 20 10C20 4.47 15.53 0 10 0ZM10 18C5.59 18 2 14.41 2 10C2 5.59 5.59 2 10 2C14.41 2 18 5.59 18 10C18 14.41 14.41 18 10 18Z"
+                                    fill="#858585"
+                                />
+                            </svg>
+                        </button>
+                    </div>
+                `;
+
+                col.innerHTML = selectedFile;
+                uploadedImages.appendChild(col);
+            };
+
+            reader.readAsDataURL(file);
+        });
+        }
+
+        function removeImage(button,index) {
+            const col   = button.closest(".col-4");
+            col.remove();
+            const input = document.getElementById("item_image_id");
+            const files = Array.from(input.files);
+            const updatedFiles = files.filter((_, i) => i !== index);
+            const dataTransfer = new DataTransfer();
+            updatedFiles.forEach((file) => dataTransfer.items.add(file));
+
+            input.files = dataTransfer.files;
+        }
+
 
     var userInput = '';
     // $('#searchableSelectTo').on('select2:selecting', function (e) {
@@ -512,6 +634,7 @@
                 if (e.params.data.newOption) {
                     console.log("New customer added");
                     $('#cust_div').removeClass('d-none');
+                    $('#order_customer_name').val(e.params.data.newOption);
                 } else {
                     $('#cust_div').addClass('d-none');
                 }
@@ -590,6 +713,7 @@
                     // }else{
                     //     $('#cust_div').addClass('d-none');
                     // }
+                    $('#order_customer_name').val(data.text);
                     return data.text;
                 }
             })

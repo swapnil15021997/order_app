@@ -126,18 +126,19 @@ class Order extends Model
 
     }
     public static function get_order_with_items($order_id)
-{
-    $order = Order::where('order_id', $order_id)
-                  ->where('is_delete', 0)
-                  ->with('items')
-                  ->first();
-    if ($order) {
-        foreach ($order->items as $item) {
-            $item->files = File::whereIn('file_id', explode(',', $item->item_file_images))->get();
+    {
+        $order = Order::with('transactions')
+                        ->where('order_id', $order_id)
+                    ->where('is_delete', 0)
+                    ->with('items')
+                    ->first();
+        if ($order) {
+            foreach ($order->items as $item) {
+                $item->files = File::whereIn('file_id', explode(',', $item->item_file_images))->get();
+            }
         }
+        return $order;
     }
-    return $order;
-}
 
 
 }

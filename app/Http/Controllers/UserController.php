@@ -336,9 +336,14 @@ class UserController extends Controller
         $branch       = Branch::get_all_branch();
 
         $user_permissions = session('combined_permissions', []);
-      
-        return view('users/user_edit',['user' => $user,'roles'=>$roles,'modules'=>$modules,'user_branch'=>$users_branch,'edit_user_branch'=>$user_branch,'login'=>$login,
-        'activePage'=>'users','branch'=>$branch,'user_permissions'=>$user_permissions,'activeBranchName'=>$activeBranchName]);
+        
+        return view('users/user_edit',['user' => $user,'roles'=>$roles,
+            'modules'=>$modules,'user_branch'=>$users_branch,
+            'edit_user_branch'=>$user_branch,'login'=>$login,
+            'pageTitle'=>'User Management','activePage'=>'users',
+            'branch'=>$branch,'user_permissions'=>$user_permissions,
+            'activeBranchName'=>$activeBranchName
+        ]);
     }
 
     public function user_remove(Request $request)

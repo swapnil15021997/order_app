@@ -66,7 +66,10 @@
             </div>
 
             <div class="row row-deck row-cards custom-table-resposive">
-
+            
+                <div class="alert-site">
+                    
+                </div>
                 <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
                     <table id="branch_table" class="table card-table table-vcenter text-nowrap datatable">
                         <thead>

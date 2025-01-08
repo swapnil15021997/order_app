@@ -26,9 +26,7 @@ class OrderController extends Controller
 
         $order = Order::get_order_by_qr_number_id($id);  
         $order = $order->toArray();
-        
         $login = auth()->user();
-        
         $fileArray = [];
         if(!empty($login)){
            
@@ -44,8 +42,6 @@ class OrderController extends Controller
                 }else{
                     $users_branch  = [];
                 }
-
-                
             }else{
                 $users_branch  = Branch::get_all_branch();
     
@@ -75,7 +71,6 @@ class OrderController extends Controller
             $payment = Payment::get_payment_by_id($order['order_id']);
         }
         $activePage       = 'orders';
-        
         $user_permissions = session('combined_permissions', []);
         if($order['order_type']==1){
             $type = 'Order';
@@ -88,7 +83,7 @@ class OrderController extends Controller
         //     ])
         // ); 
         $orderUrl = route('order_get_approve', ['id' => $order['order_qr_code']]);
-        $qr_code = QrCode::size(50)->generate($orderUrl);
+        $qr_code  = QrCode::size(50)->generate($orderUrl);
         return view('orders/view_order',['order'=>$order,'fileArray'=>$fileArray,
             'pageTitle'=>'Order','login'=>$login,'activePage'=>$activePage,
             'user_branch'=>$users_branch,'user_permissions'=>$user_permissions,
@@ -161,8 +156,10 @@ class OrderController extends Controller
             'item_weight'          => ['required', 'numeric'],
             'item_file_images'     => ['nullable'],  
             'item_file_images.*'   => ['file', 'mimes:jpeg,jpg,png,pdf', 'max:10240'],
-            'payment_advanced' => ['nullable','numeric'],
-            'payment_booking' => ['nullable','numeric'],
+            'payment_advanced'     => ['nullable','numeric'],
+            'payment_booking'      => ['nullable','numeric'],
+            'order_number'         => ['nullable','string'],
+            'qr_code_number'       => ['nullable','string'],
             
             ]; 
         $messages = [
@@ -192,8 +189,12 @@ class OrderController extends Controller
                 'item_file_images.*.file'     => 'Each item file image must be a valid file.',
                 'item_file_images.*.mimes'    => 'Each item file image must be a jpeg, jpg, png, or pdf file.',
                 'item_file_images.*.max'      => 'Each item file image cannot exceed 10MB.',
-                'payment_advance.numeric'         => 'Payment Advance must be a number.',
-                'payment_booking.numeric'         => 'Payment Booking must be a number.',
+                'payment_advance.numeric'     => 'Payment Advance must be a number.',
+                'payment_booking.numeric'     => 'Payment Booking must be a number.',
+                'order_number.required'       => 'Order Number is required.',
+                'order_number.string'         => 'Order Number must be a string.',
+                'qr_code_number.required'       => 'Order Number is required.',
+                'qr_code_number.string'         => 'Order Number must be a string.',
 
             ]; 
 
@@ -213,12 +214,6 @@ class OrderController extends Controller
                 'message' => 'You dont have permission to Create order' 
             ]);
         }
-        if ($params['order_type']==1 && ($params['payment_advance']== null || $params['payment_booking']==null)){
-            return response()->json([
-                'status' => 500,
-                'message' =>"Please enter payment details"
-            ]);
-        }
        
         $branch = Branch::get_branch_by_id($params['order_from_branch_id']);
 
@@ -235,15 +230,10 @@ class OrderController extends Controller
                 'message' => 'Branch does not exists' 
             ]);
         }     
-
-        $order_number   = $this->generateUniqueNumber('order_number');
-        $qr_code_number = $this->generateUniqueNumber('order_qr_code');
-    
-
         $order                       = new Order();
         $order->order_date           = $params['order_date'];
-        $order->order_number         = $order_number;
-        $order->order_qr_code        = $qr_code_number;
+        $order->order_number         = $params['order_number'];
+        $order->order_qr_code        = $params['qr_code_number'];
         $order->order_from_branch_id = $params['order_from_branch_id'];
         $order->order_to_branch_id   = $params['order_to_branch_id'];
         $order->order_type           = $params['order_type'];
@@ -293,13 +283,16 @@ class OrderController extends Controller
         $trans->save();
 
         if($params['order_type'] == 1){
-            $payment = new Payment();
-            $payment->payment_order_id      = $order->order_id;
-            $payment->payment_booking_rate  = $params['payment_booking'];
-            $payment->payment_customer_id   = 1;
-            $payment->payment_advance_cash  = $params['payment_advance'];
-            $payment->payment_date          = Carbon::now()->toDateString();
-            $payment->save();
+            if (!empty($params['payment_booking'])){
+
+                $payment = new Payment();
+                $payment->payment_order_id      = $order->order_id;
+                $payment->payment_booking_rate  = $params['payment_booking'];
+                $payment->payment_customer_id   = 1;
+                $payment->payment_advance_cash  = $params['payment_advance'];
+                $payment->payment_date          = Carbon::now()->toDateString();
+                $payment->save();
+            }
         }
 
         SendEmailJob::dispatch($order->order_id,$type="Add");
@@ -342,9 +335,13 @@ class OrderController extends Controller
     
             }
         }
-
+        $order_number   = $this->generateUniqueNumber('order_number');
+        $qr_code_number = $this->generateUniqueNumber('order_qr_code');
+        
+        $orderUrl = route('order_get_approve', ['id' => $qr_code_number]);
+        $qr_code  = QrCode::size(100)->generate($orderUrl);
     
-        return view('orders/order_add',compact('metals', 'melting','branchesArray','pageTitle','login','activePage','user_branch','user_permissions'));
+        return view('orders/order_add',compact('metals', 'melting','branchesArray','pageTitle','login','activePage','user_branch','user_permissions','order_number','order_number','qr_code','qr_code_number'));
     }
 
     private function generateUniqueNumber($column)
@@ -377,7 +374,9 @@ class OrderController extends Controller
            
         }
         $customer  = Customers::get_all_customers();
-        
+        $orderUrl = route('order_get_approve', ['id' => $order['order_qr_code']]);
+        $qr_code = QrCode::size(100)->generate($orderUrl);
+   
         // $order['order_cust']
         $pageTitle     = 'Orders';
         $login         = auth()->user()->toArray();
@@ -411,7 +410,7 @@ class OrderController extends Controller
       
         return view('orders/order_edit'
         ,compact('metals', 'melting','branchesArray',
-        'pageTitle','login','activePage','order','fileArray','user_branch','paymentArray','customer','user_permissions'));
+        'pageTitle','login','activePage','order','fileArray','user_branch','paymentArray','customer','user_permissions','qr_code'));
     }
 
 
