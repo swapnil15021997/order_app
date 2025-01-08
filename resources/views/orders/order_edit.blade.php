@@ -328,23 +328,23 @@
                             <!-- Audio Control Buttons -->
                             
                             <button id="recordButton" class="btn btn-success">
-                                <i class="fas fa-microphone"></i> 
+                            <i class="bi bi-mic"></i>
                             </button>
-                            <button id="pauseRecording" class="btn btn-warning" disabled>
-                                <i class="fas fa-pause"></i>
+                            <!-- <button id="pauseRecording" class="btn btn-warning" disabled>
+                            <i class="bi bi-pause-circle"></i>
                             </button>
                             <button id="resumeRecording" class="btn btn-info" disabled>
-                                <i class="fas fa-play"></i>
-                            </button>
+                            <i class="bi bi-play-circle"></i>
+                            </button> -->
                             <button id="stopButton" class="btn btn-danger" disabled>
-                                <i class="fas fa-stop"></i> 
+                            <i class="bi bi-stop-circle"></i>
                             </button>
                         </div>
                        
 
-                        <div class="mt-4 text-center">
+                        <div class="mt-4 text-center d-none" id="audioPlaybackContainer">
                             <!-- Audio Player -->
-                            <audio id="audio-playback" controls style="display: none;"></audio>
+                            <audio id="audio-playback"   controls ></audio>
                         </div>
                     </div>
 
@@ -353,7 +353,7 @@
                         <a href="#" class="btn btn-secondary" data-bs-dismiss="modal">
                             Cancel
                         </a>
-                        <a id="SendAudioBtn" href="#" class="btn btn-primary">
+                        <a id="sendButton" href="#" type="button" class="btn btn-primary">
                             Send Audio
                         </a>
                     </div>
@@ -1319,10 +1319,12 @@
         // }
 
         function record_audio(){
-            $('#record_audio').modal('show');
+            $('#record_audio').modal('show');            
+            $("#audio-playback").addClass("hidden")
+    
         }
        
-        let recorder, audio_stream;
+        let recorder, audio_stream, audioBlob;
 const recordButton = document.getElementById("recordButton");
 recordButton.addEventListener("click", startRecording);
 
@@ -1334,9 +1336,11 @@ stopButton.disabled = true;
 // set preview
 const preview = document.getElementById("audio-playback");
 
-// set download button event
-const downloadAudio = document.getElementById("downloadButton");
-downloadAudio.addEventListener("click", downloadRecording);
+const sendButton = document.getElementById("sendButton");
+sendButton.addEventListener("click", uploadRecording);
+
+const audioPlaybackContainer = document.getElementById("audioPlaybackContainer");
+   
 
 function startRecording() {
     // button settings
@@ -1348,27 +1352,43 @@ function startRecording() {
     stopButton.disabled = false;
 
 
-    if (!$("#audio-playback").hasClass("hidden")) {
-        $("#audio-playback").addClass("hidden")
-    };
+    $("#audio-playback").addClass("hidden")
+    
 
-    if (!$("#downloadContainer").hasClass("hidden")) {
-        $("#downloadContainer").addClass("hidden")
-    };
+    // if (!$("#downloadContainer").hasClass("hidden")) {
+    //     $("#downloadContainer").addClass("hidden")
+    // };
 
     navigator.mediaDevices.getUserMedia({ audio: true })
         .then(function (stream) {
             audio_stream = stream;
             recorder = new MediaRecorder(stream);
-
+            let audioChunks = [];
             // when there is data, compile into object for preview src
             recorder.ondataavailable = function (e) {
-                const url = URL.createObjectURL(e.data);
-                preview.src = url;
+                audioChunks.push(e.data);
+                // const url = URL.createObjectURL(e.data);
+                // preview.src = url;
 
                 // set link href as blob url, replaced instantly if re-recorded
-                downloadAudio.href = url;
+                // downloadAudio.href = url;
             };
+
+            recorder.onstop = function () {
+                // Create an audio blob
+                audioBlob = new Blob(audioChunks, { type: "audio/wav" });
+
+                // Create a URL for the blob and set it as the audio playback source
+                const url = URL.createObjectURL(audioBlob);
+                preview.src = url;
+
+                // Unhide the audio playback element
+                audioPlaybackContainer.classList.remove("d-none");
+                preview.load(); // Reload the audio element to use the new source
+                console.log("Audio recording ready for playback.");
+                sendButton.audioBlob = audioBlob;
+            };
+
             recorder.start();
 
             timeout_status = setTimeout(function () {
@@ -1390,15 +1410,50 @@ function stopRecording() {
     $("#stopButton").addClass("inactive");
     stopButton.disabled = true;
 
-    $("#audio-playback").removeClass("hidden");
+    sendButton.audioBlob = audioBlob;
 
-    $("#downloadContainer").removeClass("hidden");
+    $("#audio-playback").removeClass("hidden");
+    console.log('class remove');
+
+
 }
 
 function downloadRecording(){
     var name = new Date();
     var res = name.toISOString().slice(0,10)
     downloadAudio.download = res + '.wav';
+}
+
+function uploadRecording() {
+    console.log("Audio Blob:", audioBlob);
+    console.log("Send Button Blob:", sendButton.audioBlob);
+    if (!sendButton.audioBlob) {
+        alert("No audio file available for upload!");
+        return;
+    }
+    const orderId = $('#order_id').val();
+    const formData = new FormData();
+    formData.append('notes_text', '');
+    formData.append('notes_file', sendButton.audioBlob, 'recording.wav');
+    formData.append('notes_type', 2);
+    formData.append('notes_order_id', orderId);
+    $.ajax({
+        url: "{{ route('notes_add') }}",
+        type: 'POST',
+        data: formData,
+        contentType: false,
+        processData: false,
+        headers: {
+            'X-CSRF-TOKEN': csrfToken
+        },
+        success: function (response) {
+            console.log('Audio uploaded successfully:', response);
+            showAlertNotes('success', 'Audio file uploaded successfully!');
+        },
+        error: function (error) {
+            console.error('Audio upload failed:', error);
+        }
+    });
 }
 
 

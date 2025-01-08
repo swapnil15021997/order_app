@@ -24,6 +24,7 @@
     <link rel="stylesheet" href="https://unpkg.com/html5-qrcode/minified/html5-qrcode.min.css" />
 
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
 
     <style>
         @import url('https://rsms.me/inter/inter.css');
