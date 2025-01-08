@@ -20,6 +20,7 @@ class NotesController extends Controller
             'notes_file'          => ['nullable'],  
             'notes_file.*'        => ['file', 'mimes:jpeg,jpg,png,pdf', 'max:10240'],  
             'notes_order_id'      => ['required','string'],
+            'notes_type'          => ['required','string'],
             
         ]; 
         $messages = [
@@ -29,7 +30,9 @@ class NotesController extends Controller
             'notes_file.*.mimes'    => 'Each item file image must be a jpeg, jpg, png, or pdf file.',
             'notes_file.*.max'      => 'Each item file image cannot exceed 10MB.',
             'notes_order_id.string'     => 'Notes id must be string.',
-            'notes_order_id.required'      => 'Notes order required.',
+            'notes_order_id.required'   => 'Notes order required.',
+            'notes_type.string'     => 'Notes Type must be string.',
+            'notes_type.required'   => 'Notes Type required.',
     
         ]; 
         $validator = Validator::make($params, $rules, $messages);
@@ -41,11 +44,10 @@ class NotesController extends Controller
                 'errors'  => $validator->errors(), 
             ]);
         } 
-        $notes_type = !empty($params['notes_text']) ? 1 : 2;
-
+        
         $notes_save = new Notes();
         $notes_save->notes_text = $params['notes_text'];
-        $notes_save->notes_type = $notes_type;
+        $notes_save->notes_type = $params['notes_type'];
         $notes_save->notes_order_id = $params['notes_order_id'];
         $fileIds = [];
 

@@ -101,7 +101,7 @@ class ProfileController extends Controller
             'user' => $request->user(),
             'login' => $login,
             'activePage' => $activePage,
-            'pageTitle'=>'User Profile',
+            'pageTitle'=>'User Profile',    
             'branch'=>$branch,
             'user_branch' => $users_branch,
             'settings' => $settings,

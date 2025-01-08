@@ -309,5 +309,9 @@
     overflow: hidden;
 }
 .select2-container--open {
-    z-index: 9999; /* Higher than other elements */
+    z-index: 999999 !important; /* Higher than other elements */
+}
+
+.select2-dropdown {
+    z-index: 1050  !important;
 }

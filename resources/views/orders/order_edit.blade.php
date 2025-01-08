@@ -285,13 +285,13 @@
         </div>
         <input type="hidden" name="" id="transfer_order_id">
 
-        <div class="modal modal-blur fade" id="transfer_order" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal modal-blur fade" id="transfer_order" tabindex="-2" role="dialog" aria-hidden="true">
             <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
 
                     <div class="modal-header">
                         <h5 class="modal-title">Transfer Order</h5>
-                        <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> -->
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         <label class="form-label">Order To</label>
@@ -315,6 +315,52 @@
             </div>
         </div>
 
+        <div class="modal modal-blur fade" id="record_audio" tabindex="-2" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+
+                    <div class="modal-header">
+                        <h5 class="modal-title">Record Audio</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="text-center">
+                            <!-- Audio Control Buttons -->
+                            
+                            <button id="recordButton" class="btn btn-success">
+                                <i class="fas fa-microphone"></i> 
+                            </button>
+                            <button id="pauseRecording" class="btn btn-warning" disabled>
+                                <i class="fas fa-pause"></i>
+                            </button>
+                            <button id="resumeRecording" class="btn btn-info" disabled>
+                                <i class="fas fa-play"></i>
+                            </button>
+                            <button id="stopButton" class="btn btn-danger" disabled>
+                                <i class="fas fa-stop"></i> 
+                            </button>
+                        </div>
+                       
+
+                        <div class="mt-4 text-center">
+                            <!-- Audio Player -->
+                            <audio id="audio-playback" controls style="display: none;"></audio>
+                        </div>
+                    </div>
+
+
+                    <div class="modal-footer">
+                        <a href="#" class="btn btn-secondary" data-bs-dismiss="modal">
+                            Cancel
+                        </a>
+                        <a id="SendAudioBtn" href="#" class="btn btn-primary">
+                            Send Audio
+                        </a>
+                    </div>
+                
+                </div>
+            </div>
+        </div>
 
         <div class="note-sidebar" id="note_sheet">
 
@@ -360,9 +406,9 @@
                     </a>
                 </span>
                 <span class="custom-btn">
-                    <input type="file" id="fileInput" style="display: none;" onchange="handleFileUpload(event)"
+                    <input type="file" id="fileInput" style="display: none;" onchange="record_audio()"
                         multiple />
-                    <a href="#" onclick="open_file_select()" data-bs-toggle="tooltip"
+                    <a href="#" onclick="record_audio()" data-bs-toggle="tooltip"
                         aria-label="Please Select file to upload" data-bs-original-title="Audio File">
                         <svg width="16" height="22" viewBox="0 0 16 22" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path
@@ -751,11 +797,58 @@
         });
     });
 
+    // $(document).ready(function () {
+
+    //     var csrfToken = $('meta[name="csrf-token"]').attr('content');
+    //     $('#TransfersearchableSelectTo').select2({
+
+    //         placeholder: "Select an option",
+    //         allowClear: true,
+    //         ajax: {
+    //             url: "{{route('branch_list')}}",
+    //             dataType: 'json',
+    //             type: 'POST',
+    //             headers: {
+    //                 'X-CSRF-TOKEN': csrfToken  // Add CSRF token in the header
+    //             },
+    //             delay: 250,
+    //             data: function (params) {
+    //                 return {
+
+    //                     search: params.term,
+    //                     per_page: 10,
+    //                     page: params.page || 1
+    //                 };
+    //             },
+    //             processResults: function (data) {
+
+    //                 return {
+    //                     results: data.data.branches.map(function (item) {
+    //                         return {
+    //                             id: item.branch_id,
+    //                             text: item.branch_name
+    //                         };
+    //                     }),
+    //                     pagination: {
+    //                         more: data.data.length >= 10 // Check if there are more results
+    //                     }
+    //                 };
+    //             },
+    //             cache: true
+    //         }
+    //     });
+    // });
+
+
+    var csrfToken = $('meta[name="csrf-token"]').attr('content');
+
     $(document).ready(function () {
 
+        
         var csrfToken = $('meta[name="csrf-token"]').attr('content');
-        $('#TransfersearchableSelectTo').select2({
 
+        $('#TransfersearchableSelectTo').select2({
+            dropdownParent: $('#transfer_order'),
             placeholder: "Select an option",
             allowClear: true,
             ajax: {
@@ -1104,7 +1197,9 @@
                                 data: {
                                     'notes_text': text,
                                     'notes_file': null,
-                                    'notes_order_id':order_id
+                                    'notes_order_id':order_id,
+                                    'notes_type'    : 1
+
                                 },
                                 headers: {
                                     'X-CSRF-TOKEN': csrfToken
@@ -1134,7 +1229,8 @@
                             data: {
                                 'notes_text': text,
                                 'notes_file': null,
-                                'notes_order_id':order_id
+                                'notes_order_id':order_id,
+                                'notes_type'    : 1
                             },
                             headers: {
                                 'X-CSRF-TOKEN': csrfToken
@@ -1159,6 +1255,152 @@
         function open_file_select() {
             $("#fileInput").click();
         }
+      
+        // async function record_audio(){
+        //     if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        //         alert('Your browser does not support audio recording.');
+        //         return;
+        //     }
+
+        //     try {
+        //         // Request microphone access
+        //         const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        //         const mediaRecorder = new MediaRecorder(stream);
+        //         const audioChunks = [];
+
+        //         // Listen for dataavailable event to collect audio chunks
+        //         mediaRecorder.ondataavailable = (event) => {
+        //             audioChunks.push(event.data);
+        //         };
+
+        //         // Start recording
+        //         mediaRecorder.start();
+        //         console.log('Recording started...');
+
+        //         // Stop recording after 5 seconds (or you can use a button to stop)
+        //         setTimeout(() => {
+        //             mediaRecorder.stop();
+        //             console.log('Recording stopped.');
+        //         }, 5000);
+
+        //         // Process the recorded audio once recording is stopped
+        //         mediaRecorder.onstop = () => {
+        //             const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+        //             const audioUrl = URL.createObjectURL(audioBlob);
+        //             uploadAudio(audioBlob);
+        //         };
+        //     } catch (error) {
+        //         console.error('Error accessing microphone:', error);
+        //     }
+        // }
+        // function uploadAudio(audioBlob) {
+        //     const formData = new FormData();
+        //     formData.append('notes_text', '');
+        //     formData.append('notes_file', audioBlob, 'recording.wav');
+        //     formData.append('notes_type', 2);
+            
+        //     $.ajax({
+        //         url: "{{ route('notes_add') }}",
+        //         type: 'POST',
+        //         data: formData,
+        //         contentType: false,
+        //         processData: false,
+        //         headers: {
+        //             'X-CSRF-TOKEN': csrfToken
+        //         },
+        //         success: function (response) {
+        //             console.log('Audio uploaded successfully:', response);
+        //             showAlertNotes('success', 'Audio file uploaded successfully!');
+        //         },
+        //         error: function (error) {
+        //             console.error('Audio upload failed:', error);
+        //         }
+        //     });
+        // }
+
+        function record_audio(){
+            $('#record_audio').modal('show');
+        }
+       
+        let recorder, audio_stream;
+const recordButton = document.getElementById("recordButton");
+recordButton.addEventListener("click", startRecording);
+
+// stop recording
+const stopButton = document.getElementById("stopButton");
+stopButton.addEventListener("click", stopRecording);
+stopButton.disabled = true;
+
+// set preview
+const preview = document.getElementById("audio-playback");
+
+// set download button event
+const downloadAudio = document.getElementById("downloadButton");
+downloadAudio.addEventListener("click", downloadRecording);
+
+function startRecording() {
+    // button settings
+    recordButton.disabled = true;
+    recordButton.innerText = "Recording..."
+    $("#recordButton").addClass("button-animate");
+
+    $("#stopButton").removeClass("inactive");
+    stopButton.disabled = false;
+
+
+    if (!$("#audio-playback").hasClass("hidden")) {
+        $("#audio-playback").addClass("hidden")
+    };
+
+    if (!$("#downloadContainer").hasClass("hidden")) {
+        $("#downloadContainer").addClass("hidden")
+    };
+
+    navigator.mediaDevices.getUserMedia({ audio: true })
+        .then(function (stream) {
+            audio_stream = stream;
+            recorder = new MediaRecorder(stream);
+
+            // when there is data, compile into object for preview src
+            recorder.ondataavailable = function (e) {
+                const url = URL.createObjectURL(e.data);
+                preview.src = url;
+
+                // set link href as blob url, replaced instantly if re-recorded
+                downloadAudio.href = url;
+            };
+            recorder.start();
+
+            timeout_status = setTimeout(function () {
+                console.log("5 min timeout");
+                stopRecording();
+            }, 300000);
+        });
+}
+
+function stopRecording() {
+    recorder.stop();
+    audio_stream.getAudioTracks()[0].stop();
+
+    // buttons reset
+    recordButton.disabled = false;
+    recordButton.innerText = "Redo Recording"
+    $("#recordButton").removeClass("button-animate");
+
+    $("#stopButton").addClass("inactive");
+    stopButton.disabled = true;
+
+    $("#audio-playback").removeClass("hidden");
+
+    $("#downloadContainer").removeClass("hidden");
+}
+
+function downloadRecording(){
+    var name = new Date();
+    var res = name.toISOString().slice(0,10)
+    downloadAudio.download = res + '.wav';
+}
+
 
         function handleFileUpload(event) {
             const file = event.target.files;
@@ -1167,6 +1409,8 @@
                 formData.append('notes_text', '');
                 for (var i = 0; i < file.length; i++) {
                     formData.append('notes_file[]', file[i]);
+                    formData.append('notes_type', 3);
+
                 }
                 $.ajax({
                     url: "{{ route('notes_add') }}",
@@ -1187,6 +1431,9 @@
                 console.log("No file selected");
             }
         }
+
+
+
 
         function showAlertNotes(type, message) {
             const alertContainer = document.getElementById('notes-container');

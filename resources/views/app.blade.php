@@ -60,6 +60,8 @@
     <!-- Tabler Core -->
     <script src="{{ asset('js/tabler.min.js')}}" defer></script>
     <script src="{{ asset('js/demo.min.js')}}" defer></script>
+    <script src="{{ asset('js/manage-audio.js')}}" defer></script>
+
     <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script> -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
