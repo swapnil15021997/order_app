@@ -35,7 +35,7 @@
                                             <label for="order_date" class="form-label" required>Order Date
                                                 <span style="color: red;">*</span>
                                             </label>
-                                            <input type="date" id="order_date" required class="form-control" form>
+                                            <input type="text" id="order_date" required class="form-control">
                                         </div>
                                         <div class="col-12 mt-3">
                                             <label for="order_type" class="form-label">Order Type</label>
@@ -427,8 +427,30 @@
     let notesList = [];
     $(document).ready(function () {
         // default selected date
-        const today = new Date().toISOString().split('T')[0];
-        document.getElementById('order_date').value = today;
+        // const today = new Date();
+        // const day = String(today.getDate()).padStart(2, '0');
+        // const month = String(today.getMonth() + 1).padStart(2, '0'); // getMonth() is zero-based
+        // const year = today.getFullYear();
+        // const formattedDate = `${day}-${month}-${year}`;
+        // console.log(formattedDate);
+        // document.getElementById('order_date').value = formattedDate;
+
+
+        $(function () {
+            $("#order_date").
+            datepicker({
+                dateFormat: 'dd-mm-yy'
+            });
+
+            var today = new Date();
+            var dd = String(today.getDate()).padStart(2, '0');
+            var mm = String(today.getMonth() + 1).padStart(2, '0'); 
+            var yyyy = today.getFullYear();
+
+            today = dd + '-' + mm + '-' + yyyy; 
+            $("#order_date").datepicker("setDate", today);
+        });
+
 
         $('#order_type').on('change', function () {
             console.log(this.value);

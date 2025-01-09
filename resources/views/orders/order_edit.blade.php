@@ -49,8 +49,8 @@
                                             <label for="order_date" class="form-label">Order Date
                                             <span style="color: red;">*</span>
                                             </label>
-                                            <input type="date" id="edit_order_date" value="{{$order['order_date']}}"
-                                                class="form-control" form>
+                                            <input type="text" id="edit_order_date" 
+                                                class="form-control" >
                                         </div>
                                         <div class="col-12 mt-3">
                                             <label for="order_type" class="form-label">Order Type
@@ -479,7 +479,15 @@
 
 <script>
 
-    
+    $(document).ready(function () {
+        $(function () {
+            $("#edit_order_date").
+            datepicker({dateFormat: 'dd-mm-yy' });
+        });
+        var orderDate = "<?php echo \Carbon\Carbon::parse($order['order_date'])->format('d-m-Y'); ?>"; // Assuming $order['order_date'] is in a valid date format
+        console.log(orderDate);
+        $('#edit_order_date').val(orderDate);
+    });
     var userInput = '';
     // Upload Images and show the preview
 

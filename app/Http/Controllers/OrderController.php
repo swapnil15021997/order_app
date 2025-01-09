@@ -149,7 +149,7 @@ class OrderController extends Controller
        
         $rules = [   
             
-            'order_date'            => ['required', 'date', 'date_format:Y-m-d'],  
+            'order_date'            => ['required', 'date'],  
             'order_from_branch_id'  => ['required','string'],
             'order_to_branch_id'    => ['required','string'],
             'order_type'            => ['required','in:1,2'],
@@ -174,7 +174,6 @@ class OrderController extends Controller
         $messages = [
                 'order_date.required'            => 'Order date is required.',
                 'order_date.date'                => 'Order date must be a valid date.',
-                'order_date.date_format'         => 'Order date must be in the format YYYY-MM-DD.',            
                 'order_from_branch_id.required'  => 'From branch ID is required.',
                 'order_from_branch_id.string'    => 'From branch ID must be a string.',
                 'order_to_branch_id.required'    => 'To branch ID is required.',
@@ -252,8 +251,10 @@ class OrderController extends Controller
         }else{
             $customer_id = $params['order_user_id'];
         }
+        $formattedDate = Carbon::createFromFormat('d-m-Y', $params['order_date'])->format('Y-m-d'); 
+      
         $order                       = new Order();
-        $order->order_date           = $params['order_date'];
+        $order->order_date           = $formattedDate;
         $order->order_number         = $params['order_number'];
         $order->order_qr_code        = $params['qr_code_number'];
         $order->order_from_branch_id = $params['order_from_branch_id'];
@@ -404,8 +405,9 @@ class OrderController extends Controller
         $branches      = Branch::select('branch_id', 'branch_name')->take(5)->get();
         $branchesArray = $branches->toArray();
         $order         = Order::get_order_with_items($id);
+        $order->order_date = Carbon::parse($order->order_date)->format('d-m-Y');
         $order         = $order->toArray();
-        
+         
         if (empty($order)){
             return response()->json([
                 'status' => 500,
@@ -599,6 +601,8 @@ class OrderController extends Controller
         ->get();
         $orders->each(function ($order, $index) {
             $order->serial_number = $index + 1; 
+            $order->order_date = Carbon::parse($order->order_date)->format('d-m-Y');
+
         });
 
         
@@ -629,7 +633,7 @@ class OrderController extends Controller
          
         $rules = [   
             'order_id'             => ['required','string'],
-            'order_date'           => ['required', 'date', 'date_format:Y-m-d'],  
+            'order_date'           => ['required', 'date'],  
             'order_from_branch_id' => ['required','string'],
             'order_to_branch_id'   => ['required','string'],
             'order_type'           => ['required','in:1,2'],
@@ -652,8 +656,7 @@ class OrderController extends Controller
                 'order_id.required' => 'Order ID is required.',
                 'order_id.string' => 'Order ID must be a string.',         
                 'order_date.required'         => 'Order date is required.',
-                'order_date.date'             => 'Order date must be a valid date.',
-                'order_date.date_format'      => 'Order date must be in the format YYYY-MM-DD.',            
+                'order_date.date'             => 'Order date must be a valid date.',           
                 'order_from_branch_id.required' => 'From branch ID is required.',
                 'order_from_branch_id.string' => 'From branch ID must be a string.',
                 'order_to_branch_id.required' => 'To branch ID is required.',
@@ -738,8 +741,8 @@ class OrderController extends Controller
             $customer_id = $params['order_user_id'];
         }
 
-
-        $order_rec->order_date           = $params['order_date'];
+        $formattedDate = Carbon::createFromFormat('d-m-Y', $params['order_date'])->format('Y-m-d'); // '2025-01-10'
+        $order_rec->order_date           = $formattedDate;
         $order_rec->order_from_branch_id = $params['order_from_branch_id'];
         $order_rec->order_to_branch_id   = $params['order_to_branch_id'];
         $order_rec->order_type           = $params['order_type'];
