@@ -133,7 +133,7 @@
                                         <select id="edit_searchableSelectTo" class="form-select w-100" type="text">
 
                                             @foreach ($branchesArray as $branch)
-                                                <option value="{{ $branch['branch_id'] }}">{{ $branch['branch_name'] }}
+                                                <option value="{{ $branch['branch_id'] }}" @if ($branch['branch_id'] == $order['order_to']) selected @endif>{{ $branch['branch_name'] }}
                                                 </option>
                                             @endforeach
                                         </select>
