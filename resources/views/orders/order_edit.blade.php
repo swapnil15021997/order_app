@@ -351,12 +351,12 @@
                         <a id="resetButton" href="#" type="button" class="btn btn-primary">
                             Reset Audio
                         </a>
-                        <a href="#" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <a href="#" id="cancelButton" class="btn btn-secondary" data-bs-dismiss="modal">
                             Cancel
                         </a>
-                        <a id="sendButton" href="#" type="button" class="btn btn-primary">
+                        <button id="sendButton" href="#" type="button" class="btn btn-primary">
                             Send Audio
-                        </a>
+                        </button>
                     </div>
                 
                 </div>
@@ -879,47 +879,6 @@
         });
     });
 
-    // $(document).ready(function () {
-
-    //     var csrfToken = $('meta[name="csrf-token"]').attr('content');
-    //     $('#TransfersearchableSelectTo').select2({
-
-    //         placeholder: "Select an option",
-    //         allowClear: true,
-    //         ajax: {
-    //             url: "{{route('branch_list')}}",
-    //             dataType: 'json',
-    //             type: 'POST',
-    //             headers: {
-    //                 'X-CSRF-TOKEN': csrfToken  // Add CSRF token in the header
-    //             },
-    //             delay: 250,
-    //             data: function (params) {
-    //                 return {
-
-    //                     search: params.term,
-    //                     per_page: 10,
-    //                     page: params.page || 1
-    //                 };
-    //             },
-    //             processResults: function (data) {
-
-    //                 return {
-    //                     results: data.data.branches.map(function (item) {
-    //                         return {
-    //                             id: item.branch_id,
-    //                             text: item.branch_name
-    //                         };
-    //                     }),
-    //                     pagination: {
-    //                         more: data.data.length >= 10 // Check if there are more results
-    //                     }
-    //                 };
-    //             },
-    //             cache: true
-    //         }
-    //     });
-    // });
 
 
     var csrfToken = $('meta[name="csrf-token"]').attr('content');
@@ -1162,194 +1121,162 @@
 
     // Code for notes
 
-        var csrfToken = $('meta[name="csrf-token"]').attr('content');
-        let page = 1;
-        let loadNotes;
-        let isLoading = false;
+    var csrfToken = $('meta[name="csrf-token"]').attr('content');
+    let page = 1;
+    let loadNotes;
+    let isLoading = false;
 
-        document.addEventListener("DOMContentLoaded", function () {
-            // Function to load notes
-            loadNotes = function (isScrollUp = false) {
-                if (isLoading) return;
+    document.addEventListener("DOMContentLoaded", function () {
+        // Function to load notes
+        loadNotes = function (isScrollUp = false) {
+            if (isLoading) return;
 
-                isLoading = true;
-                const notesBody = $('#notes_body');
-                const order_id  = $('#order_id').val();
-                console.log("Order ID: " + order_id);
-                notesBody.html('');
-                const scrollTopBeforeLoad = notesBody.scrollTop();
+            isLoading = true;
+            const notesBody = $('#notes_body');
+            const order_id  = $('#order_id').val();
+            console.log("Order ID: " + order_id);
+            notesBody.html('');
+            const scrollTopBeforeLoad = notesBody.scrollTop();
 
-                $.ajax({
-                    url: "{{ route('notes_list') }}",
-                    type: 'POST',
-                    data: {
-                        search: '',
-                        per_page: 8,
-                        page: page,
-                        order_id: order_id,
-                    },
-                    headers: {
-                        'X-CSRF-TOKEN': csrfToken
-                    },
-                    success: function (response) {
-                        const notesBody = $('#notes_body');
-                        let firstNoteOffset = notesBody[0].scrollHeight;
+            $.ajax({
+                url: "{{ route('notes_list') }}",
+                type: 'POST',
+                data: {
+                    search: '',
+                    per_page: 8,
+                    page: page,
+                    order_id: order_id,
+                },
+                headers: {
+                    'X-CSRF-TOKEN': csrfToken
+                },
+                success: function (response) {
+                    const notesBody = $('#notes_body');
+                    let firstNoteOffset = notesBody[0].scrollHeight;
 
-                        // Add new notes below
-                        if (!isScrollUp) {
-                            response.data.notes.forEach(function (note) {
-                                console.log(note);
-                                if (note.notes_type == 1) {
-                                    notesBody.append(`
+                    // Add new notes below
+                    if (!isScrollUp) {
+                        response.data.notes.forEach(function (note) {
+                            console.log(note);
+                            if (note.notes_type == 1) {
+                                notesBody.append(`
+                                <div class="my-note-box">
+                                    <div class="chat-bubble-title"></div>
+                                    <div class="chat-bubble-body">
+                                        <p>${note.notes_text}.</p>
+                                    </div>
+                                </div>`);
+                            } 
+                            else if(note.notes_type == 3){
+                                notesBody.append(`
                                     <div class="my-note-box">
-                                        <div class="chat-bubble-title"></div>
+                                        <div class="chat-bubble-title">Audio Note</div>
                                         <div class="chat-bubble-body">
-                                            <p>${note.notes_text}.</p>
+                                            <audio controls>
+                                                <source src="${note.file.file_url}" type="audio/webm">
+                                                Your browser does not support the audio element.
+                                            </audio>
                                         </div>
+                                    </div>
+                                `);
+                            }
+                            else {
+                                if (note.file.file_type == 'pdf') {
+                                    notesBody.append(`
+                                    <div class="my-note-box w-75">
+                                        <p class="small text-decoration-underline">${note.file.file_original_name}</p>
+                                        <embed src="${note.file.file_url}" width="100%" height="auto" />
                                     </div>`);
-                                } 
-                                else if(note.notes_type == 3){
+                                } else {
                                     notesBody.append(`
-                                        <div class="my-note-box">
-                                            <div class="chat-bubble-title">Audio Note</div>
-                                            <div class="chat-bubble-body">
-                                                <audio controls>
-                                                    <source src="${note.file.file_url}" type="audio/webm">
-                                                    Your browser does not support the audio element.
-                                                </audio>
-                                            </div>
-                                        </div>
-                                    `);
+                                    <div class="my-note-box w-75">
+                                        <p class="small text-decoration-underline">${note.file.file_original_name}</p>
+                                        <img src="${note.file.file_url}" alt="" class="rounded img-fluid" />
+                                    </div>`);
                                 }
-                                else {
-                                    if (note.file.file_type == 'pdf') {
-                                        notesBody.append(`
-                                        <div class="my-note-box w-75">
-                                            <p class="small text-decoration-underline">${note.file.file_original_name}</p>
-                                            <embed src="${note.file.file_url}" width="100%" height="auto" />
-                                        </div>`);
-                                    } else {
-                                        notesBody.append(`
-                                        <div class="my-note-box w-75">
-                                            <p class="small text-decoration-underline">${note.file.file_original_name}</p>
-                                            <img src="${note.file.file_url}" alt="" class="rounded img-fluid" />
-                                        </div>`);
-                                    }
-                                }
-                            });
-                        } else {
-                            // Add older notes to the top when scrolling up
-                            let newNotes = '';
-                            response.data.notes.forEach(function (note) {
-                                if (note.notes_type == 1) {
+                            }
+                        });
+                    } else {
+                        // Add older notes to the top when scrolling up
+                        let newNotes = '';
+                        response.data.notes.forEach(function (note) {
+                            if (note.notes_type == 1) {
+                                newNotes = `
+                                <div class="my-note-box">
+                                    <div class="chat-bubble-title"></div>
+                                    <div class="chat-bubble-body">
+                                        <p>${note.notes_text}.</p>
+                                    </div>
+                                </div>` + newNotes;
+                            } else {
+                                if (note.file.file_type == 'pdf') {
                                     newNotes = `
-                                    <div class="my-note-box">
-                                        <div class="chat-bubble-title"></div>
-                                        <div class="chat-bubble-body">
-                                            <p>${note.notes_text}.</p>
-                                        </div>
+                                    <div class="my-note-box w-75">
+                                        <p class="small text-decoration-underline">${note.file.file_original_name}</p>
+                                        <embed src="${note.file.file_url}" width="100%" height="auto" />
                                     </div>` + newNotes;
                                 } else {
-                                    if (note.file.file_type == 'pdf') {
-                                        newNotes = `
-                                        <div class="my-note-box w-75">
-                                            <p class="small text-decoration-underline">${note.file.file_original_name}</p>
-                                            <embed src="${note.file.file_url}" width="100%" height="auto" />
-                                        </div>` + newNotes;
-                                    } else {
-                                        newNotes = `
-                                        <div class="my-note-box w-75">
-                                            <p class="small text-decoration-underline">${note.file.file_original_name}</p>
-                                            <img src="${note.file.file_url}" alt="" class="rounded img-fluid" />
-                                        </div>` + newNotes;
-                                    }
+                                    newNotes = `
+                                    <div class="my-note-box w-75">
+                                        <p class="small text-decoration-underline">${note.file.file_original_name}</p>
+                                        <img src="${note.file.file_url}" alt="" class="rounded img-fluid" />
+                                    </div>` + newNotes;
                                 }
-                            });
-                            notesBody.prepend(newNotes);
-                        }
-
-                        page++;
-
-                        // Scroll position handling after load
-                        if (isScrollUp) {
-                            notesBody.scrollTop(notesBody[0].scrollHeight - firstNoteOffset);
-                        } else {
-                            notesBody.scrollTop(notesBody[0].scrollHeight);
-                        }
-
-                        isLoading = false;
+                            }
+                        });
+                        notesBody.prepend(newNotes);
                     }
-                });
-            }
 
-            // Initial load (start from the bottom)
-            loadNotes();
+                    page++;
 
-            // Handle scroll event
-            function handleScroll() {
-                const notesBox = document.getElementById("notes_body");
-                if (!notesBox) return;
-
-                const { scrollTop, scrollHeight, clientHeight } = notesBox;
-
-                if (scrollTop + clientHeight >= scrollHeight - 5) {
-                    // Load more notes at the bottom
-                    loadNotes();
-                } else if (scrollTop === 0) {
-                    // Load older notes when scrolling up
-                    loadNotes(true);
-                }
-            }
-
-            // Attach scroll event
-            setTimeout(function () {
-                const notesBox = document.getElementById("notes_body");
-                if (notesBox) {
-                    notesBox.addEventListener("scroll", handleScroll);
-                }
-            }, 500);
-
-
-            $(document).ready(function () {
-                // Handle file upload
-
-                // Handle new text note submission
-                $("#TextNotes").on("keydown", function (event) {
-                    if (event.key === "Enter") {
-                        event.preventDefault();
-                        const text = event.target.value.trim();
-                        const order_id = $('#order_id').val();
-                        if (text) {
-                            $.ajax({
-                                url: "{{ route('notes_add') }}",
-                                type: 'POST',
-                                data: {
-                                    'notes_text': text,
-                                    'notes_file': null,
-                                    'notes_order_id':order_id,
-                                    'notes_type'    : 1
-
-                                },
-                                headers: {
-                                    'X-CSRF-TOKEN': csrfToken
-                                },
-                                success: function (response) {
-                                    showAlertNotes('success', response.message);
-                                    $('#TextNotes').val('');
-                                    isLoading = false;
-                                    page = 1;
-                                    loadNotes();
-                                }
-                            });
-                        } else {
-                            alert("Please enter some text.");
-                            showAlertNotes('warning', 'Please enter some text');
-                        }
+                    // Scroll position handling after load
+                    if (isScrollUp) {
+                        notesBody.scrollTop(notesBody[0].scrollHeight - firstNoteOffset);
+                    } else {
+                        notesBody.scrollTop(notesBody[0].scrollHeight);
                     }
-                });
 
-                $("#SendNotes").on("click", function () {
-                    const text = $("#TextNotes").val().trim();
+                    isLoading = false;
+                }
+            });
+        }
+
+        // Initial load (start from the bottom)
+        loadNotes();
+
+        // Handle scroll event
+        function handleScroll() {
+            const notesBox = document.getElementById("notes_body");
+            if (!notesBox) return;
+
+            const { scrollTop, scrollHeight, clientHeight } = notesBox;
+
+            if (scrollTop + clientHeight >= scrollHeight - 5) {
+                // Load more notes at the bottom
+                loadNotes();
+            } else if (scrollTop === 0) {
+                // Load older notes when scrolling up
+                loadNotes(true);
+            }
+        }
+
+        // Attach scroll event
+        setTimeout(function () {
+            const notesBox = document.getElementById("notes_body");
+            if (notesBox) {
+                notesBox.addEventListener("scroll", handleScroll);
+            }
+        }, 500);
+
+
+        $(document).ready(function () {
+            // Handle file upload
+
+            // Handle new text note submission
+            $("#TextNotes").on("keydown", function (event) {
+                if (event.key === "Enter") {
+                    event.preventDefault();
+                    const text = event.target.value.trim();
                     const order_id = $('#order_id').val();
                     if (text) {
                         $.ajax({
@@ -1360,6 +1287,7 @@
                                 'notes_file': null,
                                 'notes_order_id':order_id,
                                 'notes_type'    : 1
+
                             },
                             headers: {
                                 'X-CSRF-TOKEN': csrfToken
@@ -1376,14 +1304,45 @@
                         alert("Please enter some text.");
                         showAlertNotes('warning', 'Please enter some text');
                     }
-                
-                });  
+                }
             });
-        });
 
-        function open_file_select() {
-            $("#fileInput").click();
-        }
+            $("#SendNotes").on("click", function () {
+                const text = $("#TextNotes").val().trim();
+                const order_id = $('#order_id').val();
+                if (text) {
+                    $.ajax({
+                        url: "{{ route('notes_add') }}",
+                        type: 'POST',
+                        data: {
+                            'notes_text': text,
+                            'notes_file': null,
+                            'notes_order_id':order_id,
+                            'notes_type'    : 1
+                        },
+                        headers: {
+                            'X-CSRF-TOKEN': csrfToken
+                        },
+                        success: function (response) {
+                            showAlertNotes('success', response.message);
+                            $('#TextNotes').val('');
+                            isLoading = false;
+                            page = 1;
+                            loadNotes();
+                        }
+                    });
+                } else {
+                    alert("Please enter some text.");
+                    showAlertNotes('warning', 'Please enter some text');
+                }
+            
+            });  
+        });
+    });
+
+    function open_file_select() {
+        $("#fileInput").click();
+    }
    
 
     let cameraStream = null;
@@ -1519,36 +1478,25 @@
     }
        
     let recorder, audio_stream, audioBlob;
-    // const recordButton = document.getElementById("recordButton");
-    // recordButton.addEventListener("click", startRecording);
+
     const recordButton = $('#recordButton');
     $('#recordButton').on('click', startRecording);
-
-
-    // stop recording
-    // const stopButton = document.getElementById("stopButton");
-    // stopButton.addEventListener("click", stopRecording);
-    // stopButton.disabled = true;
 
     const stopButton = $('#stopButton');
     $('#stopButton').on('click', stopRecording);
 
     // set preview
-    // const preview = document.getElementById("audio-playback");
-    const preview = $('#audio-playback');
-
-    // const sendButton = document.getElementById("sendButton");
-    // sendButton.addEventListener("click", uploadRecording);
-
+    const preview    = $('#audio-playback');
     const sendButton = $('#sendButton');
+
     $('#sendButton').on('click', uploadRecording);
-
-
-    // const audioPlaybackContainer = document.getElementById("audioPlaybackContainer");
     const audioPlaybackContainer =$('#audioPlaybackContainer');
 
     const resetButton = $('#resetButton');
     $('#resetButton').on('click', resetRecording);
+    
+    const cancelButton = $('#cancelButton');
+    $('#cancelButton').on('click', cancelRecording);
     
     
     function startRecording() {
@@ -1562,6 +1510,9 @@
         $("#stopButton").removeClass("inactive");
         $("#stopButton").prop("disabled", false);
 
+        $('#sendButton').prop("disabled", true);
+        
+
         $("#audio-playback").addClass("hidden")
      
         navigator.mediaDevices.getUserMedia({ audio: true })
@@ -1572,11 +1523,7 @@
                 // when there is data, compile into object for preview src
                 recorder.ondataavailable = function (e) {
                     audioChunks.push(e.data);
-                    // const url = URL.createObjectURL(e.data);
-                    // preview.src = url;
-
-                    // set link href as blob url, replaced instantly if re-recorded
-                    // downloadAudio.href = url;
+                
                 };
 
                 recorder.onstop = function () {
@@ -1615,6 +1562,8 @@
         $("#recordButton").removeClass("button-animate");
 
         $("#stopButton").addClass("inactive");
+        $('#sendButton').prop("disabled", false);
+
         stopButton.disabled = true;
 
         sendButton.audioBlob = audioBlob;
@@ -1627,6 +1576,34 @@
 
     function resetRecording() {
         // Reset the recorder, audio stream, and UI
+        if (recorder) {
+            recorder.stop();
+            audio_stream.getAudioTracks()[0].stop();
+        }
+
+        // Reset audio variables
+        audioBlob = null;
+        audio_stream = null;
+        recorder = null;
+
+        // Hide audio playback and reset the buttons
+        audioPlaybackContainer.addClass("d-none");
+        preview[0].src = '';
+        $("#audio-playback").addClass("hidden");
+
+        recordButton.prop("disabled", false);
+        
+        $("#recordButton").text(""); 
+        $("#recordButton").html('<i class="bi bi-mic"></i>');
+        recordButton.removeClass("button-animate");
+
+        stopButton.addClass("inactive");
+        stopButton.prop("disabled", true);
+        
+        sendButton[0].audioBlob = null;
+    }
+
+    function cancelRecording() {
         if (recorder) {
             recorder.stop();
             audio_stream.getAudioTracks()[0].stop();

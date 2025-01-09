@@ -297,12 +297,12 @@
                         <a id="resetButton" href="#" type="button" class="btn btn-primary">
                             Reset Audio
                         </a>
-                        <a href="#" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <a href="#" id="cancelButton" class="btn btn-secondary" data-bs-dismiss="modal">
                             Cancel
                         </a>
-                        <a id="sendButton" href="#" type="button" class="btn btn-primary">
+                        <button id="sendButton" href="#" type="button" class="btn btn-primary">
                             Send Audio
-                        </a>
+                        </button>
                     </div>
                 
                 </div>
@@ -1404,6 +1404,9 @@
     const stopButton = $('#stopButton');
     $('#stopButton').on('click', stopRecording);
 
+    const cancelButton = $('#cancelButton');
+    $('#cancelButton').on('click', cancelRecording);
+    
     // set preview
     // const preview = document.getElementById("audio-playback");
     const preview = $('#audio-playback');
@@ -1434,6 +1437,8 @@
         $("#stopButton").prop("disabled", false);
 
         $("#audio-playback").addClass("hidden")
+
+        $('#sendButton').prop("disabled", true);
      
         navigator.mediaDevices.getUserMedia({ audio: true })
             .then(function (stream) {
@@ -1488,6 +1493,8 @@
         $("#stopButton").addClass("inactive");
         stopButton.disabled = true;
 
+        $('#sendButton').prop("disabled", false);
+
         sendButton.audioBlob = audioBlob;
 
         $("#audio-playback").removeClass("hidden");
@@ -1496,6 +1503,33 @@
 
     }
 
+    function cancelRecording() {
+        if (recorder) {
+            recorder.stop();
+            audio_stream.getAudioTracks()[0].stop();
+        }
+
+        // Reset audio variables
+        audioBlob = null;
+        audio_stream = null;
+        recorder = null;
+
+        // Hide audio playback and reset the buttons
+        audioPlaybackContainer.addClass("d-none");
+        preview[0].src = '';
+        $("#audio-playback").addClass("hidden");
+
+        recordButton.prop("disabled", false);
+        
+        $("#recordButton").text(""); 
+        $("#recordButton").html('<i class="bi bi-mic"></i>');
+        recordButton.removeClass("button-animate");
+
+        stopButton.addClass("inactive");
+        stopButton.prop("disabled", true);
+        
+        sendButton[0].audioBlob = null;
+    }
     function resetRecording() {
         // Reset the recorder, audio stream, and UI
         if (recorder) {
