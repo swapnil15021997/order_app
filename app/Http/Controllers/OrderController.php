@@ -143,6 +143,7 @@ class OrderController extends Controller
                 'message' =>"Please select active branch"
             ]);
         }
+
         $rules = [   
             
             'order_date'           => ['required', 'date', 'date_format:Y-m-d'],  
@@ -161,6 +162,10 @@ class OrderController extends Controller
             'order_number'         => ['nullable','string'],
             'qr_code_number'       => ['nullable','string'],
             
+            'customer_name' => ['nullable','string'],
+            'customer_address' => ['nullable','string'],
+            'customer_phone_number' => ['nullable','string'],
+            'customer_new' => ['nullable','string'],
             ]; 
         $messages = [
                 'order_date.required'         => 'Order date is required.',
@@ -196,6 +201,11 @@ class OrderController extends Controller
                 'qr_code_number.required'       => 'Order Number is required.',
                 'qr_code_number.string'         => 'Order Number must be a string.',
 
+
+                'customer_name.string'         => 'Order Number must be a string.',
+                'customer_address.string'         => 'Order Number must be a string.',
+                'customer_phone_number.string'         => 'Order Number must be a string.',
+                'customer_new.string'         => 'Order Number must be a string.'
             ]; 
 
         $validator = Validator::make($params, $rules, $messages);
@@ -230,6 +240,18 @@ class OrderController extends Controller
                 'message' => 'Branch does not exists' 
             ]);
         }     
+
+        if($params['customer_name'] != ""){
+            $customer = new Customers();
+            $customer->cust_name     = $params['customer_name'];
+            $customer->cust_phone_no = $params['customer_phone_number'];
+            $customer->cust_address  = $params['customer_address'];
+            $customer->save();
+            
+            $customer_id  = $customer->cust_id;
+        }else{
+            $customer_id = $params['order_user_id'];
+        }
         $order                       = new Order();
         $order->order_date           = $params['order_date'];
         $order->order_number         = $params['order_number'];
@@ -238,7 +260,7 @@ class OrderController extends Controller
         $order->order_to_branch_id   = $params['order_to_branch_id'];
         $order->order_type           = $params['order_type'];
         $order->order_user_id        = $login->id;
-        $order->order_customer_id    = $params['order_user_id'];
+        $order->order_customer_id    = $customer_id;
         $order->save();
 
         
@@ -579,7 +601,7 @@ class OrderController extends Controller
     // Order Updte
     public function order_update(Request $request){
         $params = $request->all();
-
+        dd($params);
         $rules = [   
             'order_id'             => ['required','string'],
             'order_date'           => ['required', 'date', 'date_format:Y-m-d'],  
@@ -595,7 +617,10 @@ class OrderController extends Controller
             'payment_advanced'     => ['nullable','numeric'],
             'payment_booking'      => ['nullable','numeric'],
             'order_user_id'        => ['required', 'string'],
-
+            'customer_name' => ['nullable','string'],
+            'customer_address' => ['nullable','string'],
+            'customer_phone_number' => ['nullable','string'],
+            'customer_new' => ['nullable','string'],
         ]; 
         $messages = [
                 'order_id.required' => 'Order ID is required.',
@@ -628,6 +653,10 @@ class OrderController extends Controller
                 'item_file_images.*.max'      => 'Each item file image cannot exceed 10MB.',
                 'payment_advance.numeric'         => 'Payment Advance must be a number.',
                 'payment_booking.numeric'         => 'Payment Booking must be a number.',
+                'customer_name.string'         => 'Order Number must be a string.',
+                'customer_address.string'         => 'Order Number must be a string.',
+                'customer_phone_number.string'         => 'Order Number must be a string.',
+                'customer_new.string'         => 'Order Number must be a string.'
             ]; 
 
         $validator = Validator::make($params, $rules, $messages);
@@ -670,11 +699,25 @@ class OrderController extends Controller
             ]);
         }    
 
+        if($params['customer_name'] != ""){
+
+            $customer = new Customers();
+            $customer->cust_name     = $params['customer_name'];
+            $customer->cust_phone_no = $params['customer_phone_number'];
+            $customer->cust_address  = $params['customer_address'];
+            $customer->save();
+            
+            $customer_id  = $customer->cust_id;
+        }else{
+            $customer_id = $params['order_user_id'];
+        }
+
+
         $order_rec->order_date           = $params['order_date'];
         $order_rec->order_from_branch_id = $params['order_from_branch_id'];
         $order_rec->order_to_branch_id   = $params['order_to_branch_id'];
         $order_rec->order_type           = $params['order_type'];
-        $order_rec->order_customer_id    = $params['order_user_id'];
+        $order_rec->order_customer_id    = $customer_id;
        
         $order_rec->save();
         $item = Item::where('item_order_id', $order_rec->order_id)->first();

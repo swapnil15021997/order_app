@@ -38,7 +38,7 @@
                             
                             <!-- <img src="{{ asset('static/qr_code.png')}}" alt="Tabler" class="img-fluid" width="100px"> -->
                         </div>
-                        <input type="hidden" name="" id="order_id" value="{{$order['order_id']}}" >
+                        <input type="hidden" name="" id="edit_order_id" value="{{$order['order_id']}}" >
                         <div class="card">
                             <div class="card-body">
                                 <div class="row">
@@ -48,33 +48,26 @@
                                             <label for="order_date" class="form-label">Order Date
                                             <span style="color: red;">*</span>
                                             </label>
-                                            <input type="date" id="order_date" value="{{$order['order_date']}}"
+                                            <input type="date" id="edit_order_date" value="{{$order['order_date']}}"
                                                 class="form-control" form>
                                         </div>
                                         <div class="col-12 mt-3">
                                             <label for="order_type" class="form-label">Order Type
-                                            <span style="color: red;">*</span>
+                                                <span style="color: red;">*</span>
                                             </label>
-                                            <!-- <select id="order_type" class="form-select" type="text">
+                                            <select id="order_type" class="form-select" type="text">
                                                 <option value="" disabled selected>Select type</option>
-                                                <option value="order">Order</option>
-                                                <option value="reparing">Reparing</option>
-                                            </select> -->
-                                            <div class="d-flex align-items-center">
-                                                <label class="form-check-label me-2">Order
+                                                <option value="order" {{ $order['order_type'] == 1 ? 'selected' : '' }}>Order</option>
+                                                <option value="reparing" {{ $order['order_type'] == 2 ? 'selected' : '' }}>Reparing</option>
 
-                                                </label>
-                                                <label class="form-check form-switch m-0">
-                                                    <input class="form-check-input" id="order_type" type="checkbox" @if($order['order_type'] == 2)
-                                                    checked @endif>
-                                                </label>
-                                                <label class="form-check-label ms-2">Reparing</label>
-                                            </div>
+                                            </select>
+                                           
                                             
                                         </div>
                                     </div>
                                     <div class="col-6">
                                         <h4>Customer Details</h4>
+                                        <input type="hidden" name="" id="customer_new"  value="false">
                                         
                                         <div class="mt-4">
                                             <label class="form-label">Select Customer</label>
@@ -102,11 +95,11 @@
                                                     class="form-control" form>
                                             </div>
                                             <div class="mt-3">
-                                                <label for="order_customer_details" class="form-label">Address
+                                                <label for="customer_address" class="form-label">Address
                                                 <span style="color: red;">*</span>
                                                 </label>
                                                 <textarea type="text" placeholder="Enter Address"
-                                                    id="order_customer_details" class="form-control" form></textarea>
+                                                    id="customer_address" class="form-control" form></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -122,7 +115,7 @@
                                         <span style="color: red;">*</span>
                                         </label>
 
-                                        <select id="searchableSelectFrom" class="form-select" type="text">
+                                        <select id="edit_searchableSelectFrom" class="form-select" type="text">
 
                                             @foreach ($user_branch as $branch)
 
@@ -133,11 +126,11 @@
                                         </select>
                                     </div>
                                     <div class="col-6">
-                                        <label for="searchableSelectTo" class="form-label">To
+                                        <label for="edit_searchableSelectTo" class="form-label">To
                                         <span style="color: red;">*</span>
                                         </label>
 
-                                        <select id="searchableSelectTo" class="form-select w-100" type="text">
+                                        <select id="edit_searchableSelectTo" class="form-select w-100" type="text">
 
                                             @foreach ($branchesArray as $branch)
                                                 <option value="{{ $branch['branch_id'] }}">{{ $branch['branch_name'] }}
@@ -242,7 +235,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="card">
+                        <div class="card" id="payment">
                             <div class="card-body">
                                 <h4 class="h2">Payment Details</h4>
                                 <div class="row">
@@ -482,22 +475,22 @@
 <script>
 
     
-    
-        // Upload Images and show the preview
+    var userInput = '';
+    // Upload Images and show the preview
 
-        function previewSelectedImages() {
-            const input = document.getElementById("item_image_id");
-            const uploadedImages = document.getElementById("uploaded-images");
-            uploadedImages.innerHTML = ""; 
+    function previewSelectedImages() {
+        const input          = document.getElementById("item_image_id");
+        const uploadedImages = document.getElementById("uploaded-images");
+        // uploadedImages.innerHTML = ""; 
 
-            const files = Array.from(input.files);
+        const files = Array.from(input.files);
 
-            if (files.length === 0) {
+        if (files.length === 0) {
             uploadedImages.innerHTML = "<p>No files selected.</p>";
             return;
-            }
+        }
 
-            files.forEach((file, index) => {
+        files.forEach((file, index) => {
             const reader = new FileReader();
 
             reader.onload = function (e) {
@@ -553,16 +546,22 @@
 
     $(document).ready(function () {
 
+        const paymentDiv = $('#payment');
         $('#order_type').on('change', function () {
-            const paymentDiv = $('#payment');
-            if (this.checked) {
-                paymentDiv.removeClass('d-none'); // Show payment div
+            if (this.value == 'order') { 
+                paymentDiv.removeClass('d-none'); 
             } else {
-                paymentDiv.addClass('d-none'); // Hide payment div
+                paymentDiv.addClass('d-none'); 
             }
         });
 
-
+        var order_type = {{$order['order_type']}};
+        
+        if (order_type == 1) {
+            paymentDiv.removeClass('d-none');
+        }else{
+            paymentDiv.addClass('d-none'); 
+        }
 
         $('#updateOrderBtn').click(function (e) {
             e.preventDefault();
@@ -572,11 +571,11 @@
             const orderTypeValue = orderType.checked ? 2 : 1;
             var orderFrom = $('#edit_searchableSelectFrom').val();
             var orderTo = $('#edit_searchableSelectTo').val();
-            var itemMetal = $('#edit_item_metal').val();
-            var itemName = $('#edit_item_name').val();
-            var itemMelting = $('#edit_item_melting').val();
-            var itemWeight = $('#edit_item_weight').val();
-            var itemImages = $('#edit_item_image_id')[0].files;
+            var itemMetal = $('#item_metal').val();
+            var itemName = $('#item_name').val();
+            var itemMelting = $('#item_melting').val();
+            var itemWeight = $('#item_weight').val();
+            var itemImages = $('#item_image_id')[0].files;
             var payment_advance = $('#payment_advance').val();
             var payment_booking = $('#payment_booking').val();
             var cust = $('#searchableCust').val();
@@ -593,6 +592,16 @@
                 formData.append('item_melting', itemMelting);
                 formData.append('item_weight', itemWeight);
                 formData.append('order_user_id', cust);
+
+                var custName    = userInput;
+                var custAddress = $('#customer_address').val();
+                var custPhone   = $('#cust_phone_no').val();
+                var custNew     = $('#customer_new').val();
+                formData.append('customer_name', custName);
+                formData.append('customer_address', custAddress);
+                formData.append('customer_phone_number', custPhone);
+                formData.append('customer_new', custNew);
+
 
                 if (payment_advance) {
                     formData.append('payment_advance', payment_advance);
@@ -685,7 +694,8 @@
 
 
     $(document).ready(function () {
-
+        $('#customer_new').val('');
+                
         $('#searchableCust').on('select2:open', function () {
             $('.select2-search__field').on('input', function () {
                 userInput = $(this).val();
@@ -764,7 +774,10 @@
             },
             templateSelection: function (data) {
                 // Display the selected item properly
+                   
                 $('#order_customer_name').val(data.text);
+                $('#customer_new').val(data.text);
+
                 return data.text;
             }
         })
@@ -775,11 +788,15 @@
 
             // Check if the selected option is a new customer
             if (e.params.data.newOption) {
-                console.log("New customer selected");
+                console.log("New customer selected",e.params.data.newOption);
                 $('#cust_div').removeClass('d-none'); 
-                $('#order_customer_name').val(e.params.data.newOption);
+                // $('#order_customer_name').val(e.params.data.newOption);
+                // $('#customer_new').val(e.params.data.newOption);
+
             } else {
                 console.log("Existing customer selected");
+                $('#customer_new').val('false');
+                
                 $('#cust_div').addClass('d-none'); 
             }
         });

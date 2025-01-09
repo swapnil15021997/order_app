@@ -39,22 +39,23 @@
                                         </div>
                                         <div class="col-12 mt-3">
                                             <label for="order_type" class="form-label">Order Type</label>
-                                            <!-- <select id="order_type" class="form-select" type="text">
+                                            <select id="order_type" class="form-select" type="text">
                                                 <option value="" disabled selected>Select type</option>
                                                 <option value="order">Order</option>
                                                 <option value="reparing">Reparing</option>
-                                            </select> -->
-                                            <div class="d-flex align-items-center">
+                                            </select>
+                                            <!-- <div class="d-flex align-items-center">
                                                 <label class="form-check-label ms-2">Order</label>
                                                 <label class="form-check form-switch m-0 ms-2">
                                                     <input class="form-check-input" id="order_type" type="checkbox" checked>
                                                 </label>
                                                 <label class="form-check-label me-2 ms-2">Reparing</label>
-                                            </div>
+                                            </div> -->
                                         </div>
                                     </div>
                                     <div class="col-6">
                                         <h4>Customer Details
+                                            <input type="hidden" name="" id="customer_new" >
                                         <span style="color: red;">*</span>
                                         </h4>
                                         <div class="mt-4">
@@ -79,11 +80,11 @@
                                                     class="form-control" form>
                                             </div>
                                             <div class="mt-3">
-                                                <label for="order_customer_details" class="form-label">Address
+                                                <label for="customer_address" class="form-label">Address
                                                 <span style="color: red;">*</span>
                                                 </label>
                                                 <textarea type="text" placeholder="Enter Address"
-                                                    id="order_customer_details" class="form-control" form></textarea>
+                                                    id="customer_address" class="form-control" form></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -212,8 +213,8 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="card">
-                            <div class="card-body row d-none" id="payment" >
+                        <div class="card" id="payment">
+                            <div class="card-body row d-none"  >
 
                                     <h4 class="h2">Payment Details</h4>
                                     <div class="row">
@@ -331,11 +332,12 @@
         document.getElementById('order_date').value = today;
 
         $('#order_type').on('change', function () {
+            console.log(this.value);
             const paymentDiv = $('#payment');
-            if (this.checked) {
-                paymentDiv.addClass('d-none'); 
-            } else {
+            if (this.value == 'order') { 
                 paymentDiv.removeClass('d-none'); 
+            } else {
+                paymentDiv.addClass('d-none'); 
             }
         });
 
@@ -391,6 +393,15 @@
                 formData.append('item_melting', item_melting);
                 formData.append('item_weight', item_weight);
 
+                var custName    = userInput;
+                var custAddress = $('#customer_address').val();
+                var custPhone   = $('#cust_phone_no').val();
+                var custNew     = $('#customer_new').val();
+                formData.append('customer_name', custName);
+                formData.append('customer_address', custAddress);
+                formData.append('customer_phone_number', custPhone);
+                formData.append('customer_new', custNew);
+
                 // Append files to FormData
                 for (var i = 0; i < itemImages.length; i++) {
                     formData.append('item_file_images[]', itemImages[i]);
@@ -421,6 +432,7 @@
                             $('#item_image_id').val('');
                             $('#order_number').val('');
                             $('#qr_code_number').val('');
+                            $('#customer_new').val('');
                             setTimeout(function () {
                                 location.href = "{{ route('order-master') }}";
                             }, 1000);
@@ -451,7 +463,7 @@
         function previewSelectedImages() {
             const input = document.getElementById("item_image_id");
             const uploadedImages = document.getElementById("uploaded-images");
-            uploadedImages.innerHTML = ""; 
+            // uploadedImages.innerHTML = ""; 
 
             const files = Array.from(input.files);
 
@@ -461,45 +473,45 @@
             }
 
             files.forEach((file, index) => {
-            const reader = new FileReader();
+                const reader = new FileReader();
 
-            reader.onload = function (e) {
-                const imageSrc = e.target.result;
-                const col      = document.createElement("div");
-                col.classList.add("col-4");
-                col.setAttribute("data-file-index", index); 
-                const maxFileNameLength = 15;
-                const trimmedFileName =
-                    file.name.length > maxFileNameLength
-                        ? file.name.slice(0, maxFileNameLength) + "..."
-                        : file.name;
+                reader.onload = function (e) {
+                    const imageSrc = e.target.result;
+                    const col      = document.createElement("div");
+                    col.classList.add("col-4");
+                    col.setAttribute("data-file-index", index); 
+                    const maxFileNameLength = 15;
+                    const trimmedFileName =
+                        file.name.length > maxFileNameLength
+                            ? file.name.slice(0, maxFileNameLength) + "..."
+                            : file.name;
 
-                const selectedFile = `
-                    <div class="selected-files">
-                        <div class="d-flex align-items-center gap-2">
-                            <img src="${imageSrc}" alt="${trimmedFileName}" width="35px" />
-                            <div>
-                                <p>${trimmedFileName}</p>
-                                <small>${(file.size / 1024).toFixed(1)} KB</small>
+                    const selectedFile = `
+                        <div class="selected-files">
+                            <div class="d-flex align-items-center gap-2">
+                                <img src="${imageSrc}" alt="${trimmedFileName}" width="35px" />
+                                <div>
+                                    <p>${trimmedFileName}</p>
+                                    <small>${(file.size / 1024).toFixed(1)} KB</small>
+                                </div>
                             </div>
+                            <button onclick="removeImage(this, ${index})">
+                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M12.59 6L10 8.59L7.41 6L6 7.41L8.59 10L6 12.59L7.41 14L10 11.41L12.59 14L14 12.59L11.41 10L14 7.41L12.59 6ZM10 0C4.47 0 0 4.47 0 10C0 15.53 4.47 20 10 20C15.53 20 20 15.53 20 10C20 4.47 15.53 0 10 0ZM10 18C5.59 18 2 14.41 2 10C2 5.59 5.59 2 10 2C14.41 2 18 5.59 18 10C18 14.41 14.41 18 10 18Z"
+                                        fill="#858585"
+                                    />
+                                </svg>
+                            </button>
                         </div>
-                        <button onclick="removeImage(this, ${index})">
-                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path
-                                    d="M12.59 6L10 8.59L7.41 6L6 7.41L8.59 10L6 12.59L7.41 14L10 11.41L12.59 14L14 12.59L11.41 10L14 7.41L12.59 6ZM10 0C4.47 0 0 4.47 0 10C0 15.53 4.47 20 10 20C15.53 20 20 15.53 20 10C20 4.47 15.53 0 10 0ZM10 18C5.59 18 2 14.41 2 10C2 5.59 5.59 2 10 2C14.41 2 18 5.59 18 10C18 14.41 14.41 18 10 18Z"
-                                    fill="#858585"
-                                />
-                            </svg>
-                        </button>
-                    </div>
-                `;
+                    `;
 
-                col.innerHTML = selectedFile;
-                uploadedImages.appendChild(col);
-            };
+                    col.innerHTML = selectedFile;
+                    uploadedImages.appendChild(col);
+                };
 
-            reader.readAsDataURL(file);
-        });
+                reader.readAsDataURL(file);
+            });
         }
 
         function removeImage(button,index) {
@@ -636,6 +648,7 @@
                     console.log("New customer added");
                     $('#cust_div').removeClass('d-none');
                     $('#order_customer_name').val(e.params.data.newOption);
+                  
                 } else {
                     $('#cust_div').addClass('d-none');
                 }
@@ -714,7 +727,9 @@
                     // }else{
                     //     $('#cust_div').addClass('d-none');
                     // }
+                    $('#customer_new').val('true');
                     $('#order_customer_name').val(data.text);
+                   
                     return data.text;
                 }
             })
