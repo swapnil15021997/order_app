@@ -323,6 +323,8 @@
                         <div id="cameraView" style="display: none; text-align: center;">
                             <video id="cameraStream" autoplay playsinline style="width: 100%; max-height: 400px; border: 1px solid #ddd;"></video>
                             <button id="captureButton" class="btn btn-primary mt-3">Capture Image</button>
+                            <button id="switchCameraButton" class="btn btn-secondary mt-3">Switch Camera</button>
+
                         </div>
 
                         <!-- Preview Area -->
@@ -330,7 +332,6 @@
                             <img id="previewImage" style="max-width: 100%; height: auto; border: 1px solid #ddd;" />
                             <div class="mt-3">
                                 <button id="retakeButton" class="btn btn-secondary">Retake</button>
-                                <button id="switchCameraButton" class="btn btn-secondary">Switch Camera</button>
                             </div>
                         </div>
                     </div>
