@@ -154,6 +154,11 @@ Route::post('password', [PasswordController::class, 'update'])->name('password.u
 Route::post('order-approve',  [OrderController::class, 'order_approve'])->name('order_approve');
 Route::get('view-order/{id}', [OrderController::class, 'view_order'])->name('view-order');
 Route::get('order-approve/{id}',  [OrderController::class, 'order_get_approve'])->name('order_get_approve');
+
+
+Route::post('file-remove',  [NotesController::class, 'file_remove'])->name('file_remove');
+
+
 });
 
 

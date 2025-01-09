@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Notes;
 use App\Models\File;
+use App\Models\Item;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Arr;
 
@@ -226,5 +227,57 @@ class NotesController extends Controller
                 'total_pages'  => $total_pages,
             ],
         ]);
+    }
+
+
+    public function file_remove(Request $request){
+        $params = $request->all();
+        $rules = [   
+            'file_id'             => ['required','string'],
+            'order_id'            => ['required','string'],  
+        ]; 
+        $messages = [
+            'file_id.string'      => 'Notes Type must be string.',
+            'file_id.required'    => 'Notes Type required.',
+            'order_id.string'     => 'Notes Type must be string.',
+            'order_id.required'   => 'Notes Type required.',
+    
+        ]; 
+        $validator = Validator::make($params, $rules, $messages);
+        
+        if($validator->fails()){
+            return response()->json([
+                'status' => 500,
+                'message' => Arr::flatten($validator->errors()->toArray())[0], 
+                'errors'  => $validator->errors(), 
+            ]);
+        } 
+
+        $file = File::where('file_id',$params['file_id'])->get()->first();
+
+        if (!empty($file)){
+            $file->is_delete = 1;
+            $file->save();
+        }
+
+        $item = Item::where('item_order_id',$params['order_id'])->get()->first();
+        $itemFileImages = explode(',', $item->item_file_images);
+
+        $fileIdToRemove = (string)$params['file_id'];
+        $key = array_search($fileIdToRemove, $itemFileImages); 
+        if ($key !== false) {
+            unset($itemFileImages[$key]); 
+        }
+
+        $itemFileImages = array_values($itemFileImages);
+        $itemFileImagesString = implode(',', $itemFileImages);
+
+        $item->item_file_images = $itemFileImagesString;
+        $item->save();
+        return response()->json([
+            'status'  => 200,
+            'message' => 'Items updated successfully'
+        ]);
+
     }
 }

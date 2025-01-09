@@ -134,7 +134,7 @@ class Order extends Model
                     ->first();
         if ($order) {
             foreach ($order->items as $item) {
-                $item->files = File::whereIn('file_id', explode(',', $item->item_file_images))->get();
+                $item->files = File::whereIn('file_id', explode(',', $item->item_file_images))->where('is_delete', 0)->get();
             }
         }
         return $order;

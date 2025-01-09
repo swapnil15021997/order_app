@@ -24,8 +24,9 @@
 
                             @if ($lastTransaction && $lastTransaction['trans_status'] === 0)
                                 <!-- If both conditions are satisfied, show the "Approve" button -->
+                                 
                                 <a class="btn btn-primary" href="#" onclick="approve_order({{ $order['order_qr_code'] }})">
-                                    Approve Order
+                                    Approve Order 
                                 </a>
                             @else
                                 <a class="btn btn-primary" href="#" onclick="transfer_order({{$order['order_id']}})">
@@ -213,7 +214,7 @@
                                     @if(!empty($file['files']))
 
                                     @foreach($file['files'] as $file)
-                                        <div class="col-4">
+                                        <div class="col-4" id="file-{{ $file->file_id }}">
                                             <div class="selected-files">
                                                 <div class="d-flex align-items-center gap-2">
                                                     <img src="{{ asset($file->file_url) }}"
@@ -223,7 +224,7 @@
                                                     <small>{{ number_format($file->file_size / 1024, 1) }} KB</small>
                                                     </div>
                                                 </div>
-                                                <button>
+                                                <button onclick="removeFile({{ $file->file_id }}, {{$order['order_id']}})">
                                                     <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
                                                         xmlns="http://www.w3.org/2000/svg">
                                                         <path
@@ -253,7 +254,7 @@
                                     <div class="col-6">
                                         <label for="payment_booking" class="form-label">Rate</label>
                                         <input type="number" class="form-control" id="payment_booking"
-                                            value="{{ optional($paymentArray)['payment_advance_cash'] }}"
+                                            value="{{ optional($paymentArray)['payment_booking_rate'] }}"
                                             placeholder="Enter here">
                                     </div>
                                 </div>
@@ -261,8 +262,8 @@
                         </div>
                         <div class="card">
                             <div class="card-body">
-                                <div class="d-flex justify-content-end">
-                                    <a href="#" class="btn btn-primary ms-auto" id="updateOrderBtn">
+                                <div class="d-flex justify-content-center align-items-center">
+                                    <a href="#" class="btn btn-primary d-flex justify-content-center align-items-center" id="updateOrderBtn">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
                                         class="bi bi-pencil-square me-2" viewBox="0 0 16 16">
                                         <path
@@ -1117,7 +1118,39 @@
         console.log("here");
     }
 
-    
+    // Remove file from the order
+    function removeFile(file_id,order_id){
+        $.ajax({
+                url: "{{ route('file_remove') }}",
+                type: 'POST',
+                data: {
+                    _token: csrfToken,
+                    file_id: file_id,
+                    order_id: order_id
+                },
+                success: function (response) {
+                    if (response.status == 200) {
+                       showAlert('success', response.message);
+                       $('#file-' + file_id).remove();
+                        // setTimeout(function () {
+                        //     location.reload();
+                        // }, 2000);
+                    } else {
+                        
+                        showAlert('success', response.message);
+                        $('#TransfersearchableSelectTo').val('');
+
+
+                    }
+                },
+                error: function (xhr, status, error) {
+                    showAlert('success', error);
+                        
+                    $('#TransfersearchableSelectTo').val('');
+
+                }
+            });
+    }
 
     // Code for notes
 

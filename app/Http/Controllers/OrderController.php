@@ -413,10 +413,11 @@ class OrderController extends Controller
             ]);
         }
         $paymentArray = [];
-        if($order['order_type']==2){
+        if($order['order_type']==1){
             $paymentArray = Payment::where('payment_order_id',$id)->first();
            
         }
+
         $customer  = Customers::get_all_customers();
         $orderUrl = route('order_get_approve', ['id' => $order['order_qr_code']]);
         $qr_code = QrCode::size(100)->generate($orderUrl);
@@ -453,7 +454,7 @@ class OrderController extends Controller
             $fileArray = $order['items'][0]['files']->toArray();
         }
         $user_permissions = session('combined_permissions', []);
-      
+
         return view('orders/order_edit'
         ,compact('metals', 'melting','branchesArray',
         'pageTitle','login','activePage','order','fileArray','user_branch','paymentArray','customer','user_permissions','qr_code','colors'));
