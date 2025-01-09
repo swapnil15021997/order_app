@@ -23,7 +23,7 @@ class NotesController extends Controller
         $rules = [   
             'notes_text'          => ['nullable','string'],
             'notes_file'          => ['nullable'],  
-            'notes_file.*'        => ['file', 'mimes:jpeg,jpg,png,pdf,mp3,wav,ogg', 'max:20240'],  
+            'notes_file.*'        => ['file', 'mimes:jpeg,jpg,png,pdf,mp3,wav,ogg,webm', 'max:20240'],  
             'notes_file.*.mime' => 'in:audio/wav,mp3,ogg',
             'notes_order_id'      => ['nullable','string'],
             'notes_type'          => ['required','string'],
