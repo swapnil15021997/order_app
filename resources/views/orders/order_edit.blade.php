@@ -328,7 +328,7 @@
                             <!-- Audio Control Buttons -->
                             
                             <button id="recordButton" class="btn btn-success">
-                            <i class="bi bi-mic"></i>
+                                <i class="bi bi-mic"></i>
                             </button>
                             <!-- <button id="pauseRecording" class="btn btn-warning" disabled>
                             <i class="bi bi-pause-circle"></i>
@@ -337,7 +337,7 @@
                             <i class="bi bi-play-circle"></i>
                             </button> -->
                             <button id="stopButton" class="btn btn-danger" disabled>
-                            <i class="bi bi-stop-circle"></i>
+                                <i class="bi bi-stop-circle"></i>
                             </button>
                         </div>
                        
@@ -350,11 +350,54 @@
 
 
                     <div class="modal-footer">
+                        <a id="resetButton" href="#" type="button" class="btn btn-primary">
+                            Reset Audio
+                        </a>
                         <a href="#" class="btn btn-secondary" data-bs-dismiss="modal">
                             Cancel
                         </a>
                         <a id="sendButton" href="#" type="button" class="btn btn-primary">
                             Send Audio
+                        </a>
+                    </div>
+                
+                </div>
+            </div>
+        </div>
+
+
+
+        <div class="modal modal-blur fade" id="click_image" tabindex="-2" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+
+                    <div class="modal-header">
+                        <h5 class="modal-title">Click Image</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div id="cameraView" style="display: none; text-align: center;">
+                            <video id="cameraStream" autoplay playsinline style="width: 100%; max-height: 400px; border: 1px solid #ddd;"></video>
+                            <button id="captureButton" class="btn btn-primary mt-3">Capture Image</button>
+                        </div>
+
+                        <!-- Preview Area -->
+                        <div id="previewContainer" style="display: none; text-align: center;">
+                            <img id="previewImage" style="max-width: 100%; height: auto; border: 1px solid #ddd;" />
+                            <div class="mt-3">
+                                <button id="retakeButton" class="btn btn-secondary">Retake</button>
+                                <button id="switchCameraButton" class="btn btn-secondary">Switch Camera</button>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="modal-footer">
+                        <a href="#" class="btn btn-secondary" data-bs-dismiss="modal">
+                            Cancel
+                        </a>
+                        <a id="sendImageButton" onclick="uploadImage()" href="#" type="button" class="btn btn-primary">
+                            Send Image
                         </a>
                     </div>
                 
@@ -394,9 +437,9 @@
                     </a>
                 </span>
                 <span class="custom-btn">
-                    <input type="file" id="fileInput" style="display: none;" onchange="handleFileUpload(event)"
+                    <input type="file" id="fileInput" style="display: none;" onchange="click_image()"
                         multiple />
-                    <a href="#" onclick="open_file_select()" data-bs-toggle="tooltip"
+                    <a href="#" onclick="click_image()" data-bs-toggle="tooltip"
                         aria-label="Please Select file to upload" data-bs-original-title="Images File">
                         <svg width="22" height="20" viewBox="0 0 22 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path
@@ -1084,6 +1127,7 @@
                         // Add new notes below
                         if (!isScrollUp) {
                             response.data.notes.forEach(function (note) {
+                                console.log(note);
                                 if (note.notes_type == 1) {
                                     notesBody.append(`
                                     <div class="my-note-box">
@@ -1092,7 +1136,21 @@
                                             <p>${note.notes_text}.</p>
                                         </div>
                                     </div>`);
-                                } else {
+                                } 
+                                else if(note.notes_type == 3){
+                                    notesBody.append(`
+                                        <div class="my-note-box">
+                                            <div class="chat-bubble-title">Audio Note</div>
+                                            <div class="chat-bubble-body">
+                                                <audio controls>
+                                                    <source src="${note.file.file_url}" type="audio/webm">
+                                                    Your browser does not support the audio element.
+                                                </audio>
+                                            </div>
+                                        </div>
+                                    `);
+                                }
+                                else {
                                     if (note.file.file_type == 'pdf') {
                                         notesBody.append(`
                                         <div class="my-note-box w-75">
@@ -1318,143 +1376,318 @@
         //     });
         // }
 
-        function record_audio(){
-            $('#record_audio').modal('show');            
-            $("#audio-playback").addClass("hidden")
-    
-        }
-       
-        let recorder, audio_stream, audioBlob;
-const recordButton = document.getElementById("recordButton");
-recordButton.addEventListener("click", startRecording);
-
-// stop recording
-const stopButton = document.getElementById("stopButton");
-stopButton.addEventListener("click", stopRecording);
-stopButton.disabled = true;
-
-// set preview
-const preview = document.getElementById("audio-playback");
-
-const sendButton = document.getElementById("sendButton");
-sendButton.addEventListener("click", uploadRecording);
-
-const audioPlaybackContainer = document.getElementById("audioPlaybackContainer");
-   
-
-function startRecording() {
-    // button settings
-    recordButton.disabled = true;
-    recordButton.innerText = "Recording..."
-    $("#recordButton").addClass("button-animate");
-
-    $("#stopButton").removeClass("inactive");
-    stopButton.disabled = false;
-
-
-    $("#audio-playback").addClass("hidden")
-    
-
-    // if (!$("#downloadContainer").hasClass("hidden")) {
-    //     $("#downloadContainer").addClass("hidden")
-    // };
-
-    navigator.mediaDevices.getUserMedia({ audio: true })
-        .then(function (stream) {
-            audio_stream = stream;
-            recorder = new MediaRecorder(stream);
-            let audioChunks = [];
-            // when there is data, compile into object for preview src
-            recorder.ondataavailable = function (e) {
-                audioChunks.push(e.data);
-                // const url = URL.createObjectURL(e.data);
-                // preview.src = url;
-
-                // set link href as blob url, replaced instantly if re-recorded
-                // downloadAudio.href = url;
-            };
-
-            recorder.onstop = function () {
-                // Create an audio blob
-                audioBlob = new Blob(audioChunks, { type: "audio/wav" });
-
-                // Create a URL for the blob and set it as the audio playback source
-                const url = URL.createObjectURL(audioBlob);
-                preview.src = url;
-
-                // Unhide the audio playback element
-                audioPlaybackContainer.classList.remove("d-none");
-                preview.load(); // Reload the audio element to use the new source
-                console.log("Audio recording ready for playback.");
-                sendButton.audioBlob = audioBlob;
-            };
-
-            recorder.start();
-
-            timeout_status = setTimeout(function () {
-                console.log("5 min timeout");
-                stopRecording();
-            }, 300000);
-        });
-}
-
-function stopRecording() {
-    recorder.stop();
-    audio_stream.getAudioTracks()[0].stop();
-
-    // buttons reset
-    recordButton.disabled = false;
-    recordButton.innerText = "Redo Recording"
-    $("#recordButton").removeClass("button-animate");
-
-    $("#stopButton").addClass("inactive");
-    stopButton.disabled = true;
-
-    sendButton.audioBlob = audioBlob;
-
-    $("#audio-playback").removeClass("hidden");
-    console.log('class remove');
-
-
-}
-
-function downloadRecording(){
-    var name = new Date();
-    var res = name.toISOString().slice(0,10)
-    downloadAudio.download = res + '.wav';
-}
-
-function uploadRecording() {
-    console.log("Audio Blob:", audioBlob);
-    console.log("Send Button Blob:", sendButton.audioBlob);
-    if (!sendButton.audioBlob) {
-        alert("No audio file available for upload!");
-        return;
+    let cameraStream = null;
+    let capturedImage = null;
+    let useFrontCamera = true;
+    function click_image(){
+        startCamera();
+        $('#click_image').modal('show');
+        $('#cameraView').show();
+        $('#previewContainer').hide();
+        $('#sendImageButton').hide();   
     }
-    const orderId = $('#order_id').val();
-    const formData = new FormData();
-    formData.append('notes_text', '');
-    formData.append('notes_file', sendButton.audioBlob, 'recording.wav');
-    formData.append('notes_type', 2);
-    formData.append('notes_order_id', orderId);
-    $.ajax({
-        url: "{{ route('notes_add') }}",
-        type: 'POST',
-        data: formData,
-        contentType: false,
-        processData: false,
-        headers: {
-            'X-CSRF-TOKEN': csrfToken
-        },
-        success: function (response) {
-            console.log('Audio uploaded successfully:', response);
-            showAlertNotes('success', 'Audio file uploaded successfully!');
-        },
-        error: function (error) {
-            console.error('Audio upload failed:', error);
+
+    function startCamera() {
+        const constraints = {
+            video: {
+                facingMode: useFrontCamera ? 'user' : 'environment',
+            },
+        };
+
+        navigator.mediaDevices
+            .getUserMedia(constraints)
+            .then((stream) => {
+                cameraStream = stream;
+                const videoElement = $('#cameraStream')[0];
+                videoElement.srcObject = stream;
+            })
+            .catch((error) => {
+                alert('Unable to access the camera. Please check permissions.');
+                console.error(error);
+            });
+    }
+
+
+    function stopCamera() {
+        if (cameraStream) {
+            cameraStream.getTracks().forEach((track) => track.stop());
+            cameraStream = null;
         }
+    }
+
+    $('#captureButton').on('click', function () {
+        const videoElement = $('#cameraStream')[0];
+        const canvas = document.createElement('canvas');
+        canvas.width = videoElement.videoWidth;
+        canvas.height = videoElement.videoHeight;
+
+        const context = canvas.getContext('2d');
+        context.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
+
+        capturedImage = canvas.toDataURL('image/png');
+
+        $('#previewImage').attr('src', capturedImage);
+        $('#cameraView').hide();
+        $('#previewContainer').show();
+        $('#sendImageButton').show();
+
+        stopCamera(); // Stop the camera to save resources
+    })
+
+    // Retake image
+    $('#retakeButton').on('click', function () {
+        $('#cameraView').show();
+        $('#previewContainer').hide();
+        $('#sendImageButton').hide();
+
+        startCamera(); // Restart the camera
     });
-}
+
+    // Switch camera
+    $('#switchCameraButton').on('click', function () {
+        useFrontCamera = !useFrontCamera; // Toggle between front and rear camera
+        stopCamera();
+        startCamera();
+    });
+
+    function dataURLToFile(dataUrl, filename) {
+        const arr = dataUrl.split(',');
+        const mime = arr[0].match(/:(.*?);/)[1];
+        const bstr = atob(arr[1]);
+        let n = bstr.length;
+        const u8arr = new Uint8Array(n);
+        while (n--) {
+            u8arr[n] = bstr.charCodeAt(n);
+        }
+        return new File([u8arr], filename, { type: mime });
+    }
+
+    // Upload image
+    function uploadImage() {
+        if (!capturedImage) {
+            alert('No image captured!');
+            return;
+        }
+        const orderId = $('#order_id').val();
+        const formData = new FormData();
+        const imageFile = dataURLToFile(capturedImage, 'captured-image.png');
+
+
+        formData.append('notes_text', '');
+        formData.append('notes_file[]', imageFile);
+        formData.append('notes_type', 4);
+        formData.append('notes_order_id', orderId);
+        
+        $.ajax({
+            url: "{{ route('notes_add') }}",
+            type: 'POST',
+            data: formData,
+            contentType: false,
+            processData: false,
+            headers: {
+                'X-CSRF-TOKEN': csrfToken
+            },
+            success: function (response) {
+                console.log('Audio uploaded successfully:', response);
+                $('#click_image').modal('hide');
+                showAlertNotes('success', 'Image file uploaded successfully!');
+                isLoading = false;
+                loadNotes();
+            },
+            error: function (error) {
+                console.error('Image upload failed:', error);
+            }
+        });
+    }
+
+    // Stop the camera when the modal is closed
+    $('[data-bs-dismiss="modal"]').on('click', stopCamera);
+
+    function record_audio(){
+        $('#record_audio').modal('show');            
+        $("#audio-playback").addClass("hidden")
+
+    }
+       
+    let recorder, audio_stream, audioBlob;
+    // const recordButton = document.getElementById("recordButton");
+    // recordButton.addEventListener("click", startRecording);
+    const recordButton = $('#recordButton');
+    $('#recordButton').on('click', startRecording);
+
+
+    // stop recording
+    // const stopButton = document.getElementById("stopButton");
+    // stopButton.addEventListener("click", stopRecording);
+    // stopButton.disabled = true;
+
+    const stopButton = $('#stopButton');
+    $('#stopButton').on('click', stopRecording);
+
+    // set preview
+    // const preview = document.getElementById("audio-playback");
+    const preview = $('#audio-playback');
+
+    // const sendButton = document.getElementById("sendButton");
+    // sendButton.addEventListener("click", uploadRecording);
+
+    const sendButton = $('#sendButton');
+    $('#sendButton').on('click', uploadRecording);
+
+
+    // const audioPlaybackContainer = document.getElementById("audioPlaybackContainer");
+    const audioPlaybackContainer =$('#audioPlaybackContainer');
+
+    const resetButton = $('#resetButton');
+    $('#resetButton').on('click', resetRecording);
+    
+    
+    function startRecording() {
+         
+        // button settings
+
+        $("#recordButton").prop("disabled", true);
+        $("#recordButton").text("Recording..."); 
+        $("#recordButton").addClass("button-animate");
+
+        $("#stopButton").removeClass("inactive");
+        $("#stopButton").prop("disabled", false);
+
+        $("#audio-playback").addClass("hidden")
+     
+        navigator.mediaDevices.getUserMedia({ audio: true })
+            .then(function (stream) {
+                audio_stream = stream;
+                recorder = new MediaRecorder(stream);
+                let audioChunks = [];
+                // when there is data, compile into object for preview src
+                recorder.ondataavailable = function (e) {
+                    audioChunks.push(e.data);
+                    // const url = URL.createObjectURL(e.data);
+                    // preview.src = url;
+
+                    // set link href as blob url, replaced instantly if re-recorded
+                    // downloadAudio.href = url;
+                };
+
+                recorder.onstop = function () {
+                    // Create an audio blob
+                    audioBlob = new Blob(audioChunks, { type: "audio/wav" });
+
+                    // Create a URL for the blob and set it as the audio playback source
+                    const url = URL.createObjectURL(audioBlob);
+                    var preview = document.getElementById('audio-playback');
+                    preview.src = url;
+
+                    // Unhide the audio playback element
+                    $("#audioPlaybackContainer").removeClass("d-none");
+
+                    preview.load(); 
+                    console.log("Audio recording ready for playback.");
+                    sendButton.audioBlob = audioBlob;
+                };
+
+                recorder.start();
+
+                timeout_status = setTimeout(function () {
+                    console.log("5 min timeout");
+                    stopRecording();
+                }, 300000);
+            });
+    }
+
+    function stopRecording() {
+        recorder.stop();
+        audio_stream.getAudioTracks()[0].stop();
+
+        // buttons reset
+        recordButton.disabled = false;
+        recordButton.innerText = "Redo Recording"
+        $("#recordButton").removeClass("button-animate");
+
+        $("#stopButton").addClass("inactive");
+        stopButton.disabled = true;
+
+        sendButton.audioBlob = audioBlob;
+
+        $("#audio-playback").removeClass("hidden");
+        console.log('class remove');
+
+
+    }
+
+    function resetRecording() {
+        // Reset the recorder, audio stream, and UI
+        if (recorder) {
+            recorder.stop();
+            audio_stream.getAudioTracks()[0].stop();
+        }
+
+        // Reset audio variables
+        audioBlob = null;
+        audio_stream = null;
+        recorder = null;
+
+        // Hide audio playback and reset the buttons
+        audioPlaybackContainer.addClass("d-none");
+        preview[0].src = '';
+        $("#audio-playback").addClass("hidden");
+
+        recordButton.prop("disabled", false);
+        
+        $("#recordButton").text(""); 
+        $("#recordButton").html('<i class="bi bi-mic"></i>');
+        recordButton.removeClass("button-animate");
+
+        stopButton.addClass("inactive");
+        stopButton.prop("disabled", true);
+        
+        sendButton[0].audioBlob = null;
+    }
+
+// function downloadRecording(){
+//     var name = new Date();
+//     var res = name.toISOString().slice(0,10)
+//     downloadAudio.download = res + '.wav';
+// }
+
+    function uploadRecording() {
+        console.log("Audio Blob:", audioBlob);
+        console.log("Send Button Blob:", sendButton.audioBlob);
+        console.log(audioBlob.type);
+        if (!sendButton.audioBlob) {
+            alert("No audio file available for upload!");
+            return;
+        }
+        const orderId = $('#order_id').val();
+        const audioFile = new File([audioBlob], 'recording.wav', { type: 'audio/wav' });
+
+        const formData = new FormData();
+        formData.append('notes_text', '');
+        formData.append('notes_file[]', audioFile);
+        formData.append('notes_type', 3);
+        formData.append('notes_order_id', orderId);
+        $.ajax({
+            url: "{{ route('notes_add') }}",
+            type: 'POST',
+            data: formData,
+            contentType: false,
+            processData: false,
+            headers: {
+                'X-CSRF-TOKEN': csrfToken
+            },
+            success: function (response) {
+                console.log('Audio uploaded successfully:', response);
+                showAlertNotes('success', 'Audio file uploaded successfully!');
+                $('#record_audio').modal('hide'); 
+                isLoading = false;
+                loadNotes();
+            },
+            error: function (error) {
+                console.error('Audio upload failed:', error);
+            }
+        });
+    }
 
 
         function handleFileUpload(event) {

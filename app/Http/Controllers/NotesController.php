@@ -14,11 +14,17 @@ class NotesController extends Controller
 
     public function add_notes(Request $request){
         $params = $request->all();
-
+        \Log::info(['params'=>$params]);
+        if ($request->hasFile('notes_file')) {
+            $file = $request->file('notes_file')[0]; // Assuming it's an array of files
+            \Log::info('Uploaded File MIME Type: ' . $file->getMimeType());
+            \Log::info('Uploaded File Extension: ' . $file->getClientOriginalExtension());
+        }
         $rules = [   
             'notes_text'          => ['nullable','string'],
             'notes_file'          => ['nullable'],  
-            'notes_file.*'        => ['file', 'mimes:jpeg,jpg,png,pdf', 'max:10240'],  
+            'notes_file.*'        => ['file', 'mimes:jpeg,jpg,png,pdf,mp3,wav,ogg', 'max:20240'],  
+            'notes_file.*.mime' => 'in:audio/wav,mp3,ogg',
             'notes_order_id'      => ['required','string'],
             'notes_type'          => ['required','string'],
             
@@ -27,7 +33,7 @@ class NotesController extends Controller
             'notes_text.string'     => 'Please provide valid string in notes text.',
             'notes_file.array'      => 'Item file images must be an array.',
             'notes_file.*.file'     => 'Each item file image must be a valid file.',
-            'notes_file.*.mimes'    => 'Each item file image must be a jpeg, jpg, png, or pdf file.',
+            'notes_file.*.mimes'    => 'Each item file image must be a jpeg, jpg, png, or pdf file,mp3, wav, or ogg file.',
             'notes_file.*.max'      => 'Each item file image cannot exceed 10MB.',
             'notes_order_id.string'     => 'Notes id must be string.',
             'notes_order_id.required'   => 'Notes order required.',
