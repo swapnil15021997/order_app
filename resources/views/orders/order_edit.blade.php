@@ -1646,7 +1646,12 @@
             },
             success: function (response) {
                 console.log('Audio uploaded successfully:', response);
-                showAlertNotes('success', 'Audio file uploaded successfully!');
+                if(response.status==200){
+
+                    showAlertNotes('success', 'Audio file uploaded successfully!');
+                }else{
+                    showAlertNotes('warning', response.message);
+                }
                 $('#record_audio').modal('hide'); 
                 isLoading = false;
                 loadNotes();
