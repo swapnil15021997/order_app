@@ -276,7 +276,7 @@ class NotesController extends Controller
         $item->save();
         return response()->json([
             'status'  => 200,
-            'message' => 'Items updated successfully'
+            'message' => 'File removed successfully'
         ]);
 
     }
