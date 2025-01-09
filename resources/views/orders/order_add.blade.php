@@ -27,8 +27,8 @@
                         <div class="card">
                             <div class="card-body">
                                 <div class="row">
+                                    <h2 class="font-bold" >{{$order_number}}</h2>
                                     <div class="col-6">
-                                        <h2 class="font-bold" >{{$order_number}}</h2>
                                         <input type="hidden" id="order_number" name="order_number" value="{{$order_number}}">
 
                                         <div class="col-12">
@@ -40,9 +40,9 @@
                                         <div class="col-12 mt-3">
                                             <label for="order_type" class="form-label">Order Type</label>
                                             <select id="order_type" class="form-select" type="text">
-                                                <option value="" disabled selected>Select type</option>
+
                                                 <option value="order">Order</option>
-                                                <option value="reparing">Reparing</option>
+                                                <option value="reparing" selected>Reparing</option>
                                             </select>
                                             <!-- <div class="d-flex align-items-center">
                                                 <label class="form-check-label ms-2">Order</label>
@@ -54,18 +54,19 @@
                                         </div>
                                     </div>
                                     <div class="col-6">
-                                        <h4>Customer Details
-                                            <input type="hidden" name="" id="customer_new" >
-                                        <span style="color: red;">*</span>
-                                        </h4>
-                                        <div class="mt-4">
+                                        <input type="hidden" name="" id="customer_new" >
+                                        <div class="col-12">
+                                            <label class="form-label">Select Customer
+                                                <span style="color: red;">*</span>
+                                            </label>
+                                           
                                             <select id="searchableCust" class="form-select select2">
                                                 
                                             </select>
                                         </div>
                                         <div class="d-none" id="cust_div">
                                 
-                                            <div class="mt-4">
+                                            <div class="col-12 mt-4">
                                                 <label for="order_customer_name" class="form-label">Customer name
                                                     <span style="color: red;">*</span>
                                                 </label>
@@ -177,7 +178,9 @@
                                     <div class="col-4">
                                         <label for="item_colors" class="form-label">Colors</label>
                                         <select class="form-select" id="item_colors">
-                                            <option value="" disabled selected>Select color</option>
+                                        @foreach ($colors as $color)
+                                            <option value="{{ $color['color_id'] }}">{{ $color['color_name'] }}</option>
+                                        @endforeach
                                         </select>
                                     </div>
                                 </div>
@@ -213,8 +216,8 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="card" id="payment">
-                            <div class="card-body row d-none"  >
+                        <div class="card d-none" id="payment">
+                            <div class="card-body row "  >
 
                                     <h4 class="h2">Payment Details</h4>
                                     <div class="row">
@@ -234,8 +237,8 @@
                         </div>
                         <div class="card">
                             <div class="card-body">
-                                <div class="d-flex justify-content-end">
-                                    <a href="#" class="btn btn-primary ms-auto" id="saveBranchBtn">
+                                <div class="d-flex justify-content-center align-items-center">
+                                    <a href="#" class="btn btn-primary  d-flex justify-content-center align-items-center" id="saveBranchBtn">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
                                             viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
                                             stroke-linecap="round" stroke-linejoin="round">
@@ -243,7 +246,7 @@
                                             <path d="M12 5l0 14" />
                                             <path d="M5 12l14 0" />
                                         </svg>
-                                        Create new Order
+                                        Save
                                     </a>
                                 </div>
                             </div>
@@ -253,6 +256,99 @@
 
             </div>
         </div>
+
+        <input type="hidden" name="" id="order_id" value="{{$last_order_id}}" >
+         
+        <div class="modal modal-blur fade" id="record_audio" tabindex="-2" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+
+                    <div class="modal-header">
+                        <h5 class="modal-title">Record Audio</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="text-center">
+                            <!-- Audio Control Buttons -->
+                            
+                            <button id="recordButton" class="btn btn-success">
+                                <i class="bi bi-mic"></i>
+                            </button>
+                            <!-- <button id="pauseRecording" class="btn btn-warning" disabled>
+                            <i class="bi bi-pause-circle"></i>
+                            </button>
+                            <button id="resumeRecording" class="btn btn-info" disabled>
+                            <i class="bi bi-play-circle"></i>
+                            </button> -->
+                            <button id="stopButton" class="btn btn-danger" disabled>
+                                <i class="bi bi-stop-circle"></i>
+                            </button>
+                        </div>
+                    
+
+                        <div class="mt-4 text-center d-none" id="audioPlaybackContainer">
+                            <!-- Audio Player -->
+                            <audio id="audio-playback"   controls ></audio>
+                        </div>
+                    </div>
+
+
+                    <div class="modal-footer">
+                        <a id="resetButton" href="#" type="button" class="btn btn-primary">
+                            Reset Audio
+                        </a>
+                        <a href="#" class="btn btn-secondary" data-bs-dismiss="modal">
+                            Cancel
+                        </a>
+                        <a id="sendButton" href="#" type="button" class="btn btn-primary">
+                            Send Audio
+                        </a>
+                    </div>
+                
+                </div>
+            </div>
+        </div>
+
+
+
+        <div class="modal modal-blur fade" id="click_image" tabindex="-2" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+
+                    <div class="modal-header">
+                        <h5 class="modal-title">Click Image</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div id="cameraView" style="display: none; text-align: center;">
+                            <video id="cameraStream" autoplay playsinline style="width: 100%; max-height: 400px; border: 1px solid #ddd;"></video>
+                            <button id="captureButton" class="btn btn-primary mt-3">Capture Image</button>
+                        </div>
+
+                        <!-- Preview Area -->
+                        <div id="previewContainer" style="display: none; text-align: center;">
+                            <img id="previewImage" style="max-width: 100%; height: auto; border: 1px solid #ddd;" />
+                            <div class="mt-3">
+                                <button id="retakeButton" class="btn btn-secondary">Retake</button>
+                                <button id="switchCameraButton" class="btn btn-secondary">Switch Camera</button>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="modal-footer">
+                        <a href="#" class="btn btn-secondary" data-bs-dismiss="modal">
+                            Cancel
+                        </a>
+                        <a id="sendImageButton" onclick="uploadImage()" href="#" type="button" class="btn btn-primary">
+                            Send Image
+                        </a>
+                    </div>
+                
+                </div>
+            </div>
+        </div>
+
         <div class="note-sidebar" id="note_sheet">
 
             <div class="note-header">
@@ -285,9 +381,9 @@
                     </a>
                 </span>
                 <span class="custom-btn">
-                    <input type="file" id="fileInput" style="display: none;" onchange="handleFileUpload(event)"
+                    <input type="file" id="fileInput" style="display: none;" onchange="click_image(event)"
                         multiple />
-                    <a href="#" onclick="open_file_select()" data-bs-toggle="tooltip"
+                    <a href="#" onclick="click_image()" data-bs-toggle="tooltip"
                         aria-label="Please Select file to upload" data-bs-original-title="Audio File">
                         <svg width="22" height="20" viewBox="0 0 22 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path
@@ -297,9 +393,9 @@
                     </a>
                 </span>
                 <span class="custom-btn">
-                    <input type="file" id="fileInput" style="display: none;" onchange="handleFileUpload(event)"
+                    <input type="file" id="fileInput" style="display: none;" onchange="record_audio(event)"
                         multiple />
-                    <a href="#" onclick="open_file_select()" data-bs-toggle="tooltip"
+                    <a href="#" onclick="record_audio()" data-bs-toggle="tooltip"
                         aria-label="Please Select file to upload" data-bs-original-title="Audio File">
                         <svg width="16" height="22" viewBox="0 0 16 22" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path
@@ -308,7 +404,7 @@
                         </svg>
                     </a>
                 </span>
-                <button class="note-submit-btn">
+                <button class="note-submit-btn" id="SendNotes">
                     <svg width="19" height="18" viewBox="0 0 19 18" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path fill-rule="evenodd" clip-rule="evenodd"
                             d="M4.43013 2.72003L15.3787 8.19293C15.6845 8.34573 15.8777 8.65821 15.8777 9.00004C15.8777 9.34187 15.6845 9.65435 15.3787 9.80715L4.43013 15.28C4.11287 15.4387 3.73208 15.3968 3.4569 15.173C3.18171 14.9492 3.06316 14.5849 3.15391 14.2419L4.54235 9.00004L3.15391 3.75813C3.06316 3.41521 3.18171 3.05093 3.4569 2.82709C3.73208 2.60325 4.11287 2.56136 4.43013 2.72003Z"
@@ -326,6 +422,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
 
 <script>
+
+    let notesList = [];
     $(document).ready(function () {
         // default selected date
         const today = new Date().toISOString().split('T')[0];
@@ -345,30 +443,32 @@
         $('#saveBranchBtn').click(function (e) {
 
             e.preventDefault();
-            var orderDate   = $('#order_date').val();
-            var orderNumber = $('#order_number').val();
-            var orderQRCode = $('#qr_code_number').val();
-            var orderType   = document.getElementById('order_type');
-
-            const orderTypeValue = orderType.checked ? 2 : 1;
-            var orderFrom = $('#searchableSelectFrom').val();
-            var orderTo = $('#searchableSelectTo').val();
-            var cust = $('#searchableCust').val();
-
-            var item_metal = $('#item_metal').val();
-            var item_name = $('#item_name').val();
-            var item_melting = $('#item_melting').val();
-            var item_weight = $('#item_weight').val();
-            var payment_advance = $('#payment_advance').val();
-            var payment_booking = $('#payment_booking').val();
-            var itemImages = $('#item_image_id')[0].files;
+            var orderDate          = $('#order_date').val();
+            var orderNumber        = $('#order_number').val();
+            var orderQRCode        = $('#qr_code_number').val();
+            var orderType          = $('#order_type').val();
+            var orderFrom          = $('#searchableSelectFrom').val();
+            var orderTo            = $('#searchableSelectTo').val();
+            var cust               = $('#searchableCust').val();
+            var item_color         = $('#item_colors').val();
+            var item_metal         = $('#item_metal').val();
+            var item_name          = $('#item_name').val();
+            var item_melting       = $('#item_melting').val();
+            var item_weight        = $('#item_weight').val();
+            var payment_advance    = $('#payment_advance').val();
+            var payment_booking    = $('#payment_booking').val();
+            var itemImages         = $('#item_image_id')[0].files;
             var formattedOrderDate = formatDate(orderDate);
-
+            if (orderType == "reparing"){
+                orderType = 2;
+            }else{
+                orderType = 1;
+            } 
             if (orderDate && orderType && orderFrom && orderTo) {
                 var formData = new FormData();
                 formData.append('_token', csrfToken);  // Add CSRF token
                 formData.append('order_date', orderDate);
-                formData.append('order_type', orderTypeValue);
+                formData.append('order_type', orderType);
                 formData.append('order_from_branch_id', orderFrom);
                 formData.append('order_to_branch_id', orderTo);
                 formData.append('order_user_id', cust);
@@ -376,6 +476,8 @@
                 formData.append('item_name', item_name);
                 formData.append('order_number', orderNumber);                
                 formData.append('qr_code_number', orderQRCode);
+                formData.append('order_notes', notesList);
+                formData.append('item_color',item_color);
 
                 if (payment_advance) {
 
@@ -460,71 +562,71 @@
     
         // Upload Images and show the preview
 
-        function previewSelectedImages() {
-            const input = document.getElementById("item_image_id");
-            const uploadedImages = document.getElementById("uploaded-images");
-            // uploadedImages.innerHTML = ""; 
+    function previewSelectedImages() {
+        const input = document.getElementById("item_image_id");
+        const uploadedImages = document.getElementById("uploaded-images");
+        // uploadedImages.innerHTML = ""; 
 
-            const files = Array.from(input.files);
+        const files = Array.from(input.files);
 
-            if (files.length === 0) {
-            uploadedImages.innerHTML = "<p>No files selected.</p>";
-            return;
-            }
+        if (files.length === 0) {
+        uploadedImages.innerHTML = "<p>No files selected.</p>";
+        return;
+        }
 
-            files.forEach((file, index) => {
-                const reader = new FileReader();
+        files.forEach((file, index) => {
+            const reader = new FileReader();
 
-                reader.onload = function (e) {
-                    const imageSrc = e.target.result;
-                    const col      = document.createElement("div");
-                    col.classList.add("col-4");
-                    col.setAttribute("data-file-index", index); 
-                    const maxFileNameLength = 15;
-                    const trimmedFileName =
-                        file.name.length > maxFileNameLength
-                            ? file.name.slice(0, maxFileNameLength) + "..."
-                            : file.name;
+            reader.onload = function (e) {
+                const imageSrc = e.target.result;
+                const col      = document.createElement("div");
+                col.classList.add("col-4");
+                col.setAttribute("data-file-index", index); 
+                const maxFileNameLength = 15;
+                const trimmedFileName =
+                    file.name.length > maxFileNameLength
+                        ? file.name.slice(0, maxFileNameLength) + "..."
+                        : file.name;
 
-                    const selectedFile = `
-                        <div class="selected-files">
-                            <div class="d-flex align-items-center gap-2">
-                                <img src="${imageSrc}" alt="${trimmedFileName}" width="35px" />
-                                <div>
-                                    <p>${trimmedFileName}</p>
-                                    <small>${(file.size / 1024).toFixed(1)} KB</small>
-                                </div>
+                const selectedFile = `
+                    <div class="selected-files">
+                        <div class="d-flex align-items-center gap-2">
+                            <img src="${imageSrc}" alt="${trimmedFileName}" width="35px" />
+                            <div>
+                                <p>${trimmedFileName}</p>
+                                <small>${(file.size / 1024).toFixed(1)} KB</small>
                             </div>
-                            <button onclick="removeImage(this, ${index})">
-                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path
-                                        d="M12.59 6L10 8.59L7.41 6L6 7.41L8.59 10L6 12.59L7.41 14L10 11.41L12.59 14L14 12.59L11.41 10L14 7.41L12.59 6ZM10 0C4.47 0 0 4.47 0 10C0 15.53 4.47 20 10 20C15.53 20 20 15.53 20 10C20 4.47 15.53 0 10 0ZM10 18C5.59 18 2 14.41 2 10C2 5.59 5.59 2 10 2C14.41 2 18 5.59 18 10C18 14.41 14.41 18 10 18Z"
-                                        fill="#858585"
-                                    />
-                                </svg>
-                            </button>
                         </div>
-                    `;
+                        <button onclick="removeImage(this, ${index})">
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M12.59 6L10 8.59L7.41 6L6 7.41L8.59 10L6 12.59L7.41 14L10 11.41L12.59 14L14 12.59L11.41 10L14 7.41L12.59 6ZM10 0C4.47 0 0 4.47 0 10C0 15.53 4.47 20 10 20C15.53 20 20 15.53 20 10C20 4.47 15.53 0 10 0ZM10 18C5.59 18 2 14.41 2 10C2 5.59 5.59 2 10 2C14.41 2 18 5.59 18 10C18 14.41 14.41 18 10 18Z"
+                                    fill="#858585"
+                                />
+                            </svg>
+                        </button>
+                    </div>
+                `;
 
-                    col.innerHTML = selectedFile;
-                    uploadedImages.appendChild(col);
-                };
+                col.innerHTML = selectedFile;
+                uploadedImages.appendChild(col);
+            };
 
-                reader.readAsDataURL(file);
-            });
-        }
+            reader.readAsDataURL(file);
+        });
+    }
 
-        function removeImage(button,index) {
-            const col   = button.closest(".col-4");
-            col.remove();
-            const input = document.getElementById("item_image_id");
-            const files = Array.from(input.files);
-            const updatedFiles = files.filter((_, i) => i !== index);
-            const dataTransfer = new DataTransfer();
-            updatedFiles.forEach((file) => dataTransfer.items.add(file));
+    function removeImage(button,index) {
+        const col   = button.closest(".col-4");
+        col.remove();
+        const input = document.getElementById("item_image_id");
+        const files = Array.from(input.files);
+        const updatedFiles = files.filter((_, i) => i !== index);
+        const dataTransfer = new DataTransfer();
+        updatedFiles.forEach((file) => dataTransfer.items.add(file));
 
-            input.files = dataTransfer.files;
-        }
+        input.files = dataTransfer.files;
+    }
 
 
     var userInput = '';
@@ -900,6 +1002,612 @@
     }
 
 
+
+
+    // Code for Notes
+
+    var csrfToken = $('meta[name="csrf-token"]').attr('content');
+        let page = 1;
+        let loadNotes;
+        let isLoading = false;
+
+        document.addEventListener("DOMContentLoaded", function () {
+            // Function to load notes
+            loadNotes = function (isScrollUp = false) {
+                if (isLoading) return;
+
+                isLoading = true;
+                const notesBody = $('#notes_body');
+                const order_id  = $('#order_id').val();
+                console.log("Order ID: " + order_id);
+                notesBody.html('');
+                const scrollTopBeforeLoad = notesBody.scrollTop();
+
+                $.ajax({
+                    url: "{{ route('notes_list') }}",
+                    type: 'POST',
+                    data: {
+                        search: '',
+                        per_page: 8,
+                        page: page,
+                        order_id: order_id,
+                    },
+                    headers: {
+                        'X-CSRF-TOKEN': csrfToken
+                    },
+                    success: function (response) {
+                        const notesBody = $('#notes_body');
+                        let firstNoteOffset = notesBody[0].scrollHeight;
+
+                        // Add new notes below
+                        if (!isScrollUp) {
+                            response.data.notes.forEach(function (note) {
+                                console.log(note);
+                                if (note.notes_type == 1) {
+                                    notesBody.append(`
+                                    <div class="my-note-box">
+                                        <div class="chat-bubble-title"></div>
+                                        <div class="chat-bubble-body">
+                                            <p>${note.notes_text}.</p>
+                                        </div>
+                                    </div>`);
+                                } 
+                                else if(note.notes_type == 3){
+                                    notesBody.append(`
+                                        <div class="my-note-box">
+                                            <div class="chat-bubble-title">Audio Note</div>
+                                            <div class="chat-bubble-body">
+                                                <audio controls>
+                                                    <source src="${note.file.file_url}" type="audio/webm">
+                                                    Your browser does not support the audio element.
+                                                </audio>
+                                            </div>
+                                        </div>
+                                    `);
+                                }
+                                else {
+                                    if (note.file.file_type == 'pdf') {
+                                        notesBody.append(`
+                                        <div class="my-note-box w-75">
+                                            <p class="small text-decoration-underline">${note.file.file_original_name}</p>
+                                            <embed src="${note.file.file_url}" width="100%" height="auto" />
+                                        </div>`);
+                                    } else {
+                                        notesBody.append(`
+                                        <div class="my-note-box w-75">
+                                            <p class="small text-decoration-underline">${note.file.file_original_name}</p>
+                                            <img src="${note.file.file_url}" alt="" class="rounded img-fluid" />
+                                        </div>`);
+                                    }
+                                }
+                            });
+                        } else {
+                            // Add older notes to the top when scrolling up
+                            let newNotes = '';
+                            response.data.notes.forEach(function (note) {
+                                if (note.notes_type == 1) {
+                                    newNotes = `
+                                    <div class="my-note-box">
+                                        <div class="chat-bubble-title"></div>
+                                        <div class="chat-bubble-body">
+                                            <p>${note.notes_text}.</p>
+                                        </div>
+                                    </div>` + newNotes;
+                                } else {
+                                    if (note.file.file_type == 'pdf') {
+                                        newNotes = `
+                                        <div class="my-note-box w-75">
+                                            <p class="small text-decoration-underline">${note.file.file_original_name}</p>
+                                            <embed src="${note.file.file_url}" width="100%" height="auto" />
+                                        </div>` + newNotes;
+                                    } else {
+                                        newNotes = `
+                                        <div class="my-note-box w-75">
+                                            <p class="small text-decoration-underline">${note.file.file_original_name}</p>
+                                            <img src="${note.file.file_url}" alt="" class="rounded img-fluid" />
+                                        </div>` + newNotes;
+                                    }
+                                }
+                            });
+                            notesBody.prepend(newNotes);
+                        }
+
+                        page++;
+
+                        // Scroll position handling after load
+                        if (isScrollUp) {
+                            notesBody.scrollTop(notesBody[0].scrollHeight - firstNoteOffset);
+                        } else {
+                            notesBody.scrollTop(notesBody[0].scrollHeight);
+                        }
+
+                        isLoading = false;
+                    }
+                });
+            }
+
+            // Initial load (start from the bottom)
+            loadNotes();
+
+            // Handle scroll event
+            function handleScroll() {
+                const notesBox = document.getElementById("notes_body");
+                if (!notesBox) return;
+
+                const { scrollTop, scrollHeight, clientHeight } = notesBox;
+
+                if (scrollTop + clientHeight >= scrollHeight - 5) {
+                    // Load more notes at the bottom
+                    loadNotes();
+                } else if (scrollTop === 0) {
+                    // Load older notes when scrolling up
+                    loadNotes(true);
+                }
+            }
+
+            // Attach scroll event
+            setTimeout(function () {
+                const notesBox = document.getElementById("notes_body");
+                if (notesBox) {
+                    notesBox.addEventListener("scroll", handleScroll);
+                }
+            }, 500);
+
+
+            $(document).ready(function () {
+                // Handle file upload
+
+                // Handle new text note submission
+                $("#TextNotes").on("keydown", function (event) {
+                    if (event.key === "Enter") {
+                        event.preventDefault();
+                        const text = event.target.value.trim();
+                        const order_id = $('#order_id').val();
+                        if (text) {
+                            $.ajax({
+                                url: "{{ route('notes_add') }}",
+                                type: 'POST',
+                                data: {
+                                    'notes_text': text,
+                                    'notes_file': null,
+                                    'notes_order_id':order_id,
+                                    'notes_type'    : 1
+
+                                },
+                                headers: {
+                                    'X-CSRF-TOKEN': csrfToken
+                                },
+                                success: function (response) {
+                                    showAlertNotes('success', response.message);
+                                    notesList.push(response.data);
+                                    $('#TextNotes').val('');
+                                    isLoading = false;
+                                    page = 1;
+                                    loadNotes();
+                                }
+                            });
+                        } else {
+                            alert("Please enter some text.");
+                            showAlertNotes('warning', 'Please enter some text');
+                        }
+                    }
+                });
+
+                $("#SendNotes").on("click", function () {
+                    const text = $("#TextNotes").val().trim();
+                    const order_id = $('#order_id').val();
+                    if (text) {
+                        $.ajax({
+                            url: "{{ route('notes_add') }}",
+                            type: 'POST',
+                            data: {
+                                'notes_text': text,
+                                'notes_file': null,
+                                'notes_order_id':order_id,
+                                'notes_type'    : 1
+                            },
+                            headers: {
+                                'X-CSRF-TOKEN': csrfToken
+                            },
+                            success: function (response) {
+                                showAlertNotes('success', response.message);
+                                notesList.push(response.data);
+                                $('#TextNotes').val('');
+                                isLoading = false;
+                                page = 1;
+                                loadNotes();
+                            }
+                        });
+                    } else {
+                        alert("Please enter some text.");
+                        showAlertNotes('warning', 'Please enter some text');
+                    }
+                
+                });  
+            });
+        });
+
+        function open_file_select() {
+            $("#fileInput").click();
+        }
+   
+
+    let cameraStream = null;
+    let capturedImage = null;
+    let useFrontCamera = true;
+    function click_image(){
+        startCamera();
+        $('#click_image').modal('show');
+        $('#cameraView').show();
+        $('#previewContainer').hide();
+        $('#sendImageButton').hide();   
+    }
+
+    function startCamera() {
+        const constraints = {
+            video: {
+                facingMode: useFrontCamera ? 'user' : 'environment',
+            },
+        };
+
+        navigator.mediaDevices
+            .getUserMedia(constraints)
+            .then((stream) => {
+                cameraStream = stream;
+                const videoElement = $('#cameraStream')[0];
+                videoElement.srcObject = stream;
+            })
+            .catch((error) => {
+                alert('Unable to access the camera. Please check permissions.');
+                console.error(error);
+            });
+    }
+
+
+    function stopCamera() {
+        if (cameraStream) {
+            cameraStream.getTracks().forEach((track) => track.stop());
+            cameraStream = null;
+        }
+    }
+
+    $('#captureButton').on('click', function () {
+        const videoElement = $('#cameraStream')[0];
+        const canvas = document.createElement('canvas');
+        canvas.width = videoElement.videoWidth;
+        canvas.height = videoElement.videoHeight;
+
+        const context = canvas.getContext('2d');
+        context.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
+
+        capturedImage = canvas.toDataURL('image/png');
+
+        $('#previewImage').attr('src', capturedImage);
+        $('#cameraView').hide();
+        $('#previewContainer').show();
+        $('#sendImageButton').show();
+
+        stopCamera(); // Stop the camera to save resources
+    })
+
+    // Retake image
+    $('#retakeButton').on('click', function () {
+        $('#cameraView').show();
+        $('#previewContainer').hide();
+        $('#sendImageButton').hide();
+
+        startCamera(); // Restart the camera
+    });
+
+    // Switch camera
+    $('#switchCameraButton').on('click', function () {
+        useFrontCamera = !useFrontCamera; // Toggle between front and rear camera
+        stopCamera();
+        startCamera();
+    });
+
+    function dataURLToFile(dataUrl, filename) {
+        const arr = dataUrl.split(',');
+        const mime = arr[0].match(/:(.*?);/)[1];
+        const bstr = atob(arr[1]);
+        let n = bstr.length;
+        const u8arr = new Uint8Array(n);
+        while (n--) {
+            u8arr[n] = bstr.charCodeAt(n);
+        }
+        return new File([u8arr], filename, { type: mime });
+    }
+
+    // Upload image
+    function uploadImage() {
+        if (!capturedImage) {
+            alert('No image captured!');
+            return;
+        }
+        const orderId = $('#order_id').val();
+        const formData = new FormData();
+        const imageFile = dataURLToFile(capturedImage, 'captured-image.png');
+
+
+        formData.append('notes_text', '');
+        formData.append('notes_file[]', imageFile);
+        formData.append('notes_type', 4);
+        formData.append('notes_order_id', orderId);
+        
+        $.ajax({
+            url: "{{ route('notes_add') }}",
+            type: 'POST',
+            data: formData,
+            contentType: false,
+            processData: false,
+            headers: {
+                'X-CSRF-TOKEN': csrfToken
+            },
+            success: function (response) {
+                console.log('Audio uploaded successfully:', response);
+                notesList.push(response.data);
+                $('#click_image').modal('hide');
+                showAlertNotes('success', 'Image file uploaded successfully!');
+                isLoading = false;
+                loadNotes();
+            },
+            error: function (error) {
+                console.error('Image upload failed:', error);
+            }
+        });
+    }
+
+    // Stop the camera when the modal is closed
+    $('[data-bs-dismiss="modal"]').on('click', stopCamera);
+
+    function record_audio(){
+        $('#record_audio').modal('show');            
+        $("#audio-playback").addClass("hidden")
+
+    }
+       
+    let recorder, audio_stream, audioBlob;
+    // const recordButton = document.getElementById("recordButton");
+    // recordButton.addEventListener("click", startRecording);
+    const recordButton = $('#recordButton');
+    $('#recordButton').on('click', startRecording);
+
+
+    // stop recording
+    // const stopButton = document.getElementById("stopButton");
+    // stopButton.addEventListener("click", stopRecording);
+    // stopButton.disabled = true;
+
+    const stopButton = $('#stopButton');
+    $('#stopButton').on('click', stopRecording);
+
+    // set preview
+    // const preview = document.getElementById("audio-playback");
+    const preview = $('#audio-playback');
+
+    // const sendButton = document.getElementById("sendButton");
+    // sendButton.addEventListener("click", uploadRecording);
+
+    const sendButton = $('#sendButton');
+    $('#sendButton').on('click', uploadRecording);
+
+
+    // const audioPlaybackContainer = document.getElementById("audioPlaybackContainer");
+    const audioPlaybackContainer =$('#audioPlaybackContainer');
+
+    const resetButton = $('#resetButton');
+    $('#resetButton').on('click', resetRecording);
+    
+    
+    function startRecording() {
+         
+        // button settings
+
+        $("#recordButton").prop("disabled", true);
+        $("#recordButton").text("Recording..."); 
+        $("#recordButton").addClass("button-animate");
+
+        $("#stopButton").removeClass("inactive");
+        $("#stopButton").prop("disabled", false);
+
+        $("#audio-playback").addClass("hidden")
+     
+        navigator.mediaDevices.getUserMedia({ audio: true })
+            .then(function (stream) {
+                audio_stream = stream;
+                recorder = new MediaRecorder(stream);
+                let audioChunks = [];
+                // when there is data, compile into object for preview src
+                recorder.ondataavailable = function (e) {
+                    audioChunks.push(e.data);
+                    // const url = URL.createObjectURL(e.data);
+                    // preview.src = url;
+
+                    // set link href as blob url, replaced instantly if re-recorded
+                    // downloadAudio.href = url;
+                };
+
+                recorder.onstop = function () {
+                    // Create an audio blob
+                    audioBlob = new Blob(audioChunks, { type: "audio/wav" });
+
+                    // Create a URL for the blob and set it as the audio playback source
+                    const url = URL.createObjectURL(audioBlob);
+                    var preview = document.getElementById('audio-playback');
+                    preview.src = url;
+
+                    // Unhide the audio playback element
+                    $("#audioPlaybackContainer").removeClass("d-none");
+
+                    preview.load(); 
+                    console.log("Audio recording ready for playback.");
+                    sendButton.audioBlob = audioBlob;
+                };
+
+                recorder.start();
+
+                timeout_status = setTimeout(function () {
+                    console.log("5 min timeout");
+                    stopRecording();
+                }, 300000);
+            });
+    }
+
+    function stopRecording() {
+        recorder.stop();
+        audio_stream.getAudioTracks()[0].stop();
+
+        // buttons reset
+        recordButton.disabled = false;
+        recordButton.innerText = "Redo Recording"
+        $("#recordButton").removeClass("button-animate");
+
+        $("#stopButton").addClass("inactive");
+        stopButton.disabled = true;
+
+        sendButton.audioBlob = audioBlob;
+
+        $("#audio-playback").removeClass("hidden");
+        console.log('class remove');
+
+
+    }
+
+    function resetRecording() {
+        // Reset the recorder, audio stream, and UI
+        if (recorder) {
+            recorder.stop();
+            audio_stream.getAudioTracks()[0].stop();
+        }
+
+        // Reset audio variables
+        audioBlob = null;
+        audio_stream = null;
+        recorder = null;
+
+        // Hide audio playback and reset the buttons
+        audioPlaybackContainer.addClass("d-none");
+        preview[0].src = '';
+        $("#audio-playback").addClass("hidden");
+
+        recordButton.prop("disabled", false);
+        
+        $("#recordButton").text(""); 
+        $("#recordButton").html('<i class="bi bi-mic"></i>');
+        recordButton.removeClass("button-animate");
+
+        stopButton.addClass("inactive");
+        stopButton.prop("disabled", true);
+        
+        sendButton[0].audioBlob = null;
+    }
+
+    // function downloadRecording(){
+    //     var name = new Date();
+    //     var res = name.toISOString().slice(0,10)
+    //     downloadAudio.download = res + '.wav';
+    // }
+
+        function uploadRecording() {
+            console.log("Audio Blob:", audioBlob);
+            console.log("Send Button Blob:", sendButton.audioBlob);
+            console.log(audioBlob.type);
+            if (!sendButton.audioBlob) {
+                alert("No audio file available for upload!");
+                return;
+            }
+            const orderId = $('#order_id').val();
+            const audioFile = new File([audioBlob], 'recording.wav', { type: 'audio/wav' });
+
+            const formData = new FormData();
+            formData.append('notes_text', '');
+            formData.append('notes_file[]', audioFile);
+            formData.append('notes_type', 3);
+            formData.append('notes_order_id', orderId);
+            $.ajax({
+                url: "{{ route('notes_add') }}",
+                type: 'POST',
+                data: formData,
+                contentType: false,
+                processData: false,
+                headers: {
+                    'X-CSRF-TOKEN': csrfToken
+                },
+                success: function (response) {
+                    console.log('Audio uploaded successfully:', response);
+                    notesList.push(response.data);
+                    showAlertNotes('success', 'Audio file uploaded successfully!');
+                    $('#record_audio').modal('hide'); 
+                    isLoading = false;
+                    loadNotes();
+                },
+                error: function (error) {
+                    console.error('Audio upload failed:', error);
+                }
+            });
+        }
+
+
+        function handleFileUpload(event) {
+            const file = event.target.files;
+            if (file) {
+                const formData = new FormData();
+                formData.append('notes_text', '');
+                for (var i = 0; i < file.length; i++) {
+                    formData.append('notes_file[]', file[i]);
+                    formData.append('notes_type', 3);
+
+                }
+                $.ajax({
+                    url: "{{ route('notes_add') }}",
+                    type: 'POST',
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    headers: {
+                        'X-CSRF-TOKEN': csrfToken
+                    },
+                    success: function (response) {
+                        showAlertNotes('success', response.message);
+                        isLoading = false;
+                        loadNotes();
+                        notesList.push(response.data);
+                    }
+                });
+            } else {
+                console.log("No file selected");
+            }
+        }
+
+
+
+
+        function showAlertNotes(type, message) {
+            const alertContainer = document.getElementById('notes-container');
+            const alertHTML = `
+                <div class="alert alert-${type} position-fixed  bg-white alert-dismissible" role="alert" style="top:1rem; right:1rem;width:350px;">
+                    <div class="d-flex ">
+                        <div>
+                            ${type === 'success' ? `
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon alert-icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                <path d="M5 12l5 5l10 -10" />
+                            </svg>` : `
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon alert-icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                <path d="M10.24 3.957l-8.422 14.06a1.989 1.989 0 0 0 1.7 2.983h16.845a1.989 1.989 0 0 0 1.7 -2.983l-8.423 -14.06a1.989 1.989 0 0 0 -3.4 0z" />
+                                <path d="M12 9v4" />
+                                <path d="M12 17h.01" />
+                            </svg>`}
+                        </div>
+                        <div>${message}</div>
+                    </div>
+                    <a class="btn-close" data-bs-dismiss="alert" aria-label="close"></a>
+                </div>
+            `;
+            alertContainer.innerHTML = alertHTML;
+            console.log("here");
+        }
 
 </script>
 @endsection

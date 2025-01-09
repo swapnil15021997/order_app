@@ -24,7 +24,8 @@ class Item extends Model
         'item_melting',
         'item_weight',
         'item_file_images',
-        'item_order_id'
+        'item_order_id',
+        'item_color'
     ];
 
     public function order()

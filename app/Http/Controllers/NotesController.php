@@ -25,7 +25,7 @@ class NotesController extends Controller
             'notes_file'          => ['nullable'],  
             'notes_file.*'        => ['file', 'mimes:jpeg,jpg,png,pdf,mp3,wav,ogg', 'max:20240'],  
             'notes_file.*.mime' => 'in:audio/wav,mp3,ogg',
-            'notes_order_id'      => ['required','string'],
+            'notes_order_id'      => ['nullable','string'],
             'notes_type'          => ['required','string'],
             
         ]; 
@@ -80,7 +80,8 @@ class NotesController extends Controller
 
         return response()->json([
             'status'  => 200,
-            'message' => 'Notes saved successfully' 
+            'message' => 'Notes saved successfully',
+            'data'  => $notes_save->notes_id
         ]);
     }
 
@@ -185,12 +186,18 @@ class NotesController extends Controller
                 'errors'  => $validator->errors(),
             ]);
         }
-    
         $searchQuery = $request->input('search', ''); 
         $perPage     = $request->input('per_page', 15);   
         $page        = $request->input('page', 1);  
         $order_id    = $request->input('order_id');  
         $offset      = ($page - 1) * $perPage;
+        if(empty($order_id)){
+            return response()->json([
+                'status' => 200,
+                'message' => 'Notes list fetched successfully!',
+                'data'    => []
+                ]);    
+        }
   
         $notesQuery  = Notes::query()->with('file');       
         if (!empty($searchQuery)) {
@@ -198,7 +205,7 @@ class NotesController extends Controller
                 $query->where('notes_text', 'like', "%{$searchQuery}%");
             });
         }
-
+        
         $total_notes = $notesQuery->count();
         $notes = $notesQuery
             ->where('notes_order_id',$order_id)

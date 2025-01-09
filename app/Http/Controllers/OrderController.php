@@ -10,6 +10,8 @@ use App\Models\File;
 use App\Models\Transactions;
 use App\Models\Payment;
 use App\Models\Customers;
+use App\Models\Colors;
+
 use DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Arr;
@@ -143,69 +145,67 @@ class OrderController extends Controller
                 'message' =>"Please select active branch"
             ]);
         }
-
+ 
+       
         $rules = [   
             
-            'order_date'           => ['required', 'date', 'date_format:Y-m-d'],  
-            'order_from_branch_id' => ['required','string'],
-            'order_to_branch_id'   => ['required','string'],
-            'order_type'           => ['required','in:1,2'],
-            'item_metal'           => ['required', 'string'],
-            'item_name'            => ['required', 'string'],
-            'item_melting'         => ['required', 'string'],
-            'order_user_id'        => ['required', 'string'],
-            'item_weight'          => ['required', 'numeric'],
-            'item_file_images'     => ['nullable'],  
-            'item_file_images.*'   => ['file', 'mimes:jpeg,jpg,png,pdf', 'max:10240'],
-            'payment_advanced'     => ['nullable','numeric'],
-            'payment_booking'      => ['nullable','numeric'],
-            'order_number'         => ['nullable','string'],
-            'qr_code_number'       => ['nullable','string'],
-            
-            'customer_name' => ['nullable','string'],
-            'customer_address' => ['nullable','string'],
+            'order_date'            => ['required', 'date', 'date_format:Y-m-d'],  
+            'order_from_branch_id'  => ['required','string'],
+            'order_to_branch_id'    => ['required','string'],
+            'order_type'            => ['required','in:1,2'],
+            'item_metal'            => ['required', 'string'],
+            'item_name'             => ['required', 'string'],
+            'item_melting'          => ['required', 'string'],
+            'order_user_id'         => ['required', 'string'],
+            'item_weight'           => ['required', 'numeric'],
+            'item_color'            => ['nullable', 'numeric'],
+            'item_file_images'      => ['nullable'],  
+            'item_file_images.*'    => ['file', 'mimes:jpeg,jpg,png,pdf', 'max:10240'],
+            'payment_advanced'      => ['nullable','numeric'],
+            'payment_booking'       => ['nullable','numeric'],
+            'order_number'          => ['nullable','string'],
+            'qr_code_number'        => ['nullable','string'],
+            'order_notes'           => ['nullable'],
+            'customer_name'         => ['nullable','string'],
+            'customer_address'      => ['nullable','string'],
             'customer_phone_number' => ['nullable','string'],
-            'customer_new' => ['nullable','string'],
+            'customer_new'          => ['nullable','string'],
             ]; 
         $messages = [
-                'order_date.required'         => 'Order date is required.',
-                'order_date.date'             => 'Order date must be a valid date.',
-                'order_date.date_format'      => 'Order date must be in the format YYYY-MM-DD.',            
-                'order_from_branch_id.required' => 'From branch ID is required.',
-                'order_from_branch_id.string' => 'From branch ID must be a string.',
-                'order_to_branch_id.required' => 'To branch ID is required.',
-                'order_to_branch_id.string'   => 'To branch ID must be a string.',
-                'order_type.required'         => 'Order type is required.',
-                'order_type.string'           => 'Order type must be a string.',
-                'order_type.in'               => 'Order type must be 1 or 2.',
-
+                'order_date.required'            => 'Order date is required.',
+                'order_date.date'                => 'Order date must be a valid date.',
+                'order_date.date_format'         => 'Order date must be in the format YYYY-MM-DD.',            
+                'order_from_branch_id.required'  => 'From branch ID is required.',
+                'order_from_branch_id.string'    => 'From branch ID must be a string.',
+                'order_to_branch_id.required'    => 'To branch ID is required.',
+                'order_to_branch_id.string'      => 'To branch ID must be a string.',
+                'order_type.required'            => 'Order type is required.',
+                'order_type.string'              => 'Order type must be a string.',
+                'order_type.in'                  => 'Order type must be 1 or 2.',
                 'order_user_id.required'         => 'Customer Details is required.',
                 'order_user_id.string'           => 'Customer Details must be a string.',
-                
-                'item_metal.required'         => 'Item metal is required.',
-                'item_metal.string'           => 'Item metal must be a string.',
-                'item_name.required'          => 'Item name is required.',
-                'item_name.string'            => 'Item name must be a string.',
-                'item_melting.required'       => 'Item melting is required.',
-                'item_melting.string'         => 'Item melting must be a string.',
-                'item_weight.required'        => 'Item weight is required.',
-                'item_weight.numeric'         => 'Item weight must be a number.',
-                'item_file_images.array'      => 'Item file images must be an array.',
-                'item_file_images.*.file'     => 'Each item file image must be a valid file.',
-                'item_file_images.*.mimes'    => 'Each item file image must be a jpeg, jpg, png, or pdf file.',
-                'item_file_images.*.max'      => 'Each item file image cannot exceed 10MB.',
-                'payment_advance.numeric'     => 'Payment Advance must be a number.',
-                'payment_booking.numeric'     => 'Payment Booking must be a number.',
-                'order_number.required'       => 'Order Number is required.',
-                'order_number.string'         => 'Order Number must be a string.',
-                'qr_code_number.required'       => 'Order Number is required.',
-                'qr_code_number.string'         => 'Order Number must be a string.',
-
-
-                'customer_name.string'         => 'Order Number must be a string.',
-                'customer_address.string'         => 'Order Number must be a string.',
-                'customer_phone_number.string'         => 'Order Number must be a string.',
-                'customer_new.string'         => 'Order Number must be a string.'
+                'item_metal.required'            => 'Item metal is required.',
+                'item_metal.string'              => 'Item metal must be a string.',
+                'item_name.required'             => 'Item name is required.',
+                'item_name.string'               => 'Item name must be a string.',
+                'item_melting.required'          => 'Item melting is required.',
+                'item_melting.string'            => 'Item melting must be a string.',
+                'item_weight.required'           => 'Item weight is required.',
+                'item_weight.numeric'            => 'Item weight must be a number.',
+                'item_file_images.array'         => 'Item file images must be an array.',
+                'item_file_images.*.file'        => 'Each item file image must be a valid file.',
+                'item_file_images.*.mimes'       => 'Each item file image must be a jpeg, jpg, png, or pdf file.',
+                'item_file_images.*.max'         => 'Each item file image cannot exceed 10MB.',
+                'payment_advance.numeric'        => 'Payment Advance must be a number.',
+                'payment_booking.numeric'        => 'Payment Booking must be a number.',
+                'order_number.required'          => 'Order Number is required.',
+                'order_number.string'            => 'Order Number must be a string.',
+                'qr_code_number.required'        => 'Order Number is required.',
+                'qr_code_number.string'          => 'Order Number must be a string.',
+                'customer_name.string'           => 'Order Number must be a string.',
+                'customer_address.string'        => 'Order Number must be a string.',
+                'customer_phone_number.string'   => 'Order Number must be a string.',
+                'customer_new.string'            => 'Order Number must be a string.'
             ]; 
 
         $validator = Validator::make($params, $rules, $messages);
@@ -265,9 +265,10 @@ class OrderController extends Controller
 
         
         $item = new Item();
-        $item->item_metal = $params['item_metal'];
-        $item->item_name = $params['item_name'];
-        $item->item_melting = $params['item_melting'];
+        $item->item_metal    = $params['item_metal'];
+        $item->item_name     = $params['item_name'];
+        $item->item_melting  = $params['item_melting'];
+        $item->item_color    = $params['item_color'];
         $item->item_weight   = $params['item_weight'];
         $item->item_order_id = $order->order_id;
         $item->save();
@@ -317,6 +318,23 @@ class OrderController extends Controller
             }
         }
 
+        $order_notes = []; 
+        if (is_string($params['order_notes'])) {
+            $order_notes = explode(',',$params['order_notes']); 
+        }
+        if (!is_array($order_notes)) {
+            $order_notes = []; 
+        }
+         
+        if (!empty($order_notes)) {
+            foreach ($order_notes as $key => $note) {
+                $note = Notes::where('note_id',$note)->first();
+                $note->note_order_id = $order->order_id;
+                $note->save();
+            }
+        }
+         
+        
         SendEmailJob::dispatch($order->order_id,$type="Add");
         SendNotification::dispatch($order->order_id,$type="Add");
         return response()->json([
@@ -335,8 +353,12 @@ class OrderController extends Controller
         $login         = auth()->user()->toArray();
         $activePage    = 'orders';
         $user_permissions = session('combined_permissions', []);
-      
-        $login = auth()->user();
+        
+        $last_order_id = Order::orderBy('order_id', 'desc')->value('order_id');
+        $last_order_id = $last_order_id + 1;
+        $login         = auth()->user();
+        
+        $colors        = Colors::where('is_delete',0)->get()->toArray();
          
         if(!empty($login)){
             if($login['user_role_id'] != 1){
@@ -363,7 +385,7 @@ class OrderController extends Controller
         $orderUrl = route('order_get_approve', ['id' => $qr_code_number]);
         $qr_code  = QrCode::size(100)->generate($orderUrl);
     
-        return view('orders/order_add',compact('metals', 'melting','branchesArray','pageTitle','login','activePage','user_branch','user_permissions','order_number','order_number','qr_code','qr_code_number'));
+        return view('orders/order_add',compact('metals', 'melting','branchesArray','pageTitle','login','activePage','user_branch','user_permissions','order_number','order_number','qr_code','qr_code_number','last_order_id','colors'));
     }
 
     private function generateUniqueNumber($column)
@@ -404,6 +426,8 @@ class OrderController extends Controller
         $login         = auth()->user()->toArray();
         $activePage    = 'orders';
         $fileArray = [];
+        $colors        = Colors::where('is_delete',0)->get()->toArray();
+       
         if(!empty($login)){
             if($login['user_role_id'] != 1){
 
@@ -432,7 +456,7 @@ class OrderController extends Controller
       
         return view('orders/order_edit'
         ,compact('metals', 'melting','branchesArray',
-        'pageTitle','login','activePage','order','fileArray','user_branch','paymentArray','customer','user_permissions','qr_code'));
+        'pageTitle','login','activePage','order','fileArray','user_branch','paymentArray','customer','user_permissions','qr_code','colors'));
     }
 
 
@@ -601,7 +625,7 @@ class OrderController extends Controller
     // Order Updte
     public function order_update(Request $request){
         $params = $request->all();
-        dd($params);
+         
         $rules = [   
             'order_id'             => ['required','string'],
             'order_date'           => ['required', 'date', 'date_format:Y-m-d'],  
@@ -612,6 +636,7 @@ class OrderController extends Controller
             'item_name'            => ['required', 'string'],
             'item_melting'         => ['required', 'string'],
             'item_weight'          => ['required', 'numeric'],
+            'item_color'           => ['required', 'numeric'],
             'item_file_images'     => ['nullable'],  
             'item_file_images.*'   => ['file', 'mimes:jpeg,jpg,png,pdf', 'max:10240'],
             'payment_advanced'     => ['nullable','numeric'],
@@ -722,10 +747,11 @@ class OrderController extends Controller
         $order_rec->save();
         $item = Item::where('item_order_id', $order_rec->order_id)->first();
 
-        $item->item_metal = $params['item_metal'];
-        $item->item_name = $params['item_name'];
-        $item->item_melting = $params['item_melting'];
-        $item->item_weight = $params['item_weight'];
+        $item->item_metal    = $params['item_metal'];
+        $item->item_name     = $params['item_name'];
+        $item->item_melting  = $params['item_melting'];
+        $item->item_weight   = $params['item_weight'];
+        $item->item_color    = $params['item_color'];
     
         $fileIds = [];
         if ($request->hasFile('item_file_images')) {

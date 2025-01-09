@@ -38,12 +38,12 @@
                             
                             <!-- <img src="{{ asset('static/qr_code.png')}}" alt="Tabler" class="img-fluid" width="100px"> -->
                         </div>
-                        <input type="hidden" name="" id="edit_order_id" value="{{$order['order_id']}}" >
+                        <input type="hidden" name="" id="order_id" value="{{$order['order_id']}}" >
                         <div class="card">
                             <div class="card-body">
                                 <div class="row">
+                                    <h2 class="font-bold">{{$order['order_number']}}</h2>
                                     <div class="col-6">
-                                        <h2 class="font-bold">{{$order['order_number']}}</h2>
                                         <div class="col-12">
                                             <label for="order_date" class="form-label">Order Date
                                             <span style="color: red;">*</span>
@@ -66,10 +66,10 @@
                                         </div>
                                     </div>
                                     <div class="col-6">
-                                        <h4>Customer Details</h4>
+                                        
                                         <input type="hidden" name="" id="customer_new"  value="false">
                                         
-                                        <div class="mt-4">
+                                        <div class="col-12">
                                             <label class="form-label">Select Customer</label>
                                             <select id="searchableCust" class="form-select select2">
                                                 @foreach ($customer as $branch)
@@ -192,7 +192,11 @@
                                     <div class="col-4">
                                         <label for="item_colors" class="form-label">Colors</label>
                                         <select class="form-select" id="item_colors">
-                                            <option value="" disabled selected>Select color</option>
+                                            @foreach ($colors as $color)
+                                                <option value="{{ $color['color_id'] }}"
+                                                @if ($color['color_id'] == $order['items'][0]['item_color']) selected @endif>
+                                                {{ $color['color_name'] }}</option>
+                                            @endforeach
                                         </select>
                                     </div>
                                 </div>
@@ -565,26 +569,33 @@
 
         $('#updateOrderBtn').click(function (e) {
             e.preventDefault();
-            var orderId = $('#edit_order_id').val();  // Get the order ID to update
-            var orderDate = $('#edit_order_date').val();
-            var orderType = document.getElementById('order_type');
-            const orderTypeValue = orderType.checked ? 2 : 1;
-            var orderFrom = $('#edit_searchableSelectFrom').val();
-            var orderTo = $('#edit_searchableSelectTo').val();
-            var itemMetal = $('#item_metal').val();
-            var itemName = $('#item_name').val();
-            var itemMelting = $('#item_melting').val();
-            var itemWeight = $('#item_weight').val();
-            var itemImages = $('#item_image_id')[0].files;
-            var payment_advance = $('#payment_advance').val();
-            var payment_booking = $('#payment_booking').val();
-            var cust = $('#searchableCust').val();
+            var orderId            = $('#order_id').val();  
+            var orderDate          = $('#edit_order_date').val();
+            var orderType          = $('#order_type').val();
+            var orderFrom          = $('#edit_searchableSelectFrom').val();
+            var orderTo            = $('#edit_searchableSelectTo').val();
+            var itemMetal          = $('#item_metal').val();
+            var itemName           = $('#item_name').val();
+            var itemMelting        = $('#item_melting').val();
+            var itemWeight         = $('#item_weight').val();
+            var itemImages         = $('#item_image_id')[0].files;
+            var payment_advance    = $('#payment_advance').val();
+            var payment_booking    = $('#payment_booking').val();
+            var item_color         = $('#item_colors').val();
+            var cust               = $('#searchableCust').val();
+
+            if (orderType == "reparing"){
+                orderType = 2;
+            }else{
+                orderType = 1;
+            } 
+
             if (orderDate && orderType && orderFrom && orderTo) {
                 var formData = new FormData();
                 formData.append('_token', csrfToken);
                 formData.append('order_id', orderId);
                 formData.append('order_date', orderDate);
-                formData.append('order_type', orderTypeValue);
+                formData.append('order_type', orderType);
                 formData.append('order_from_branch_id', orderFrom);
                 formData.append('order_to_branch_id', orderTo);
                 formData.append('item_metal', itemMetal);
@@ -592,6 +603,8 @@
                 formData.append('item_melting', itemMelting);
                 formData.append('item_weight', itemWeight);
                 formData.append('order_user_id', cust);
+                formData.append('item_color',item_color);
+
 
                 var custName    = userInput;
                 var custAddress = $('#customer_address').val();
@@ -1330,68 +1343,7 @@
         function open_file_select() {
             $("#fileInput").click();
         }
-      
-        // async function record_audio(){
-        //     if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-        //         alert('Your browser does not support audio recording.');
-        //         return;
-        //     }
-
-        //     try {
-        //         // Request microphone access
-        //         const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-        //         const mediaRecorder = new MediaRecorder(stream);
-        //         const audioChunks = [];
-
-        //         // Listen for dataavailable event to collect audio chunks
-        //         mediaRecorder.ondataavailable = (event) => {
-        //             audioChunks.push(event.data);
-        //         };
-
-        //         // Start recording
-        //         mediaRecorder.start();
-        //         console.log('Recording started...');
-
-        //         // Stop recording after 5 seconds (or you can use a button to stop)
-        //         setTimeout(() => {
-        //             mediaRecorder.stop();
-        //             console.log('Recording stopped.');
-        //         }, 5000);
-
-        //         // Process the recorded audio once recording is stopped
-        //         mediaRecorder.onstop = () => {
-        //             const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
-        //             const audioUrl = URL.createObjectURL(audioBlob);
-        //             uploadAudio(audioBlob);
-        //         };
-        //     } catch (error) {
-        //         console.error('Error accessing microphone:', error);
-        //     }
-        // }
-        // function uploadAudio(audioBlob) {
-        //     const formData = new FormData();
-        //     formData.append('notes_text', '');
-        //     formData.append('notes_file', audioBlob, 'recording.wav');
-        //     formData.append('notes_type', 2);
-            
-        //     $.ajax({
-        //         url: "{{ route('notes_add') }}",
-        //         type: 'POST',
-        //         data: formData,
-        //         contentType: false,
-        //         processData: false,
-        //         headers: {
-        //             'X-CSRF-TOKEN': csrfToken
-        //         },
-        //         success: function (response) {
-        //             console.log('Audio uploaded successfully:', response);
-        //             showAlertNotes('success', 'Audio file uploaded successfully!');
-        //         },
-        //         error: function (error) {
-        //             console.error('Audio upload failed:', error);
-        //         }
-        //     });
-        // }
+   
 
     let cameraStream = null;
     let capturedImage = null;
