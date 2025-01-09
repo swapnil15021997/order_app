@@ -1352,8 +1352,7 @@
         startCamera();
         $('#click_image').modal('show');
         $('#cameraView').show();
-        $('#previewContainer').hide();
-        $('#sendImageButton').hide();   
+        $('#previewContainer').hide(); 
     }
 
     function startCamera() {

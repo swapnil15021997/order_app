@@ -1241,7 +1241,7 @@
         $('#click_image').modal('show');
         $('#cameraView').show();
         $('#previewContainer').hide();
-        $('#sendImageButton').hide();   
+        $('#sendImageButton').show();   
     }
 
     function startCamera() {
