@@ -21,78 +21,89 @@
     </div>
 </div>
 
-    <div class="page-body">
-        <div class="container-xl">
-            <div id="alert-profile"></div>
-            <div id="alert-site"></div>
-            <div class="row">
-                <div class="card">
-                    <div class="row g-0">
+<div class="page-body">
+    <div class="container-xl">
+        <div id="alert-profile"></div>
+        <div id="alert-site"></div>
+        <div class="row">
+            <div class="card">
+                <div class="row g-0">
 
                     <div class="col-12 col-md-3 border-end">
-                            <div class="card-body">
-                                <h4 class="subheader">Profile settings</h4>
-                                <div class="list-group list-group-transparent">
-                                    <a href="#myAccount" class="list-group-item list-group-item-action d-flex align-items-center active" data-bs-toggle="tab" role="tab" aria-controls="myAccount" aria-selected="true">My Account</a>
-                                    <a href="#password" class="list-group-item list-group-item-action d-flex align-items-center" data-bs-toggle="tab" role="tab" aria-controls="password" aria-selected="false">
-                                        Password
-                                    </a>
-                                    <!-- <a href="#general_settings" class="list-group-item list-group-item-action d-flex align-items-center" data-bs-toggle="tab" role="tab" aria-controls="password" aria-selected="false">
+                        <div class="card-body">
+                            <h4 class="subheader">Profile settings</h4>
+                            <div class="list-group list-group-transparent">
+                                <a href="#myAccount"
+                                    class="list-group-item list-group-item-action d-flex align-items-center active"
+                                    data-bs-toggle="tab" role="tab" aria-controls="myAccount" aria-selected="true">My
+                                    Account</a>
+                                <a href="#password"
+                                    class="list-group-item list-group-item-action d-flex align-items-center"
+                                    data-bs-toggle="tab" role="tab" aria-controls="password" aria-selected="false">
+                                    Password
+                                </a>
+                                <!-- <a href="#general_settings" class="list-group-item list-group-item-action d-flex align-items-center" data-bs-toggle="tab" role="tab" aria-controls="password" aria-selected="false">
                                         General Settings
                                     </a> -->
-                                    <a href="{{route('branch-master')}}" class="list-group-item list-group-item-action d-flex align-items-center" >
-                                        Branch
-                                    </a>
-                                    <a href="{{route('user-master')}}" class="list-group-item list-group-item-action d-flex align-items-center" >
-                                        User & Roles
-                                    </a>
-                                </div>
+                                <a href="{{route('branch-master')}}"
+                                    class="list-group-item list-group-item-action d-flex align-items-center">
+                                    Branch
+                                </a>
+                                <a href="{{route('user-master')}}"
+                                    class="list-group-item list-group-item-action d-flex align-items-center">
+                                    User & Roles
+                                </a>
                             </div>
                         </div>
                     </div>
+
                     <div class="col-12 col-md-9 d-flex flex-column">
                         <div class="tab-content">
 
-                                <div class="tab-pane fade show active" id="myAccount" role="tabpanel">
-                                    <form method="post" action="{{ route('profile.update') }}" class="">
-                                        <div class="card-body">
-                                            <h2 class="mb-4">My Profile</h2>
-                                            <h3 class="">Profile Details</h3>
+                            <div class="tab-pane fade show active" id="myAccount" role="tabpanel">
+                                <form method="post" action="{{ route('profile.update') }}" class="">
+                                    <div class="card-body">
+                                        <h2 class="mb-4">My Profile</h2>
+                                        <h3 class="">Profile Details</h3>
 
-                                            <div class="row align-items-center">
-                                                <div class="col-auto">
-                                                    <span class="avatar avatar-xl" style="background-image: url('{{ asset( 'storage/'. session('profile_path', ''))}}')">
+                                        <div class="row align-items-center">
+                                            <div class="col-auto">
+                                                <span class="avatar avatar-xl"
+                                                    style="background-image: url('{{ asset('storage/' . session('profile_path', ''))}}')">
 
-                                                    </span>
-                                                </div>
-                                                <input type="file" id="fileInput" style="display: none;" onchange="handleFileUpload(event)">
-                                                <div onclick="file_select()" class="col-auto"><a href="#" class="btn">
+                                                </span>
+                                            </div>
+                                            <input type="file" id="fileInput" style="display: none;"
+                                                onchange="handleFileUpload(event)">
+                                            <div onclick="file_select()" class="col-auto"><a href="#" class="btn">
                                                     Change avatar
-                                                    </a>
-                                                </div>
-                                                <!-- <div class="col-auto"><a href="#" class="btn btn-ghost-danger">
+                                                </a>
+                                            </div>
+                                            <!-- <div class="col-auto"><a href="#" class="btn btn-ghost-danger">
                                                     Delete avatar
                                                     </a>
                                                 </div> -->
-                                            </div>
-                                                @csrf
-                                                @method('patch')
+                                        </div>
+                                        @csrf
+                                        @method('patch')
 
-                                                <div class="row mt-4 align-items-center">
-                                                
-                                                    <div class="col-md mb-3">
-                                                        <div class="form-label">Name</div>
-                                                        <input type="text" class="form-control" name="name" value="{{$login['name']}}">
-                                                    </div>
-                                                    
-                                                    <div class="col-md mb-3">
-                                                        <div class="form-label">Phone No</div>
-                                                        <input type="text" class="form-control" name="user_phone_number" value="{{$login['user_phone_number']}}">
-                                                    </div>
-                                                    
-                                                    <!-- <div>
+                                        <div class="row mt-4 align-items-center">
+
+                                            <div class="col-md mb-3">
+                                                <div class="form-label">Name</div>
+                                                <input type="text" class="form-control" name="name"
+                                                    value="{{$login['name']}}">
+                                            </div>
+
+                                            <div class="col-md mb-3">
+                                                <div class="form-label">Phone No</div>
+                                                <input type="text" class="form-control" name="user_phone_number"
+                                                    value="{{$login['user_phone_number']}}">
+                                            </div>
+
+                                            <!-- <div>
                                                         <div class="row g-2">
-                                                        
+
                                                             <div class="col-auto">
                                                                 <button href="#" class="btn" type="submit">
                                                                     Submit
@@ -100,62 +111,48 @@
                                                             </div>
                                                         </div>
                                                     </div> -->
-                                                </div>
-                                                <h3 class="card-title mt-4">Email</h3>
-                                                <div>
-                                                    <div class="row g-2">
-                                                        <div class="col-auto">
-                                                            <input type="email" class="form-control w-auto" name="email" value="{{$login['email']}}">
-                                                        </div>
-                                                        
-                                                    </div>
-                                                </div>
-                                                    
-                                        
-
-                                            <div class="row mt-3">
-                                                <div class="col-md-3 mb-3">
-                                                    
-                                                    <h3 class="card-title mt-4">Change Active Branch</h3>
-                                                        <select class="form-select" onchange="changeBranch(this.value)">
-                                                            @foreach($user_branch as $branch)
-                                                                <option value="{{ $branch['branch_id'] }}" 
-                                                                        @if($branch['branch_id'] == $login['user_active_branch']) selected @endif>
-                                                                    {{ $branch['branch_name'] }}
-                                                                </option>
-                                                            @endforeach
-                                                        </select>
-
-                                                    </div>
-                                                </div>
                                         </div>
-                                        <div class="card-footer bg-transparent mt-auto">
-                                            <div class="btn-list justify-content-end">
-                                                <a href="#" class="btn">
-                                                    Cancel
-                                                </a>
-                                                <button  type="submit" class="btn btn-primary">
-                                                    Submit
-                                                </button>
+                                        <h3 class="card-title mt-4">Email</h3>
+                                        <div>
+                                            <div class="row g-2">
+                                                <div class="col-auto">
+                                                    <input type="email" class="form-control w-auto" name="email"
+                                                        value="{{$login['email']}}">
+                                                </div>
+
                                             </div>
                                         </div>
-                                    </form>
-                                </div>
 
-                                            </div>
-                                            <div class="card-footer">
-                                                <div class="row justify-content-end g-2">
 
-                                                    <div class="col-auto">
-                                                        <button href="#" class="btn  btn-primary" type="submit">
-                                                            Submit
-                                                        </button>
-                                                    </div>
-                                                </div>
+
+                                        <div class="row mt-3">
+                                            <div class="col-md-3 mb-3">
+
+                                                <h3 class="card-title mt-4">Change Active Branch</h3>
+                                                <select class="form-select" onchange="changeBranch(this.value)">
+                                                    @foreach($user_branch as $branch)
+                                                        <option value="{{ $branch['branch_id'] }}"
+                                                            @if($branch['branch_id'] == $login['user_active_branch']) selected
+                                                            @endif>
+                                                            {{ $branch['branch_name'] }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+
                                             </div>
                                         </div>
-                                    </form>
-                                </div>
+                                    </div>
+                                    <div class="card-footer bg-transparent mt-auto">
+                                        <div class="btn-list justify-content-end">
+                                            <a href="#" class="btn">
+                                                Cancel
+                                            </a>
+                                            <button type="submit" class="btn btn-primary">
+                                                Submit
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
                             </div>
 
                             <div class="tab-pane fade" id="password" role="tabpanel">
@@ -260,7 +257,6 @@
 
                                 </div>
                             </div>
-
                         </div>
                     </div>
                 </div>
@@ -270,46 +266,46 @@
 </div>
 
 
-    <script>
-        function file_select(){
-          
-            $("#fileInput").click();
-    
-        }
+<script>
+    function file_select() {
 
-        function handleFileUpload(event){
-            var csrfToken = $('meta[name="csrf-token"]').attr('content');
-            const file    = event.target.files;
-            const user_id = "{{$login['id']}}";
+        $("#fileInput").click();
 
-            if (file) {
-                const formData = new FormData();
-                formData.append('notes_text', '');
-                for (var i = 0; i < file.length; i++) {
-                    formData.append('user_file', file[i]);
-                }
-                formData.append('user_id', user_id);
+    }
 
-                $.ajax({
-                    url: "{{ route('user_update') }}",
-                    type: 'POST',
-                    data: formData,
-                    contentType: false,
-                    processData: false,
-                    headers: {
-                        'X-CSRF-TOKEN': csrfToken
-                    },
-                    success: function (response) {
-                        showAlert('success', response.message);
-                        location.reload();
-                    }
-                });
+    function handleFileUpload(event) {
+        var csrfToken = $('meta[name="csrf-token"]').attr('content');
+        const file = event.target.files;
+        const user_id = "{{$login['id']}}";
+
+        if (file) {
+            const formData = new FormData();
+            formData.append('notes_text', '');
+            for (var i = 0; i < file.length; i++) {
+                formData.append('user_file', file[i]);
             }
-        }
-         @if (session('status'))
-            document.addEventListener('DOMContentLoaded', function () {
-                showAlert('success', "{{ session('status') }}");
+            formData.append('user_id', user_id);
+
+            $.ajax({
+                url: "{{ route('user_update') }}",
+                type: 'POST',
+                data: formData,
+                contentType: false,
+                processData: false,
+                headers: {
+                    'X-CSRF-TOKEN': csrfToken
+                },
+                success: function (response) {
+                    showAlert('success', response.message);
+                    location.reload();
+                }
             });
+        }
+    }
+    @if (session('status'))
+        document.addEventListener('DOMContentLoaded', function () {
+            showAlert('success', "{{ session('status') }}");
+        });
 
     @endif
 

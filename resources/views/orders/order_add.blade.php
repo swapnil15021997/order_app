@@ -27,7 +27,7 @@
                         <div class="card">
                             <div class="card-body">
                                 <div class="row">
-                                    <h2 class="font-bold">{{$order_number}}</h2>
+                                    <h2 class="font-bold">#{{$order_number}}</h2>
                                     <div class="col-6">
                                         <input type="hidden" id="order_number" name="order_number"
                                             value="{{$order_number}}">
