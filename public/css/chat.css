@@ -77,7 +77,9 @@
     /* top: 6px;  */
     /* right: 6px; */
     width: 100%;
-    /* height: calc(100dvh - 12px); */
+    height: calc(100dvh - 24px);
+    position: sticky;
+    top: 12px;
     max-width: 320px;
     overflow: hidden;
     border-radius: 12px;
@@ -313,5 +315,9 @@
 }
 
 .select2-dropdown {
-    z-index: 1050  !important;
+    z-index: 1050 !important;
+}
+
+.select-full .select2-container {
+    width: 100% !important;
 }

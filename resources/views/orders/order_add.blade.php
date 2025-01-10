@@ -21,15 +21,16 @@
                             {{$qr_code}}
                             <input type="hidden" name="qr_code_number" value="{{$qr_code_number}}" id="qr_code_number">
 
-    
+
                             <!-- <img src="{{ asset('static/qr_code.png')}}" alt="Tabler" class="img-fluid" width="100px"> -->
                         </div>
                         <div class="card">
                             <div class="card-body">
                                 <div class="row">
-                                    <h2 class="font-bold" >{{$order_number}}</h2>
+                                    <h2 class="font-bold">{{$order_number}}</h2>
                                     <div class="col-6">
-                                        <input type="hidden" id="order_number" name="order_number" value="{{$order_number}}">
+                                        <input type="hidden" id="order_number" name="order_number"
+                                            value="{{$order_number}}">
 
                                         <div class="col-12">
                                             <label for="order_date" class="form-label" required>Order Date
@@ -54,18 +55,18 @@
                                         </div>
                                     </div>
                                     <div class="col-6">
-                                        <input type="hidden" name="" id="customer_new" >
+                                        <input type="hidden" name="" id="customer_new">
                                         <div class="col-12">
                                             <label class="form-label">Select Customer
                                                 <span style="color: red;">*</span>
                                             </label>
-                                           
+
                                             <select id="searchableCust" class="form-select select2">
-                                                
+
                                             </select>
                                         </div>
                                         <div class="d-none" id="cust_div">
-                                
+
                                             <div class="col-12 mt-4">
                                                 <label for="order_customer_name" class="form-label">Customer name
                                                     <span style="color: red;">*</span>
@@ -75,17 +76,17 @@
                                             </div>
                                             <div class="mt-3">
                                                 <label for="cust_phone_no" class="form-label">Phone number
-                                                <span style="color: red;">*</span>
+                                                    <span style="color: red;">*</span>
                                                 </label>
                                                 <input type="text" placeholder="Enter number" id="cust_phone_no"
                                                     class="form-control" form>
                                             </div>
                                             <div class="mt-3">
                                                 <label for="customer_address" class="form-label">Address
-                                                <span style="color: red;">*</span>
+                                                    <span style="color: red;">*</span>
                                                 </label>
-                                                <textarea type="text" placeholder="Enter Address"
-                                                    id="customer_address" class="form-control" form></textarea>
+                                                <textarea type="text" placeholder="Enter Address" id="customer_address"
+                                                    class="form-control" form></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -98,7 +99,7 @@
                                 <div class="row">
                                     <div class="col-6">
                                         <label for="searchableSelectFrom" class="form-label">From
-                                        <span style="color: red;">*</span>
+                                            <span style="color: red;">*</span>
                                         </label>
 
                                         <select id="searchableSelectFrom" class="form-select" type="text">
@@ -113,7 +114,7 @@
                                     </div>
                                     <div class="col-6">
                                         <label for="searchableSelectTo" class="form-label">To
-                                        <span style="color: red;">*</span>
+                                            <span style="color: red;">*</span>
                                         </label>
 
                                         <select id="searchableSelectTo" class="form-select w-100" type="text">
@@ -133,14 +134,14 @@
                                 <div class="row">
                                     <div class="col-6">
                                         <label for="item_name" class="form-label">Name
-                                        <span style="color: red;">*</span>
+                                            <span style="color: red;">*</span>
                                         </label>
                                         <input type="text" class="form-control" id="item_name"
                                             placeholder="Select Item" />
                                     </div>
                                     <div class="col-6">
                                         <label for="item_metal" class="form-label">Metal
-                                        <span style="color: red;">*</span>
+                                            <span style="color: red;">*</span>
                                         </label>
                                         <select class="form-select" id="item_metal">
 
@@ -157,7 +158,7 @@
                                 <div class="row mt-3">
                                     <div class="col-4">
                                         <label for="item_melting" class="form-label">Melting
-                                        <span style="color: red;">*</span>
+                                            <span style="color: red;">*</span>
                                         </label>
                                         <select class="form-select" id="item_melting">
                                             <option value="" disabled selected>Select a melting</option>
@@ -170,7 +171,7 @@
                                     </div>
                                     <div class="col-4">
                                         <label for="item_weight" class="form-label">Weight
-                                        <span style="color: red;">*</span>
+                                            <span style="color: red;">*</span>
                                         </label>
                                         <input type="number" class="form-control" id="item_weight"
                                             name="example-text-input" placeholder="Weight of item" />
@@ -178,18 +179,16 @@
                                     <div class="col-4">
                                         <label for="item_colors" class="form-label">Colors</label>
                                         <select class="form-select" id="item_colors">
-                                        @foreach ($colors as $color)
-                                            <option value="{{ $color['color_id'] }}">{{ $color['color_name'] }}</option>
-                                        @endforeach
+                                            @foreach ($colors as $color)
+                                                <option value="{{ $color['color_id'] }}">{{ $color['color_name'] }}</option>
+                                            @endforeach
                                         </select>
                                     </div>
                                 </div>
                                 <div class="row mt-3">
                                     <div class="col-12">
-                                        <input type="file" class="form-control"
-                                        id="item_image_id" multiple
-                                        onchange="previewSelectedImages()"
-                                        placeholder="Choose Images" />
+                                        <input type="file" class="form-control" id="item_image_id" multiple
+                                            onchange="previewSelectedImages()" placeholder="Choose Images" />
                                     </div>
                                 </div>
                                 <div class="row mt-3" id="uploaded-images">
@@ -217,33 +216,35 @@
                             </div>
                         </div>
                         <div class="card d-none" id="payment">
-                            <div class="card-body row "  >
+                            <div class="card-body row ">
 
-                                    <h4 class="h2">Payment Details</h4>
-                                    <div class="row">
-                                        <div class="col-6">
-                                            <label for="payment_advance" class="form-label">Advance cash deposit</label>
-                                            <input type="number" placeholder="Enter here" class="form-control"
-                                                id="payment_advance" name="example-text-input">
-                                        </div>
-                                        <div class="col-6">
-                                            <label for="payment_booking" class="form-label">Rate</label>
-                                            <input type="number" class="form-control" id="payment_booking"
-                                                placeholder="Enter here">
-                                        </div>
+                                <h4 class="h2">Payment Details</h4>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <label for="payment_advance" class="form-label">Advance cash deposit</label>
+                                        <input type="number" placeholder="Enter here" class="form-control"
+                                            id="payment_advance" name="example-text-input">
                                     </div>
-                                
+                                    <div class="col-6">
+                                        <label for="payment_booking" class="form-label">Rate</label>
+                                        <input type="number" class="form-control" id="payment_booking"
+                                            placeholder="Enter here">
+                                    </div>
+                                </div>
+
                             </div>
                         </div>
                         <div class="card">
                             <div class="card-body">
                                 <div class="d-flex justify-content-end align-items-center">
-                                    <a href="#" onclick="cancel_save()" class="btn btn-secondary me-2 d-flex justify-content-end align-items-end" >
-                                        
+                                    <a href="#" onclick="cancel_save()"
+                                        class="btn btn-secondary me-2 d-flex justify-content-end align-items-end">
+
                                         Cancel
                                     </a>
-                                    <a href="#" class="btn btn-primary  d-flex justify-content-end align-items-end" id="saveBranchBtn">
-                                        
+                                    <a href="#" class="btn btn-primary  d-flex justify-content-end align-items-end"
+                                        id="saveBranchBtn">
+
                                         Save
                                     </a>
                                 </div>
@@ -255,8 +256,8 @@
             </div>
         </div>
 
-        <input type="hidden" name="" id="order_id" value="{{$last_order_id}}" >
-         
+        <input type="hidden" name="" id="order_id" value="{{$last_order_id}}">
+
         <div class="modal modal-blur fade" id="record_audio" tabindex="-2" role="dialog" aria-hidden="true">
             <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
@@ -268,7 +269,7 @@
                     <div class="modal-body">
                         <div class="text-center">
                             <!-- Audio Control Buttons -->
-                            
+
                             <button id="recordButton" class="btn btn-success">
                                 <i class="bi bi-mic"></i>
                             </button>
@@ -282,11 +283,11 @@
                                 <i class="bi bi-stop-circle"></i>
                             </button>
                         </div>
-                    
+
 
                         <div class="mt-4 text-center d-none" id="audioPlaybackContainer">
                             <!-- Audio Player -->
-                            <audio id="audio-playback"   controls ></audio>
+                            <audio id="audio-playback" controls></audio>
                         </div>
                     </div>
 
@@ -302,7 +303,7 @@
                             Send Audio
                         </button>
                     </div>
-                
+
                 </div>
             </div>
         </div>
@@ -319,7 +320,8 @@
                     </div>
                     <div class="modal-body">
                         <div id="cameraView" style="display: none; text-align: center;">
-                            <video id="cameraStream" autoplay playsinline style="width: 100%; max-height: 400px; border: 1px solid #ddd;"></video>
+                            <video id="cameraStream" autoplay playsinline
+                                style="width: 100%; max-height: 400px; border: 1px solid #ddd;"></video>
                             <button id="captureButton" class="btn btn-primary mt-3">Capture Image</button>
                             <button id="switchCameraButton" class="btn btn-secondary mt-3">Switch Camera</button>
 
@@ -343,7 +345,7 @@
                             Send Image
                         </a>
                     </div>
-                
+
                 </div>
             </div>
         </div>
@@ -380,8 +382,7 @@
                     </a>
                 </span>
                 <span class="custom-btn">
-                    <input type="file" id="fileInput" style="display: none;" onchange="click_image(event)"
-                        multiple />
+                    <input type="file" id="fileInput" style="display: none;" onchange="click_image(event)" multiple />
                     <a href="#" onclick="click_image()" data-bs-toggle="tooltip"
                         aria-label="Please Select file to upload" data-bs-original-title="Audio File">
                         <svg width="22" height="20" viewBox="0 0 22 20" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -392,8 +393,7 @@
                     </a>
                 </span>
                 <span class="custom-btn">
-                    <input type="file" id="fileInput" style="display: none;" onchange="record_audio(event)"
-                        multiple />
+                    <input type="file" id="fileInput" style="display: none;" onchange="record_audio(event)" multiple />
                     <a href="#" onclick="record_audio()" data-bs-toggle="tooltip"
                         aria-label="Please Select file to upload" data-bs-original-title="Audio File">
                         <svg width="16" height="22" viewBox="0 0 16 22" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -408,7 +408,7 @@
                         <path fill-rule="evenodd" clip-rule="evenodd"
                             d="M4.43013 2.72003L15.3787 8.19293C15.6845 8.34573 15.8777 8.65821 15.8777 9.00004C15.8777 9.34187 15.6845 9.65435 15.3787 9.80715L4.43013 15.28C4.11287 15.4387 3.73208 15.3968 3.4569 15.173C3.18171 14.9492 3.06316 14.5849 3.15391 14.2419L4.54235 9.00004L3.15391 3.75813C3.06316 3.41521 3.18171 3.05093 3.4569 2.82709C3.73208 2.60325 4.11287 2.56136 4.43013 2.72003Z"
                             fill="white" />
-                        <path d="M8.66223 9.0001H4.54236" stroke="#0054a6" stroke-width="1.5" stroke-linecap="round"
+                        <path d="M8.66223 9.0001H4.54236" stroke="#842b25" stroke-width="1.5" stroke-linecap="round"
                             stroke-linejoin="round" />
                     </svg>
                 </button>
@@ -423,10 +423,10 @@
 <script>
 
     let notesList = [];
-    
-    function cancel_save(){
-            location.href = "{{route('order-master')}}";
-        }
+
+    function cancel_save() {
+        location.href = "{{route('order-master')}}";
+    }
     $(document).ready(function () {
         // default selected date
         // const today = new Date();
@@ -439,16 +439,16 @@
 
         $(function () {
             $("#order_date").
-            datepicker({
-                dateFormat: 'dd-mm-yy'
-            });
+                datepicker({
+                    dateFormat: 'dd-mm-yy'
+                });
 
             var today = new Date();
             var dd = String(today.getDate()).padStart(2, '0');
-            var mm = String(today.getMonth() + 1).padStart(2, '0'); 
+            var mm = String(today.getMonth() + 1).padStart(2, '0');
             var yyyy = today.getFullYear();
 
-            today = dd + '-' + mm + '-' + yyyy; 
+            today = dd + '-' + mm + '-' + yyyy;
             $("#order_date").datepicker("setDate", today);
         });
 
@@ -456,10 +456,10 @@
         $('#order_type').on('change', function () {
             console.log(this.value);
             const paymentDiv = $('#payment');
-            if (this.value == 'order') { 
-                paymentDiv.removeClass('d-none'); 
+            if (this.value == 'order') {
+                paymentDiv.removeClass('d-none');
             } else {
-                paymentDiv.addClass('d-none'); 
+                paymentDiv.addClass('d-none');
             }
         });
 
@@ -467,27 +467,27 @@
         $('#saveBranchBtn').click(function (e) {
 
             e.preventDefault();
-            var orderDate          = $('#order_date').val();
-            var orderNumber        = $('#order_number').val();
-            var orderQRCode        = $('#qr_code_number').val();
-            var orderType          = $('#order_type').val();
-            var orderFrom          = $('#searchableSelectFrom').val();
-            var orderTo            = $('#searchableSelectTo').val();
-            var cust               = $('#searchableCust').val();
-            var item_color         = $('#item_colors').val();
-            var item_metal         = $('#item_metal').val();
-            var item_name          = $('#item_name').val();
-            var item_melting       = $('#item_melting').val();
-            var item_weight        = $('#item_weight').val();
-            var payment_advance    = $('#payment_advance').val();
-            var payment_booking    = $('#payment_booking').val();
-            var itemImages         = $('#item_image_id')[0].files;
+            var orderDate = $('#order_date').val();
+            var orderNumber = $('#order_number').val();
+            var orderQRCode = $('#qr_code_number').val();
+            var orderType = $('#order_type').val();
+            var orderFrom = $('#searchableSelectFrom').val();
+            var orderTo = $('#searchableSelectTo').val();
+            var cust = $('#searchableCust').val();
+            var item_color = $('#item_colors').val();
+            var item_metal = $('#item_metal').val();
+            var item_name = $('#item_name').val();
+            var item_melting = $('#item_melting').val();
+            var item_weight = $('#item_weight').val();
+            var payment_advance = $('#payment_advance').val();
+            var payment_booking = $('#payment_booking').val();
+            var itemImages = $('#item_image_id')[0].files;
             var formattedOrderDate = formatDate(orderDate);
-            if (orderType == "reparing"){
+            if (orderType == "reparing") {
                 orderType = 2;
-            }else{
+            } else {
                 orderType = 1;
-            } 
+            }
             if (orderDate && orderType && orderFrom && orderTo) {
                 var formData = new FormData();
                 formData.append('_token', csrfToken);  // Add CSRF token
@@ -498,10 +498,10 @@
                 formData.append('order_user_id', cust);
                 formData.append('item_metal', item_metal);
                 formData.append('item_name', item_name);
-                formData.append('order_number', orderNumber);                
+                formData.append('order_number', orderNumber);
                 formData.append('qr_code_number', orderQRCode);
                 formData.append('order_notes', notesList);
-                formData.append('item_color',item_color);
+                formData.append('item_color', item_color);
 
                 if (payment_advance) {
 
@@ -519,10 +519,10 @@
                 formData.append('item_melting', item_melting);
                 formData.append('item_weight', item_weight);
 
-                var custName    = userInput;
+                var custName = userInput;
                 var custAddress = $('#customer_address').val();
-                var custPhone   = $('#cust_phone_no').val();
-                var custNew     = $('#customer_new').val();
+                var custPhone = $('#cust_phone_no').val();
+                var custNew = $('#customer_new').val();
                 formData.append('customer_name', custName);
                 formData.append('customer_address', custAddress);
                 formData.append('customer_phone_number', custPhone);
@@ -563,7 +563,7 @@
                                 location.href = "{{ route('order-master') }}";
                             }, 1000);
                         } else {
-                            
+
                             showOrderAlert('warning', response.message);
                         }
                     },
@@ -583,19 +583,19 @@
 
     });
 
-    
-        // Upload Images and show the preview
+
+    // Upload Images and show the preview
 
     function previewSelectedImages() {
         const input = document.getElementById("item_image_id");
         const uploadedImages = document.getElementById("uploaded-images");
-        // uploadedImages.innerHTML = ""; 
+        // uploadedImages.innerHTML = "";
 
         const files = Array.from(input.files);
 
         if (files.length === 0) {
-        uploadedImages.innerHTML = "<p>No files selected.</p>";
-        return;
+            uploadedImages.innerHTML = "<p>No files selected.</p>";
+            return;
         }
 
         files.forEach((file, index) => {
@@ -603,9 +603,9 @@
 
             reader.onload = function (e) {
                 const imageSrc = e.target.result;
-                const col      = document.createElement("div");
+                const col = document.createElement("div");
                 col.classList.add("col-4");
-                col.setAttribute("data-file-index", index); 
+                col.setAttribute("data-file-index", index);
                 const maxFileNameLength = 15;
                 const trimmedFileName =
                     file.name.length > maxFileNameLength
@@ -640,8 +640,8 @@
         });
     }
 
-    function removeImage(button,index) {
-        const col   = button.closest(".col-4");
+    function removeImage(button, index) {
+        const col = button.closest(".col-4");
         col.remove();
         const input = document.getElementById("item_image_id");
         const files = Array.from(input.files);
@@ -774,7 +774,7 @@
                     console.log("New customer added");
                     $('#cust_div').removeClass('d-none');
                     $('#order_customer_name').val(e.params.data.newOption);
-                  
+
                 } else {
                     $('#cust_div').addClass('d-none');
                 }
@@ -855,7 +855,7 @@
                     // }
                     $('#customer_new').val('true');
                     $('#order_customer_name').val(data.text);
-                   
+
                     return data.text;
                 }
             })
@@ -1031,53 +1031,53 @@
     // Code for Notes
 
     var csrfToken = $('meta[name="csrf-token"]').attr('content');
-        let page = 1;
-        let loadNotes;
-        let isLoading = false;
+    let page = 1;
+    let loadNotes;
+    let isLoading = false;
 
-        document.addEventListener("DOMContentLoaded", function () {
-            // Function to load notes
-            loadNotes = function (isScrollUp = false) {
-                if (isLoading) return;
+    document.addEventListener("DOMContentLoaded", function () {
+        // Function to load notes
+        loadNotes = function (isScrollUp = false) {
+            if (isLoading) return;
 
-                isLoading = true;
-                const notesBody = $('#notes_body');
-                const order_id  = $('#order_id').val();
-                console.log("Order ID: " + order_id);
-                notesBody.html('');
-                const scrollTopBeforeLoad = notesBody.scrollTop();
+            isLoading = true;
+            const notesBody = $('#notes_body');
+            const order_id = $('#order_id').val();
+            console.log("Order ID: " + order_id);
+            notesBody.html('');
+            const scrollTopBeforeLoad = notesBody.scrollTop();
 
-                $.ajax({
-                    url: "{{ route('notes_list') }}",
-                    type: 'POST',
-                    data: {
-                        search: '',
-                        per_page: 8,
-                        page: page,
-                        order_id: order_id,
-                    },
-                    headers: {
-                        'X-CSRF-TOKEN': csrfToken
-                    },
-                    success: function (response) {
-                        const notesBody = $('#notes_body');
-                        let firstNoteOffset = notesBody[0].scrollHeight;
+            $.ajax({
+                url: "{{ route('notes_list') }}",
+                type: 'POST',
+                data: {
+                    search: '',
+                    per_page: 8,
+                    page: page,
+                    order_id: order_id,
+                },
+                headers: {
+                    'X-CSRF-TOKEN': csrfToken
+                },
+                success: function (response) {
+                    const notesBody = $('#notes_body');
+                    let firstNoteOffset = notesBody[0].scrollHeight;
 
-                        // Add new notes below
-                        if (!isScrollUp) {
-                            response.data.notes.forEach(function (note) {
-                                console.log(note);
-                                if (note.notes_type == 1) {
-                                    notesBody.append(`
+                    // Add new notes below
+                    if (!isScrollUp) {
+                        response.data.notes.forEach(function (note) {
+                            console.log(note);
+                            if (note.notes_type == 1) {
+                                notesBody.append(`
                                     <div class="my-note-box">
                                         <div class="chat-bubble-title"></div>
                                         <div class="chat-bubble-body">
                                             <p>${note.notes_text}.</p>
                                         </div>
                                     </div>`);
-                                } 
-                                else if(note.notes_type == 3){
-                                    notesBody.append(`
+                            }
+                            else if (note.notes_type == 3) {
+                                notesBody.append(`
                                         <div class="my-note-box">
                                             <div class="chat-bubble-title">Audio Note</div>
                                             <div class="chat-bubble-body">
@@ -1088,137 +1088,104 @@
                                             </div>
                                         </div>
                                     `);
-                                }
-                                else {
-                                    if (note.file.file_type == 'pdf') {
-                                        notesBody.append(`
+                            }
+                            else {
+                                if (note.file.file_type == 'pdf') {
+                                    notesBody.append(`
                                         <div class="my-note-box w-75">
                                             <p class="small text-decoration-underline">${note.file.file_original_name}</p>
                                             <embed src="${note.file.file_url}" width="100%" height="auto" />
                                         </div>`);
-                                    } else {
-                                        notesBody.append(`
+                                } else {
+                                    notesBody.append(`
                                         <div class="my-note-box w-75">
                                             <p class="small text-decoration-underline">${note.file.file_original_name}</p>
                                             <img src="${note.file.file_url}" alt="" class="rounded img-fluid" />
                                         </div>`);
-                                    }
                                 }
-                            });
-                        } else {
-                            // Add older notes to the top when scrolling up
-                            let newNotes = '';
-                            response.data.notes.forEach(function (note) {
-                                if (note.notes_type == 1) {
-                                    newNotes = `
+                            }
+                        });
+                    } else {
+                        // Add older notes to the top when scrolling up
+                        let newNotes = '';
+                        response.data.notes.forEach(function (note) {
+                            if (note.notes_type == 1) {
+                                newNotes = `
                                     <div class="my-note-box">
                                         <div class="chat-bubble-title"></div>
                                         <div class="chat-bubble-body">
                                             <p>${note.notes_text}.</p>
                                         </div>
                                     </div>` + newNotes;
-                                } else {
-                                    if (note.file.file_type == 'pdf') {
-                                        newNotes = `
+                            } else {
+                                if (note.file.file_type == 'pdf') {
+                                    newNotes = `
                                         <div class="my-note-box w-75">
                                             <p class="small text-decoration-underline">${note.file.file_original_name}</p>
                                             <embed src="${note.file.file_url}" width="100%" height="auto" />
                                         </div>` + newNotes;
-                                    } else {
-                                        newNotes = `
+                                } else {
+                                    newNotes = `
                                         <div class="my-note-box w-75">
                                             <p class="small text-decoration-underline">${note.file.file_original_name}</p>
                                             <img src="${note.file.file_url}" alt="" class="rounded img-fluid" />
                                         </div>` + newNotes;
-                                    }
                                 }
-                            });
-                            notesBody.prepend(newNotes);
-                        }
-
-                        page++;
-
-                        // Scroll position handling after load
-                        if (isScrollUp) {
-                            notesBody.scrollTop(notesBody[0].scrollHeight - firstNoteOffset);
-                        } else {
-                            notesBody.scrollTop(notesBody[0].scrollHeight);
-                        }
-
-                        isLoading = false;
+                            }
+                        });
+                        notesBody.prepend(newNotes);
                     }
-                });
-            }
 
-            // Initial load (start from the bottom)
-            loadNotes();
+                    page++;
 
-            // Handle scroll event
-            function handleScroll() {
-                const notesBox = document.getElementById("notes_body");
-                if (!notesBox) return;
-
-                const { scrollTop, scrollHeight, clientHeight } = notesBox;
-
-                if (scrollTop + clientHeight >= scrollHeight - 5) {
-                    // Load more notes at the bottom
-                    loadNotes();
-                } else if (scrollTop === 0) {
-                    // Load older notes when scrolling up
-                    loadNotes(true);
-                }
-            }
-
-            // Attach scroll event
-            setTimeout(function () {
-                const notesBox = document.getElementById("notes_body");
-                if (notesBox) {
-                    notesBox.addEventListener("scroll", handleScroll);
-                }
-            }, 500);
-
-
-            $(document).ready(function () {
-                // Handle file upload
-
-                // Handle new text note submission
-                $("#TextNotes").on("keydown", function (event) {
-                    if (event.key === "Enter") {
-                        event.preventDefault();
-                        const text = event.target.value.trim();
-                        const order_id = $('#order_id').val();
-                        if (text) {
-                            $.ajax({
-                                url: "{{ route('notes_add') }}",
-                                type: 'POST',
-                                data: {
-                                    'notes_text': text,
-                                    'notes_file': null,
-                                    'notes_order_id':order_id,
-                                    'notes_type'    : 1
-
-                                },
-                                headers: {
-                                    'X-CSRF-TOKEN': csrfToken
-                                },
-                                success: function (response) {
-                                    showAlertNotes('success', response.message);
-                                    notesList.push(response.data);
-                                    $('#TextNotes').val('');
-                                    isLoading = false;
-                                    page = 1;
-                                    loadNotes();
-                                }
-                            });
-                        } else {
-                            alert("Please enter some text.");
-                            showAlertNotes('warning', 'Please enter some text');
-                        }
+                    // Scroll position handling after load
+                    if (isScrollUp) {
+                        notesBody.scrollTop(notesBody[0].scrollHeight - firstNoteOffset);
+                    } else {
+                        notesBody.scrollTop(notesBody[0].scrollHeight);
                     }
-                });
 
-                $("#SendNotes").on("click", function () {
-                    const text = $("#TextNotes").val().trim();
+                    isLoading = false;
+                }
+            });
+        }
+
+        // Initial load (start from the bottom)
+        loadNotes();
+
+        // Handle scroll event
+        function handleScroll() {
+            const notesBox = document.getElementById("notes_body");
+            if (!notesBox) return;
+
+            const { scrollTop, scrollHeight, clientHeight } = notesBox;
+
+            if (scrollTop + clientHeight >= scrollHeight - 5) {
+                // Load more notes at the bottom
+                loadNotes();
+            } else if (scrollTop === 0) {
+                // Load older notes when scrolling up
+                loadNotes(true);
+            }
+        }
+
+        // Attach scroll event
+        setTimeout(function () {
+            const notesBox = document.getElementById("notes_body");
+            if (notesBox) {
+                notesBox.addEventListener("scroll", handleScroll);
+            }
+        }, 500);
+
+
+        $(document).ready(function () {
+            // Handle file upload
+
+            // Handle new text note submission
+            $("#TextNotes").on("keydown", function (event) {
+                if (event.key === "Enter") {
+                    event.preventDefault();
+                    const text = event.target.value.trim();
                     const order_id = $('#order_id').val();
                     if (text) {
                         $.ajax({
@@ -1227,8 +1194,9 @@
                             data: {
                                 'notes_text': text,
                                 'notes_file': null,
-                                'notes_order_id':order_id,
-                                'notes_type'    : 1
+                                'notes_order_id': order_id,
+                                'notes_type': 1
+
                             },
                             headers: {
                                 'X-CSRF-TOKEN': csrfToken
@@ -1246,25 +1214,57 @@
                         alert("Please enter some text.");
                         showAlertNotes('warning', 'Please enter some text');
                     }
-                
-                });  
+                }
+            });
+
+            $("#SendNotes").on("click", function () {
+                const text = $("#TextNotes").val().trim();
+                const order_id = $('#order_id').val();
+                if (text) {
+                    $.ajax({
+                        url: "{{ route('notes_add') }}",
+                        type: 'POST',
+                        data: {
+                            'notes_text': text,
+                            'notes_file': null,
+                            'notes_order_id': order_id,
+                            'notes_type': 1
+                        },
+                        headers: {
+                            'X-CSRF-TOKEN': csrfToken
+                        },
+                        success: function (response) {
+                            showAlertNotes('success', response.message);
+                            notesList.push(response.data);
+                            $('#TextNotes').val('');
+                            isLoading = false;
+                            page = 1;
+                            loadNotes();
+                        }
+                    });
+                } else {
+                    alert("Please enter some text.");
+                    showAlertNotes('warning', 'Please enter some text');
+                }
+
             });
         });
+    });
 
-        function open_file_select() {
-            $("#fileInput").click();
-        }
-   
+    function open_file_select() {
+        $("#fileInput").click();
+    }
+
 
     let cameraStream = null;
     let capturedImage = null;
     let useFrontCamera = true;
-    function click_image(){
+    function click_image() {
         startCamera();
         $('#click_image').modal('show');
         $('#cameraView').show();
         $('#previewContainer').hide();
-        $('#sendImageButton').show();   
+        $('#sendImageButton').show();
     }
 
     function startCamera() {
@@ -1357,7 +1357,7 @@
         formData.append('notes_file[]', imageFile);
         formData.append('notes_type', 4);
         formData.append('notes_order_id', orderId);
-        
+
         $.ajax({
             url: "{{ route('notes_add') }}",
             type: 'POST',
@@ -1384,12 +1384,12 @@
     // Stop the camera when the modal is closed
     $('[data-bs-dismiss="modal"]').on('click', stopCamera);
 
-    function record_audio(){
-        $('#record_audio').modal('show');            
+    function record_audio() {
+        $('#record_audio').modal('show');
         $("#audio-playback").addClass("hidden")
 
     }
-       
+
     let recorder, audio_stream, audioBlob;
     // const recordButton = document.getElementById("recordButton");
     // recordButton.addEventListener("click", startRecording);
@@ -1407,7 +1407,7 @@
 
     const cancelButton = $('#cancelButton');
     $('#cancelButton').on('click', cancelRecording);
-    
+
     // set preview
     // const preview = document.getElementById("audio-playback");
     const preview = $('#audio-playback');
@@ -1420,18 +1420,18 @@
 
 
     // const audioPlaybackContainer = document.getElementById("audioPlaybackContainer");
-    const audioPlaybackContainer =$('#audioPlaybackContainer');
+    const audioPlaybackContainer = $('#audioPlaybackContainer');
 
     const resetButton = $('#resetButton');
     $('#resetButton').on('click', resetRecording);
-    
-    
+
+
     function startRecording() {
-         
+
         // button settings
 
         $("#recordButton").prop("disabled", true);
-        $("#recordButton").text("Recording..."); 
+        $("#recordButton").text("Recording...");
         $("#recordButton").addClass("button-animate");
 
         $("#stopButton").removeClass("inactive");
@@ -1440,7 +1440,7 @@
         $("#audio-playback").addClass("hidden")
 
         $('#sendButton').prop("disabled", true);
-     
+
         navigator.mediaDevices.getUserMedia({ audio: true })
             .then(function (stream) {
                 audio_stream = stream;
@@ -1468,7 +1468,7 @@
                     // Unhide the audio playback element
                     $("#audioPlaybackContainer").removeClass("d-none");
 
-                    preview.load(); 
+                    preview.load();
                     console.log("Audio recording ready for playback.");
                     sendButton.audioBlob = audioBlob;
                 };
@@ -1521,14 +1521,14 @@
         $("#audio-playback").addClass("hidden");
 
         recordButton.prop("disabled", false);
-        
-        $("#recordButton").text(""); 
+
+        $("#recordButton").text("");
         $("#recordButton").html('<i class="bi bi-mic"></i>');
         recordButton.removeClass("button-animate");
 
         stopButton.addClass("inactive");
         stopButton.prop("disabled", true);
-        
+
         sendButton[0].audioBlob = null;
     }
     function resetRecording() {
@@ -1549,14 +1549,14 @@
         $("#audio-playback").addClass("hidden");
 
         recordButton.prop("disabled", false);
-        
-        $("#recordButton").text(""); 
+
+        $("#recordButton").text("");
         $("#recordButton").html('<i class="bi bi-mic"></i>');
         recordButton.removeClass("button-animate");
 
         stopButton.addClass("inactive");
         stopButton.prop("disabled", true);
-        
+
         sendButton[0].audioBlob = null;
     }
 
@@ -1566,22 +1566,56 @@
     //     downloadAudio.download = res + '.wav';
     // }
 
-        function uploadRecording() {
-            console.log("Audio Blob:", audioBlob);
-            console.log("Send Button Blob:", sendButton.audioBlob);
-            console.log(audioBlob.type);
-            if (!sendButton.audioBlob) {
-                alert("No audio file available for upload!");
-                return;
-            }
-            const orderId = $('#order_id').val();
-            const audioFile = new File([audioBlob], 'recording.wav', { type: 'audio/wav' });
+    function uploadRecording() {
+        console.log("Audio Blob:", audioBlob);
+        console.log("Send Button Blob:", sendButton.audioBlob);
+        console.log(audioBlob.type);
+        if (!sendButton.audioBlob) {
+            alert("No audio file available for upload!");
+            return;
+        }
+        const orderId = $('#order_id').val();
+        const audioFile = new File([audioBlob], 'recording.wav', { type: 'audio/wav' });
 
+        const formData = new FormData();
+        formData.append('notes_text', '');
+        formData.append('notes_file[]', audioFile);
+        formData.append('notes_type', 3);
+        formData.append('notes_order_id', orderId);
+        $.ajax({
+            url: "{{ route('notes_add') }}",
+            type: 'POST',
+            data: formData,
+            contentType: false,
+            processData: false,
+            headers: {
+                'X-CSRF-TOKEN': csrfToken
+            },
+            success: function (response) {
+                console.log('Audio uploaded successfully:', response);
+                notesList.push(response.data);
+                showAlertNotes('success', 'Audio file uploaded successfully!');
+                $('#record_audio').modal('hide');
+                isLoading = false;
+                loadNotes();
+            },
+            error: function (error) {
+                console.error('Audio upload failed:', error);
+            }
+        });
+    }
+
+
+    function handleFileUpload(event) {
+        const file = event.target.files;
+        if (file) {
             const formData = new FormData();
             formData.append('notes_text', '');
-            formData.append('notes_file[]', audioFile);
-            formData.append('notes_type', 3);
-            formData.append('notes_order_id', orderId);
+            for (var i = 0; i < file.length; i++) {
+                formData.append('notes_file[]', file[i]);
+                formData.append('notes_type', 3);
+
+            }
             $.ajax({
                 url: "{{ route('notes_add') }}",
                 type: 'POST',
@@ -1592,57 +1626,23 @@
                     'X-CSRF-TOKEN': csrfToken
                 },
                 success: function (response) {
-                    console.log('Audio uploaded successfully:', response);
-                    notesList.push(response.data);
-                    showAlertNotes('success', 'Audio file uploaded successfully!');
-                    $('#record_audio').modal('hide'); 
+                    showAlertNotes('success', response.message);
                     isLoading = false;
                     loadNotes();
-                },
-                error: function (error) {
-                    console.error('Audio upload failed:', error);
+                    notesList.push(response.data);
                 }
             });
+        } else {
+            console.log("No file selected");
         }
-
-
-        function handleFileUpload(event) {
-            const file = event.target.files;
-            if (file) {
-                const formData = new FormData();
-                formData.append('notes_text', '');
-                for (var i = 0; i < file.length; i++) {
-                    formData.append('notes_file[]', file[i]);
-                    formData.append('notes_type', 3);
-
-                }
-                $.ajax({
-                    url: "{{ route('notes_add') }}",
-                    type: 'POST',
-                    data: formData,
-                    contentType: false,
-                    processData: false,
-                    headers: {
-                        'X-CSRF-TOKEN': csrfToken
-                    },
-                    success: function (response) {
-                        showAlertNotes('success', response.message);
-                        isLoading = false;
-                        loadNotes();
-                        notesList.push(response.data);
-                    }
-                });
-            } else {
-                console.log("No file selected");
-            }
-        }
+    }
 
 
 
 
-        function showAlertNotes(type, message) {
-            const alertContainer = document.getElementById('notes-container');
-            const alertHTML = `
+    function showAlertNotes(type, message) {
+        const alertContainer = document.getElementById('notes-container');
+        const alertHTML = `
                 <div class="alert alert-${type} position-fixed  bg-white alert-dismissible" role="alert" style="top:1rem; right:1rem;width:350px;">
                     <div class="d-flex ">
                         <div>
@@ -1663,9 +1663,9 @@
                     <a class="btn-close" data-bs-dismiss="alert" aria-label="close"></a>
                 </div>
             `;
-            alertContainer.innerHTML = alertHTML;
-            console.log("here");
-        }
+        alertContainer.innerHTML = alertHTML;
+        console.log("here");
+    }
 
 </script>
 @endsection

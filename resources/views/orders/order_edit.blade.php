@@ -24,9 +24,9 @@
                             <div class="btn-list">
                                 @if ($lastTransaction && $lastTransaction['trans_status'] === 0)
                                     <!-- If both conditions are satisfied, show the "Approve" button -->
-                                     
+
                                     <button class="btn"  onclick="approve_order({{ $order['order_qr_code'] }})">
-                                        Approve Order 
+                                        Approve Order
                                     </button>
                                 @else
                                     <button class="btn "  onclick="transfer_order({{$order['order_id']}})">
@@ -37,7 +37,7 @@
 
                             </div>
                             {{$qr_code}}
-                            
+
                             <!-- <img src="{{ asset('static/qr_code.png')}}" alt="Tabler" class="img-fluid" width="100px"> -->
                         </div>
                         <input type="hidden" name="" id="order_id" value="{{$order['order_id']}}" >
@@ -50,7 +50,7 @@
                                             <label for="order_date" class="form-label">Order Date
                                             <span style="color: red;">*</span>
                                             </label>
-                                            <input type="text" id="edit_order_date" 
+                                            <input type="text" id="edit_order_date"
                                                 class="form-control" >
                                         </div>
                                         <div class="col-12 mt-3">
@@ -63,14 +63,14 @@
                                                 <option value="reparing" {{ $order['order_type'] == 2 ? 'selected' : '' }}>Reparing</option>
 
                                             </select>
-                                           
-                                            
+
+
                                         </div>
                                     </div>
                                     <div class="col-6">
-                                        
+
                                         <input type="hidden" name="" id="customer_new"  value="false">
-                                        
+
                                         <div class="col-12">
                                             <label class="form-label">Select Customer</label>
                                             <select id="searchableCust" class="form-select select2">
@@ -81,7 +81,7 @@
                                             </select>
                                         </div>
                                         <div class="d-none" id="cust_div">
-                    
+
                                             <div class="mt-4">
                                                 <label for="order_customer_name" class="form-label">Customer name
                                                 <span style="color: red;">*</span>
@@ -235,7 +235,7 @@
                                                 </button>
                                             </div>
                                         </div>
-                                        @endforeach 
+                                        @endforeach
                                     @endif
                                     @endforeach
                                 </div>
@@ -265,11 +265,11 @@
                             <div class="card-body">
                                 <div class="d-flex justify-content-end align-items-end">
                                 <a href="#" onclick="cancel_update()" class="btn btn-secondary me-2 d-flex justify-content-end align-items-end" >
-                                    
+
                                     Cancel
                                 </a>
                                     <a href="#" class="btn btn-primary d-flex justify-content-end align-items-end" id="updateOrderBtn">
-                                    
+
                                         Save
                                     </a>
                                 </div>
@@ -291,11 +291,14 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
+
                         <label class="form-label">Order To</label>
-                        <select id="TransfersearchableSelectTo" class="form-select w-100" type="text">
-
-
-                        </select>
+                        <div class="row">
+                            <div class="col-6 select-full">
+                                <select id="TransfersearchableSelectTo" class="form-select  w-100 " type="text">
+                                    </select>
+                                </div>
+                            </div>
                     </div>
 
 
@@ -307,7 +310,7 @@
                             Transfer This Order
                         </a>
                     </div>
-                
+
                 </div>
             </div>
         </div>
@@ -323,7 +326,7 @@
                     <div class="modal-body">
                         <div class="text-center">
                             <!-- Audio Control Buttons -->
-                            
+
                             <button id="recordButton" class="btn btn-success">
                                 <i class="bi bi-mic"></i>
                             </button>
@@ -337,7 +340,7 @@
                                 <i class="bi bi-stop-circle"></i>
                             </button>
                         </div>
-                       
+
 
                         <div class="mt-4 text-center d-none" id="audioPlaybackContainer">
                             <!-- Audio Player -->
@@ -357,7 +360,7 @@
                             Send Audio
                         </button>
                     </div>
-                
+
                 </div>
             </div>
         </div>
@@ -397,7 +400,7 @@
                             Send Image
                         </a>
                     </div>
-                
+
                 </div>
             </div>
         </div>
@@ -462,13 +465,13 @@
                         <path fill-rule="evenodd" clip-rule="evenodd"
                             d="M4.43013 2.72003L15.3787 8.19293C15.6845 8.34573 15.8777 8.65821 15.8777 9.00004C15.8777 9.34187 15.6845 9.65435 15.3787 9.80715L4.43013 15.28C4.11287 15.4387 3.73208 15.3968 3.4569 15.173C3.18171 14.9492 3.06316 14.5849 3.15391 14.2419L4.54235 9.00004L3.15391 3.75813C3.06316 3.41521 3.18171 3.05093 3.4569 2.82709C3.73208 2.60325 4.11287 2.56136 4.43013 2.72003Z"
                             fill="white" />
-                        <path d="M8.66223 9.0001H4.54236" stroke="#0054a6" stroke-width="1.5" stroke-linecap="round"
+                        <path d="M8.66223 9.0001H4.54236" stroke="#842b25" stroke-width="1.5" stroke-linecap="round"
                             stroke-linejoin="round" />
                     </svg>
                 </button>
             </div>
         </div>
-       
+
     </div>
 </div>
 
@@ -495,7 +498,7 @@
     function previewSelectedImages() {
         const input          = document.getElementById("item_image_id");
         const uploadedImages = document.getElementById("uploaded-images");
-        // uploadedImages.innerHTML = ""; 
+        // uploadedImages.innerHTML = "";
 
         const files = Array.from(input.files);
 
@@ -511,7 +514,7 @@
                 const imageSrc = e.target.result;
                 const col      = document.createElement("div");
                 col.classList.add("col-4");
-                col.setAttribute("data-file-index", index); 
+                col.setAttribute("data-file-index", index);
                 const maxFileNameLength = 15;
                 const trimmedFileName =
                     file.name.length > maxFileNameLength
@@ -562,24 +565,24 @@
 
         const paymentDiv = $('#payment');
         $('#order_type').on('change', function () {
-            if (this.value == 'order') { 
-                paymentDiv.removeClass('d-none'); 
+            if (this.value == 'order') {
+                paymentDiv.removeClass('d-none');
             } else {
-                paymentDiv.addClass('d-none'); 
+                paymentDiv.addClass('d-none');
             }
         });
 
         var order_type = {{$order['order_type']}};
-        
+
         if (order_type == 1) {
             paymentDiv.removeClass('d-none');
         }else{
-            paymentDiv.addClass('d-none'); 
+            paymentDiv.addClass('d-none');
         }
 
         $('#updateOrderBtn').click(function (e) {
             e.preventDefault();
-            var orderId            = $('#order_id').val();  
+            var orderId            = $('#order_id').val();
             var orderDate          = $('#edit_order_date').val();
             var orderType          = $('#order_type').val();
             var orderFrom          = $('#edit_searchableSelectFrom').val();
@@ -598,7 +601,7 @@
                 orderType = 2;
             }else{
                 orderType = 1;
-            } 
+            }
 
             if (orderDate && orderType && orderFrom && orderTo) {
                 var formData = new FormData();
@@ -718,7 +721,7 @@
 
     $(document).ready(function () {
         $('#customer_new').val('');
-                
+
         $('#searchableCust').on('select2:open', function () {
             $('.select2-search__field').on('input', function () {
                 userInput = $(this).val();
@@ -797,7 +800,7 @@
             },
             templateSelection: function (data) {
                 // Display the selected item properly
-                   
+
                 $('#order_customer_name').val(data.text);
                 $('#customer_new').val(data.text);
 
@@ -812,21 +815,21 @@
             // Check if the selected option is a new customer
             if (e.params.data.newOption) {
                 console.log("New customer selected",e.params.data.newOption);
-                $('#cust_div').removeClass('d-none'); 
+                $('#cust_div').removeClass('d-none');
                 // $('#order_customer_name').val(e.params.data.newOption);
                 // $('#customer_new').val(e.params.data.newOption);
 
             } else {
                 console.log("Existing customer selected");
                 $('#customer_new').val('false');
-                
-                $('#cust_div').addClass('d-none'); 
+
+                $('#cust_div').addClass('d-none');
             }
         });
 
 
-      
-        
+
+
 
         $('#saveCustBtn').click(function (e) {
             e.preventDefault();
@@ -886,7 +889,7 @@
 
     $(document).ready(function () {
 
-        
+
         var csrfToken = $('meta[name="csrf-token"]').attr('content');
 
         $('#TransfersearchableSelectTo').select2({
@@ -930,7 +933,7 @@
 
 
     function transfer_order(order_id) {
-        
+
         $('#transfer_order_id').val(order_id);
         $('#transfer_order').modal('show');
     }
@@ -962,7 +965,7 @@
                             location.reload();
                         }, 2000);
                     } else {
-                        
+
                         showAlert('success', response.message);
                         $('#TransfersearchableSelectTo').val('');
 
@@ -971,7 +974,7 @@
                 },
                 error: function (xhr, status, error) {
                     showAlert('success', error);
-                        
+
                     $('#TransfersearchableSelectTo').val('');
 
                 }
@@ -981,7 +984,7 @@
         }
     });
 
-        
+
 
 
     function approve_order(transaction_id) {
@@ -1012,7 +1015,7 @@
     }
 
 
-    
+
     $(document).ready(function () {
         $('#searchableSelectTo').on('select2:open', function () {
             $('.select2-search__field').on('input', function () {
@@ -1104,7 +1107,7 @@
                         //     location.reload();
                         // }, 2000);
                     } else {
-                        
+
                         showAlert('success', response.message);
                         $('#TransfersearchableSelectTo').val('');
 
@@ -1113,7 +1116,7 @@
                 },
                 error: function (xhr, status, error) {
                     showAlert('success', error);
-                        
+
                     $('#TransfersearchableSelectTo').val('');
 
                 }
@@ -1167,7 +1170,7 @@
                                         <p>${note.notes_text}.</p>
                                     </div>
                                 </div>`);
-                            } 
+                            }
                             else if(note.notes_type == 3){
                                 notesBody.append(`
                                     <div class="my-note-box">
@@ -1336,15 +1339,15 @@
                     alert("Please enter some text.");
                     showAlertNotes('warning', 'Please enter some text');
                 }
-            
-            });  
+
+            });
         });
     });
 
     function open_file_select() {
         $("#fileInput").click();
     }
-   
+
 
     let cameraStream = null;
     let capturedImage = null;
@@ -1353,7 +1356,7 @@
         startCamera();
         $('#click_image').modal('show');
         $('#cameraView').show();
-        $('#previewContainer').hide(); 
+        $('#previewContainer').hide();
     }
 
     function startCamera() {
@@ -1446,7 +1449,7 @@
         formData.append('notes_file[]', imageFile);
         formData.append('notes_type', 4);
         formData.append('notes_order_id', orderId);
-        
+
         $.ajax({
             url: "{{ route('notes_add') }}",
             type: 'POST',
@@ -1473,11 +1476,11 @@
     $('[data-bs-dismiss="modal"]').on('click', stopCamera);
 
     function record_audio(){
-        $('#record_audio').modal('show');            
+        $('#record_audio').modal('show');
         $("#audio-playback").addClass("hidden")
 
     }
-       
+
     let recorder, audio_stream, audioBlob;
 
     const recordButton = $('#recordButton');
@@ -1495,27 +1498,27 @@
 
     const resetButton = $('#resetButton');
     $('#resetButton').on('click', resetRecording);
-    
+
     const cancelButton = $('#cancelButton');
     $('#cancelButton').on('click', cancelRecording);
-    
-    
+
+
     function startRecording() {
-         
+
         // button settings
 
         $("#recordButton").prop("disabled", true);
-        $("#recordButton").text("Recording..."); 
+        $("#recordButton").text("Recording...");
         $("#recordButton").addClass("button-animate");
 
         $("#stopButton").removeClass("inactive");
         $("#stopButton").prop("disabled", false);
 
         $('#sendButton').prop("disabled", true);
-        
+
 
         $("#audio-playback").addClass("hidden")
-     
+
         navigator.mediaDevices.getUserMedia({ audio: true })
             .then(function (stream) {
                 audio_stream = stream;
@@ -1524,7 +1527,7 @@
                 // when there is data, compile into object for preview src
                 recorder.ondataavailable = function (e) {
                     audioChunks.push(e.data);
-                
+
                 };
 
                 recorder.onstop = function () {
@@ -1539,7 +1542,7 @@
                     // Unhide the audio playback element
                     $("#audioPlaybackContainer").removeClass("d-none");
 
-                    preview.load(); 
+                    preview.load();
                     console.log("Audio recording ready for playback.");
                     sendButton.audioBlob = audioBlob;
                 };
@@ -1593,14 +1596,14 @@
         $("#audio-playback").addClass("hidden");
 
         recordButton.prop("disabled", false);
-        
-        $("#recordButton").text(""); 
+
+        $("#recordButton").text("");
         $("#recordButton").html('<i class="bi bi-mic"></i>');
         recordButton.removeClass("button-animate");
 
         stopButton.addClass("inactive");
         stopButton.prop("disabled", true);
-        
+
         sendButton[0].audioBlob = null;
     }
 
@@ -1621,14 +1624,14 @@
         $("#audio-playback").addClass("hidden");
 
         recordButton.prop("disabled", false);
-        
-        $("#recordButton").text(""); 
+
+        $("#recordButton").text("");
         $("#recordButton").html('<i class="bi bi-mic"></i>');
         recordButton.removeClass("button-animate");
 
         stopButton.addClass("inactive");
         stopButton.prop("disabled", true);
-        
+
         sendButton[0].audioBlob = null;
     }
 
@@ -1671,7 +1674,7 @@
                 }else{
                     showAlertNotes('warning', response.message);
                 }
-                $('#record_audio').modal('hide'); 
+                $('#record_audio').modal('hide');
                 isLoading = false;
                 loadNotes();
             },

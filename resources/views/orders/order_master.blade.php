@@ -21,12 +21,12 @@
                 <div class="btn-list">
                     @if(in_array(7, $user_permissions))
 
-                    <a href="{{route('order-add-page')}}" class="btn btn-primary d-none d-sm-inline-block">
-                       
-                        Create new Order
-                    </a>
+                        <a href="{{route('order-add-page')}}" class="btn btn-primary d-none d-sm-inline-block">
+
+                            Create new Order
+                        </a>
                     @endif
-                    <a href="{{route('order-add-page')}}" class="btn btn-primary d-sm-none btn-icon" 
+                    <a href="{{route('order-add-page')}}" class="btn btn-primary d-sm-none btn-icon"
                         aria-label="Create new report">
                         <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
                         <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24"
@@ -47,22 +47,22 @@
             <div class="container">
                 <div id="alert-site"></div>
                 @if(session('success'))
-                <div class="alert alert-success" role="alert">
-                    <strong>Success!</strong> {{ session('success') }}
-                </div>
+                    <div class="alert alert-success" role="alert">
+                        <strong>Success!</strong> {{ session('success') }}
+                    </div>
                 @endif
                 @if(session('error'))
-                <div class="alert alert-success" role="alert">
-                    <strong>Success!</strong> {{ session('success') }}
-                </div>
+                    <div class="alert alert-success" role="alert">
+                        <strong>Success!</strong> {{ session('success') }}
+                    </div>
                 @endif
-                
+
             </div>
 
             <div class="row row-deck row-cards custom-table-resposive">
-            
+
                 <div class="alert-site">
-                    
+
                 </div>
                 <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
                     <table id="branch_table" class="table card-table table-vcenter text-nowrap datatable">
@@ -102,11 +102,13 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <label class="form-label">Order To</label>
-                    <select id="searchableSelectTo" class="form-select select2">
-
-
-                    </select>
+                    <label for="searchableSelectTo" class="form-label">Order To</label>
+                    <div class="row">
+                        <div class="col-6 select-full">
+                            <select id="searchableSelectTo" class="form-select select2">
+                            </select>
+                        </div>
+                    </div>
                 </div>
 
 
@@ -285,7 +287,7 @@
                             }
                         },
                         error: function (xhr, status, error) {
- 
+
                             showAlertOrder('warning', response.message);
 
                         }
