@@ -215,7 +215,7 @@
                                     @if(!empty($file['files']))
 
                                     @foreach($file['files'] as $file)
-                                        <div class="col-4" id="file-{{ $file->file_id }}">
+                                        <div class="col-sm-4" id="file-{{ $file->file_id }}">
                                             <div class="selected-files">
                                                 <div class="d-flex align-items-center gap-2">
                                                     <img src="{{ asset($file->file_url) }}"

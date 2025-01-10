@@ -172,15 +172,6 @@
         margin-right: 0 !important;
     }
 
-    .my-note-box {
-        --tblr-bg-opacity: 1;
-        background-color: rgba(
-            var(--tblr-secondary-rgb),
-            var(--tblr-bg-opacity)
-        ) !important;
-        color: white;
-    }
-
     .layout-wrapper {
         padding-right: 0;
         padding: 0;
