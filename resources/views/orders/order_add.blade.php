@@ -432,6 +432,13 @@
 
 <script>
 
+    $(document).ready(function () {
+        lightbox.option({
+            'resizeDuration': 200,
+            'wrapAround': true
+        });
+    });
+
     let notesList = [];
 
     function cancel_save() {
@@ -1136,10 +1143,10 @@
                                         </div>` + newNotes;
                                 } else {
                                     newNotes = `
-                                        <div class="my-note-box w-75">
+                                        <a href="${note.file.file_url}" data-title="${note.file.file_original_name}" data-lightbox="gallery" class="my-note-box w-75">
                                             <p class="small text-decoration-underline">${note.file.file_original_name}</p>
                                             <img src="${note.file.file_url}" alt="" class="rounded img-fluid" />
-                                        </div>` + newNotes;
+                                        </a>` + newNotes;
                                 }
                             }
                         });
