@@ -204,13 +204,38 @@
                                 </div>
                                 <div class="row mt-3">
                                     <div class="col-12">
-                                        <input type="file" class="form-control" id="item_image_id"
+                                        <!-- <input type="file" class="form-control" id="item_image_id"
                                         onchange="previewSelectedImages()"
                                         multiple
-                                        placeholder="Choose Images" />
+                                        placeholder="Choose Images" /> -->
+
+                                        <form class="dropzone" id="dropzone-multiple"  autocomplete="off" novalidate>
+                                            <div class="fallback">
+                                            
+                                                <input name="file" class="d-none" type="file" id="item_image_id"  multiple  />
+                                                @foreach($order['items'] as $file)
+                                                    @if(!empty($file['files']))
+                                                        @foreach($file['files'] as $file)
+                                                        <div class="dz-preview dz-processing dz-error dz-complete dz-image-preview">
+                                                            <div class="dz-image">
+                                                                <img data-dz-thumbnail src="{{ asset($file->file_url) }}" alt="${fileName}" />
+                                                                <button type="button" class="btn btn-danger btn-sm position-absolute top-0 end-0 m-1" onclick="removeFile({{ $file->file_id }}, {{$order['order_id']}})"><i class="bi bi-x"></i></button>
+                                                            </div>
+                                                        </div>
+                                                        @endforeach
+                                                    @else
+                                                    <div class="dz-default dz-message">
+                                                        <p class="dz-button">Drop files here to upload</p>
+                                                    </div>
+                                                    @endif
+                                                @endforeach
+
+                            
+                                            </div>
+                                        </form> 
                                     </div>
                                 </div>
-                                <div class="row mt-3" id="uploaded-images">
+                                <!-- <div class="row mt-3" id="uploaded-images">
                                     @foreach($order['items'] as $file)
                                     @if(!empty($file['files']))
 
@@ -238,7 +263,7 @@
                                         @endforeach
                                     @endif
                                     @endforeach
-                                </div>
+                                </div> -->
                             </div>
                         </div>
                         <div class="card" id="payment">
@@ -321,7 +346,7 @@
 
                     <div class="modal-header">
                         <h5 class="modal-title">Record Audio</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button type="button" id="cancelButton" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         <div class="text-center">
@@ -353,9 +378,9 @@
                         <a id="resetButton" href="#" type="button" class="btn btn-primary">
                             Reset Audio
                         </a>
-                        <a href="#" id="cancelButton" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <!-- <a href="#" id="cancelButton" class="btn btn-secondary" data-bs-dismiss="modal">
                             Cancel
-                        </a>
+                        </a> -->
                         <button id="sendButton" href="#" type="button" class="btn btn-primary">
                             Send Audio
                         </button>
@@ -488,9 +513,97 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
 
 
+<!-- Drop zone code -->
+<script>
+  // @formatter:off
+  document.addEventListener("DOMContentLoaded", function() {
+
+    const dropzone  = $("#dropzone-multiple");
+    const inputFile = $("#item_image_id");
+    
+    dropzone[0].addEventListener("dragover", function (e) {
+        e.preventDefault();
+        dropzone[0].classList.add("dragover");
+    });
+
+    dropzone[0].addEventListener("dragleave", function () {
+        dropzone[0].classList.remove("dragover");
+    });
+
+    dropzone[0].addEventListener("drop", function (e) {
+        e.preventDefault();
+        dropzone[0].classList.remove("dragover");
+        handleFiles(e.dataTransfer.files);
+        addFilesToInput(e.dataTransfer.files);
+    });
+
+    inputFile[0].addEventListener("change", function () {
+        handleFiles(inputFile[0].files);
+    });
+
+    function handleFiles(files) {
+        $('.dz-default').hide();
+        const fileArray = Array.from(files);
+
+        fileArray.forEach((file,index) => {
+            const reader = new FileReader();
+
+            reader.onload = function (e) {
+                const imageSrc = e.target.result;
+                const col = document.createElement("div");
+                col.classList.add("dz-preview", "dz-processing", "dz-error", "dz-complete", "dz-image-preview");
+                const fileName = file.name.length > 15 ? file.name.slice(0, 15) + "..." : file.name;
+
+                const selectedFile = `
+
+                        <div class="dz-image">
+                            <img data-dz-thumbnail src="${imageSrc}" alt="${fileName}" />
+                            <button type="button" class="btn btn-danger btn-sm position-absolute top-0 end-0 m-1" onclick="removeImage(this,${index})"><i class="bi bi-x"></i></button>
+                        </div>
+
+                        `;
+
+                col.innerHTML = selectedFile ;
+                dropzone[0].appendChild(col);
+            };
+
+            reader.readAsDataURL(file);
+        });
+    }
+
+    function addFilesToInput(droppedFiles) {
+        const input        = document.getElementById("item_image_id");
+        const currentFiles = Array.from(input.files);
+        const dataTransfer = new DataTransfer();
+
+        currentFiles.forEach(file => dataTransfer.items.add(file));
+        Array.from(droppedFiles).forEach(file => dataTransfer.items.add(file));
+        input.files = dataTransfer.files;
+    }
+
+  });
+
+
+    function removeImage(button, index) {
+        const dropzone    = document.getElementById("dropzone-multiple");
+        const fileElement = button.closest(".dz-preview");
+        dropzone.removeChild(fileElement);
+       
+        const input = document.getElementById("item_image_id");
+        const files = Array.from(input.files);
+        const updatedFiles = files.filter((_, i) => i !== index);
+        const dataTransfer = new DataTransfer();
+        updatedFiles.forEach((file) => dataTransfer.items.add(file));
+        input.files = dataTransfer.files;
+        if (input.files.length === 0) {
+            $('.dz-default').show();
+        }
+    }
+</script>
+
 <script>
 
-$(document).ready(function () {
+    $(document).ready(function () {
         lightbox.option({
             'resizeDuration': 200,
             'wrapAround': true
@@ -513,71 +626,71 @@ $(document).ready(function () {
     var userInput = '';
     // Upload Images and show the preview
 
-    function previewSelectedImages() {
-        const input          = document.getElementById("item_image_id");
-        const uploadedImages = document.getElementById("uploaded-images");
-        // uploadedImages.innerHTML = "";
+    // function previewSelectedImages() {
+    //     const input          = document.getElementById("item_image_id");
+    //     const uploadedImages = document.getElementById("uploaded-images");
+    //     // uploadedImages.innerHTML = "";
 
-        const files = Array.from(input.files);
+    //     const files = Array.from(input.files);
 
-        if (files.length === 0) {
-            uploadedImages.innerHTML = "<p>No files selected.</p>";
-            return;
-        }
+    //     if (files.length === 0) {
+    //         uploadedImages.innerHTML = "<p>No files selected.</p>";
+    //         return;
+    //     }
 
-        files.forEach((file, index) => {
-            const reader = new FileReader();
+    //     files.forEach((file, index) => {
+    //         const reader = new FileReader();
 
-            reader.onload = function (e) {
-                const imageSrc = e.target.result;
-                const col      = document.createElement("div");
-                col.classList.add("col-4");
-                col.setAttribute("data-file-index", index);
-                const maxFileNameLength = 15;
-                const trimmedFileName =
-                    file.name.length > maxFileNameLength
-                        ? file.name.slice(0, maxFileNameLength) + "..."
-                        : file.name;
+    //         reader.onload = function (e) {
+    //             const imageSrc = e.target.result;
+    //             const col      = document.createElement("div");
+    //             col.classList.add("col-4");
+    //             col.setAttribute("data-file-index", index);
+    //             const maxFileNameLength = 15;
+    //             const trimmedFileName =
+    //                 file.name.length > maxFileNameLength
+    //                     ? file.name.slice(0, maxFileNameLength) + "..."
+    //                     : file.name;
 
-                const selectedFile = `
-                    <div class="selected-files">
-                        <div class="d-flex align-items-center gap-2">
-                            <img src="${imageSrc}" alt="${trimmedFileName}" width="35px" />
-                            <div>
-                                <p>${trimmedFileName}</p>
-                                <small>${(file.size / 1024).toFixed(1)} KB</small>
-                            </div>
-                        </div>
-                        <button onclick="removeImage(this, ${index})">
-                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path
-                                    d="M12.59 6L10 8.59L7.41 6L6 7.41L8.59 10L6 12.59L7.41 14L10 11.41L12.59 14L14 12.59L11.41 10L14 7.41L12.59 6ZM10 0C4.47 0 0 4.47 0 10C0 15.53 4.47 20 10 20C15.53 20 20 15.53 20 10C20 4.47 15.53 0 10 0ZM10 18C5.59 18 2 14.41 2 10C2 5.59 5.59 2 10 2C14.41 2 18 5.59 18 10C18 14.41 14.41 18 10 18Z"
-                                    fill="#858585"
-                                />
-                            </svg>
-                        </button>
-                    </div>
-                `;
+    //             const selectedFile = `
+    //                 <div class="selected-files">
+    //                     <div class="d-flex align-items-center gap-2">
+    //                         <img src="${imageSrc}" alt="${trimmedFileName}" width="35px" />
+    //                         <div>
+    //                             <p>${trimmedFileName}</p>
+    //                             <small>${(file.size / 1024).toFixed(1)} KB</small>
+    //                         </div>
+    //                     </div>
+    //                     <button onclick="removeImage(this, ${index})">
+    //                         <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+    //                             <path
+    //                                 d="M12.59 6L10 8.59L7.41 6L6 7.41L8.59 10L6 12.59L7.41 14L10 11.41L12.59 14L14 12.59L11.41 10L14 7.41L12.59 6ZM10 0C4.47 0 0 4.47 0 10C0 15.53 4.47 20 10 20C15.53 20 20 15.53 20 10C20 4.47 15.53 0 10 0ZM10 18C5.59 18 2 14.41 2 10C2 5.59 5.59 2 10 2C14.41 2 18 5.59 18 10C18 14.41 14.41 18 10 18Z"
+    //                                 fill="#858585"
+    //                             />
+    //                         </svg>
+    //                     </button>
+    //                 </div>
+    //             `;
 
-                col.innerHTML = selectedFile;
-                uploadedImages.appendChild(col);
-            };
+    //             col.innerHTML = selectedFile;
+    //             uploadedImages.appendChild(col);
+    //         };
 
-            reader.readAsDataURL(file);
-        });
-    }
+    //         reader.readAsDataURL(file);
+    //     });
+    // }
 
-    function removeImage(button,index) {
-        const col   = button.closest(".col-4");
-        col.remove();
-        const input = document.getElementById("item_image_id");
-        const files = Array.from(input.files);
-        const updatedFiles = files.filter((_, i) => i !== index);
-        const dataTransfer = new DataTransfer();
-        updatedFiles.forEach((file) => dataTransfer.items.add(file));
+    // function removeImage(button,index) {
+    //     const col   = button.closest(".col-4");
+    //     col.remove();
+    //     const input = document.getElementById("item_image_id");
+    //     const files = Array.from(input.files);
+    //     const updatedFiles = files.filter((_, i) => i !== index);
+    //     const dataTransfer = new DataTransfer();
+    //     updatedFiles.forEach((file) => dataTransfer.items.add(file));
 
-        input.files = dataTransfer.files;
-    }
+    //     input.files = dataTransfer.files;
+    // }
 
     $(document).ready(function () {
 
@@ -1511,12 +1624,13 @@ $(document).ready(function () {
     // set preview
     const preview    = $('#audio-playback');
     const sendButton = $('#sendButton');
-
+    $('#sendButton').hide();
     $('#sendButton').on('click', uploadRecording);
     const audioPlaybackContainer =$('#audioPlaybackContainer');
 
     const resetButton = $('#resetButton');
     $('#resetButton').on('click', resetRecording);
+    $('#resetButton').hide();
 
     const cancelButton = $('#cancelButton');
     $('#cancelButton').on('click', cancelRecording);
@@ -1586,6 +1700,8 @@ $(document).ready(function () {
 
         $("#stopButton").addClass("inactive");
         $('#sendButton').prop("disabled", false);
+        $('#sendButton').show();
+        $('#resetButton').show();
 
         stopButton.disabled = true;
 
@@ -1624,6 +1740,9 @@ $(document).ready(function () {
         stopButton.prop("disabled", true);
 
         sendButton[0].audioBlob = null;
+
+        $('#sendButton').hide();
+        $("#resetButton").hide();
     }
 
     function cancelRecording() {
@@ -1652,6 +1771,8 @@ $(document).ready(function () {
         stopButton.prop("disabled", true);
 
         sendButton[0].audioBlob = null;
+        $('#sendButton').hide();
+
     }
 
 // function downloadRecording(){

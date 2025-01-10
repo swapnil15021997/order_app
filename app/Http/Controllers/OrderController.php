@@ -146,8 +146,9 @@ class OrderController extends Controller
                 'message' =>"Please select active branch"
             ]);
         }
- 
-       
+        $files = $request->file('item_file_images');
+        dd($files);
+    
         $rules = [   
             
             'order_date'            => ['required', 'date'],  

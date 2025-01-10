@@ -318,7 +318,7 @@
     width: 100% !important;
 }
 
-#click_image .modal-dialog {
+/* #click_image .modal-dialog {
     max-width: 100dvw;
     height: 100dvh;
     margin: 0;
@@ -327,20 +327,20 @@
     -moz-border-radius: 0;
     -ms-border-radius: 0;
     -o-border-radius: 0;
-}
+} */
 
-#click_image .modal-body {
+/* #click_image .modal-body {
     width: 100%;
     padding-top: 0;
     padding-left: 0;
-    padding-right: 0;
-}
+    padding-right: 0; 
+}*/
 
-#click_image .modal-body #cameraStream {
+/* #click_image .modal-body #cameraStream {
     width: 100%;
     object-fit: cover;
-    height: calc(100dvh - 130px);
-}
+    height: calc(100dvh - 130px); 
+}*/
 
 .timeline {
     position: relative;
