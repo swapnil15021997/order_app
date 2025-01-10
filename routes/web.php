@@ -63,7 +63,10 @@ Route::get('/dashboard', function () {
         $activeBranchName = '';
     }
     
-    $login['active_branch'] = $activeBranchName;
+    session(['active_branch' => $activeBranchName]);
+    session(['role_name'     => $role->role_name]);
+    
+
     $branch_count = Branch::where('is_delete',0)->count();
     $user_count   = User::where('is_delete',0)->count();
     $orders_count = Order::where('is_delete',0)->count();

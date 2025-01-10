@@ -57,8 +57,14 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
-
-    
+    public function role()
+    {
+        return $this->belongsTo(UserRole::class, 'user_role_id');
+    }
+    public function getRoleNameAttribute()
+    {
+        return $this->role ? $this->role->role_name : null; 
+    }
 
     public static function get_data_by_phone_no($phone){
         $user = User::where('user_phone_number',$phone)->first();

@@ -24,7 +24,7 @@
               </a>
 
             </div> -->
-            <div class="nav-item dropdown d-none d-xl-flex">
+            <div class="nav-item dropdown d-none d-xl-flex me-4">
                 <a href="#" class="nav-link d-flex lh-1 text-reset p-0" data-bs-toggle="dropdown"
                     aria-label="Open user menu">
                     <span class="avatar avatar-sm">
@@ -36,7 +36,7 @@
                     <div class="d-none d-xl-block ps-2">
                         <div>{{$login['name']}}</div>
 
-                        <div class="mt-1 small text-secondary">{{$login['role_name']}}</div>
+                        <div class="mt-1 small text-secondary">{{session('role_name', '')}}</div>
                     </div>
                 </a>
 
@@ -52,22 +52,22 @@
             </div>
             <div class="ps-2 nav-item dropdown">
                 <div class="btn-list">
-                    <a href="#" data-bs-toggle="dropdown" class=" btn nav-link dropdown-toggle no-arrow">
-                        <span class="me-2">{{ $login['active_branch'] ?? '' }}</span>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-geo-alt" viewBox="0 0 16 16">
+                    <a href="#" data-bs-toggle="dropdown" class=" btn  dropdown-toggle no-arrow">
+                        <svg class="me-2" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-geo-alt" viewBox="0 0 16 16">
                             <path d="M12.166 8.94c-.524 1.062-1.234 2.12-1.96 3.07A32 32 0 0 1 8 14.58a32 32 0 0 1-2.206-2.57c-.726-.95-1.436-2.008-1.96-3.07C3.304 7.867 3 6.862 3 6a5 5 0 0 1 10 0c0 .862-.305 1.867-.834 2.94M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10"/>
                             <path d="M8 8a2 2 0 1 1 0-4 2 2 0 0 1 0 4m0 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6"/>
                         </svg>
+                        <span class="me-2">{{ session('active_branch', '') }}</span>
                     </a>
-                </div>
-                <div class="dropdown-menu dropdown-menu-end">
-                    @foreach($user_branch as $branch)
-                        <a class="dropdown-item  @if($branch['branch_id'] == $login['user_active_branch']) active @endif"
-                            href="#" onclick="changeBranch('{{ $branch['branch_id'] }}')">
-                            {{ $branch['branch_name'] }}
-                        </a>
-                    @endforeach
+                    <div class="dropdown-menu dropdown-menu-end">
+                        @foreach($user_branch as $branch)
+                            <a class="dropdown-item  @if($branch['branch_id'] == $login['user_active_branch']) active @endif"
+                                href="#" onclick="changeBranch('{{ $branch['branch_id'] }}')">
+                                {{ $branch['branch_name'] }}
+                            </a>
+                        @endforeach
                     <div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -159,8 +159,18 @@
 
 
                 </ul>
-                <div class="my-2 my-md-0 flex-grow-1 flex-md-grow-0 d-md-flex d-none">
-                    <button class="btn btn-ghost-primary" id="start-scan">Start Scanner</button>
+                <div class="my-2 btn-list my-md-0 flex-grow-1 flex-md-grow-0 d-md-flex d-none">
+                    <button class="btn" id="start-scan">
+                        <span class="me-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-qr-code-scan" viewBox="0 0 16 16">
+                                <path d="M0 .5A.5.5 0 0 1 .5 0h3a.5.5 0 0 1 0 1H1v2.5a.5.5 0 0 1-1 0zm12 0a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-1 0V1h-2.5a.5.5 0 0 1-.5-.5M.5 12a.5.5 0 0 1 .5.5V15h2.5a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5v-3a.5.5 0 0 1 .5-.5m15 0a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1 0-1H15v-2.5a.5.5 0 0 1 .5-.5M4 4h1v1H4z"/>
+                                <path d="M7 2H2v5h5zM3 3h3v3H3zm2 8H4v1h1z"/>
+                                <path d="M7 9H2v5h5zm-4 1h3v3H3zm8-6h1v1h-1z"/>
+                                <path d="M9 2h5v5H9zm1 1v3h3V3zM8 8v2h1v1H8v1h2v-2h1v2h1v-1h2v-1h-3V8zm2 2H9V9h1zm4 2h-1v1h-2v1h3zm-4 2v-1H8v1z"/>
+                                <path d="M12 9h2V8h-2z"/>
+                            </svg>
+                        </span>
+                        Scan</button>
                 </div>
             </div>
         </div>

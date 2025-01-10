@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Branch;
 use App\Models\User;
+use App\Models\UserRole;
+
 use DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Arr;
@@ -15,7 +17,10 @@ class BranchController extends Controller
 
     // Branch Master
     public function branch_index(Request $request){
-        $login      = auth()->user();
+        $login              = auth()->user()->toArray();
+        $role               = UserRole::get_role_by_id($login['user_role_id']);
+        $login['role_name'] = $role->role_name;
+       
         $activePage = 'branch';
 
         if($login['user_role_id'] != 1){
@@ -27,16 +32,10 @@ class BranchController extends Controller
             $users_branch  = Branch::where('is_delete', 0)->get()->toArray();
 
         }
-        foreach ($users_branch as $branch) {
-            if ($branch['branch_id'] == $login['user_active_branch']) {
-                $activeBranchName = $branch['branch_name'];
-                break;
-            }
-            $activeBranchName = '';
-        }
+
         $combined_permissions = session('combined_permissions', []);
 
-        return view('branch/branch_master',['pageTitle'=>'Branch','login'=>$login,'activePage'=>$activePage,'user_branch'=>$users_branch,'user_permissions'=>$combined_permissions,'activeBranchName'=>$activeBranchName]);
+        return view('branch/branch_master',['pageTitle'=>'Branch','login'=>$login,'activePage'=>$activePage,'user_branch'=>$users_branch,'user_permissions'=>$combined_permissions]);
     }
 
     // Bracnh add edit ajax call
@@ -216,7 +215,9 @@ class BranchController extends Controller
         $user = User::get_user_by_id($login['id']);
            
         $user->user_active_branch = $params['branch_id'];
+        
         $user->save();
+        session(['active_branch' => $branch->branch_name]);
         return response()->json([
             'status'  => 200,
             'message' => 'Active branch updated successfully'

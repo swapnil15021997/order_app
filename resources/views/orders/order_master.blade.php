@@ -45,6 +45,7 @@
         <div class="container-xl">
             <div id="alert-container"></div>
             <div class="container">
+                <div id="alert-site"></div>
                 @if(session('success'))
                 <div class="alert alert-success" role="alert">
                     <strong>Success!</strong> {{ session('success') }}

@@ -28,7 +28,10 @@ class OrderController extends Controller
 
         $order = Order::get_order_by_qr_number_id($id);  
         $order = $order->toArray();
-        $login = auth()->user();
+        $login              = auth()->user()->toArray();
+        $role               = UserRole::get_role_by_id($login['user_role_id']);
+        $login['role_name'] = $role->role_name;
+      
         $fileArray = [];
         if(!empty($login)){
            

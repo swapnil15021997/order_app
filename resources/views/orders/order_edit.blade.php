@@ -21,18 +21,19 @@
                             @php
                                 $lastTransaction = end($order['transactions']); // Get the last transaction
                             @endphp
-
-                            @if ($lastTransaction && $lastTransaction['trans_status'] === 0)
-                                <!-- If both conditions are satisfied, show the "Approve" button -->
-                                 
-                                <a class="btn btn-primary" href="#" onclick="approve_order({{ $order['order_qr_code'] }})">
-                                    Approve Order 
-                                </a>
-                            @else
-                                <a class="btn btn-primary" href="#" onclick="transfer_order({{$order['order_id']}})">
-                                    Transfer Order
-                                </a>
-                            @endif
+                            <div class="btn-list">
+                                @if ($lastTransaction && $lastTransaction['trans_status'] === 0)
+                                    <!-- If both conditions are satisfied, show the "Approve" button -->
+                                     
+                                    <button class="btn"  onclick="approve_order({{ $order['order_qr_code'] }})">
+                                        Approve Order 
+                                    </button>
+                                @else
+                                    <button class="btn "  onclick="transfer_order({{$order['order_id']}})">
+                                        Transfer Order
+                                    </button>
+                                @endif
+                            </div>
 
                             </div>
                             {{$qr_code}}
