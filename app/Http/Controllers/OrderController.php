@@ -1073,24 +1073,21 @@ class OrderController extends Controller
         $branches      = Branch::select('branch_id', 'branch_name')->take(5)->get();
         $branchesArray = $branches->toArray();
     
-
         $check_order = Order::get_order_with_transaction($id);
+       
         if (empty($check_order)){
             return response()->json([
                 'status' => 500,
                 'message' => 'Order does not exist'
             ]);
         }
-
         $pageTitle     = 'Orders';
         $login         = auth()->user()->toArray();
         $activePage    = 'orders';
        
         if(!empty($login)){
             if($login['user_role_id'] != 1){
-
                 $userBranchIds = explode(',', $login['user_branch_ids']);
-                
                 $userBranchIds = array_map('trim', $userBranchIds); 
                 $userBranchIds = array_filter($userBranchIds); 
               
@@ -1103,14 +1100,14 @@ class OrderController extends Controller
                 
             }else{
                 $user_branch  = Branch::get_all_branch();
-    
             }
         }
        
         $user_permissions = session('combined_permissions', []);
+        $check_order      = $check_order->toArray();
 
-        return view('orders/order_track'
-        ,compact('branchesArray',
-        'pageTitle','login','activePage','check_order','user_branch','user_permissions'));
+        return view('orders/order_track',compact('branchesArray',
+        'pageTitle','login','activePage',
+        'check_order','user_branch','user_permissions'));
     }
 }

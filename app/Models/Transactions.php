@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Models\User;
+use App\Models\Branch;
+
 class Transactions extends Model
 {
     //
@@ -52,6 +54,16 @@ class Transactions extends Model
     public function transApprovedBy()
     {
         return $this->belongsTo(User::class, 'trans_approved_by');
+    }
+
+    public function trans_from()
+    {
+        return $this->belongsTo(Branch::class, 'trans_from', 'branch_id');
+    }
+
+    public function trans_to()
+    {
+        return $this->belongsTo(Branch::class, 'trans_to', 'branch_id');
     }
 
 }
