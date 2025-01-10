@@ -11,7 +11,7 @@
                     <div class="d-flex flex-column gap-3">
                         <div id="alert-container"></div>
                         <div id="alert-site"></div>
-                        <div class="d-flex align-items-center justify-content-between">
+                        <div class="d-flex align-items-center flex-wrap justify-content-between">
                             <div>
                                 <img src="{{ asset('static/logo_order.png')}}" alt="Tabler" class="img-fluid "
                                     width="80px" height="40px" />
@@ -45,7 +45,7 @@
                             <div class="card-body">
                                 <div class="row">
                                     <h2 class="font-bold">#{{$order['order_number']}}</h2>
-                                    <div class="col-6">
+                                    <div class="col-sm-6">
                                         <div class="col-12">
                                             <label for="order_date" class="form-label">Order Date
                                             <span style="color: red;">*</span>
@@ -67,7 +67,7 @@
 
                                         </div>
                                     </div>
-                                    <div class="col-6">
+                                    <div class="col-sm-6 mt-sm-0 mt-3">
 
                                         <input type="hidden" name="" id="customer_new"  value="false">
 
@@ -112,7 +112,7 @@
                             <div class="card-body">
                                 <h4 class="h2">Branch & Transfer</h4>
                                 <div class="row">
-                                    <div class="col-6">
+                                    <div class="col-sm-6">
                                         <label for="searchableSelectFrom" class="form-label">From
                                         <span style="color: red;">*</span>
                                         </label>
@@ -127,7 +127,7 @@
                                             @endforeach
                                         </select>
                                     </div>
-                                    <div class="col-6">
+                                    <div class="col-sm-6 mt-sm-0 mt-3">
                                         <label for="edit_searchableSelectTo" class="form-label">To
                                         <span style="color: red;">*</span>
                                         </label>
@@ -147,14 +147,14 @@
                             <div class="card-body">
                                 <h4 class="h2">Item Details</h4>
                                 <div class="row">
-                                    <div class="col-6">
+                                    <div class="col-sm-6">
                                         <label for="item_name" class="form-label">Name
                                         <span style="color: red;">*</span>
                                         </label>
                                         <input type="text" class="form-control" id="item_name" placeholder="Select Item"
                                             value="{{$order['items'][0]['item_name']}}" />
                                     </div>
-                                    <div class="col-6">
+                                    <div class="col-sm-6 mt-sm-0 mt-3">
                                         <label for="item_metal" class="form-label">Metal
                                         <span style="color: red;">*</span>
                                         </label>
@@ -170,7 +170,7 @@
                                     </div>
                                 </div>
                                 <div class="row mt-3">
-                                    <div class="col-4">
+                                    <div class="col-sm-4">
                                         <label for="item_melting" class="form-label">Melting
                                         <span style="color: red;">*</span>
                                         </label>
@@ -183,7 +183,7 @@
                                             @endforeach
                                         </select>
                                     </div>
-                                    <div class="col-4">
+                                    <div class="col-sm-4 mt-sm-0 mt-3">
                                         <label for="item_weight" class="form-label">Weight
                                         <span style="color: red;">*</span>
                                         </label>
@@ -191,7 +191,7 @@
                                             name="example-text-input" value="{{$order['items'][0]['item_weight']}}"
                                             placeholder="Weight of item" />
                                     </div>
-                                    <div class="col-4">
+                                    <div class="col-sm-4 mt-sm-0 mt-3">
                                         <label for="item_colors" class="form-label">Colors</label>
                                         <select class="form-select" id="item_colors">
                                             @foreach ($colors as $color)
@@ -245,14 +245,14 @@
                             <div class="card-body">
                                 <h4 class="h2">Payment Details</h4>
                                 <div class="row">
-                                    <div class="col-6">
+                                    <div class="col-sm-6">
                                         <label for="payment_advance" class="form-label">Advance cash deposit</label>
                                         <input type="number" placeholder="Enter here" class="form-control"
                                             id="payment_advance"
                                             value="{{ optional($paymentArray)['payment_advance_cash'] }}"
                                             name="example-text-input">
                                     </div>
-                                    <div class="col-6">
+                                    <div class="col-sm-6 mt-sm-0 mt-3">
                                         <label for="payment_booking" class="form-label">Rate</label>
                                         <input type="number" class="form-control" id="payment_booking"
                                             value="{{ optional($paymentArray)['payment_booking_rate'] }}"

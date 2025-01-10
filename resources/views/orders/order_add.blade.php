@@ -12,7 +12,7 @@
                     <div class="d-flex flex-column gap-3">
                         <div id="alert-site"></div>
                         <div id="alert-container"></div>
-                        <div class="d-flex align-items-center justify-content-between">
+                        <div class="d-flex align-items-center flex-wrap justify-content-between">
                             <div>
                                 <img src="{{ asset('static/logo_order.png')}}" alt="Tabler" class="img-fluid "
                                     width="80px" height="40px" />
@@ -28,7 +28,7 @@
                             <div class="card-body">
                                 <div class="row">
                                     <h2 class="font-bold">#{{$order_number}}</h2>
-                                    <div class="col-6">
+                                    <div class="col-sm-6">
                                         <input type="hidden" id="order_number" name="order_number"
                                             value="{{$order_number}}">
 
@@ -54,7 +54,7 @@
                                             </div> -->
                                         </div>
                                     </div>
-                                    <div class="col-6">
+                                    <div class="col-sm-6 mt-sm-0 mt-3">
                                         <input type="hidden" name="" id="customer_new">
                                         <div class="col-12">
                                             <label class="form-label">Select Customer
@@ -97,7 +97,7 @@
                             <div class="card-body">
                                 <h4 class="h2">Branch & Transfer</h4>
                                 <div class="row">
-                                    <div class="col-6">
+                                    <div class="col-sm-6">
                                         <label for="searchableSelectFrom" class="form-label">From
                                             <span style="color: red;">*</span>
                                         </label>
@@ -112,7 +112,7 @@
                                             @endforeach
                                         </select>
                                     </div>
-                                    <div class="col-6">
+                                    <div class="col-sm-6 mt-3 mt-sm-0">
                                         <label for="searchableSelectTo" class="form-label">To
                                             <span style="color: red;">*</span>
                                         </label>
@@ -132,14 +132,14 @@
                             <div class="card-body">
                                 <h4 class="h2">Item Details</h4>
                                 <div class="row">
-                                    <div class="col-6">
+                                    <div class="col-sm-6">
                                         <label for="item_name" class="form-label">Name
                                             <span style="color: red;">*</span>
                                         </label>
                                         <input type="text" class="form-control" id="item_name"
                                             placeholder="Select Item" />
                                     </div>
-                                    <div class="col-6">
+                                    <div class="col-sm-6 mt-3 mt-sm-0">
                                         <label for="item_metal" class="form-label">Metal
                                             <span style="color: red;">*</span>
                                         </label>
@@ -156,7 +156,7 @@
                                     </div>
                                 </div>
                                 <div class="row mt-3">
-                                    <div class="col-4">
+                                    <div class="col-sm-4">
                                         <label for="item_melting" class="form-label">Melting
                                             <span style="color: red;">*</span>
                                         </label>
@@ -169,14 +169,14 @@
                                             @endforeach
                                         </select>
                                     </div>
-                                    <div class="col-4">
+                                    <div class="col-sm-4 mt-3 mt-sm-0">
                                         <label for="item_weight" class="form-label">Weight
                                             <span style="color: red;">*</span>
                                         </label>
                                         <input type="number" class="form-control" id="item_weight"
                                             name="example-text-input" placeholder="Weight of item" />
                                     </div>
-                                    <div class="col-4">
+                                    <div class="col-sm-4 mt-3 mt-sm-0">
                                         <label for="item_colors" class="form-label">Colors</label>
                                         <select class="form-select" id="item_colors">
                                             @foreach ($colors as $color)
@@ -220,12 +220,12 @@
 
                                 <h4 class="h2">Payment Details</h4>
                                 <div class="row">
-                                    <div class="col-6">
+                                    <div class="col-sm-6">
                                         <label for="payment_advance" class="form-label">Advance cash deposit</label>
                                         <input type="number" placeholder="Enter here" class="form-control"
                                             id="payment_advance" name="example-text-input">
                                     </div>
-                                    <div class="col-6">
+                                    <div class="col-sm-6 mt-3 mt-sm-0">
                                         <label for="payment_booking" class="form-label">Rate</label>
                                         <input type="number" class="form-control" id="payment_booking"
                                             placeholder="Enter here">
@@ -311,7 +311,7 @@
 
 
         <div class="modal modal-blur fade" id="click_image" tabindex="-2" role="dialog" aria-hidden="true">
-            <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-dialog modal-xl" role="document">
                 <div class="modal-content">
 
                     <div class="modal-header">
@@ -320,8 +320,7 @@
                     </div>
                     <div class="modal-body">
                         <div id="cameraView" style="display: none; text-align: center;">
-                            <video id="cameraStream" autoplay playsinline
-                                style="width: 100%; max-height: 400px; border: 1px solid #ddd;object-fit:cover;"></video>
+                            <video id="cameraStream" autoplay playsinline></video>
                             <button id="captureButton" class="btn btn-primary mt-3">Capture Image</button>
                             <button id="switchCameraButton" class="btn btn-secondary mt-3">Switch Camera</button>
 
@@ -332,7 +331,8 @@
                             <img id="previewImage" style="max-width: 100%; height: auto; border: 1px solid #ddd;" />
                             <div class="mt-3">
                                 <button id="retakeButton" class="btn btn-secondary">Retake</button>
-                                <a id="sendImageButton" onclick="uploadImage()" href="#" type="button" class="btn btn-primary">
+                                <a id="sendImageButton" onclick="uploadImage()" href="#" type="button"
+                                    class="btn btn-primary">
                                     Send Image
                                 </a>
                             </div>

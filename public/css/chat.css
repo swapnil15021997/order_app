@@ -184,6 +184,7 @@
     }
 
     .note-sidebar {
+        position: fixed;
         max-width: 40%;
         height: 100dvh;
         border-right: 1px solid #486e9524;
@@ -320,4 +321,28 @@
 
 .select-full .select2-container {
     width: 100% !important;
+}
+
+#click_image .modal-dialog {
+    max-width: 100dvw;
+    height: 100dvh;
+    margin: 0;
+    border-radius: 0;
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    -ms-border-radius: 0;
+    -o-border-radius: 0;
+}
+
+#click_image .modal-body {
+    width: 100%;
+    padding-top: 0;
+    padding-left: 0;
+    padding-right: 0;
+}
+
+#click_image .modal-body #cameraStream {
+    width: 100%;
+    object-fit: cover;
+    height: calc(100dvh - 130px);
 }
