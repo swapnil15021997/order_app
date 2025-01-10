@@ -321,7 +321,7 @@
                     <div class="modal-body">
                         <div id="cameraView" style="display: none; text-align: center;">
                             <video id="cameraStream" autoplay playsinline
-                                style="width: 100%; max-height: 400px; border: 1px solid #ddd;"></video>
+                                style="width: 100%; max-height: 400px; border: 1px solid #ddd;object-fit:cover;"></video>
                             <button id="captureButton" class="btn btn-primary mt-3">Capture Image</button>
                             <button id="switchCameraButton" class="btn btn-secondary mt-3">Switch Camera</button>
 
@@ -340,8 +340,8 @@
                     </div>
 
 
-                     
-                    
+
+
                 </div>
             </div>
         </div>

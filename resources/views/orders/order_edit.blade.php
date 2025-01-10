@@ -377,7 +377,7 @@
                     </div>
                     <div class="modal-body">
                         <div id="cameraView" style="display: none; text-align: center;">
-                            <video id="cameraStream" autoplay playsinline style="width: 100%; max-height: 400px; border: 1px solid #ddd;"></video>
+                            <video id="cameraStream" autoplay playsinline style="width: 100%; max-height: 400px; border: 1px solid #ddd;object-fit:cover;"></video>
                             <button id="captureButton" class="btn btn-primary mt-3">Capture Image</button>
                             <button id="switchCameraButton" class="btn btn-secondary mt-3">Switch Camera</button>
                         </div>
@@ -395,7 +395,7 @@
                     </div>
 
 
-                
+
                 </div>
             </div>
         </div>
@@ -1351,7 +1351,7 @@
         startCamera();
         $('#click_image').modal('show');
         $('#cameraView').show();
-        $('#previewContainer').hide(); 
+        $('#previewContainer').hide();
         $('#sendImageButton').hide();
 
     }
@@ -1407,7 +1407,7 @@
         $('#cameraView').show();
         $('#previewContainer').hide();
         $('#sendImageButton').hide();
-        startCamera(); 
+        startCamera();
     });
 
     // Switch camera
