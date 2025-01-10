@@ -1,6 +1,6 @@
 @include('head')
 
-<body>
+<body class="layout-fluid">
     <div id="layout">
 
         <div class="main-content">
