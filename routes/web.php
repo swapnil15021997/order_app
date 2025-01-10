@@ -65,6 +65,7 @@ Route::get('/dashboard', function () {
     
     session(['active_branch' => $activeBranchName]);
     session(['role_name'     => $role->role_name]);
+    session(['profile_path'  => $login['user_profile']]);
     
 
     $branch_count = Branch::where('is_delete',0)->count();
@@ -95,6 +96,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::post('/profile-update', [ProfileController::class, 'user_update'])->name('user_update');
+
+    
 });
 
 Route::middleware('guest')->group(function () {

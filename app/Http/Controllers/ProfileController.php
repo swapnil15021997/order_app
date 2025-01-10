@@ -9,7 +9,10 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
 use App\Models\Branch;
+use App\Models\User;
 use App\Models\Settings;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Arr;
 
 class ProfileController extends Controller
 {
@@ -40,6 +43,60 @@ class ProfileController extends Controller
         $request->user()->save();
 
         return Redirect::route('settings')->with('status', 'profile-updated');
+    }
+
+    public function user_update(Request $request){
+        $params = $request->all();
+       
+        $rules = [   
+
+            'user_file'        => ['required','file', 'mimes:jpeg,jpg,png,pdf,mp3,wav,ogg,webm', 'max:20240'],  
+            'user_id'          => ['required','string'],
+            
+        ]; 
+        $messages = [
+            'user_file.file'     => 'Each item file image must be a valid file.',
+            'user_file.mimes'    => 'Each item file image must be a jpeg, jpg, png, or pdf file,mp3, wav, or ogg file.',
+            'user_file.max'      => 'Each item file image cannot exceed 10MB.',            
+            'user_id.string'     => 'Notes Type must be string.',
+            'user_id.required'   => 'Notes Type required.',
+    
+        ]; 
+        $validator = Validator::make($params, $rules, $messages);
+        
+        if($validator->fails()){
+            return response()->json([
+                'status' => 500,
+                'message' => Arr::flatten($validator->errors()->toArray())[0], 
+                'errors'  => $validator->errors(), 
+            ]);
+        } 
+        $user = User::find($params['user_id'])->first();
+        if(empty($user)){
+            return response()->json([
+                'status'  => 500,
+                'message' => 'User does not exist' 
+            ]);
+        }
+        if ($request->hasFile('user_file')) {
+            $file = $request->file('user_file');
+            $fileName = 'profile_' . $user->id . '_' . time() . '.' . $file->getClientOriginalExtension();
+            $filePath = $file->storeAs('profiles', $fileName, 'public');
+            $user->user_profile = $filePath;
+            $user->save();
+            session(['profile_path'     => $filePath]);
+    
+            return response()->json([
+                'status' => 200,
+                'message' => 'User Profile updated successfully.',
+            ]);
+        }else{
+            return response()->json([
+                'status' => 500,
+                'message' => 'User updated successfully. No profile picture uploaded.',
+            ]);
+        }
+        
     }
 
     /**

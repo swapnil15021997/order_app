@@ -387,20 +387,15 @@
                             <img id="previewImage" style="max-width: 100%; height: auto; border: 1px solid #ddd;" />
                             <div class="mt-3">
                                 <button id="retakeButton" class="btn btn-secondary">Retake</button>
+                                <a id="sendImageButton" onclick="uploadImage()" href="#" type="button" class="btn btn-primary">
+                                    Save Image
+                                </a>
                             </div>
                         </div>
                     </div>
 
 
-                    <div class="modal-footer">
-                        <a href="#" class="btn btn-secondary" data-bs-dismiss="modal">
-                            Cancel
-                        </a>
-                        <a id="sendImageButton" onclick="uploadImage()" href="#" type="button" class="btn btn-primary">
-                            Send Image
-                        </a>
-                    </div>
-
+                
                 </div>
             </div>
         </div>
@@ -1356,7 +1351,9 @@
         startCamera();
         $('#click_image').modal('show');
         $('#cameraView').show();
-        $('#previewContainer').hide();
+        $('#previewContainer').hide(); 
+        $('#sendImageButton').hide();
+
     }
 
     function startCamera() {
@@ -1402,8 +1399,7 @@
         $('#cameraView').hide();
         $('#previewContainer').show();
         $('#sendImageButton').show();
-
-        stopCamera(); // Stop the camera to save resources
+        stopCamera();
     })
 
     // Retake image
@@ -1411,8 +1407,7 @@
         $('#cameraView').show();
         $('#previewContainer').hide();
         $('#sendImageButton').hide();
-
-        startCamera(); // Restart the camera
+        startCamera(); 
     });
 
     // Switch camera
@@ -1464,6 +1459,7 @@
                 $('#click_image').modal('hide');
                 showAlertNotes('success', 'Image file uploaded successfully!');
                 isLoading = false;
+                page=1;
                 loadNotes();
             },
             error: function (error) {
@@ -1676,6 +1672,7 @@
                 }
                 $('#record_audio').modal('hide');
                 isLoading = false;
+                page=1;
                 loadNotes();
             },
             error: function (error) {
@@ -1707,6 +1704,7 @@
                     success: function (response) {
                         showAlertNotes('success', response.message);
                         isLoading = false;
+                        page=1;
                         loadNotes();
                     }
                 });
