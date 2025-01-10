@@ -23,7 +23,9 @@ Route::get('/', function () {
 });
 
 Route::get('/dashboard', function () {
-    $login = auth()->user()->toArray();
+    $login              = auth()->user()->toArray();
+    $role               = UserRole::get_role_by_id($login['user_role_id']);
+    $login['role_name'] = $role->role_name;
     if(!empty($login)){
 
         if($login['user_role_id'] != 1){
@@ -49,16 +51,19 @@ Route::get('/dashboard', function () {
                 if ($branch['branch_id'] == $login['user_active_branch']) {
                     $activeBranchName = $branch['branch_name'];
                     break;
+                }else{
+                    $activeBranchName = '';
                 }
             }
-            $activeBranchName = '';
         }else{
             $activeBranchName = '';
         }
+        
     }else{
         $activeBranchName = '';
     }
- 
+    
+    $login['active_branch'] = $activeBranchName;
     $branch_count = Branch::where('is_delete',0)->count();
     $user_count   = User::where('is_delete',0)->count();
     $orders_count = Order::where('is_delete',0)->count();

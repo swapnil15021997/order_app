@@ -237,15 +237,13 @@
                         </div>
                         <div class="card">
                             <div class="card-body">
-                                <div class="d-flex justify-content-center align-items-center">
-                                    <a href="#" class="btn btn-primary  d-flex justify-content-center align-items-center" id="saveBranchBtn">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
-                                            viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
-                                            stroke-linecap="round" stroke-linejoin="round">
-                                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                            <path d="M12 5l0 14" />
-                                            <path d="M5 12l14 0" />
-                                        </svg>
+                                <div class="d-flex justify-content-end align-items-center">
+                                    <a href="#" onclick="cancel_save()" class="btn btn-secondary me-2 d-flex justify-content-end align-items-end" >
+                                        
+                                        Cancel
+                                    </a>
+                                    <a href="#" class="btn btn-primary  d-flex justify-content-end align-items-end" id="saveBranchBtn">
+                                        
                                         Save
                                     </a>
                                 </div>
@@ -425,6 +423,10 @@
 <script>
 
     let notesList = [];
+    
+    function cancel_save(){
+            location.href = "{{route('order-master')}}";
+        }
     $(document).ready(function () {
         // default selected date
         // const today = new Date();
@@ -434,7 +436,6 @@
         // const formattedDate = `${day}-${month}-${year}`;
         // console.log(formattedDate);
         // document.getElementById('order_date').value = formattedDate;
-
 
         $(function () {
             $("#order_date").

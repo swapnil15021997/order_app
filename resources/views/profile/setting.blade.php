@@ -38,6 +38,12 @@
                                     <a href="#general_settings" class="list-group-item list-group-item-action d-flex align-items-center" data-bs-toggle="tab" role="tab" aria-controls="password" aria-selected="false">
                                         General Settings
                                     </a>
+                                    <a href="{{route('branch-master')}}" class="list-group-item list-group-item-action d-flex align-items-center" >
+                                        Branch
+                                    </a>
+                                    <a href="{{route('user-master')}}" class="list-group-item list-group-item-action d-flex align-items-center" >
+                                        User & Roles
+                                    </a>
                                 </div>
                             </div>
                         </div>
