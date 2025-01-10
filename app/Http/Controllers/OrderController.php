@@ -960,7 +960,7 @@ class OrderController extends Controller
 
 
     public function order_approve(Request $request){
-
+        $login  = auth()->user()->toArray();
         $params = $request->all();
              
         $rules = [   
@@ -1005,6 +1005,7 @@ class OrderController extends Controller
             ]);
         }
         $trans->trans_status = 1;
+        $trans->trans_approved_by = $login['id'];
         $trans->save();
         $order = Order::get_order_by_id($trans->trans_order_id);
         $order->order_status        = 1;
@@ -1024,10 +1025,13 @@ class OrderController extends Controller
     }
 
     public function order_get_approve(Request $request,$id){
-
+        $login  = auth()->user()->toArray();
         $order = Order::get_order_by_qr_number_id($id);  
         $order = $order->toArray();
         
+        if(empty($login)){
+            return redirect()->back()->with('error', 'Please login to continue');
+        }
         if (empty($order)) {
             return redirect()->back()->with('error', 'Order does not exist or already approved');
         }
@@ -1048,6 +1052,7 @@ class OrderController extends Controller
         SendEmailJob::dispatch($order->order_id,$type="Approve");
         SendNotification::dispatch($order->order_id,$type="Approve");
         $trans->trans_status = 1;
+        $trans->trans_approved_by = $login['id'];
         $trans->save();
         $order = Order::get_order_by_id($trans->trans_order_id);
         $order->order_status        = 1;
@@ -1062,7 +1067,14 @@ class OrderController extends Controller
 
 
     public function track_order(Request $request,$id){
-        $check_order = Order::get_order_with_items($id);
+
+        $metals        = DB::table('metals')->select('metal_name')->get();
+        $melting       = DB::table('melting')->select('melting_name')->get();
+        $branches      = Branch::select('branch_id', 'branch_name')->take(5)->get();
+        $branchesArray = $branches->toArray();
+    
+
+        $check_order = Order::get_order_with_transaction($id);
         if (empty($check_order)){
             return response()->json([
                 'status' => 500,
@@ -1070,6 +1082,35 @@ class OrderController extends Controller
             ]);
         }
 
-        dd($check_order->toArray());
+        $pageTitle     = 'Orders';
+        $login         = auth()->user()->toArray();
+        $activePage    = 'orders';
+       
+        if(!empty($login)){
+            if($login['user_role_id'] != 1){
+
+                $userBranchIds = explode(',', $login['user_branch_ids']);
+                
+                $userBranchIds = array_map('trim', $userBranchIds); 
+                $userBranchIds = array_filter($userBranchIds); 
+              
+                if(!empty($userBranchIds)){
+
+                    $user_branch  = Branch::get_users_branch($userBranchIds);
+                }else{
+                    $user_branch  = [];
+                }
+                
+            }else{
+                $user_branch  = Branch::get_all_branch();
+    
+            }
+        }
+       
+        $user_permissions = session('combined_permissions', []);
+
+        return view('orders/order_track'
+        ,compact('branchesArray',
+        'pageTitle','login','activePage','check_order','user_branch','user_permissions'));
     }
 }

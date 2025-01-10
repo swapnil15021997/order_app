@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-
+use App\Models\User;
 class Transactions extends Model
 {
     //
@@ -23,7 +23,8 @@ class Transactions extends Model
         'trans_date',
         'trans_time',
         'is_delete',
-        'trans_status'
+        'trans_status',
+        'trans_approved_by'
     ];
 
     public static function get_trans_by_id($trans_id){
@@ -40,6 +41,17 @@ class Transactions extends Model
         ->get()
         ->first();
         return $trasnaction;
+    }
+
+
+    public function transUser()
+    {
+        return $this->belongsTo(User::class, 'trans_user_id');
+    }
+
+    public function transApprovedBy()
+    {
+        return $this->belongsTo(User::class, 'trans_approved_by');
     }
 
 }

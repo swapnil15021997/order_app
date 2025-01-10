@@ -140,7 +140,18 @@ class Order extends Model
         return $order;
     }
 
-    
+
+   
+
+    public static function get_order_with_transaction($id){
+        $order = Order::with('transactions.transUser','transactions.transApprovedBy')
+                ->where('order_id', $id)
+                ->where('is_delete', 0)
+                ->first();
+
+        return $order;
+    }
+
 
 
 }
