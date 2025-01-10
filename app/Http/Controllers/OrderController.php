@@ -29,8 +29,6 @@ class OrderController extends Controller
         $order = Order::get_order_by_qr_number_id($id);  
         $order = $order->toArray();
         $login              = auth()->user()->toArray();
-        $role               = UserRole::get_role_by_id($login['user_role_id']);
-        $login['role_name'] = $role->role_name;
       
         $fileArray = [];
         if(!empty($login)){
@@ -925,11 +923,14 @@ class OrderController extends Controller
         //         'message' => 'Cant transfer to the same branch'
         //     ]);
         // }
-        if ($order->order_status==0){
-            return response()->json([
-                'status' => 500,
-                'message' => 'Cant transfer item right now'
-            ]);
+        $check_transaction = Transactions::where('trans_order_id',$order->order_id)->first();
+        if(!empty($check_transaction)){
+            if ($order->order_status==0){
+                return response()->json([
+                    'status' => 500,
+                    'message' => 'Cant transfer item right now Please approve previous order'
+                ]);
+            }
         }
         $items = $order->items->toArray();
         // $order->order_current_branch= $params['transfer_to'];
@@ -1057,5 +1058,18 @@ class OrderController extends Controller
         //     'message' => "Order Received Successfully" 
         // ]);
         return redirect()->route('order-master')->with('success', 'Order received successfully');
+    }
+
+
+    public function track_order(Request $request,$id){
+        $check_order = Order::get_order_with_items($id);
+        if (empty($check_order)){
+            return response()->json([
+                'status' => 500,
+                'message' => 'Order does not exist'
+            ]);
+        }
+
+        dd($check_order->toArray());
     }
 }

@@ -52,6 +52,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
+                    <div id="transfer-container"></div>
                     <label class="form-label">Order To</label>
                     <select id="searchableSelectTo" class="form-select select2">
 
@@ -473,7 +474,8 @@
 }
 </style> 
     <script>
-
+        var csrfToken = $('meta[name="csrf-token"]').attr('content');
+          
 
         function transfer_order(order_id) {
             $('#transfer_order_id').val(order_id);
@@ -618,8 +620,7 @@
                     userInput = $(this).val();
                 });
             });
-            var csrfToken = $('meta[name="csrf-token"]').attr('content');
-            $('#searchableSelectTo').select2({
+             $('#searchableSelectTo').select2({
 
                 placeholder: "Select an option",
                 allowClear: true,

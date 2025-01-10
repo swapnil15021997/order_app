@@ -102,6 +102,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
+                    <div id="transfer-container"></div>
                     <label for="searchableSelectTo" class="form-label">Order To</label>
                     <div class="row">
                         <div class="col-6 select-full">
@@ -223,6 +224,9 @@
                                   <a class="dropdown-item" href="#" onclick="transfer_order(${row.order_id})">
                                     Transfer Order
                                   </a>
+                                  <a class="dropdown-item" href="#" onclick="track_order(${row.order_id})">
+                                    Track Order
+                                  </a>
                                   <a class="dropdown-item" href="#" onclick="delete_order(${row.order_id})">
                                     Delete
                                   </a>`;
@@ -342,6 +346,10 @@
         function view_order(order_id) {
             window.location.href = `/view-order/${order_id}`;
 
+        }
+
+        function track_order(order_id){
+            window.location.href = `/track-order/${order_id}`;
         }
 
         function view_qr_code(order_id) {
@@ -466,11 +474,11 @@
                         },
                         success: function (response) {
                             if (response.status == 200) {
+                                showAlertTransfer('success', response.message);
                                 $('#transfer_order_id').val('');
                                 $('#searchableSelectTo').val('');
                                 $('#branch_table').DataTable().ajax.reload();
 
-                                showAlertTransfer('success', response.message);
 
                                 setTimeout(function () {
                                     $('#transfer_order').modal('hide');
