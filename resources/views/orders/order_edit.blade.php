@@ -489,9 +489,18 @@
 
 
 <script>
+
+$(document).ready(function () {
+        lightbox.option({
+            'resizeDuration': 200,
+            'wrapAround': true
+        });
+    });
+
     function cancel_update(){
         location.href = "{{route('order-master')}}";
     }
+
     $(document).ready(function () {
         $(function () {
             $("#edit_order_date").
@@ -1202,10 +1211,10 @@
                                     </div>`);
                                 } else {
                                     notesBody.append(`
-                                    <div class="my-note-box w-75">
+                                    <a href="${note.file.file_url}" data-title="${note.file.file_original_name}" data-lightbox="gallery" class="my-note-box w-75">
                                         <p class="small text-decoration-underline">${note.file.file_original_name}</p>
                                         <img src="${note.file.file_url}" alt="" class="rounded img-fluid" />
-                                    </div>`);
+                                    </a>`);
                                 }
                             }
                         });
@@ -1230,10 +1239,10 @@
                                     </div>` + newNotes;
                                 } else {
                                     newNotes = `
-                                    <div class="my-note-box w-75">
+                                    <a href="${note.file.file_url}" data-title="${note.file.file_original_name}" data-lightbox="gallery" class="my-note-box w-75">
                                         <p class="small text-decoration-underline">${note.file.file_original_name}</p>
                                         <img src="${note.file.file_url}" alt="" class="rounded img-fluid" />
-                                    </div>` + newNotes;
+                                    </a>` + newNotes;
                                 }
                             }
                         });
