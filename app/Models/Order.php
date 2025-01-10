@@ -97,6 +97,11 @@ class Order extends Model
         return $this->belongsTo(Branch::class, 'order_to_branch_id', 'branch_id');
     }
 
+    public function orderUser()
+    {
+        return $this->belongsTo(User::class, 'order_user_id');
+    }
+
     // public static function get_order_with_items($order_id)
     // {
     //     $order = Order::where('order_id', $order_id)
@@ -144,7 +149,11 @@ class Order extends Model
    
 
     public static function get_order_with_transaction($id){
-        $order = Order::with('transactions.transUser','transactions.transApprovedBy')
+        $order = Order::with(
+            'fromBranch','toBranch','orderUser',
+            'transactions.transUser','transactions.transApprovedBy',
+            'transactions.trans_from','transactions.trans_to'
+            )
                 ->where('order_id', $id)
                 ->where('is_delete', 0)
                 ->first();
