@@ -288,7 +288,7 @@
                         if (lastTransaction.trans_status === 0 && isAnyOrderTransferred) { alert
                             alert("Previous order was aprove, and the current order is of transfer. Please handle accordingly.");
                         }
-                        alert(lastTransaction.trans_status)
+                        alert(lastTransaction.trans_status,"last trans",lastTransaction.trans_id)
                         if (lastTransaction.trans_status === 0) {
                             // Add to approve_array
                             approve_array.push(order_id);
