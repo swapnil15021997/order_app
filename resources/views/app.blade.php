@@ -168,76 +168,7 @@
         </style>
         <script>
             
-            domReady(function () {
-            // Get DOM elements
-            const videoElem = document.getElementById("videoElem");
-            const startButton = document.getElementById("start-scan");
-            const resultDiv = document.getElementById("result");
-            let qrScanner = null;
-
-            function onScanSuccess(result) {
-                // Display the result
-                const scannedText = result.data || result;
-                // If the result is a URL, open it in a new tab
-                if (scannedText.startsWith('http')) {
-                    window.open(scannedText, '_blank');
-                    
-                }
-
-                // Stop scanning
-                stopScanner();
-            }
-
-            function startScanner() {
-                // Show the video element
-                
-                create_order_array(1,'orderQrCode', 1, 2463257358,2020-2-12);
-                
-                document.getElementById("my-qr-reader").style.display = "block";
-                startButton.textContent = "Stop Scanner";
-
-                // Initialize QR scanner if not already created
-                if (!qrScanner) {
-                    qrScanner = new QrScanner(
-                        videoElem,
-                        onScanSuccess,
-                        {
-                            highlightScanRegion: true,
-                            highlightCodeOutline: true,
-                        }
-                    );
-                }
-
-                // Start scanning
-                qrScanner.start();
-            }
-
-            function stopScanner() {
-                if (qrScanner) {
-                    qrScanner.stop();
-                }
-                document.getElementById("my-qr-reader").style.display = "none";
-                startButton.textContent = "Start Scanner";
-            }
-
-            // Toggle scanner on button click
-            startButton.addEventListener("click", function () {
-                if (qrScanner && qrScanner.isScanning()) {
-                    stopScanner();
-                } else {
-                    startScanner();
-                }
-            });
-
-            // Handle errors
-            // window.addEventListener('error', function(e) {
-            //     resultDiv.innerHTML = `<p style="color: red;">Error: ${e.message}</p>`;
-            // });
-        });
-
-
-
-
+        
         domReady(function () {
             // Get DOM elements
             const videoElem   = document.getElementById("videoElem");

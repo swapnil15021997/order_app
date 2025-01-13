@@ -61,7 +61,7 @@
             </h1>
             <div class="navbar-nav flex-row order-md-last">
                 <div class="d-md-none d-flex align-items-center ps-3">
-                    <button class="btn btn-ghost-primary btn-icon" id="start-scann" style="max-height:40px;">
+                    <button class="btn btn-ghost-primary btn-icon" onclick="startScanner()" id="start-scann" style="max-height:40px;">
                         <svg fill="currentColor" version="1.1" id="Capa_1" width="24" xmlns="http://www.w3.org/2000/svg"
                             xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 64 64" xml:space="preserve">
                             <g>
@@ -218,68 +218,68 @@
 
     domReady(function () {
         // Get DOM elements
-        const videoElem = document.getElementById("videoElem");
-        const startButton = document.getElementById("start-scann");
+        // const videoElem = document.getElementById("videoElem");
+        // const startButton = document.getElementById("start-scann");
 
-        let qrScanner = null;
+        // let qrScanner = null;
 
-        function onScanSuccess(result) {
-            // Display the result
-            const scannedText = result.data || result;
-            alert(scannedText);
-            // If the result is a URL, open it in a new tab
-            if (scannedText.startsWith('http')) {
-                window.open(scannedText, '_blank');
-            }
+        // function onScanSuccess(result) {
+        //     // Display the result
+        //     const scannedText = result.data || result;
+        //     alert(scannedText);
+        //     // If the result is a URL, open it in a new tab
+        //     if (scannedText.startsWith('http')) {
+        //         window.open(scannedText, '_blank');
+        //     }
 
-            // Stop scanning
-            stopScanner();
-        }
+        //     // Stop scanning
+        //     stopScanner();
+        // }
 
-        function startScanner() {
-            console.log('Starting');
-            // Show the video element
-            document.getElementById("my-qr-reader").style.display = "block";
-            startButton.textContent = "Stop Scanner";
+        // function startScanner() {
+        //     console.log('Starting');
+        //     // Show the video element
+        //     document.getElementById("my-qr-reader").style.display = "block";
+        //     startButton.textContent = "Stop Scanner";
 
-            // Initialize QR scanner if not already created
-            if (!qrScanner) {
-                qrScanner = new QrScanner(
-                    videoElem,
-                    onScanSuccess,
-                    {
-                        highlightScanRegion: true,
-                        highlightCodeOutline: true,
-                    }
-                );
-            }
+        //     // Initialize QR scanner if not already created
+        //     if (!qrScanner) {
+        //         qrScanner = new QrScanner(
+        //             videoElem,
+        //             onScanSuccess,
+        //             {
+        //                 highlightScanRegion: true,
+        //                 highlightCodeOutline: true,
+        //             }
+        //         );
+        //     }
 
-            // Start scanning
-            qrScanner.start();
-        }
+        //     // Start scanning
+        //     qrScanner.start();
+        // }
 
-        function stopScanner() {
-            if (qrScanner) {
-                qrScanner.stop();
-            }
-            document.getElementById("my-qr-reader").style.display = "none";
-            startButton.textContent = "Start Scanner";
-        }
-
-
-        document.getElementById("close_qr_code").addEventListener("click", function () {
-            stopScanner();
-        });
+        // function stopScanner() {
+        //     if (qrScanner) {
+        //         qrScanner.stop();
+        //     }
+        //     document.getElementById("my-qr-reader").style.display = "none";
+        //     startButton.textContent = "Start Scanner";
+        // }
 
 
-        // Toggle scanner on button click
-        startButton.addEventListener("click", function () {
-            if (qrScanner && qrScanner.isScanning()) {
-                stopScanner();
-            } else {
-                startScanner();
-            }
-        });
+        // document.getElementById("close_qr_code").addEventListener("click", function () {
+        //     stopScanner();
+        // });
+
+
+        // // Toggle scanner on button click
+        // startButton.addEventListener("click", function () {
+        //     if (qrScanner && qrScanner.isScanning()) {
+        //         stopScanner();
+        //     } else {
+        //         startScanner();
+        //     }
+        // });
 
         // Handle errors
         // window.addEventListener('error', function(e) {
