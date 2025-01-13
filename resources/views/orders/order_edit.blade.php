@@ -1711,7 +1711,10 @@
                 recorder.onstop = function () {
                     // Create an audio blob
                     audioBlob = new Blob(audioChunks, { type: "audio/wav" });
-
+                    if (audioBlob.size === 0) {
+                        alert("Audio blob is empty! Recording may have failed.");
+                        return;
+                    }
                     // Create a URL for the blob and set it as the audio playback source
                     const url = URL.createObjectURL(audioBlob);
                     var preview = document.getElementById('audio-playback');
