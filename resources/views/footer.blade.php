@@ -244,7 +244,7 @@
 
             // Start scanning
             qrScanner.start();
-            // create_order_array(1,7656545, 1, 5765654,6/34/3432)
+            create_order_array(3,7656545, 1, 5765654,6/34/3432)
    
         }
 
@@ -285,7 +285,7 @@
         if (qrScanner) {
             qrScanner.stop();
         }
-        // document.getElementById("my-qr-reader").style.display = "none";
+        document.getElementById("my-qr-reader").style.display = "none";
         // startButton.textContent = "Start Scanner";
     }
 

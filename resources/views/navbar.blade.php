@@ -178,38 +178,7 @@
 
     <input type="hidden" name="" id="transfer_order_id">
 
-    <div class="modal modal-blur fade" id="transfer_order" tabindex="-2" role="dialog" aria-hidden="true">
-        <div class="modal-dialog modal-lg" role="document">
-            <div class="modal-content">
-
-                <div class="modal-header">
-                    <h5 class="modal-title">Transfer Order</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-
-                    <label class="form-label">Order To</label>
-                    <div class="row">
-                        <div class="col-6 select-full">
-                            <select id="TransfersearchableSelectTo" class="form-select select-2  w-100 " type="text">
-                            </select>
-                        </div>
-                    </div>
-                </div>
-
-
-                <div class="modal-footer">
-                    <a href="#" class="btn btn-secondary" data-bs-dismiss="modal">
-                        Cancel
-                    </a>
-                    <a id="TransferOrderBtn" onclick="transfer_this()" href="#" class="btn btn-primary">
-                        Transfer This Order
-                    </a>
-                </div>
-
-            </div>
-        </div>
-    </div>
+  
 </header>
 <!-- <script  src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
 <!-- <script defer src="https://cdnjs.cloudflare.com/ajax/libs/qr-scanner/1.4.2/qr-scanner.umd.min.js"></script>

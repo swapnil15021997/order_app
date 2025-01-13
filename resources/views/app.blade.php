@@ -126,6 +126,39 @@
             </div>
         </div>
 
+        <div class="modal modal-blur fade" id="transfer_order" tabindex="-2" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h5 class="modal-title">Transfer Order</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+
+                    <label class="form-label">Order To</label>
+                    <div class="row">
+                        <div class="col-6 select-full">
+                            <select id="TransfersearchableSelectTo" class="form-select select-2  w-100 " type="text">
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="modal-footer">
+                    <a href="#" class="btn btn-secondary" data-bs-dismiss="modal">
+                        Cancel
+                    </a>
+                    <a id="TransferOrderBtn" onclick="transfer_this()" href="#" class="btn btn-primary">
+                        Transfer This Order
+                    </a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
         <!-- new qr finish  -->
 
 
@@ -249,7 +282,7 @@
             let my_ord;
             let buttonHtml = '';
             var csrfToken = $('meta[name="csrf-token"]').attr('content');
-            alert(isScanning);
+            
             if (isScanning) {
                 alert("Please wait until the current scan is complete.");
                 return; // Stop further execution
@@ -288,7 +321,7 @@
                         if (lastTransaction.trans_status === 0 && isAnyOrderTransferred) { alert
                             alert("Previous order was aprove, and the current order is of transfer. Please handle accordingly.");
                         }
-                        alert(lastTransaction.trans_status + " - last trans - " + lastTransaction.trans_id);
+                        
                         if (lastTransaction.trans_status === 0) {
                             // Add to approve_array
                             approve_array.push(order_id);
@@ -366,7 +399,7 @@
                                 `;
                             }
                         }
-                        alert(approve_array.length + "approve_array")
+
                         if(approve_array.length >= 1){
                             buttonHtml = `
                                 <div class="btn-list">
