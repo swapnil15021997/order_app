@@ -241,6 +241,8 @@
 
         let approve_array  = [];
         let transfer_array = [];
+        let scanned = [];
+        let isScanning = false;
         function create_order_array(order_id,orderQrCode, orderStatus, orderNumber,orderDate){
             const my_orders   = document.getElementById("my_orders");
             
@@ -248,15 +250,17 @@
             let buttonHtml = '';
             var csrfToken = $('meta[name="csrf-token"]').attr('content');
 
-            if (approve_array.includes(order_id)) {
+            if (isScanning) {
+                alert("Please wait until the current scan is complete.");
+                return; // Stop further execution
+            } 
+            isScanning = true;
+            
+            if (scanned.includes(order_id)) {
                 alert("This order is already approved.");
                 return; // Stop further execution
             }
 
-            if (transfer_array.includes(order_id)) {
-                alert("This order is already transferred.");
-                return; // Stop further execution
-            }
             
             $.ajax({
                 url: "{{ route('order_details') }}",  // Adjust the route as needed
@@ -392,8 +396,10 @@
                         }else{
                             console.log("No transactions found");
                         }
+                        scanned.push(order_id);
                     }
                 }
+                isScanning = false;
             
             });
     
