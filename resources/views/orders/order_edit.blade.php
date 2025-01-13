@@ -15,32 +15,32 @@
                             <div>
                                 <img src="{{ asset('static/logo_order.png')}}" alt="Tabler" class="img-fluid "
                                     width="80px" height="40px" />
-                                    <p class="mb-0 mt-1">{{$login['name']}} <br /> +91 {{$login['user_phone_number']}} </p>
+                                <p class="mb-0 mt-1">{{$login['name']}} <br /> +91 {{$login['user_phone_number']}} </p>
                             </div>
                             <div>
-                            @php
-                                $lastTransaction = end($order['transactions']); // Get the last transaction
-                            @endphp
-                            <div class="btn-list">
-                                @if ($lastTransaction && $lastTransaction['trans_status'] === 0)
-                                    <!-- If both conditions are satisfied, show the "Approve" button -->
+                                @php
+                                    $lastTransaction = end($order['transactions']); // Get the last transaction
+                                @endphp
+                                <div class="btn-list">
+                                    @if ($lastTransaction && $lastTransaction['trans_status'] === 0)
+                                        <!-- If both conditions are satisfied, show the "Approve" button -->
 
-                                    <button class="btn"  onclick="approve_order({{ $order['order_qr_code'] }})">
-                                        Approve Order
-                                    </button>
-                                @else
-                                    <button class="btn "  onclick="transfer_order({{$order['order_id']}})">
-                                        Transfer Order
-                                    </button>
-                                @endif
-                            </div>
+                                        <button class="btn" onclick="approve_order({{ $order['order_qr_code'] }})">
+                                            Approve Order
+                                        </button>
+                                    @else
+                                        <button class="btn " onclick="transfer_order({{$order['order_id']}})">
+                                            Transfer Order
+                                        </button>
+                                    @endif
+                                </div>
 
                             </div>
                             {{$qr_code}}
 
                             <!-- <img src="{{ asset('static/qr_code.png')}}" alt="Tabler" class="img-fluid" width="100px"> -->
                         </div>
-                        <input type="hidden" name="" id="order_id" value="{{$order['order_id']}}" >
+                        <input type="hidden" name="" id="order_id" value="{{$order['order_id']}}">
                         <div class="card">
                             <div class="card-body">
                                 <div class="row">
@@ -48,10 +48,9 @@
                                     <div class="col-sm-6">
                                         <div class="col-12">
                                             <label for="order_date" class="form-label">Order Date
-                                            <span style="color: red;">*</span>
+                                                <span style="color: red;">*</span>
                                             </label>
-                                            <input type="text" id="edit_order_date"
-                                                class="form-control" >
+                                            <input type="text" id="edit_order_date" class="form-control">
                                         </div>
                                         <div class="col-12 mt-3">
                                             <label for="order_type" class="form-label">Order Type
@@ -59,7 +58,8 @@
                                             </label>
                                             <select id="order_type" class="form-select" type="text">
                                                 <option value="" disabled selected>Select type</option>
-                                                <option value="order" {{ $order['order_type'] == 1 ? 'selected' : '' }}>Order</option>
+                                                <option value="order" {{ $order['order_type'] == 1 ? 'selected' : '' }}>
+                                                    Order</option>
                                                 <option value="reparing" {{ $order['order_type'] == 2 ? 'selected' : '' }}>Reparing</option>
 
                                             </select>
@@ -69,14 +69,15 @@
                                     </div>
                                     <div class="col-sm-6 mt-sm-0 mt-3">
 
-                                        <input type="hidden" name="" id="customer_new"  value="false">
+                                        <input type="hidden" name="" id="customer_new" value="false">
 
                                         <div class="col-12">
                                             <label class="form-label">Select Customer</label>
                                             <select id="searchableCust" class="form-select select2">
                                                 @foreach ($customer as $branch)
-                                                    <option value="{{ $branch['cust_id'] }}" @if ($branch['cust_id'] == $order['order_customer_id'])
-                                                    selected @endif>{{ $branch['cust_name'] }}</option>
+                                                    <option value="{{ $branch['cust_id'] }}" @if ($branch['cust_id'] == $order['order_customer_id']) selected @endif>
+                                                        {{ $branch['cust_name'] }}
+                                                    </option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -84,24 +85,24 @@
 
                                             <div class="mt-4">
                                                 <label for="order_customer_name" class="form-label">Customer name
-                                                <span style="color: red;">*</span>
+                                                    <span style="color: red;">*</span>
                                                 </label>
                                                 <input type="text" placeholder="Enter name" id="order_customer_name"
                                                     class="form-control" form>
                                             </div>
                                             <div class="mt-3">
                                                 <label for="cust_phone_no" class="form-label">Phone number
-                                                <span style="color: red;">*</span>
+                                                    <span style="color: red;">*</span>
                                                 </label>
                                                 <input type="text" placeholder="Enter number" id="cust_phone_no"
                                                     class="form-control" form>
                                             </div>
                                             <div class="mt-3">
                                                 <label for="customer_address" class="form-label">Address
-                                                <span style="color: red;">*</span>
+                                                    <span style="color: red;">*</span>
                                                 </label>
-                                                <textarea type="text" placeholder="Enter Address"
-                                                    id="customer_address" class="form-control" form></textarea>
+                                                <textarea type="text" placeholder="Enter Address" id="customer_address"
+                                                    class="form-control" form></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -114,7 +115,7 @@
                                 <div class="row">
                                     <div class="col-sm-6">
                                         <label for="searchableSelectFrom" class="form-label">From
-                                        <span style="color: red;">*</span>
+                                            <span style="color: red;">*</span>
                                         </label>
 
                                         <select id="edit_searchableSelectFrom" class="form-select" type="text">
@@ -129,13 +130,14 @@
                                     </div>
                                     <div class="col-sm-6 mt-sm-0 mt-3">
                                         <label for="edit_searchableSelectTo" class="form-label">To
-                                        <span style="color: red;">*</span>
+                                            <span style="color: red;">*</span>
                                         </label>
 
                                         <select id="edit_searchableSelectTo" class="form-select w-100" type="text">
 
                                             @foreach ($branchesArray as $branch)
-                                                <option value="{{ $branch['branch_id'] }}" @if ($branch['branch_id'] == $order['order_to_branch_id']) selected @endif>{{ $branch['branch_name'] }}
+                                                <option value="{{ $branch['branch_id'] }}" @if ($branch['branch_id'] == $order['order_to_branch_id']) selected @endif>
+                                                    {{ $branch['branch_name'] }}
                                                 </option>
                                             @endforeach
                                         </select>
@@ -149,14 +151,14 @@
                                 <div class="row">
                                     <div class="col-sm-6">
                                         <label for="item_name" class="form-label">Name
-                                        <span style="color: red;">*</span>
+                                            <span style="color: red;">*</span>
                                         </label>
                                         <input type="text" class="form-control" id="item_name" placeholder="Select Item"
                                             value="{{$order['items'][0]['item_name']}}" />
                                     </div>
                                     <div class="col-sm-6 mt-sm-0 mt-3">
                                         <label for="item_metal" class="form-label">Metal
-                                        <span style="color: red;">*</span>
+                                            <span style="color: red;">*</span>
                                         </label>
                                         <select class="form-select" id="item_metal">
                                             <option value="" disabled selected>Select a metal</option>
@@ -172,7 +174,7 @@
                                 <div class="row mt-3">
                                     <div class="col-sm-4">
                                         <label for="item_melting" class="form-label">Melting
-                                        <span style="color: red;">*</span>
+                                            <span style="color: red;">*</span>
                                         </label>
                                         <select class="form-select" id="item_melting">
                                             <option value="" disabled selected>Select a melting</option>
@@ -185,7 +187,7 @@
                                     </div>
                                     <div class="col-sm-4 mt-sm-0 mt-3">
                                         <label for="item_weight" class="form-label">Weight
-                                        <span style="color: red;">*</span>
+                                            <span style="color: red;">*</span>
                                         </label>
                                         <input type="number" class="form-control" id="item_weight"
                                             name="example-text-input" value="{{$order['items'][0]['item_weight']}}"
@@ -195,9 +197,9 @@
                                         <label for="item_colors" class="form-label">Colors</label>
                                         <select class="form-select" id="item_colors">
                                             @foreach ($colors as $color)
-                                                <option value="{{ $color['color_id'] }}"
-                                                @if ($color['color_id'] == $order['items'][0]['item_color']) selected @endif>
-                                                {{ $color['color_name'] }}</option>
+                                                <option value="{{ $color['color_id'] }}" @if ($color['color_id'] == $order['items'][0]['item_color']) selected @endif>
+                                                    {{ $color['color_name'] }}
+                                                </option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -209,30 +211,36 @@
                                         multiple
                                         placeholder="Choose Images" /> -->
 
-                                        <form class="dropzone" id="dropzone-multiple"  autocomplete="off" novalidate>
+                                        <form class="dropzone" id="dropzone-multiple" autocomplete="off" novalidate>
                                             <div class="fallback">
-                                            
-                                                <input name="file" class="d-none" type="file" id="item_image_id"  multiple  />
+
+                                                <input name="file" class="d-none" type="file" id="item_image_id"
+                                                    multiple />
                                                 @foreach($order['items'] as $file)
                                                     @if(!empty($file['files']))
                                                         @foreach($file['files'] as $file)
-                                                        <div class="dz-preview dz-processing dz-error dz-complete dz-image-preview">
-                                                            <div class="dz-image">
-                                                                <img data-dz-thumbnail src="{{ asset($file->file_url) }}" alt="${fileName}" />
-                                                                <button type="button" class="btn btn-danger btn-sm position-absolute top-0 end-0 m-1" onclick="removeFile({{ $file->file_id }}, {{$order['order_id']}})"><i class="bi bi-x"></i></button>
+                                                            <div
+                                                                class="dz-preview dz-processing dz-error dz-complete dz-image-preview">
+                                                                <div class="dz-image">
+                                                                    <img data-dz-thumbnail src="{{ asset($file->file_url) }}"
+                                                                        alt="${fileName}" />
+                                                                    <button type="button"
+                                                                        class="btn btn-danger btn-sm position-absolute top-0 end-0 m-1"
+                                                                        onclick="removeFile({{ $file->file_id }}, {{$order['order_id']}})"><i
+                                                                            class="bi bi-x"></i></button>
+                                                                </div>
                                                             </div>
-                                                        </div>
                                                         @endforeach
                                                     @else
-                                                    <div class="dz-default dz-message">
-                                                        <p class="dz-button">Drop files here to upload</p>
-                                                    </div>
+                                                        <div class="dz-default dz-message">
+                                                            <p class="dz-button">Drop files here to upload</p>
+                                                        </div>
                                                     @endif
                                                 @endforeach
 
-                            
+
                                             </div>
-                                        </form> 
+                                        </form>
                                     </div>
                                 </div>
                                 <!-- <div class="row mt-3" id="uploaded-images">
@@ -289,11 +297,13 @@
                         <div class="card">
                             <div class="card-body">
                                 <div class="d-flex justify-content-end align-items-end">
-                                <a href="#" onclick="cancel_update()" class="btn btn-secondary me-2 d-flex justify-content-end align-items-end" >
+                                    <a href="#" onclick="cancel_update()"
+                                        class="btn btn-secondary me-2 d-flex justify-content-end align-items-end">
 
-                                    Cancel
-                                </a>
-                                    <a href="#" class="btn btn-primary d-flex justify-content-end align-items-end" id="updateOrderBtn">
+                                        Cancel
+                                    </a>
+                                    <a href="#" class="btn btn-primary d-flex justify-content-end align-items-end"
+                                        id="updateOrderBtn">
 
                                         Save
                                     </a>
@@ -321,9 +331,9 @@
                         <div class="row">
                             <div class="col-6 select-full">
                                 <select id="TransfersearchableSelectTo" class="form-select  w-100 " type="text">
-                                    </select>
-                                </div>
+                                </select>
                             </div>
+                        </div>
                     </div>
 
 
@@ -346,7 +356,8 @@
 
                     <div class="modal-header">
                         <h5 class="modal-title">Record Audio</h5>
-                        <button type="button" id="cancelButton" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button type="button" id="cancelButton" class="btn-close" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         <div class="text-center">
@@ -369,7 +380,7 @@
 
                         <div class="mt-4 text-center d-none" id="audioPlaybackContainer">
                             <!-- Audio Player -->
-                            <audio id="audio-playback"   controls ></audio>
+                            <audio id="audio-playback" controls></audio>
                         </div>
                     </div>
 
@@ -412,7 +423,8 @@
                             <img id="previewImage" style="max-width: 100%; height: auto; border: 1px solid #ddd;" />
                             <div class="mt-3">
                                 <button id="retakeButton" class="btn btn-secondary">Retake</button>
-                                <a id="sendImageButton" onclick="uploadImage()" href="#" type="button" class="btn btn-primary">
+                                <a id="sendImageButton" onclick="uploadImage()" href="#" type="button"
+                                    class="btn btn-primary">
                                     Save Image
                                 </a>
                             </div>
@@ -443,7 +455,43 @@
             <div id="notes-container"></div>
             <div class="space-y-2 scrollable h-100 py-2 px-1" id="notes_body"></div>
             <div class="note-footer">
-                <input type="text"  autocomplete="off" placeholder="Write your message" id="TextNotes" />
+                <div class="audio-box" id="audio_box">
+                    <div class="visualizer">
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                    </div>
+                    <div class="d-flex gap-1 align-items-center">
+                        <button id="audio_stop" class="stop">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
+                                <g fill="none" stroke="currentColor" stroke-linejoin="round">
+                                    <path d="M14.5 8a6.5 6.5 0 1 1-13 0a6.5 6.5 0 0 1 13 0Z" />
+                                    <path d="M6 6h4v4H6z" />
+                                </g>
+                            </svg>
+                        </button>
+                        <button id="audio_send" class="send">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                                <path fill="currentColor"
+                                    d="M20.33 3.67a1.45 1.45 0 0 0-1.47-.35L4.23 8.2A1.44 1.44 0 0 0 4 10.85l6.07 3l3 6.09a1.44 1.44 0 0 0 1.29.79h.1a1.43 1.43 0 0 0 1.26-1l4.95-14.59a1.41 1.41 0 0 0-.34-1.47M4.85 9.58l12.77-4.26l-7.09 7.09Zm9.58 9.57l-2.84-5.68l7.09-7.09Z" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                <input type="text" autocomplete="off" placeholder="Write your message" id="TextNotes" />
                 <span class="custom-btn">
                     <input type="file" id="fileInput" style="display: none;" onchange="handleFileUpload(event)"
                         multiple />
@@ -457,8 +505,7 @@
                     </a>
                 </span>
                 <span class="custom-btn">
-                    <input type="file" id="fileInput" style="display: none;" onchange="click_image()"
-                        multiple />
+                    <input type="file" id="fileInput" style="display: none;" onchange="click_image()" multiple />
                     <a href="#" onclick="click_image()" data-bs-toggle="tooltip"
                         aria-label="Please Select file to upload" data-bs-original-title="Images File">
                         <svg width="22" height="20" viewBox="0 0 22 20" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -468,20 +515,19 @@
                         </svg>
                     </a>
                 </span>
-                <span class="custom-btn">
-                    <input type="file" id="fileInput" style="display: none;" onchange="record_audio()"
-                        multiple />
-                        <!-- onclick="record_audio()" -->
-                    <a href="#"  id="startRec" data-bs-toggle="tooltip"
-                        aria-label="Please Select file to upload" data-bs-original-title="Audio File">
+                <span class="custom-btn position-relative">
+                    <input type="file" id="fileInput" style="display: none;" onchange="record_audio()" multiple />
+                    <!-- onclick="record_audio()" -->
+                    <div id="startRec" data-bs-toggle="tooltip" aria-label="Please Select file to upload"
+                        data-bs-original-title="Audio File">
                         <svg width="16" height="22" viewBox="0 0 16 22" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path
                                 d="M15 10V11C15 14.866 11.866 18 8 18M1 10V11C1 14.866 4.13401 18 8 18M8 18V21M8 21H11M8 21H5M8 15C5.79086 15 4 13.2091 4 11V5C4 2.79086 5.79086 1 8 1C10.2091 1 12 2.79086 12 5V11C12 13.2091 10.2091 15 8 15Z"
                                 stroke="#000E08" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
                         </svg>
-                    </a>
+                    </div>
                 </span>
-                <button class="note-submit-btn" id="SendNotes" >
+                <button class="note-submit-btn" id="SendNotes">
                     <svg width="19" height="18" viewBox="0 0 19 18" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path fill-rule="evenodd" clip-rule="evenodd"
                             d="M4.43013 2.72003L15.3787 8.19293C15.6845 8.34573 15.8777 8.65821 15.8777 9.00004C15.8777 9.34187 15.6845 9.65435 15.3787 9.80715L4.43013 15.28C4.11287 15.4387 3.73208 15.3968 3.4569 15.173C3.18171 14.9492 3.06316 14.5849 3.15391 14.2419L4.54235 9.00004L3.15391 3.75813C3.06316 3.41521 3.18171 3.05093 3.4569 2.82709C3.73208 2.60325 4.11287 2.56136 4.43013 2.72003Z"
@@ -516,46 +562,46 @@
 
 <!-- Drop zone code -->
 <script>
-  // @formatter:off
-  document.addEventListener("DOMContentLoaded", function() {
+    // @formatter:off
+    document.addEventListener("DOMContentLoaded", function () {
 
-    const dropzone  = $("#dropzone-multiple");
-    const inputFile = $("#item_image_id");
-    
-    dropzone[0].addEventListener("dragover", function (e) {
-        e.preventDefault();
-        dropzone[0].classList.add("dragover");
-    });
+        const dropzone = $("#dropzone-multiple");
+        const inputFile = $("#item_image_id");
 
-    dropzone[0].addEventListener("dragleave", function () {
-        dropzone[0].classList.remove("dragover");
-    });
+        dropzone[0].addEventListener("dragover", function (e) {
+            e.preventDefault();
+            dropzone[0].classList.add("dragover");
+        });
 
-    dropzone[0].addEventListener("drop", function (e) {
-        e.preventDefault();
-        dropzone[0].classList.remove("dragover");
-        handleFiles(e.dataTransfer.files);
-        addFilesToInput(e.dataTransfer.files);
-    });
+        dropzone[0].addEventListener("dragleave", function () {
+            dropzone[0].classList.remove("dragover");
+        });
 
-    inputFile[0].addEventListener("change", function () {
-        handleFiles(inputFile[0].files);
-    });
+        dropzone[0].addEventListener("drop", function (e) {
+            e.preventDefault();
+            dropzone[0].classList.remove("dragover");
+            handleFiles(e.dataTransfer.files);
+            addFilesToInput(e.dataTransfer.files);
+        });
 
-    function handleFiles(files) {
-        $('.dz-default').hide();
-        const fileArray = Array.from(files);
+        inputFile[0].addEventListener("change", function () {
+            handleFiles(inputFile[0].files);
+        });
 
-        fileArray.forEach((file,index) => {
-            const reader = new FileReader();
+        function handleFiles(files) {
+            $('.dz-default').hide();
+            const fileArray = Array.from(files);
 
-            reader.onload = function (e) {
-                const imageSrc = e.target.result;
-                const col = document.createElement("div");
-                col.classList.add("dz-preview", "dz-processing", "dz-error", "dz-complete", "dz-image-preview");
-                const fileName = file.name.length > 15 ? file.name.slice(0, 15) + "..." : file.name;
+            fileArray.forEach((file, index) => {
+                const reader = new FileReader();
 
-                const selectedFile = `
+                reader.onload = function (e) {
+                    const imageSrc = e.target.result;
+                    const col = document.createElement("div");
+                    col.classList.add("dz-preview", "dz-processing", "dz-error", "dz-complete", "dz-image-preview");
+                    const fileName = file.name.length > 15 ? file.name.slice(0, 15) + "..." : file.name;
+
+                    const selectedFile = `
 
                         <div class="dz-image">
                             <img data-dz-thumbnail src="${imageSrc}" alt="${fileName}" />
@@ -564,32 +610,32 @@
 
                         `;
 
-                col.innerHTML = selectedFile ;
-                dropzone[0].appendChild(col);
-            };
+                    col.innerHTML = selectedFile;
+                    dropzone[0].appendChild(col);
+                };
 
-            reader.readAsDataURL(file);
-        });
-    }
+                reader.readAsDataURL(file);
+            });
+        }
 
-    function addFilesToInput(droppedFiles) {
-        const input        = document.getElementById("item_image_id");
-        const currentFiles = Array.from(input.files);
-        const dataTransfer = new DataTransfer();
+        function addFilesToInput(droppedFiles) {
+            const input = document.getElementById("item_image_id");
+            const currentFiles = Array.from(input.files);
+            const dataTransfer = new DataTransfer();
 
-        currentFiles.forEach(file => dataTransfer.items.add(file));
-        Array.from(droppedFiles).forEach(file => dataTransfer.items.add(file));
-        input.files = dataTransfer.files;
-    }
+            currentFiles.forEach(file => dataTransfer.items.add(file));
+            Array.from(droppedFiles).forEach(file => dataTransfer.items.add(file));
+            input.files = dataTransfer.files;
+        }
 
-  });
+    });
 
 
     function removeImage(button, index) {
-        const dropzone    = document.getElementById("dropzone-multiple");
+        const dropzone = document.getElementById("dropzone-multiple");
         const fileElement = button.closest(".dz-preview");
         dropzone.removeChild(fileElement);
-       
+
         const input = document.getElementById("item_image_id");
         const files = Array.from(input.files);
         const updatedFiles = files.filter((_, i) => i !== index);
@@ -611,14 +657,14 @@
         });
     });
 
-    function cancel_update(){
+    function cancel_update() {
         location.href = "{{route('order-master')}}";
     }
 
     $(document).ready(function () {
         $(function () {
             $("#edit_order_date").
-            datepicker({dateFormat: 'dd-mm-yy' });
+                datepicker({ dateFormat: 'dd-mm-yy' });
         });
         var orderDate = "<?php echo \Carbon\Carbon::parse($order['order_date'])->format('d-m-Y'); ?>"; // Assuming $order['order_date'] is in a valid date format
         console.log(orderDate);
@@ -708,30 +754,30 @@
 
         if (order_type == 1) {
             paymentDiv.removeClass('d-none');
-        }else{
+        } else {
             paymentDiv.addClass('d-none');
         }
 
         $('#updateOrderBtn').click(function (e) {
             e.preventDefault();
-            var orderId            = $('#order_id').val();
-            var orderDate          = $('#edit_order_date').val();
-            var orderType          = $('#order_type').val();
-            var orderFrom          = $('#edit_searchableSelectFrom').val();
-            var orderTo            = $('#edit_searchableSelectTo').val();
-            var itemMetal          = $('#item_metal').val();
-            var itemName           = $('#item_name').val();
-            var itemMelting        = $('#item_melting').val();
-            var itemWeight         = $('#item_weight').val();
-            var itemImages         = $('#item_image_id')[0].files;
-            var payment_advance    = $('#payment_advance').val();
-            var payment_booking    = $('#payment_booking').val();
-            var item_color         = $('#item_colors').val();
-            var cust               = $('#searchableCust').val();
+            var orderId = $('#order_id').val();
+            var orderDate = $('#edit_order_date').val();
+            var orderType = $('#order_type').val();
+            var orderFrom = $('#edit_searchableSelectFrom').val();
+            var orderTo = $('#edit_searchableSelectTo').val();
+            var itemMetal = $('#item_metal').val();
+            var itemName = $('#item_name').val();
+            var itemMelting = $('#item_melting').val();
+            var itemWeight = $('#item_weight').val();
+            var itemImages = $('#item_image_id')[0].files;
+            var payment_advance = $('#payment_advance').val();
+            var payment_booking = $('#payment_booking').val();
+            var item_color = $('#item_colors').val();
+            var cust = $('#searchableCust').val();
 
-            if (orderType == "reparing"){
+            if (orderType == "reparing") {
                 orderType = 2;
-            }else{
+            } else {
                 orderType = 1;
             }
 
@@ -748,13 +794,13 @@
                 formData.append('item_melting', itemMelting);
                 formData.append('item_weight', itemWeight);
                 formData.append('order_user_id', cust);
-                formData.append('item_color',item_color);
+                formData.append('item_color', item_color);
 
 
-                var custName    = userInput;
+                var custName = userInput;
                 var custAddress = $('#customer_address').val();
-                var custPhone   = $('#cust_phone_no').val();
-                var custNew     = $('#customer_new').val();
+                var custPhone = $('#cust_phone_no').val();
+                var custNew = $('#customer_new').val();
                 formData.append('customer_name', custName);
                 formData.append('customer_address', custAddress);
                 formData.append('customer_phone_number', custPhone);
@@ -946,7 +992,7 @@
 
             // Check if the selected option is a new customer
             if (e.params.data.newOption) {
-                console.log("New customer selected",e.params.data.newOption);
+                console.log("New customer selected", e.params.data.newOption);
                 $('#cust_div').removeClass('d-none');
                 // $('#order_customer_name').val(e.params.data.newOption);
                 // $('#customer_new').val(e.params.data.newOption);
@@ -1222,37 +1268,37 @@
     }
 
     // Remove file from the order
-    function removeFile(file_id,order_id){
+    function removeFile(file_id, order_id) {
         $.ajax({
-                url: "{{ route('file_remove') }}",
-                type: 'POST',
-                data: {
-                    _token: csrfToken,
-                    file_id: file_id,
-                    order_id: order_id
-                },
-                success: function (response) {
-                    if (response.status == 200) {
-                       showAlert('success', response.message);
-                       $('#file-' + file_id).remove();
-                        // setTimeout(function () {
-                        //     location.reload();
-                        // }, 2000);
-                    } else {
+            url: "{{ route('file_remove') }}",
+            type: 'POST',
+            data: {
+                _token: csrfToken,
+                file_id: file_id,
+                order_id: order_id
+            },
+            success: function (response) {
+                if (response.status == 200) {
+                    showAlert('success', response.message);
+                    $('#file-' + file_id).remove();
+                    // setTimeout(function () {
+                    //     location.reload();
+                    // }, 2000);
+                } else {
 
-                        showAlert('success', response.message);
-                        $('#TransfersearchableSelectTo').val('');
-
-
-                    }
-                },
-                error: function (xhr, status, error) {
-                    showAlert('success', error);
-
+                    showAlert('success', response.message);
                     $('#TransfersearchableSelectTo').val('');
 
+
                 }
-            });
+            },
+            error: function (xhr, status, error) {
+                showAlert('success', error);
+
+                $('#TransfersearchableSelectTo').val('');
+
+            }
+        });
     }
 
     // Code for notes
@@ -1269,7 +1315,7 @@
 
             isLoading = true;
             const notesBody = $('#notes_body');
-            const order_id  = $('#order_id').val();
+            const order_id = $('#order_id').val();
             console.log("Order ID: " + order_id);
             notesBody.html('');
             const scrollTopBeforeLoad = notesBody.scrollTop();
@@ -1303,7 +1349,7 @@
                                     </div>
                                 </div>`);
                             }
-                            else if(note.notes_type == 3){
+                            else if (note.notes_type == 3) {
                                 notesBody.append(`
                                     <div class="my-note-box">
                                         <div class="chat-bubble-title">Audio Note</div>
@@ -1421,8 +1467,8 @@
                             data: {
                                 'notes_text': text,
                                 'notes_file': null,
-                                'notes_order_id':order_id,
-                                'notes_type'    : 1
+                                'notes_order_id': order_id,
+                                'notes_type': 1
 
                             },
                             headers: {
@@ -1453,8 +1499,8 @@
                         data: {
                             'notes_text': text,
                             'notes_file': null,
-                            'notes_order_id':order_id,
-                            'notes_type'    : 1
+                            'notes_order_id': order_id,
+                            'notes_type': 1
                         },
                         headers: {
                             'X-CSRF-TOKEN': csrfToken
@@ -1484,7 +1530,7 @@
     let cameraStream = null;
     let capturedImage = null;
     let useFrontCamera = true;
-    function click_image(){
+    function click_image() {
         startCamera();
         $('#click_image').modal('show');
         $('#cameraView').show();
@@ -1596,7 +1642,7 @@
                 $('#click_image').modal('hide');
                 showAlertNotes('success', 'Image file uploaded successfully!');
                 isLoading = false;
-                page=1;
+                page = 1;
                 loadNotes();
             },
             error: function (error) {
@@ -1611,14 +1657,18 @@
     // $('#startRec')
 
     const recordButton = document.getElementById("startRec");
+    const recordStopButton = document.getElementById("audio_stop");
+    const recordSendutton = document.getElementById("audio_send");
     let isRecording = false;
-    
+
+
 
     // Start recording
     const startRecord = () => {
         if (!isRecording) {
             isRecording = true;
             console.log("Recording started...");
+            $('#audio_box').css("display", "flex");
             // Add logic to start recording audio here
             startRecording()
         }
@@ -1630,28 +1680,31 @@
             isRecording = false;
             console.log("Recording stopped. Sending audio...");
             // Add logic to stop recording and send audio here
+            $('#audio_box').css("display", "none");
             stopRecording();
         }
     };
 
     // Add event listeners
     recordButton.addEventListener("mousedown", startRecord);
-    recordButton.addEventListener("mouseup", stopRecord);
-    recordButton.addEventListener("mouseleave", stopRecord);
+    recordStopButton.addEventListener("mousedown", stopRecord);
+    // recordButton.addEventListener("mouseup", stopRecord);
+    // recordButton.addEventListener("mouseleave", stopRecord);
 
     // For touch devices
     recordButton.addEventListener("touchstart", (e) => {
-        e.preventDefault(); 
+        e.preventDefault();
         startRecording();
     });
-    recordButton.addEventListener("touchend", (e) => {
-        e.preventDefault();
-        stopRecording();
-    });
-    recordButton.addEventListener("touchcancel", stopRecord);
+    // recordButton.addEventListener("touchend", (e) => {
+    //     e.preventDefault();
+    //     stopRecording();
+    // });
+    // recordButton.addEventListener("touchcancel", stopRecord);
 
 
-    // Audio recording 
+
+    // Audio recording
     // function record_audio(){
     //     $('#record_audio').modal('show');
     //     $("#audio-playback").addClass("hidden")
@@ -1825,11 +1878,11 @@
 
     // }
 
-// function downloadRecording(){
-//     var name = new Date();
-//     var res = name.toISOString().slice(0,10)
-//     downloadAudio.download = res + '.wav';
-// }
+    // function downloadRecording(){
+    //     var name = new Date();
+    //     var res = name.toISOString().slice(0,10)
+    //     downloadAudio.download = res + '.wav';
+    // }
 
     function uploadRecording(audioBlob) {
         if (!audioBlob) {
@@ -1861,15 +1914,15 @@
             },
             success: function (response) {
                 console.log('Audio uploaded successfully:', response);
-                if(response.status==200){
+                if (response.status == 200) {
 
                     showAlertNotes('success', 'Audio file uploaded successfully!');
-                }else{
+                } else {
                     showAlertNotes('warning', response.message);
                 }
                 $('#record_audio').modal('hide');
                 isLoading = false;
-                page=1;
+                page = 1;
                 loadNotes();
             },
             error: function (error) {
@@ -1879,43 +1932,43 @@
     }
 
 
-        function handleFileUpload(event) {
-            const file = event.target.files;
-            if (file) {
-                const formData = new FormData();
-                formData.append('notes_text', '');
-                for (var i = 0; i < file.length; i++) {
-                    formData.append('notes_file[]', file[i]);
-                    formData.append('notes_type', 3);
+    function handleFileUpload(event) {
+        const file = event.target.files;
+        if (file) {
+            const formData = new FormData();
+            formData.append('notes_text', '');
+            for (var i = 0; i < file.length; i++) {
+                formData.append('notes_file[]', file[i]);
+                formData.append('notes_type', 3);
 
-                }
-                $.ajax({
-                    url: "{{ route('notes_add') }}",
-                    type: 'POST',
-                    data: formData,
-                    contentType: false,
-                    processData: false,
-                    headers: {
-                        'X-CSRF-TOKEN': csrfToken
-                    },
-                    success: function (response) {
-                        showAlertNotes('success', response.message);
-                        isLoading = false;
-                        page=1;
-                        loadNotes();
-                    }
-                });
-            } else {
-                console.log("No file selected");
             }
+            $.ajax({
+                url: "{{ route('notes_add') }}",
+                type: 'POST',
+                data: formData,
+                contentType: false,
+                processData: false,
+                headers: {
+                    'X-CSRF-TOKEN': csrfToken
+                },
+                success: function (response) {
+                    showAlertNotes('success', response.message);
+                    isLoading = false;
+                    page = 1;
+                    loadNotes();
+                }
+            });
+        } else {
+            console.log("No file selected");
         }
+    }
 
 
 
 
-        function showAlertNotes(type, message) {
-            const alertContainer = document.getElementById('notes-container');
-            const alertHTML = `
+    function showAlertNotes(type, message) {
+        const alertContainer = document.getElementById('notes-container');
+        const alertHTML = `
                 <div class="alert alert-${type} position-fixed  bg-white alert-dismissible" role="alert" style="top:1rem; right:1rem;width:350px;">
                     <div class="d-flex ">
                         <div>
@@ -1936,8 +1989,8 @@
                     <a class="btn-close" data-bs-dismiss="alert" aria-label="close"></a>
                 </div>
             `;
-            alertContainer.innerHTML = alertHTML;
-            console.log("here");
-        }
+        alertContainer.innerHTML = alertHTML;
+        console.log("here");
+    }
 </script>
 @endsection
