@@ -288,7 +288,7 @@
                         if (lastTransaction.trans_status === 0 && isAnyOrderTransferred) { alert
                             alert("Previous order was aprove, and the current order is of transfer. Please handle accordingly.");
                         }
-                        alert(lastTransaction.trans_status,"last trans",lastTransaction.trans_id)
+                        alert(lastTransaction.trans_status + " - last trans - " + lastTransaction.trans_id);
                         if (lastTransaction.trans_status === 0) {
                             // Add to approve_array
                             approve_array.push(order_id);
@@ -366,7 +366,7 @@
                                 `;
                             }
                         }
-                        alert(approve_array.length,"approve_array")
+                        alert(approve_array.length + "approve_array")
                         if(approve_array.length >= 1){
                             buttonHtml = `
                                 <div class="btn-list">
