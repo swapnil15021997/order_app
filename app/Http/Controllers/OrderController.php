@@ -85,8 +85,12 @@ class OrderController extends Controller
         //         $order['order_qr_code']
         //     ])
         // ); 
-        $orderUrl = route('order_get_approve', ['id' => $order['order_qr_code']]);
-        $qr_code  = QrCode::size(50)->generate($orderUrl);
+        // $orderUrl = route('order_get_approve', ['id' => $order['order_qr_code']]);
+        $qr_code  = QrCode::size(50)->generate(
+            implode('|', [
+                $order['order_id'],$order['order_qr_code'],$order['order_status'],$order['order_number'],$order['order_date'] 
+            ])
+        );
         return view('orders/view_order',['order'=>$order,'fileArray'=>$fileArray,
             'pageTitle'=>'Order','login'=>$login,'activePage'=>$activePage,
             'user_branch'=>$users_branch,'user_permissions'=>$user_permissions,
@@ -519,6 +523,7 @@ class OrderController extends Controller
         } 
 
         $check_order = Order::get_order_with_items($params['order_id']);
+
         if (empty($check_order)){
             return response()->json([
                 'status' => 500,
@@ -1110,5 +1115,168 @@ class OrderController extends Controller
         return view('orders/order_track',compact('branchesArray',
         'pageTitle','login','activePage',
         'check_order','user_branch','user_permissions'));
+    }
+
+
+
+    public function multiple_approve(Request $request){
+        $login  = auth()->user()->toArray();
+        $params = $request->all();
+             
+        $rules = [   
+            
+            'order_id'    => ['required', 'array'],         // Ensure order_id is an array
+            'order_id.*'  => ['required', 'string'],         // Each order_id should be a string
+           
+        ]; 
+        $messages = [
+            'order_id.required'        => 'Order ID is required.',
+            'order_id.array'           => 'Order ID must be an array.',
+            'order_id.*.required'      => 'Each Order ID is required.',
+            'order_id.*.string'        => 'Each Order ID must be a string.',
+         ];
+
+              
+        $validator = Validator::make($params, $rules, $messages);
+        
+        if($validator->fails()){
+            return response()->json([
+                'status' => 500,
+                'message' => Arr::flatten($validator->errors()->toArray())[0], 
+                'errors'  => $validator->errors(), 
+            ]);
+        } 
+        foreach ($params['order_id'] as $order_id) {
+       
+
+            $order = Order::get_order_by_order_id($order_id);  
+            $order = $order->toArray();
+            
+            $trans = Transactions::get_trans_by_order_id($order['order_id']);
+            
+            if (empty($trans)){
+                return response()->json([
+                    'status' => 500,
+                    'message' => 'Order does not exist'
+                ]);
+            }
+            $user_permissions = session('combined_permissions', []);
+
+            
+            if (!in_array(17, $user_permissions)) {
+                return response()->json([
+                    'status' => 500,
+                    'message' => 'You are not allowed to approve this order'
+                ]);
+            }
+            $trans->trans_status = 1;
+            $trans->trans_approved_by = $login['id'];
+            $trans->save();
+            $order = Order::get_order_by_id($trans->trans_order_id);
+            $order->order_status        = 1;
+            $order->order_current_branch= $trans->trans_to;
+            $order->save();
+        }
+        SendEmailJob::dispatch($order->order_id,$type="Approve");
+        SendNotification::dispatch($order->order_id,$type="Approve");
+        return response()->json([
+            'status' => 200,
+            'message' => "Order Received Successfully" 
+        ]);
+
+
+    }
+
+
+    public function multiple_transfer(Request $request){
+        $login  = auth()->user()->toArray();
+        $params = $request->all();
+             
+        $rules = [   
+            
+            'order_id'    => ['required', 'array'],         // Ensure order_id is an array
+            'order_id.*'  => ['required', 'string'],         // Each order_id should be a string
+            'transfer_to' => ['required', 'string'], 
+        ]; 
+        $messages = [
+            'order_id.required'        => 'Order ID is required.',
+            'order_id.array'           => 'Order ID must be an array.',
+            'order_id.*.required'      => 'Each Order ID is required.',
+            'order_id.*.string'        => 'Each Order ID must be a string.',
+            'transfer_to.required'     => 'Transfer target is required.',
+            'transfer_to.string'       => 'Transfer target must be a string.',
+          ];
+
+              
+        $validator = Validator::make($params, $rules, $messages);
+        
+        if($validator->fails()){
+            return response()->json([
+                'status' => 500,
+                'message' => Arr::flatten($validator->errors()->toArray())[0], 
+                'errors'  => $validator->errors(), 
+            ]);
+        } 
+
+        foreach ($params['order_id'] as $order_id) {
+            
+            $order = Order::get_order_with_items($params['order_id']);
+            if (empty($order)){
+                return response()->json([
+                    'status' => 500,
+                    'message' => 'Order does not exist'
+                ]);
+            }
+    
+            $user_permissions = session('combined_permissions', []);
+           
+            if (!in_array(18, $user_permissions)) {
+                return response()->json([
+                    'status' => 500,
+                    'message' => 'You are not allowed to transfer this order'
+                ]);
+            }
+            // if( $order->order_to_branch_id == $params['transfer_to']){
+            //     return response()->json([
+            //         'status' => 500,
+            //         'message' => 'Cant transfer to the same branch'
+            //     ]);
+            // }
+            $check_transaction = Transactions::where('trans_order_id',$order->order_id)->first();
+            if(!empty($check_transaction)){
+                if ($order->order_status==0){
+                    return response()->json([
+                        'status' => 500,
+                        'message' => 'Cant transfer item right now Please approve previous order'
+                    ]);
+                }
+            }
+            $items = $order->items->toArray();
+            // $order->order_current_branch= $params['transfer_to'];
+            $order->order_status        = 0;
+            $order->save();
+    
+            $login                      = auth()->user()->toArray();
+            $active_branch              = $login['user_active_branch'];
+            $trans                      = new Transactions();
+            $trans->trans_from          = $order->order_from_branch_id;
+            $trans->trans_to            = $params['transfer_to'];
+            $trans->trans_active_branch = $active_branch ?? $order->order_from_branch_id;
+            $trans->trans_user_id       = $login['id'];
+            $trans->trans_order_id      = $order->order_id;
+            $trans->trans_item_id       = $items[0]['item_id'];
+            $trans->trans_date          = Carbon::now()->toDateString();
+            $trans->trans_time          = Carbon::now()->toDateTimeString(); 
+            $trans->trans_status        = 0;
+            $trans->save();
+        }
+        SendEmailJob::dispatch($order->order_id,$type="Transfer");
+        SendNotification::dispatch($order->order_id,$type="Transfer");
+        return response()->json([
+            'status'  => 200,
+            'message' => "Item Transfered successfully" 
+        ]);
+        
+
     }
 }

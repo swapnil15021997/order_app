@@ -16,10 +16,12 @@
         </div>
 
 
-
-
-        <!-- <div id="my-qr-reader"
+ 
+<!-- 
+        <div id="my-qr-reader"
+           
             style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1000; background: rgba(0, 0, 0, 0.8);">
+    
             <video id="videoElem" style="width: 100%; height: 100%; object-fit: cover;"></video>
             <div style="position:fixed; top: 1rem; right: 1rem; z-index: 1111;">
                 <button class="btn btn-secondary btn-icon" id="close_qr_code">
@@ -35,16 +37,55 @@
                     </svg>
                 </button>
             </div>
-        </div>
-    </div> -->
+            
+        </div> -->
 
+        <!-- <div id="my-qr-reader" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1000; background: rgba(0, 0, 0, 0.8);">
+    
+            
+            <div style="display: flex; flex-direction: column; height: 100%;">
+
+                <div id="scanner-container" style="flex: 1; position: relative; background: black; color: white; overflow: hidden;">
+                    <video id="videoElem" style="width: 100%; height: 100%; object-fit: cover;"></video>
+                    <button class="btn btn-secondary btn-icon" id="close_qr_code"
+                        style="position: absolute; top: 1rem; right: 1rem; z-index: 1111; background: rgba(255, 255, 255, 0.8); border: none; padding: 0.5rem;">
+                        <svg fill="currentColor" height="24px" width="24px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                            <polygon points="512,59.076 452.922,0 256,196.922 59.076,0 0,59.076 196.922,256 0,452.922 59.076,512 256,315.076 452.922,512 512,452.922 315.076,256" />
+                        </svg>
+                    </button>
+                </div>
+
+            </div>
+        </div> -->
+
+
+    </div>
+
+    <!-- Libs JS -->
+    <script src="{{ asset('libs/apexcharts/apexcharts.min.js')}}" defer></script>
+    <script src="{{ asset('libs/jsvectormap/js/jsvectormap.min.js')}}" defer></script>
+    <script src="{{ asset('libs/jsvectormap/maps/world.js')}}" defer></script>
+    <script src="{{ asset('libs/jsvectormap/maps/world-merc.js')}}" defer></script>
+
+    <!-- <script src="{{ asset('libs/dropzone/dist/dropzone-min.js')}}" defer></script> -->
+    
+    <!-- Tabler Core -->
+    <script src="{{ asset('js/tabler.min.js')}}" defer></script>
+    <script src="{{ asset('js/demo.min.js')}}" defer></script>
+    <script src="{{ asset('js/manage-audio.js')}}" defer></script>
+
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script> -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
+
+    
 
         <!-- new qr  -->
 
         <div id="my-qr-reader" class="qr-scanner-position">
             <div class="qr-scan-screen">
                 <div class="qr-code">
-                    <button class="btn btn-secondary btn-icon" id="close_qr_code">
+                    <button class="btn btn-secondary btn-icon" id="close_qr_code" onclick="stopScanner()">
                         <svg fill="currentColor" height="24px" width="24px" version="1.1" id="Layer_1"
                             xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
                             viewBox="0 0 512 512" xml:space="preserve">
@@ -59,8 +100,8 @@
                     <video id="videoElem" style="width: 100%; height: 100%; object-fit: cover;"></video>
                 </div>
                 <div class="qr-list">
-                    <ul>
-                        <li class="card">
+                    <ul id="my_orders">
+                        <!-- <li class="card">
                             <div class="card-body">
                                 <div>
                                     <h4>#9276293</h4>
@@ -76,7 +117,7 @@
                                         alt="qr-code" />
                                 </div>
                             </div>
-                        </li>
+                        </li> -->
                     </ul>
                 </div>
             </div>

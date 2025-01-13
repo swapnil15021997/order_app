@@ -134,6 +134,11 @@ Route::post('order-transfer',  [OrderController::class, 'order_transfer'])->name
 Route::get('track-order/{id}', [OrderController::class, 'track_order'])->name('track_order');
 
 
+Route::post('multiple-approve', [OrderController::class, 'multiple_approve'])->name('multiple_approve');
+
+Route::post('multiple-transfer', [OrderController::class, 'multiple_transfer'])->name('multiple_transfer');
+
+
 
 
 Route::get('user-master', [UserController::class, 'user_index'])->name('user-master');

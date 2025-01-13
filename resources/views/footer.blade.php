@@ -237,6 +237,7 @@
         }
 
         function startScanner() {
+            console.log('Starting');
             // Show the video element
             document.getElementById("my-qr-reader").style.display = "block";
             startButton.textContent = "Stop Scanner";

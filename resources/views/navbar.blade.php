@@ -175,6 +175,41 @@
             </div>
         </div>
     </div>
+
+    <input type="hidden" name="" id="transfer_order_id">
+
+    <div class="modal modal-blur fade" id="transfer_order" tabindex="-2" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h5 class="modal-title">Transfer Order</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+
+                    <label class="form-label">Order To</label>
+                    <div class="row">
+                        <div class="col-6 select-full">
+                            <select id="TransfersearchableSelectTo" class="form-select select-2  w-100 " type="text">
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="modal-footer">
+                    <a href="#" class="btn btn-secondary" data-bs-dismiss="modal">
+                        Cancel
+                    </a>
+                    <a id="TransferOrderBtn" onclick="transfer_this()" href="#" class="btn btn-primary">
+                        Transfer This Order
+                    </a>
+                </div>
+
+            </div>
+        </div>
+    </div>
 </header>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/qr-scanner/1.4.2/qr-scanner.umd.min.js"></script>
@@ -186,6 +221,9 @@
             }
         }
     </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+
     <script>
         function domReady(fn) {
             if (document.readyState === "complete" || document.readyState === "interactive") {
@@ -213,6 +251,7 @@
                 // If the result is a URL, open it in a new tab
                 if (scannedText.startsWith('http')) {
                     window.open(scannedText, '_blank');
+                    
                 }
 
                 // Stop scanning
@@ -221,6 +260,9 @@
 
             function startScanner() {
                 // Show the video element
+                
+                create_order_array(1,'orderQrCode', 1, 2463257358,2020-2-12);
+                
                 document.getElementById("my-qr-reader").style.display = "block";
                 startButton.textContent = "Stop Scanner";
 
@@ -262,6 +304,366 @@
             //     resultDiv.innerHTML = `<p style="color: red;">Error: ${e.message}</p>`;
             // });
         });
+
+
+
+
+        domReady(function () {
+            // Get DOM elements
+            const videoElem   = document.getElementById("videoElem");
+            const startButton = document.getElementById("start-scan");
+            const resultDiv   = document.getElementById("result");
+            const my_orders   = document.getElementById("my_orders");
+            let qrScanner = null;
+
+            function onScanSuccess(result) {
+                // Display the result
+                const scannedText = result.data || result;
+                // If the result is a URL, open it in a new tab
+                // if (scannedText.startsWith('http')) {
+                //     window.open(scannedText, '_blank');
+                    
+                // }
+
+                const [order_id,orderQrCode, orderStatus, orderNumber, orderDate] = scannedText.split('|');
+                create_order_array(order_id,orderQrCode, orderStatus, orderNumber,orderDate);
+                // Stop scanning
+                stopScanner();
+            }
+
+            function startScanner() {
+                // Show the video element
+
+                document.getElementById("my-qr-reader").style.display = "block";
+                startButton.textContent = "Stop Scanner";
+
+                // Initialize QR scanner if not already created
+                if (!qrScanner) {
+                    qrScanner = new QrScanner(
+                        videoElem,
+                        onScanSuccess,
+                        {
+                            highlightScanRegion: true,
+                            highlightCodeOutline: true,
+                        }
+                    );
+                }
+
+                // Start scanning
+                qrScanner.start();
+            }
+
+            function stopScanner() {
+                if (qrScanner) {
+                    qrScanner.stop();
+                }
+                document.getElementById("my-qr-reader").style.display = "none";
+                startButton.textContent = "Start Scanner";
+            }
+
+            // Toggle scanner on button click
+            startButton.addEventListener("click", function () {
+                if (qrScanner && qrScanner.isScanning()) {
+                    stopScanner();
+                } else {
+                    startScanner();
+                }
+            });
+
+           
+
+            // Handle errors
+            // window.addEventListener('error', function(e) {
+            //     resultDiv.innerHTML = `<p style="color: red;">Error: ${e.message}</p>`;
+            // });
+        });
+
+        let approve_array  = [];
+        let transfer_array = [];
+        function create_order_array(order_id,orderQrCode, orderStatus, orderNumber,orderDate){
+            const my_orders   = document.getElementById("my_orders");
+            
+            let my_ord;
+            let buttonHtml = '';
+            var csrfToken = $('meta[name="csrf-token"]').attr('content');
+
+            $.ajax({
+                url: "{{ route('order_details') }}",  // Adjust the route as needed
+                type: 'POST',
+                data: {
+                    _token: csrfToken,
+
+                    order_id: order_id,
+                },
+                success: function (response) {
+                    console.log(response);
+                        
+                    if (response.data.transactions && response.data.transactions.length > 0) {
+
+                        let lastTransaction = response.data.transactions[response.data.transactions.length - 1];
+                        
+
+                        let isAnyOrderApproved = approve_array.length > 0;
+                        let isAnyOrderTransferred = transfer_array.length > 0;  
+                        
+                        if (lastTransaction.trans_status === 1 && isAnyOrderApproved) {
+                            alert("Previous order was transferred, and the current order is approved. Please handle accordingly.");
+                        }
+                        if (lastTransaction.trans_status === 0 && isAnyOrderTransferred) { alert
+                            alert("Previous order was aprove, and the current order is of transfer. Please handle accordingly.");
+                        }
+
+                        if (lastTransaction.trans_status === 0) {
+                            // Add to approve_array
+                            approve_array.push(order_id);
+
+                            my_ord = `
+                            
+                               <li class="card">
+                                    <div class="card-body">
+                                        <div>
+                                            <h4>${orderNumber}</h4>
+                                            <h4>${orderDate}</h4>
+                                        </div>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <div>
+                                                <p>G - brckle</p>
+                                                <p>p - 91.6</p>
+                                                <p>w - 22.5</p>
+                                            </div>
+                                            <img src="https://upload.wikimedia.org/wikipedia/commons/d/d0/QR_code_for_mobile_English_Wikipedia.svg"
+                                                alt="qr-code" />
+                                        </div>
+                                    </div>
+                                </li>
+                                
+                            `;
+                        } else {
+                            // If any previous order was approved, do not allow transfer
+                            if (isAnyOrderApproved) {
+                                approve_array.push(order_id);
+
+                                my_ord = `
+                                   <li class="card">
+                                    <div class="card-body">
+                                        <div>
+                                            <h4>${orderNumber}</h4>
+                                            <h4>${orderDate}</h4>
+                                        </div>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <div>
+                                                <p>G - brckle</p>
+                                                <p>p - 91.6</p>
+                                                <p>w - 22.5</p>
+                                            </div>
+                                            <img src="https://upload.wikimedia.org/wikipedia/commons/d/d0/QR_code_for_mobile_English_Wikipedia.svg"
+                                                alt="qr-code" />
+                                        </div>
+                                    </div>
+                                </li>
+                                
+                                    
+                                `;
+                            } else {
+                                
+                                transfer_array.push(order_id); 
+                                my_ord = `
+                                     <li class="card">
+                                    <div class="card-body">
+                                        <div>
+                                            <h4>${orderNumber}</h4>
+                                            <h4>${orderDate}</h4>
+                                        </div>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <div>
+                                                <p>G - brckle</p>
+                                                <p>p - 91.6</p>
+                                                <p>w - 22.5</p>
+                                            </div>
+                                            <img src="https://upload.wikimedia.org/wikipedia/commons/d/d0/QR_code_for_mobile_English_Wikipedia.svg"
+                                                alt="qr-code" />
+                                        </div>
+                                    </div>
+                                </li>
+                                
+                                    
+                                `;
+                            }
+                        }
+
+                        if(approve_array.length >= 1){
+                            buttonHtml = `
+                                <div class="btn-list">
+                                    <button class="btn" onclick="approve_order()">
+                                        Approve Order
+                                    </button>
+                                   
+                                </div>
+                            `;
+                        }else{
+                            buttonHtml = `
+                                <div class="btn-list">
+                                    
+                                    <button class="btn" onclick="transfer_order()">
+                                        Transfer Order
+                                    </button>
+                                </div>
+                            `;
+                        }
+                       
+
+                        my_orders.innerHTML += my_ord;
+
+                        // Only add the button once (based on approval or transfer status)
+                        if (buttonHtml) {
+                            console.log(buttonHtml);
+                            my_orders.innerHTML += buttonHtml;
+                        }else{
+                            console.log("No transactions found");
+                        }
+                    }
+                }
+            
+            });
+    
+        }
+
+
+        function transfer_order() {
+
+            $('#transfer_order').modal('show');
+        }
+
+        $(document).ready(function () {
+
+
+            var csrfToken = $('meta[name="csrf-token"]').attr('content');
+
+            $('#TransfersearchableSelectTo').select2({
+                dropdownParent: $('#transfer_order'),
+                placeholder: "Select an option",
+                allowClear: true,
+                ajax: {
+                    url: "{{route('branch_list')}}",
+                    dataType: 'json',
+                    type: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': csrfToken  // Add CSRF token in the header
+                    },
+                    delay: 250,
+                    data: function (params) {
+                        return {
+
+                            search: params.term,
+                            per_page: 10,
+                            page: params.page || 1
+                        };
+                    },
+                    processResults: function (data) {
+
+                        return {
+                            results: data.data.branches.map(function (item) {
+                                return {
+                                    id: item.branch_id,
+                                    text: item.branch_name
+                                };
+                            }),
+                            pagination: {
+                                more: data.data.length >= 10 // Check if there are more results
+                            }
+                        };
+                    },
+                    cache: true
+                }
+            });
+        });
+
+
+        function transfer_this(){
+            if (transfer_array.length == 0){
+                alert('Cant transfer with empty array');
+            }
+            var csrfToken = $('meta[name="csrf-token"]').attr('content');
+            var transferTo = $('#TransfersearchableSelectTo').val();
+
+            $.ajax({
+                url: "{{ route('multiple_transfer') }}",
+                type: 'POST',
+                data: {
+                    _token: csrfToken,
+                    order_id: transfer_array,
+                    transfer_to: transferTo
+
+                },
+                success: function (response) {
+                    if (response.status == 200) {
+                        $('#transfer_order_id').val('');
+                        $('#TransfersearchableSelectTo').val('');
+                        $('#transfer_order').modal('hide');
+                        showAlert('success', response.message);
+
+                        setTimeout(function () {
+                            location.reload();
+                        }, 2000);
+                    } else {
+
+                        showAlert('success', response.message);
+                        $('#TransfersearchableSelectTo').val('');
+
+
+                    }
+                },
+                error: function (xhr, status, error) {
+                    showAlert('success', error);
+
+                    $('#TransfersearchableSelectTo').val('');
+
+                }
+            });
+        }
+
+            function approve_order(){
+                alert("Approve Order");
+                if (approve_array.length == 0){
+                    alert('Cant approve with empty array');
+                }
+                var csrfToken = $('meta[name="csrf-token"]').attr('content');
+        
+                $.ajax({
+                    url: "{{ route('multiple_approve') }}",
+                    type: 'POST',
+                    data: {
+                        _token  : csrfToken,
+                        order_id: approve_array,
+                        transfer_to: transferTo
+
+                    },
+                    success: function (response) {
+                        if (response.status == 200) {
+                            $('#transfer_order_id').val('');
+                            $('#TransfersearchableSelectTo').val('');
+                            $('#transfer_order').modal('hide');
+                            showAlert('success', response.message);
+
+                            setTimeout(function () {
+                                location.reload();
+                            }, 2000);
+                        } else {
+
+                            showAlert('success', response.message);
+                            $('#TransfersearchableSelectTo').val('');
+
+
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        showAlert('success', error);
+
+                        $('#TransfersearchableSelectTo').val('');
+
+                    }
+                });
+            }
     </script> 
    
 <script>
