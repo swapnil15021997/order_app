@@ -1732,9 +1732,7 @@
     recordButton.addEventListener("mousedown", startRecord);
     recordStopButton.addEventListener("mousedown", stopRecord);
     recordSendutton.addEventListener("mousedown", uploadRecording);
-    // recordButton.addEventListener("mouseup", stopRecord);
-    // recordButton.addEventListener("mouseleave", stopRecord);
-
+    
     // For touch devices
     recordButton.addEventListener("touchstart", (e) => {
         e.preventDefault();
@@ -1744,54 +1742,15 @@
         e.preventDefault();
         stopRecording();
     });
-    // recordButton.addEventListener("touchcancel", stopRecord);
-
 
     // Audio recording
-    // function record_audio(){
-    //     $('#record_audio').modal('show');
-    //     $("#audio-playback").addClass("hidden")
-
-    // }
-
-    // let recorder, audio_stream, audioBlob;
-
-    // const recordButton = $('#recordButton');
-    // $('#recordButton').on('click', startRecording);
-
-    // const stopButton = $('#stopButton');
-    // $('#stopButton').on('click', stopRecording);
-
-    // // set preview
-    // const preview    = $('#audio-playback');
+   
     const sendButton = $('#audio_send');
     $('#audio_send').on('click', uploadRecording);
-    // $('#sendButton').hide();
-    // const audioPlaybackContainer =$('#audioPlaybackContainer');
-
-    // const resetButton = $('#resetButton');
-    // $('#resetButton').on('click', resetRecording);
-    // $('#resetButton').hide();
-
-    // const cancelButton = $('#cancelButton');
-    // $('#cancelButton').on('click', cancelRecording);
-
+   
 
     function startRecording() {
-        console.log('Starting recording... in function');
-        // button settings
-
-        // $("#recordButton").prop("disabled", true);
-        // $("#recordButton").text("Recording...");
-        // $("#recordButton").addClass("button-animate");
-
-        // $("#stopButton").removeClass("inactive");
-        // $("#stopButton").prop("disabled", false);
-
-        // $('#sendButton').prop("disabled", true);
-
-
-        // $("#audio-playback").addClass("hidden")
+      
 
         navigator.mediaDevices.getUserMedia({ audio: true })
             .then(function (stream) {
@@ -1853,95 +1812,9 @@
         audioBlob = null;
         audio_stream = null;
         recorder = null;
-
-
-        // buttons reset
-        // recordButton.disabled = false;
-        // recordButton.innerText = "Redo Recording"
-        // $("#recordButton").removeClass("button-animate");
-
-        // $("#stopButton").addClass("inactive");
-        // $('#sendButton').prop("disabled", false);
-        // $('#sendButton').show();
-        // $('#resetButton').show();
-
-        // stopButton.disabled = true;
-
-        // sendButton.audioBlob = audioBlob;
-
-        // $("#audio-playback").removeClass("hidden");
-        // console.log('class remove');
-
-
     }
 
-    // function resetRecording() {
-    //     // Reset the recorder, audio stream, and UI
-    //     if (recorder) {
-    //         recorder.stop();
-    //         audio_stream.getAudioTracks()[0].stop();
-    //     }
-
-    //     // Reset audio variables
-    //     audioBlob = null;
-    //     audio_stream = null;
-    //     recorder = null;
-
-    //     // Hide audio playback and reset the buttons
-    //     audioPlaybackContainer.addClass("d-none");
-    //     preview[0].src = '';
-    //     $("#audio-playback").addClass("hidden");
-
-    //     recordButton.prop("disabled", false);
-
-    //     $("#recordButton").text("");
-    //     $("#recordButton").html('<i class="bi bi-mic"></i>');
-    //     recordButton.removeClass("button-animate");
-
-    //     stopButton.addClass("inactive");
-    //     stopButton.prop("disabled", true);
-
-    //     sendButton[0].audioBlob = null;
-
-    //     $('#sendButton').hide();
-    //     $("#resetButton").hide();
-    // }
-
-    // function cancelRecording() {
-    //     if (recorder) {
-    //         recorder.stop();
-    //         audio_stream.getAudioTracks()[0].stop();
-    //     }
-
-    //     // Reset audio variables
-    //     audioBlob = null;
-    //     audio_stream = null;
-    //     recorder = null;
-
-    //     // Hide audio playback and reset the buttons
-    //     audioPlaybackContainer.addClass("d-none");
-    //     preview[0].src = '';
-    //     $("#audio-playback").addClass("hidden");
-
-    //     recordButton.prop("disabled", false);
-
-    //     $("#recordButton").text("");
-    //     $("#recordButton").html('<i class="bi bi-mic"></i>');
-    //     recordButton.removeClass("button-animate");
-
-    //     stopButton.addClass("inactive");
-    //     stopButton.prop("disabled", true);
-
-    //     sendButton[0].audioBlob = null;
-    //     $('#sendButton').hide();
-
-    // }
-
-    // function downloadRecording(){
-    //     var name = new Date();
-    //     var res = name.toISOString().slice(0,10)
-    //     downloadAudio.download = res + '.wav';
-    // }
+  
 
     function uploadRecording() {
        console.log("Send Button Blob:", sendButton.audioBlob);

@@ -401,6 +401,42 @@
             <div id="notes-container"></div>
             <div class="space-y-2 scrollable h-100 py-2 px-1" id="notes_body"></div>
             <div class="note-footer">
+            <div class="audio-box" id="audio_box">
+                    <div class="visualizer">
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                    </div>
+                    <div class="d-flex gap-1 align-items-center">
+                        <button id=" audio_send" class="stop">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
+                                <g fill="none" stroke="currentColor" stroke-linejoin="round">
+                                    <path d="M14.5 8a6.5 6.5 0 1 1-13 0a6.5 6.5 0 0 1 13 0Z" />
+                                    <path d="M6 6h4v4H6z" />
+                                </g>
+                            </svg>
+                        </button>
+                        <button id="audio_stop" class="send">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                                <path fill="currentColor"
+                                    d="M20.33 3.67a1.45 1.45 0 0 0-1.47-.35L4.23 8.2A1.44 1.44 0 0 0 4 10.85l6.07 3l3 6.09a1.44 1.44 0 0 0 1.29.79h.1a1.43 1.43 0 0 0 1.26-1l4.95-14.59a1.41 1.41 0 0 0-.34-1.47M4.85 9.58l12.77-4.26l-7.09 7.09Zm9.58 9.57l-2.84-5.68l7.09-7.09Z" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
                 <input type="text" autocomplete="off" placeholder="Write your message" id="TextNotes" />
                 <span class="custom-btn">
                     <input type="file" id="fileInput" style="display: none;" onchange="handleFileUpload(event)"
@@ -425,16 +461,17 @@
                         </svg>
                     </a>
                 </span>
-                <span class="custom-btn">
-                    <input type="file" id="fileInput" style="display: none;" onchange="record_audio(event)" multiple />
-                    <a href="#" onclick="record_audio()" data-bs-toggle="tooltip"
-                        aria-label="Please Select file to upload" data-bs-original-title="Audio File">
+                <span class="custom-btn position-relative">
+                    <input type="file" id="fileInput" style="display: none;" onchange="record_audio()" multiple />
+                    <!-- onclick="record_audio()" -->
+                    <div id="startRec" data-bs-toggle="tooltip" aria-label="Please Select file to upload"
+                        data-bs-original-title="Audio File">
                         <svg width="16" height="22" viewBox="0 0 16 22" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path
                                 d="M15 10V11C15 14.866 11.866 18 8 18M1 10V11C1 14.866 4.13401 18 8 18M8 18V21M8 21H11M8 21H5M8 15C5.79086 15 4 13.2091 4 11V5C4 2.79086 5.79086 1 8 1C10.2091 1 12 2.79086 12 5V11C12 13.2091 10.2091 15 8 15Z"
                                 stroke="#000E08" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
                         </svg>
-                    </a>
+                    </div>
                 </span>
                 <button class="note-submit-btn" id="SendNotes">
                     <svg width="19" height="18" viewBox="0 0 19 18" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -1523,62 +1560,61 @@
     // Stop the camera when the modal is closed
     $('[data-bs-dismiss="modal"]').on('click', stopCamera);
 
-    function record_audio() {
-        $('#record_audio').modal('show');
-        $("#audio-playback").addClass("hidden")
-
-    }
-
+    const recordButton = document.getElementById("startRec");
+    const recordStopButton = document.getElementById("audio_stop");
+    const recordSendutton = document.getElementById("audio_send");
+    let isRecording = false;
     let recorder, audio_stream, audioBlob;
-    // const recordButton = document.getElementById("recordButton");
-    // recordButton.addEventListener("click", startRecording);
-    const recordButton = $('#recordButton');
-    $('#recordButton').on('click', startRecording);
+
+    let sendButton = $('#audio_send');
 
 
-    // stop recording
-    // const stopButton = document.getElementById("stopButton");
-    // stopButton.addEventListener("click", stopRecording);
-    // stopButton.disabled = true;
+    // Start recording
+    const startRecord = () => {
+        if (!isRecording) {
+            isRecording = true;
+            console.log("Recording started...");
+            $('#audio_box').css("display", "flex");
+            // Add logic to start recording audio here
+            startRecording()
+        }
+    };
 
-    const stopButton = $('#stopButton');
-    $('#stopButton').on('click', stopRecording);
+    // Stop recording and send
+    const stopRecord = () => {
+        if (isRecording) {
+            isRecording = false;
+            console.log("Recording stopped. Sending audio...");
+            // Add logic to stop recording and send audio here
+            $('#audio_box').css("display", "none");
+            stopRecording();
+        }
+    };
 
-    const cancelButton = $('#cancelButton');
-    $('#cancelButton').on('click', cancelRecording);
 
-    // set preview
-    // const preview = document.getElementById("audio-playback");
-    const preview = $('#audio-playback');
 
-    // const sendButton = document.getElementById("sendButton");
-    // sendButton.addEventListener("click", uploadRecording);
+    // Add event listeners
+    recordButton.addEventListener("mousedown", startRecord);
+    recordStopButton.addEventListener("mousedown", stopRecord);
+    recordSendutton.addEventListener("mousedown", uploadRecording);
+    
+    // For touch devices
+    recordButton.addEventListener("touchstart", (e) => {
+        e.preventDefault();
+        startRecording();
+    });
+    recordStopButton.addEventListener("touchend", (e) => {
+        e.preventDefault();
+        stopRecording();
+    });
 
-    const sendButton = $('#sendButton');
-    $('#sendButton').on('click', uploadRecording);
-    $('#sendButton').hide();
-
-    // const audioPlaybackContainer = document.getElementById("audioPlaybackContainer");
-    const audioPlaybackContainer = $('#audioPlaybackContainer');
-
-    const resetButton = $('#resetButton');
-    $('#resetButton').on('click', resetRecording);
-    $('#resetButton').hide();
+    // Audio recording
+   
+        $('#audio_send').on('click', uploadRecording);
+   
 
     function startRecording() {
-
-        // button settings
-
-        $("#recordButton").prop("disabled", true);
-        $("#recordButton").text("Recording...");
-        $("#recordButton").addClass("button-animate");
-
-        $("#stopButton").removeClass("inactive");
-        $("#stopButton").prop("disabled", false);
-
-        $("#audio-playback").addClass("hidden")
-
-        $('#sendButton').prop("disabled", true);
+      
 
         navigator.mediaDevices.getUserMedia({ audio: true })
             .then(function (stream) {
@@ -1588,17 +1624,20 @@
                 // when there is data, compile into object for preview src
                 recorder.ondataavailable = function (e) {
                     audioChunks.push(e.data);
-                    // const url = URL.createObjectURL(e.data);
-                    // preview.src = url;
 
-                    // set link href as blob url, replaced instantly if re-recorded
-                    // downloadAudio.href = url;
                 };
 
                 recorder.onstop = function () {
                     // Create an audio blob
                     audioBlob = new Blob(audioChunks, { type: "audio/wav" });
+                    console.log("Audio Blob Created:", audioBlob);
+                    console.log("Audio Blob Size:", audioBlob.size);
 
+   
+                    if (audioBlob.size === 0) {
+                        alert("Audio blob is empty! Recording may have failed.");
+                        return;
+                    }
                     // Create a URL for the blob and set it as the audio playback source
                     const url = URL.createObjectURL(audioBlob);
                     var preview = document.getElementById('audio-playback');
@@ -1609,7 +1648,12 @@
 
                     preview.load();
                     console.log("Audio recording ready for playback.");
-                    sendButton.audioBlob = audioBlob;
+                    if (audioBlob.size > 0) {
+                        sendButton.audioBlob = audioBlob; // Assign to sendButton
+                        console.log("Audio Blob assigned to sendButton:", sendButton.audioBlob);
+                    } else {
+                        console.error("Audio Blob is empty. Recording may have failed.");
+                    }
                 };
 
                 recorder.start();
@@ -1622,106 +1666,29 @@
     }
 
     function stopRecording() {
-        recorder.stop();
-        audio_stream.getAudioTracks()[0].stop();
-
-        // buttons reset
-        recordButton.disabled = false;
-        recordButton.innerText = "Redo Recording"
-        $("#recordButton").removeClass("button-animate");
-
-        $("#stopButton").addClass("inactive");
-        stopButton.disabled = true;
-
-        $('#sendButton').prop("disabled", false);
-
-        sendButton.audioBlob = audioBlob;
-
-        $("#audio-playback").removeClass("hidden");
-        console.log('class remove');
-
-        $('#sendButton').show();
-        $('#resetButton').show();
-
-
-    }
-
-    function cancelRecording() {
         if (recorder) {
             recorder.stop();
             audio_stream.getAudioTracks()[0].stop();
         }
-
-        // Reset audio variables
+        $('#audio_box').css("display", "none");
+    
+    //     // Reset audio variables
         audioBlob = null;
         audio_stream = null;
         recorder = null;
-
-        // Hide audio playback and reset the buttons
-        audioPlaybackContainer.addClass("d-none");
-        preview[0].src = '';
-        $("#audio-playback").addClass("hidden");
-
-        recordButton.prop("disabled", false);
-
-        $("#recordButton").text("");
-        $("#recordButton").html('<i class="bi bi-mic"></i>');
-        recordButton.removeClass("button-animate");
-
-        stopButton.addClass("inactive");
-        stopButton.prop("disabled", true);
-
-        sendButton[0].audioBlob = null;
-    }
-    function resetRecording() {
-        // Reset the recorder, audio stream, and UI
-        if (recorder) {
-            recorder.stop();
-            audio_stream.getAudioTracks()[0].stop();
-        }
-
-        // Reset audio variables
-        audioBlob = null;
-        audio_stream = null;
-        recorder = null;
-
-        // Hide audio playback and reset the buttons
-        audioPlaybackContainer.addClass("d-none");
-        preview[0].src = '';
-        $("#audio-playback").addClass("hidden");
-
-        recordButton.prop("disabled", false);
-
-        $("#recordButton").text("");
-        $("#recordButton").html('<i class="bi bi-mic"></i>');
-        recordButton.removeClass("button-animate");
-
-        stopButton.addClass("inactive");
-        stopButton.prop("disabled", true);
-
-        sendButton[0].audioBlob = null;
-
-        $('#sendButton').hide();
-        $('#resetButton').hide();
-
     }
 
-    // function downloadRecording(){
-    //     var name = new Date();
-    //     var res = name.toISOString().slice(0,10)
-    //     downloadAudio.download = res + '.wav';
-    // }
+  
 
     function uploadRecording() {
-        console.log("Audio Blob:", audioBlob);
-        console.log("Send Button Blob:", sendButton.audioBlob);
-        console.log(audioBlob.type);
+       console.log("Send Button Blob:", sendButton.audioBlob);
+        
         if (!sendButton.audioBlob) {
             alert("No audio file available for upload!");
             return;
         }
         const orderId = $('#order_id').val();
-        const audioFile = new File([audioBlob], 'recording.wav', { type: 'audio/wav' });
+        const audioFile = new File([sendButton.audioBlob], 'recording.wav', { type: 'audio/wav' });
 
         const formData = new FormData();
         formData.append('notes_text', '');
@@ -1739,10 +1706,27 @@
             },
             success: function (response) {
                 console.log('Audio uploaded successfully:', response);
-                notesList.push(response.data);
-                showAlertNotes('success', 'Audio file uploaded successfully!');
+                if (response.status == 200) {
+
+                    showAlertNotes('success', 'Audio file uploaded successfully!');
+                } else {
+                    showAlertNotes('warning', response.message);
+                }
+                $('#audio_box').css("display", "none");
+                if (recorder) {
+                    recorder.stop();
+                    audio_stream.getAudioTracks()[0].stop();
+                }
+                $('#audio_box').css("display", "none");
+            
+                // Reset audio variables
+                audioBlob = null;
+                audio_stream = null;
+                recorder = null;
+
                 $('#record_audio').modal('hide');
                 isLoading = false;
+                page = 1;
                 loadNotes();
             },
             error: function (error) {
@@ -1750,6 +1734,7 @@
             }
         });
     }
+
 
 
     function handleFileUpload(event) {
