@@ -249,7 +249,7 @@
             let my_ord;
             let buttonHtml = '';
             var csrfToken = $('meta[name="csrf-token"]').attr('content');
-
+            alert(isScanning);
             if (isScanning) {
                 alert("Please wait until the current scan is complete.");
                 return; // Stop further execution
