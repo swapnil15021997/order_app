@@ -358,6 +358,9 @@
 #click_image .camera_body {
     width: 100%;
     height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 #click_image .camera_footer {
@@ -381,16 +384,9 @@
     );
 }
 
-#click_image .modal-body {
-    width: 100%;
-    padding-top: 0;
-    padding-left: 0;
-    padding-right: 0;
-}
-
 #click_image #cameraStream {
     width: 100%;
-    height: 100%;
+    max-height: 100%;
     object-fit: cover;
 }
 
@@ -470,10 +466,10 @@
     font-weight: 500;
 }
 
-#click_image .modal-body #previewImage {
+#click_image #previewImage {
     width: 100%;
     object-fit: cover;
-    height: calc(100dvh - 130px) !important;
+    max-height: 100%;
 }
 
 .audio-box {

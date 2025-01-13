@@ -440,8 +440,7 @@
                     </div>
                     <div class="camera_content" id="previewContainer">
                         <div class="camera_body">
-                            <img id="previewImage"
-                                style="width: 100%; height: 100%; object-fit:cover; border: 1px solid #ddd;" />
+                            <img id="previewImage" style="width: 100%;  object-fit:cover;" />
                         </div>
                         <div class="camera_footer">
                             <button id="retakeButton" class="btn  btn-ghost-secondary btn-icon">
@@ -468,6 +467,9 @@
                 </div>
             </div>
         </div>
+
+
+
 
         <div class="note-sidebar" id="note_sheet">
 
