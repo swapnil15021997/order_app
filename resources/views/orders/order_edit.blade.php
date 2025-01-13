@@ -422,7 +422,7 @@
                             <video id="cameraStream" autoplay playsinline></video>
                         </div>
                         <div class="camera_footer">
-                            <div></div>
+                            <div class="btn btn-ghost-secondary btn-icon"></div>
                             <button id="captureButton" class="btn btn-ghost-primary btn-icon">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
                                     <circle cx="16" cy="16" r="10" fill="currentColor" />
@@ -461,7 +461,7 @@
                                     </g>
                                 </svg>
                             </button>
-                            <div></div>
+                            <div class="btn btn-ghost-secondary btn-icon"></div>
                         </div>
                     </div>
                 </div>
@@ -1373,7 +1373,7 @@
                     // Add new notes below
                     if (!isScrollUp) {
                         response.data.notes.forEach(function (note) {
-                           
+
                             if (note.notes_type == 1) {
                                 notesBody.append(`
                                 <div class="my-note-box">
@@ -1804,7 +1804,7 @@
                     console.log("Audio Blob Created:", audioBlob);
                     console.log("Audio Blob Size:", audioBlob.size);
 
-   
+
                     if (audioBlob.size === 0) {
                         alert("Audio blob is empty! Recording may have failed.");
                         return;
@@ -1842,13 +1842,13 @@
             audio_stream.getAudioTracks()[0].stop();
         }
         $('#audio_box').css("display", "none");
-    
+
     //     // Reset audio variables
         audioBlob = null;
         audio_stream = null;
         recorder = null;
 
-         
+
         // buttons reset
         // recordButton.disabled = false;
         // recordButton.innerText = "Redo Recording"
@@ -1939,7 +1939,7 @@
 
     function uploadRecording() {
        console.log("Send Button Blob:", sendButton.audioBlob);
-        
+
         if (!sendButton.audioBlob) {
             alert("No audio file available for upload!");
             return;
@@ -1975,7 +1975,7 @@
                     audio_stream.getAudioTracks()[0].stop();
                 }
                 $('#audio_box').css("display", "none");
-            
+
                 // Reset audio variables
                 audioBlob = null;
                 audio_stream = null;

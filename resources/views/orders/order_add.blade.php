@@ -319,37 +319,66 @@
 
 
         <div class="modal modal-blur fade" id="click_image" tabindex="-2" role="dialog" aria-hidden="true">
-            <div class="modal-dialog modal-xl" role="document">
+            <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
-
-                    <div class="modal-header">
-                        <h5 class="modal-title">Click Image</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <div class="camera_header">
+                        <div class="d-flex align-items-end justify-content-end">
+                            <button type="button" class="btn btn-ghost-secondary btn-icon" data-bs-dismiss="modal"
+                                aria-label="Close">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                                    <path fill="currentColor"
+                                        d="m6.4 18.308l-.708-.708l5.6-5.6l-5.6-5.6l.708-.708l5.6 5.6l5.6-5.6l.708.708l-5.6 5.6l5.6 5.6l-.708.708l-5.6-5.6z" />
+                                </svg>
+                            </button>
+                        </div>
                     </div>
-                    <div class="modal-body">
-                        <div id="cameraView" style="display: none; text-align: center;">
+                    <div class="camera_content" id="cameraView">
+                        <div class="camera_body">
                             <video id="cameraStream" autoplay playsinline></video>
-                            <button id="captureButton" class="btn btn-primary mt-3">Capture Image</button>
-                            <button id="switchCameraButton" class="btn btn-secondary mt-3">Switch Camera</button>
-
                         </div>
-
-                        <!-- Preview Area -->
-                        <div id="previewContainer" style="display: none; text-align: center;">
-                            <img id="previewImage" style="max-width: 100%; height: auto; border: 1px solid #ddd;" />
-                            <div class="mt-3">
-                                <button id="retakeButton" class="btn btn-secondary">Retake</button>
-                                <a id="sendImageButton" onclick="uploadImage()" href="#" type="button"
-                                    class="btn btn-primary">
-                                    Send Image
-                                </a>
-                            </div>
+                        <div class="camera_footer">
+                            <div class="btn btn-ghost-secondary btn-icon"></div>
+                            <button id="captureButton" class="btn btn-ghost-primary btn-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
+                                    <circle cx="16" cy="16" r="10" fill="currentColor" />
+                                    <path fill="currentColor"
+                                        d="M16 30a14 14 0 1 1 14-14a14.016 14.016 0 0 1-14 14m0-26a12 12 0 1 0 12 12A12.014 12.014 0 0 0 16 4" />
+                                </svg>
+                            </button>
+                            <button id="switchCameraButton" class="btn  btn-ghost-secondary btn-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                                    <path fill="currentColor"
+                                        d="M13.685 5.25h.03a.75.75 0 0 1 0 1.5c-1.292 0-2.275 0-3.058.063c-.785.063-1.283.183-1.636.371a3.94 3.94 0 0 0-1.677 1.764c-.19.394-.304.88-.363 1.638c-.06.764-.06 1.738-.06 3.094v.11l1.12-1.12a.75.75 0 0 1 1.06 1.06l-2.4 2.4a.75.75 0 0 1-1.086-.027l-2.171-2.4a.75.75 0 0 1 1.112-1.006l.865.956v-.005c0-1.317 0-2.35.065-3.179c.066-.844.202-1.542.509-2.176a5.44 5.44 0 0 1 2.319-2.431c.625-.335 1.37-.476 2.224-.544c.85-.068 1.891-.068 3.147-.068m4.162 2.4a.75.75 0 0 1 .538.247l2.171 2.4a.75.75 0 0 1-1.112 1.006l-.865-.956v.005c0 1.317 0 2.35-.065 3.179c-.066.844-.201 1.542-.509 2.176a5.44 5.44 0 0 1-2.319 2.431c-.625.335-1.37.476-2.224.544c-.85.068-1.891.068-3.146.068h-.03a.75.75 0 0 1 0-1.5c1.291 0 2.274 0 3.057-.063c.785-.063 1.283-.183 1.636-.372a3.94 3.94 0 0 0 1.677-1.763c.19-.394.304-.88.363-1.638c.06-.764.06-1.738.06-3.094v-.11l-1.12 1.12a.75.75 0 0 1-1.06-1.06l2.4-2.4a.75.75 0 0 1 .548-.22" />
+                                </svg>
+                            </button>
                         </div>
                     </div>
-
-
-
-
+                    <div class="camera_content" id="previewContainer">
+                        <div class="camera_body">
+                            <img id="previewImage" style="width: 100%;  object-fit:cover;" />
+                        </div>
+                        <div class="camera_footer">
+                            <button id="retakeButton" class="btn  btn-ghost-secondary btn-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 32 32">
+                                    <path fill="currentColor"
+                                        d="M13.5 6.5V7h5v-.5a2.5 2.5 0 0 0-5 0m-2 .5v-.5a4.5 4.5 0 1 1 9 0V7H28a1 1 0 1 1 0 2h-1.508L24.6 25.568A5 5 0 0 1 19.63 30h-7.26a5 5 0 0 1-4.97-4.432L5.508 9H4a1 1 0 0 1 0-2zM9.388 25.34a3 3 0 0 0 2.98 2.66h7.263a3 3 0 0 0 2.98-2.66L24.48 9H7.521zM13 12.5a1 1 0 0 1 1 1v10a1 1 0 1 1-2 0v-10a1 1 0 0 1 1-1m7 1a1 1 0 1 0-2 0v10a1 1 0 1 0 2 0z" />
+                                </svg>
+                            </button>
+                            <button id="sendImageButton" onclick="uploadImage()"
+                                class="btn  btn-ghost-primary btn-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                                    <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                        stroke-width="1.5" color="currentColor">
+                                        <circle cx="7.5" cy="7.5" r="1.5" />
+                                        <path
+                                            d="M2.5 12c0-4.478 0-6.718 1.391-8.109S7.521 2.5 12 2.5c4.478 0 6.718 0 8.109 1.391S21.5 7.521 21.5 12c0 4.478 0 6.718-1.391 8.109S16.479 21.5 12 21.5c-4.478 0-6.718 0-8.109-1.391S2.5 16.479 2.5 12" />
+                                        <path d="M5 21c4.372-5.225 9.274-12.116 16.498-7.458" />
+                                    </g>
+                                </svg>
+                            </button>
+                            <div class="btn btn-ghost-secondary btn-icon"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
