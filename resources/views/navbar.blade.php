@@ -261,7 +261,7 @@
             function startScanner() {
                 // Show the video element
                 
-                create_order_array(1,'orderQrCode', 1, 2463257358,2020-2-12);
+                // create_order_array(1,'orderQrCode', 1, 2463257358,2020-2-12);
                 
                 document.getElementById("my-qr-reader").style.display = "block";
                 startButton.textContent = "Stop Scanner";
