@@ -256,7 +256,7 @@
             //     window.open(scannedText, '_blank');
                 
             // }
-
+            alert(scannedText);
             const [order_id,orderQrCode, orderStatus, orderNumber, orderDate] = scannedText.split('|');
             create_order_array(order_id,orderQrCode, orderStatus, orderNumber,orderDate);
             // Stop scanning
