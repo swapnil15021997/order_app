@@ -333,13 +333,13 @@
     width: 100%;
     padding-top: 0;
     padding-left: 0;
-    padding-right: 0; 
+    padding-right: 0;
 }
 
 #click_image .modal-body #cameraStream {
     width: 100%;
     object-fit: cover;
-    height: calc(100dvh - 130px); 
+    height: calc(100dvh - 130px);
 }
 
 .timeline {
@@ -416,4 +416,10 @@
 .tracking-info span {
     color: #333;
     font-weight: 500;
+}
+
+#click_image .modal-body #previewImage {
+    width: 100%;
+    object-fit: cover;
+    height: calc(100dvh - 130px) !important;
 }
