@@ -260,7 +260,7 @@
             const [order_id,orderQrCode, orderStatus, orderNumber, orderDate] = scannedText.split('|');
             create_order_array(order_id,orderQrCode, orderStatus, orderNumber,orderDate);
             // Stop scanning
-            stopScanner();
+            // stopScanner();
         }
 
         function stopScanner() {
