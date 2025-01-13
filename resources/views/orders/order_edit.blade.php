@@ -1725,8 +1725,8 @@
 
                     preview.load();
                     console.log("Audio recording ready for playback.");
-                    sendButton.audioBlob = audioBlob;
-                    uploadRecording();
+                    // sendButton.audioBlob = audioBlob;
+                    uploadRecording(audioBlob);
                 };
 
                 recorder.start();
@@ -1831,17 +1831,17 @@
 //     downloadAudio.download = res + '.wav';
 // }
 
-    function uploadRecording() {
+    function uploadRecording(audioBlob) {
         if (!audioBlob) {
             alert('No recording available for upload');
         }
         console.log("Audio Blob:", audioBlob);
-        console.log("Send Button Blob:", sendButton.audioBlob);
-        console.log(audioBlob.type);
-        if (!sendButton.audioBlob) {
-            alert("No audio file available for upload!");
-            return;
-        }
+        // console.log("Send Button Blob:", sendButton.audioBlob);
+        // console.log(audioBlob.type);
+        // if (!sendButton.audioBlob) {
+        //     alert("No audio file available for upload!");
+        //     return;
+        // }
         const orderId = $('#order_id').val();
         const audioFile = new File([audioBlob], 'recording.wav', { type: 'audio/wav' });
 
