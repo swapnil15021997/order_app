@@ -245,7 +245,7 @@
         let isScanning = false;
         function create_order_array(order_id,orderQrCode, orderStatus, orderNumber,orderDate){
             const my_orders   = document.getElementById("my_orders");
-            
+            const qr_list = document.querySelector(".qr-list");
             let my_ord;
             let buttonHtml = '';
             var csrfToken = $('meta[name="csrf-token"]').attr('content');
@@ -391,11 +391,8 @@
                         my_orders.innerHTML += my_ord;
 
                         // Only add the button once (based on approval or transfer status)
-                        if (buttonHtml) {
-                            console.log(buttonHtml);
-                            my_orders.innerHTML += buttonHtml;
-                        }else{
-                            console.log("No transactions found");
+                        if (!qr_list.querySelector(".btn-list")) {
+                            qr_list.insertAdjacentHTML("beforeend", buttonHtml);
                         }
                         scanned.push(order_id);
                     }
