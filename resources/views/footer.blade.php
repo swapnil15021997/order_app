@@ -285,8 +285,8 @@
         if (qrScanner) {
             qrScanner.stop();
         }
-        document.getElementById("my-qr-reader").style.display = "none";
-        startButton.textContent = "Start Scanner";
+        // document.getElementById("my-qr-reader").style.display = "none";
+        // startButton.textContent = "Start Scanner";
     }
 
 
