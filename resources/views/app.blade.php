@@ -257,6 +257,7 @@
             isScanning = true;
             
             if (scanned.includes(order_id)) {
+                isScanning = false;
                 alert("This order is already approved.");
                 return; // Stop further execution
             }
