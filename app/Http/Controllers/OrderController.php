@@ -427,9 +427,14 @@ class OrderController extends Controller
         }
 
         $customer  = Customers::get_all_customers();
-        $orderUrl = route('order_get_approve', ['id' => $order['order_qr_code']]);
-        $qr_code = QrCode::size(100)->generate($orderUrl);
-   
+        // $orderUrl = route('order_get_approve', ['id' => $order['order_qr_code']]);
+        // $qr_code = QrCode::size(100)->generate($orderUrl);
+        
+        $qr_code  = QrCode::size(50)->generate(
+            implode('|', [
+                $order['order_id'],$order['order_qr_code'],$order['order_status'],$order['order_number'],$order['order_date'] 
+            ])
+        );
         // $order['order_cust']
         $pageTitle     = 'Orders';
         $login         = auth()->user()->toArray();
