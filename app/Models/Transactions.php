@@ -40,6 +40,7 @@ class Transactions extends Model
 
     public static function get_trans_by_order_id($order_id){
         $trasnaction = Transactions::where('trans_order_id', $order_id)
+        ->where('trans_status',0)
         ->get()
         ->first();
         return $trasnaction;
