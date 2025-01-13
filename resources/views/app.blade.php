@@ -398,8 +398,8 @@
                         }
                         scanned.push(order_id);
                     }
+                    isScanning = false;
                 }
-                isScanning = false;
             
             });
     
