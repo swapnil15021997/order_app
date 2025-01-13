@@ -1373,7 +1373,7 @@
                     // Add new notes below
                     if (!isScrollUp) {
                         response.data.notes.forEach(function (note) {
-                            console.log(note);
+                           
                             if (note.notes_type == 1) {
                                 notesBody.append(`
                                 <div class="my-note-box">
@@ -1694,6 +1694,7 @@
     const recordStopButton = document.getElementById("audio_stop");
     const recordSendutton = document.getElementById("audio_send");
     let isRecording = false;
+    let recorder, audio_stream, audioBlob;
 
 
 
@@ -1719,9 +1720,12 @@
         }
     };
 
+
+
     // Add event listeners
     recordButton.addEventListener("mousedown", startRecord);
     recordStopButton.addEventListener("mousedown", stopRecord);
+    recordSendutton.addEventListener("mousedown", uploadRecording);
     // recordButton.addEventListener("mouseup", stopRecord);
     // recordButton.addEventListener("mouseleave", stopRecord);
 
@@ -1730,12 +1734,11 @@
         e.preventDefault();
         startRecording();
     });
-    // recordButton.addEventListener("touchend", (e) => {
-    //     e.preventDefault();
-    //     stopRecording();
-    // });
+    recordStopButton.addEventListener("touchend", (e) => {
+        e.preventDefault();
+        stopRecording();
+    });
     // recordButton.addEventListener("touchcancel", stopRecord);
-
 
 
     // Audio recording
@@ -1755,9 +1758,9 @@
 
     // // set preview
     // const preview    = $('#audio-playback');
-    // const sendButton = $('#sendButton');
+    const sendButton = $('#audio_send');
+    $('#audio_send').on('click', uploadRecording);
     // $('#sendButton').hide();
-    // $('#sendButton').on('click', uploadRecording);
     // const audioPlaybackContainer =$('#audioPlaybackContainer');
 
     // const resetButton = $('#resetButton');
@@ -1769,7 +1772,7 @@
 
 
     function startRecording() {
-
+        console.log('Starting recording... in function');
         // button settings
 
         // $("#recordButton").prop("disabled", true);
@@ -1798,6 +1801,10 @@
                 recorder.onstop = function () {
                     // Create an audio blob
                     audioBlob = new Blob(audioChunks, { type: "audio/wav" });
+                    console.log("Audio Blob Created:", audioBlob);
+                    console.log("Audio Blob Size:", audioBlob.size);
+
+   
                     if (audioBlob.size === 0) {
                         alert("Audio blob is empty! Recording may have failed.");
                         return;
@@ -1812,8 +1819,12 @@
 
                     preview.load();
                     console.log("Audio recording ready for playback.");
-                    // sendButton.audioBlob = audioBlob;
-                    uploadRecording(audioBlob);
+                    if (audioBlob.size > 0) {
+                        sendButton.audioBlob = audioBlob; // Assign to sendButton
+                        console.log("Audio Blob assigned to sendButton:", sendButton.audioBlob);
+                    } else {
+                        console.error("Audio Blob is empty. Recording may have failed.");
+                    }
                 };
 
                 recorder.start();
@@ -1830,6 +1841,14 @@
             recorder.stop();
             audio_stream.getAudioTracks()[0].stop();
         }
+        $('#audio_box').css("display", "none");
+    
+    //     // Reset audio variables
+        audioBlob = null;
+        audio_stream = null;
+        recorder = null;
+
+         
         // buttons reset
         // recordButton.disabled = false;
         // recordButton.innerText = "Redo Recording"
@@ -1918,19 +1937,15 @@
     //     downloadAudio.download = res + '.wav';
     // }
 
-    function uploadRecording(audioBlob) {
-        if (!audioBlob) {
-            alert('No recording available for upload');
+    function uploadRecording() {
+       console.log("Send Button Blob:", sendButton.audioBlob);
+        
+        if (!sendButton.audioBlob) {
+            alert("No audio file available for upload!");
+            return;
         }
-        console.log("Audio Blob:", audioBlob);
-        // console.log("Send Button Blob:", sendButton.audioBlob);
-        // console.log(audioBlob.type);
-        // if (!sendButton.audioBlob) {
-        //     alert("No audio file available for upload!");
-        //     return;
-        // }
         const orderId = $('#order_id').val();
-        const audioFile = new File([audioBlob], 'recording.wav', { type: 'audio/wav' });
+        const audioFile = new File([sendButton.audioBlob], 'recording.wav', { type: 'audio/wav' });
 
         const formData = new FormData();
         formData.append('notes_text', '');
@@ -1954,6 +1969,18 @@
                 } else {
                     showAlertNotes('warning', response.message);
                 }
+                $('#audio_box').css("display", "none");
+                if (recorder) {
+                    recorder.stop();
+                    audio_stream.getAudioTracks()[0].stop();
+                }
+                $('#audio_box').css("display", "none");
+            
+                // Reset audio variables
+                audioBlob = null;
+                audio_stream = null;
+                recorder = null;
+
                 $('#record_audio').modal('hide');
                 isLoading = false;
                 page = 1;
