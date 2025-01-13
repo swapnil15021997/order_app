@@ -248,6 +248,16 @@
             let buttonHtml = '';
             var csrfToken = $('meta[name="csrf-token"]').attr('content');
 
+            if (approve_array.includes(order_id)) {
+                alert("This order is already approved.");
+                return; // Stop further execution
+            }
+
+            if (transfer_array.includes(order_id)) {
+                alert("This order is already transferred.");
+                return; // Stop further execution
+            }
+            
             $.ajax({
                 url: "{{ route('order_details') }}",  // Adjust the route as needed
                 type: 'POST',
