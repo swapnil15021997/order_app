@@ -210,9 +210,6 @@ class NotesController extends Controller
         $total_notes = $notesQuery->count();
         $notes = $notesQuery
             ->where('notes_order_id',$order_id)
-            ->offset($offset)
-            ->limit($perPage)
-            
             ->get();
         $total_pages = ceil($total_notes / $perPage);
         

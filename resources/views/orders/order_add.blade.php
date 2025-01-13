@@ -1312,14 +1312,14 @@
                         notesBody.prepend(newNotes);
                     }
 
-                    page++;
+                    // page++;
 
                     // Scroll position handling after load
-                    if (isScrollUp) {
-                        notesBody.scrollTop(notesBody[0].scrollHeight - firstNoteOffset);
-                    } else {
-                        notesBody.scrollTop(notesBody[0].scrollHeight);
-                    }
+                    // if (isScrollUp) {
+                    //     notesBody.scrollTop(notesBody[0].scrollHeight - firstNoteOffset);
+                    // } else {
+                    //     notesBody.scrollTop(notesBody[0].scrollHeight);
+                    // }
 
                     isLoading = false;
                 }
@@ -1330,28 +1330,28 @@
         loadNotes();
 
         // Handle scroll event
-        function handleScroll() {
-            const notesBox = document.getElementById("notes_body");
-            if (!notesBox) return;
+        // function handleScroll() {
+        //     const notesBox = document.getElementById("notes_body");
+        //     if (!notesBox) return;
 
-            const { scrollTop, scrollHeight, clientHeight } = notesBox;
+        //     const { scrollTop, scrollHeight, clientHeight } = notesBox;
 
-            if (scrollTop + clientHeight >= scrollHeight - 5) {
-                // Load more notes at the bottom
-                loadNotes();
-            } else if (scrollTop === 0) {
-                // Load older notes when scrolling up
-                loadNotes(true);
-            }
-        }
+        //     if (scrollTop + clientHeight >= scrollHeight - 5) {
+        //         // Load more notes at the bottom
+        //         loadNotes();
+        //     } else if (scrollTop === 0) {
+        //         // Load older notes when scrolling up
+        //         loadNotes(true);
+        //     }
+        // }
 
-        // Attach scroll event
-        setTimeout(function () {
-            const notesBox = document.getElementById("notes_body");
-            if (notesBox) {
-                notesBox.addEventListener("scroll", handleScroll);
-            }
-        }, 500);
+        // // Attach scroll event
+        // setTimeout(function () {
+        //     const notesBox = document.getElementById("notes_body");
+        //     if (notesBox) {
+        //         notesBox.addEventListener("scroll", handleScroll);
+        //     }
+        // }, 500);
 
 
         $(document).ready(function () {

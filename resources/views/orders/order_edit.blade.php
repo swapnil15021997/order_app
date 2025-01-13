@@ -1465,30 +1465,30 @@
         loadNotes();
 
         // Handle scroll event
-        function handleScroll() {
-            const notesBox = document.getElementById("notes_body");
-            if (!notesBox) return;
+        // function handleScroll() {
+        //     const notesBox = document.getElementById("notes_body");
+        //     if (!notesBox) return;
 
-            const { scrollTop, scrollHeight, clientHeight } = notesBox;
-            const scrollThreshold = 50;
-            if (scrollTop + clientHeight >= scrollHeight - scrollThreshold) {
-                console.log("calling notes")
-                // Load more notes at the bottom
-                loadNotes(false);
-            } else if (scrollTop === 0) {
-                // Load older notes when scrolling up
-                console.log("calling notes here")
-                loadNotes(true);
-            }
-        }
+        //     const { scrollTop, scrollHeight, clientHeight } = notesBox;
+        //     const scrollThreshold = 50;
+        //     if (scrollTop + clientHeight >= scrollHeight - scrollThreshold) {
+        //         console.log("calling notes")
+        //         // Load more notes at the bottom
+        //         loadNotes(false);
+        //     } else if (scrollTop === 0) {
+        //         // Load older notes when scrolling up
+        //         console.log("calling notes here")
+        //         loadNotes(true);
+        //     }
+        // }
 
-        // Attach scroll event
-        setTimeout(function () {
-            const notesBox = document.getElementById("notes_body");
-            if (notesBox) {
-                notesBox.addEventListener("scroll", handleScroll);
-            }
-        }, 500);
+        // // Attach scroll event
+        // setTimeout(function () {
+        //     const notesBox = document.getElementById("notes_body");
+        //     if (notesBox) {
+        //         notesBox.addEventListener("scroll", handleScroll);
+        //     }
+        // }, 500);
 
 
         $(document).ready(function () {
