@@ -193,7 +193,7 @@
 </footer>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script defer src="https://cdnjs.cloudflare.com/ajax/libs/qr-scanner/1.4.2/qr-scanner.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qr-scanner/1.4.2/qr-scanner.umd.min.js"></script>
 <style>
     @media (max-width:768px) {
         .page-body {
@@ -216,6 +216,83 @@
         element.classList.toggle("active");
     }
 
+    let qrScanner = null;
+    domReady(function () {
+
+        const videoElem   = document.getElementById("videoElem");
+        const startButton = document.getElementById("start-scann");
+        const my_orders   = document.getElementById("my_orders");
+
+
+        function startScanner() {
+            // Show the video element
+
+            document.getElementById("my-qr-reader").style.display = "block";
+            startButton.textContent = "Stop Scanner";
+
+            // Initialize QR scanner if not already created
+            if (!qrScanner) {
+                qrScanner = new QrScanner(
+                    videoElem,
+                    onScanSuccess,
+                    {
+                        highlightScanRegion: true,
+                        highlightCodeOutline: true,
+                    }
+                );
+            }
+
+            // Start scanning
+            qrScanner.start();
+            create_order_array(1,7656545, 1, 5765654,6/34/3432)
+   
+        }
+
+        function onScanSuccess(result) {
+            // Display the result
+            const scannedText = result.data || result;
+            // If the result is a URL, open it in a new tab
+            // if (scannedText.startsWith('http')) {
+            //     window.open(scannedText, '_blank');
+                
+            // }
+
+            const [order_id,orderQrCode, orderStatus, orderNumber, orderDate] = scannedText.split('|');
+            create_order_array(order_id,orderQrCode, orderStatus, orderNumber,orderDate);
+            // Stop scanning
+            stopScanner();
+        }
+
+        function stopScanner() {
+            if (qrScanner) {
+                qrScanner.stop();
+            }
+            document.getElementById("my-qr-reader").style.display = "none";
+            startButton.textContent = "Start Scanner";
+        }
+
+        startButton.addEventListener("click", function () {
+            if (qrScanner && qrScanner.isScanning()) {
+                stopScanner();
+            } else {
+                startScanner();
+            }
+        });
+
+
+    });
+    function stopScanner() {
+        if (qrScanner) {
+            qrScanner.stop();
+        }
+        document.getElementById("my-qr-reader").style.display = "none";
+        startButton.textContent = "Start Scanner";
+    }
+
+
+
+    
+    
     domReady(function () {
         // Get DOM elements
         // const videoElem = document.getElementById("videoElem");
