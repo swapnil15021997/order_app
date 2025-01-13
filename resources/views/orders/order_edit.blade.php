@@ -1341,10 +1341,12 @@
     let page = 1;
     let loadNotes;
     let isLoading = false;
+    let isInitialLoad = true;
 
     document.addEventListener("DOMContentLoaded", function () {
         // Function to load notes
         loadNotes = function (isScrollUp = false) {
+            console.log("Loading notes",isLoading,page);
             if (isLoading) return;
 
             isLoading = true;
@@ -1443,7 +1445,9 @@
                         notesBody.prepend(newNotes);
                     }
 
+                    if (!isScrollUp) {
                     page++;
+                }
 
                     // Scroll position handling after load
                     if (isScrollUp) {
@@ -1466,12 +1470,14 @@
             if (!notesBox) return;
 
             const { scrollTop, scrollHeight, clientHeight } = notesBox;
-
-            if (scrollTop + clientHeight >= scrollHeight - 5) {
+            const scrollThreshold = 50;
+            if (scrollTop + clientHeight >= scrollHeight - scrollThreshold) {
+                console.log("calling notes")
                 // Load more notes at the bottom
-                loadNotes();
+                loadNotes(false);
             } else if (scrollTop === 0) {
                 // Load older notes when scrolling up
+                console.log("calling notes here")
                 loadNotes(true);
             }
         }
