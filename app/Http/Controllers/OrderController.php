@@ -11,6 +11,8 @@ use App\Models\Transactions;
 use App\Models\Payment;
 use App\Models\Customers;
 use App\Models\Colors;
+use App\Models\TempOrders;
+use App\Models\Notes;
 
 use DB;
 use Illuminate\Support\Facades\Validator;
@@ -137,7 +139,7 @@ class OrderController extends Controller
 
         $activePage       = 'orders';
         $user_permissions = session('combined_permissions', []);
-      
+        session()->forget('temp_order_id');
         return view('orders/order_master',compact('pageTitle','login','activePage','user_branch','user_permissions','activeBranchName'));
     }
 
@@ -151,8 +153,7 @@ class OrderController extends Controller
             ]);
         }
         $files = $request->file('item_file_images');
-        dd($files);
-    
+       
         $rules = [   
             
             'order_date'            => ['required', 'date'],  
@@ -171,7 +172,8 @@ class OrderController extends Controller
             'payment_booking'       => ['nullable','numeric'],
             'order_number'          => ['nullable','string'],
             'qr_code_number'        => ['nullable','string'],
-            'order_notes'           => ['nullable'],
+            // 'order_notes'           => ['nullable'],
+            'temp_order_id'         => ['nullable','string'],
             'customer_name'         => ['nullable','string'],
             'customer_address'      => ['nullable','string'],
             'customer_phone_number' => ['nullable','string'],
@@ -325,22 +327,26 @@ class OrderController extends Controller
             }
         }
 
-        $order_notes = []; 
-        if (is_string($params['order_notes'])) {
-            $order_notes = explode(',',$params['order_notes']); 
-        }
-        if (!is_array($order_notes)) {
-            $order_notes = []; 
-        }
+        // $order_notes = []; 
+        // if (is_string($params['order_notes'])) {
+        //     $order_notes = explode(',',$params['order_notes']); 
+        // }
+        // if (!is_array($order_notes)) {
+        //     $order_notes = []; 
+        // }
          
-        if (!empty($order_notes)) {
-            foreach ($order_notes as $key => $note) {
-                $note = Notes::where('note_id',$note)->first();
-                $note->note_order_id = $order->order_id;
-                $note->save();
-            }
+        // if (!empty($order_notes)) {
+        //     foreach ($order_notes as $key => $note) {
+        //         $note = Notes::where('note_id',$note)->first();
+        //         $note->note_order_id = $order->order_id;
+        //         $note->save();
+        //     }
+        // }
+        $notes = Notes::where('notes_temp_order_id',$params['temp_order_id'])->get();
+        foreach ($notes as $note) {
+            $note->notes_order_id = $order->order_id;
+            $note->save();
         }
-         
         
         SendEmailJob::dispatch($order->order_id,$type="Add");
         SendNotification::dispatch($order->order_id,$type="Add");
@@ -386,6 +392,11 @@ class OrderController extends Controller
     
             }
         }
+        $temp_order    = new TempOrders();
+        $temp_order->save();
+        $temp_order_id = $temp_order->temp_order_id;
+
+        session(['temp_order_id'=>$temp_order_id]);
         $order_number   = $this->generateUniqueNumber('order_number');
         $qr_code_number = $this->generateUniqueNumber('order_qr_code');
         

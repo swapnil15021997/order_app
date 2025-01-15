@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Notes;
 use App\Models\File;
 use App\Models\Item;
+use App\Models\TempOrders;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Arr;
 
@@ -27,6 +28,7 @@ class NotesController extends Controller
             'notes_file.*'        => ['file', 'mimes:jpeg,jpg,png,pdf,mp3,wav,ogg,webm', 'max:20240'],  
             'notes_file.*.mime' => 'in:audio/wav,mp3,ogg',
             'notes_order_id'      => ['nullable','string'],
+            'temp_order_id'      => ['nullable','string'],            
             'notes_type'          => ['required','string'],
             
         ]; 
@@ -55,7 +57,8 @@ class NotesController extends Controller
         $notes_save = new Notes();
         $notes_save->notes_text = $params['notes_text'];
         $notes_save->notes_type = $params['notes_type'];
-        $notes_save->notes_order_id = $params['notes_order_id'];
+        $notes_save->notes_order_id = $params['notes_order_id'] ?? null;;
+        $notes_save->notes_temp_order_id = $params['temp_order_id'] ?? null;
         $fileIds = [];
 
         if ($request->hasFile('notes_file')) {
@@ -78,7 +81,15 @@ class NotesController extends Controller
             
         }
         $notes_save->save();
-
+        if(!empty($params['temp_order_id'])){
+            $temp_order = TempOrders::find($params['temp_order_id']);
+            $existing_ids = $temp_order->temp_notes_id;
+            $existing_ids_array = explode(',', $existing_ids); 
+            $existing_ids_array = array_filter($existing_ids_array);
+            $existing_ids_array[] = $notes_save->notes_id; 
+            $temp_order->temp_notes_id = implode(',', $existing_ids_array);
+            $temp_order->save();
+        }
         return response()->json([
             'status'  => 200,
             'message' => 'Notes saved successfully',
@@ -191,8 +202,36 @@ class NotesController extends Controller
         $perPage     = $request->input('per_page', 15);   
         $page        = $request->input('page', 1);  
         $order_id    = $request->input('order_id');  
+        $temp_order_id = $request->input('temp_order_id'); 
         $offset      = ($page - 1) * $perPage;
         if(empty($order_id)){
+            if(!empty($temp_order_id)){
+                $notesQuery  = Notes::query()->with('file');       
+                if (!empty($searchQuery)) {
+                    $notesQuery->where(function ($query) use ($searchQuery) {
+                        $query->where('notes_text', 'like', "%{$searchQuery}%");
+                    });
+                }
+                
+                $total_notes = $notesQuery->count();
+                $notes = $notesQuery
+                    ->where('notes_temp_order_id',$temp_order_id)
+                    ->get();
+                $total_pages = ceil($total_notes / $perPage);
+                
+                return response()->json([
+                    'status' => 200,
+                    'message' => 'Notes list fetched successfully!',
+                    'data'    => [
+                        'notes'        => $notes,
+                        'total'        => $total_notes,
+                        'per_page'     => $perPage,
+                        'current_page' => $page,
+                        'total_pages'  => $total_pages,
+                    ],
+                ]);
+
+            }
             return response()->json([
                 'status' => 200,
                 'message' => 'Notes list fetched successfully!',

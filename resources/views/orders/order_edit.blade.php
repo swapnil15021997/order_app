@@ -1508,6 +1508,7 @@
                                 'notes_text': text,
                                 'notes_file': null,
                                 'notes_order_id': order_id,
+                                'temp_order_id':null,
                                 'notes_type': 1
 
                             },
@@ -1540,7 +1541,9 @@
                             'notes_text': text,
                             'notes_file': null,
                             'notes_order_id': order_id,
-                            'notes_type': 1
+                            'notes_type': 1,
+                            'temp_order_id':null,
+
                         },
                         headers: {
                             'X-CSRF-TOKEN': csrfToken
@@ -1667,6 +1670,8 @@
         formData.append('notes_file[]', imageFile);
         formData.append('notes_type', 4);
         formData.append('notes_order_id', orderId);
+        formData.append('temp_order_id',null);
+
 
         $.ajax({
             url: "{{ route('notes_add') }}",
@@ -1832,6 +1837,7 @@
         formData.append('notes_file[]', audioFile);
         formData.append('notes_type', 3);
         formData.append('notes_order_id', orderId);
+        formData.append('temp_order_id',orderId);
         $.ajax({
             url: "{{ route('notes_add') }}",
             type: 'POST',

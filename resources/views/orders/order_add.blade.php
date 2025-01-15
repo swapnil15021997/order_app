@@ -197,7 +197,8 @@
                                     </form>
                                 </div>
                                 <div class="row mt-3" id="uploaded-images">
-                                    <!-- <div class="col-4">
+
+                                <!-- <div class="col-4">
                                         <div class="selected-files">
                                             <div class="d-flex align-items-center gap-2">
                                                 <img src="https://images.unsplash.com/photo-1736148912326-aeeda15df88f?q=80&w=1964&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
@@ -260,8 +261,8 @@
 
             </div>
         </div>
-
-        <input type="hidden" name="" id="order_id" value="{{$last_order_id}}">
+        
+        <input type="hidden" name="" id="temp_order_id" value="{{session('temp_order_id')}}">
 
         <div class="modal modal-blur fade" id="record_audio" tabindex="-2" role="dialog" aria-hidden="true">
             <div class="modal-dialog modal-lg" role="document">
@@ -666,6 +667,7 @@
             var item_weight = $('#item_weight').val();
             var payment_advance = $('#payment_advance').val();
             var payment_booking = $('#payment_booking').val();
+            var temp_order_id   = $('#temp_order_id').val();
             var itemImages = $('#item_image_id')[0].files;
             console.log("ItemImages: " + itemImages, itemImages.length)
             var formattedOrderDate = formatDate(orderDate);
@@ -688,6 +690,7 @@
                 formData.append('qr_code_number', orderQRCode);
                 formData.append('order_notes', notesList);
                 formData.append('item_color', item_color);
+                formData.append('temp_order_id',temp_order_id);
 
                 if (payment_advance) {
 
@@ -1226,6 +1229,8 @@
             isLoading = true;
             const notesBody = $('#notes_body');
             const order_id = $('#order_id').val();
+            const temp_order_id = $('#temp_order_id').val();
+            
             console.log("Order ID: " + order_id);
             notesBody.html('');
             const scrollTopBeforeLoad = notesBody.scrollTop();
@@ -1238,6 +1243,7 @@
                     per_page: 8,
                     page: page,
                     order_id: order_id,
+                    temp_order_id: temp_order_id
                 },
                 headers: {
                     'X-CSRF-TOKEN': csrfToken
@@ -1369,7 +1375,7 @@
                 if (event.key === "Enter") {
                     event.preventDefault();
                     const text = event.target.value.trim();
-                    const order_id = $('#order_id').val();
+                    const order_id = $('#temp_order_id').val();
                     if (text) {
                         $.ajax({
                             url: "{{ route('notes_add') }}",
@@ -1377,7 +1383,7 @@
                             data: {
                                 'notes_text': text,
                                 'notes_file': null,
-                                'notes_order_id': order_id,
+                                'temp_order_id': order_id,
                                 'notes_type': 1
 
                             },
@@ -1402,7 +1408,7 @@
 
             $("#SendNotes").on("click", function () {
                 const text = $("#TextNotes").val().trim();
-                const order_id = $('#order_id').val();
+                const order_id = $('#temp_order_id').val();
                 if (text) {
                     $.ajax({
                         url: "{{ route('notes_add') }}",
@@ -1410,7 +1416,7 @@
                         data: {
                             'notes_text': text,
                             'notes_file': null,
-                            'notes_order_id': order_id,
+                            'temp_order_id': order_id,
                             'notes_type': 1
                         },
                         headers: {
@@ -1531,7 +1537,7 @@
             alert('No image captured!');
             return;
         }
-        const orderId = $('#order_id').val();
+        const orderId = $('#temp_order_id').val();
         const formData = new FormData();
         const imageFile = dataURLToFile(capturedImage, 'captured-image.png');
 
@@ -1539,7 +1545,7 @@
         formData.append('notes_text', '');
         formData.append('notes_file[]', imageFile);
         formData.append('notes_type', 4);
-        formData.append('notes_order_id', orderId);
+        formData.append('temp_order_id', orderId);
 
         $.ajax({
             url: "{{ route('notes_add') }}",
@@ -1696,14 +1702,14 @@
             alert("No audio file available for upload!");
             return;
         }
-        const orderId = $('#order_id').val();
+        const orderId = $('#temp_order_id').val();
         const audioFile = new File([sendButton.audioBlob], 'recording.wav', { type: 'audio/wav' });
 
         const formData = new FormData();
         formData.append('notes_text', '');
         formData.append('notes_file[]', audioFile);
         formData.append('notes_type', 3);
-        formData.append('notes_order_id', orderId);
+        formData.append('temp_order_id', orderId);
         $.ajax({
             url: "{{ route('notes_add') }}",
             type: 'POST',
@@ -1715,6 +1721,7 @@
             },
             success: function (response) {
                 console.log('Audio uploaded successfully:', response);
+                notesList.push(response.data);
                 if (response.status == 200) {
 
                     showAlertNotes('success', 'Audio file uploaded successfully!');
