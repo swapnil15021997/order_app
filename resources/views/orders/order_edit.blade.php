@@ -509,7 +509,7 @@
                         <div class="bar"></div>
                     </div>
                     <div class="d-flex gap-1 align-items-center">
-                        <button id="audio_stop" class="stop">
+                        <button id="audio_send" class="stop">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
                                 <g fill="none" stroke="currentColor" stroke-linejoin="round">
                                     <path d="M14.5 8a6.5 6.5 0 1 1-13 0a6.5 6.5 0 0 1 13 0Z" />
@@ -517,7 +517,7 @@
                                 </g>
                             </svg>
                         </button>
-                        <button id="audio_send" class="send">
+                        <button id="audio_stop" class="send">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
                                 <path fill="currentColor"
                                     d="M20.33 3.67a1.45 1.45 0 0 0-1.47-.35L4.23 8.2A1.44 1.44 0 0 0 4 10.85l6.07 3l3 6.09a1.44 1.44 0 0 0 1.29.79h.1a1.43 1.43 0 0 0 1.26-1l4.95-14.59a1.41 1.41 0 0 0-.34-1.47M4.85 9.58l12.77-4.26l-7.09 7.09Zm9.58 9.57l-2.84-5.68l7.09-7.09Z" />
@@ -1731,7 +1731,7 @@
     // Add event listeners
     recordButton.addEventListener("mousedown", startRecord);
     recordStopButton.addEventListener("mousedown", stopRecord);
-    recordSendutton.addEventListener("mousedown", uploadRecording);
+    // recordSendutton.addEventListener("mousedown", uploadRecording);
     
     // For touch devices
     recordButton.addEventListener("touchstart", (e) => {
@@ -1745,8 +1745,8 @@
 
     // Audio recording
    
-    const sendButton = $('#audio_send');
-    $('#audio_send').on('click', uploadRecording);
+    const sendButton = $('#audio_stop');
+    $('#audio_stop').on('click', uploadRecording);
    
 
     function startRecording() {
@@ -1786,6 +1786,7 @@
                     console.log("Audio recording ready for playback.");
                     if (audioBlob.size > 0) {
                         sendButton.audioBlob = audioBlob; // Assign to sendButton
+                        uploadRecording()
                         console.log("Audio Blob assigned to sendButton:", sendButton.audioBlob);
                     } else {
                         console.error("Audio Blob is empty. Recording may have failed.");
