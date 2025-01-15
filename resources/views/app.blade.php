@@ -351,10 +351,12 @@
                         let isAnyOrderTransferred = transfer_array.length > 0;  
                         
                         if (lastTransaction.trans_status === 1 && isAnyOrderApproved) {
-                            alert("Previous order was transferred, and the current order is approved. Please handle accordingly.");
+                            alert("Previous order was approved, and the current order is of transfer. Please handle accordingly.");
+                            return;
                         }
                         if (lastTransaction.trans_status === 0 && isAnyOrderTransferred) { alert
-                            alert("Previous order was aprove, and the current order is of transfer. Please handle accordingly.");
+                            alert("Previous order was transfer, and the current order is of approve. Please handle accordingly.");
+                            return;
                         }
                         
                         if (lastTransaction.trans_status === 0) {
