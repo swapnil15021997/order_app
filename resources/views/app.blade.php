@@ -231,6 +231,8 @@
             }
 
             function startScanner() {
+                create_order_array(3,7656545, 1, 5765654,6/34/3432)
+            
                 // Show the video element
 
                 document.getElementById("my-qr-reader").style.display = "block";

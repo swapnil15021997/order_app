@@ -46,7 +46,16 @@ class Transactions extends Model
         return $trasnaction;
     }
 
+    public static function get_trans_by_order($order_id)
+    {
+        $trasnaction = Transactions::where('trans_order_id', $order_id)
+            ->where('trans_status',1)
+            ->get()
+            ->latest()
+            ->first();
+        return $trasnaction;
 
+    }
     public function transUser()
     {
         return $this->belongsTo(User::class, 'trans_user_id');
