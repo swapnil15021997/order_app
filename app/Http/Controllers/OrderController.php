@@ -391,8 +391,9 @@ class OrderController extends Controller
         
         $orderUrl = route('order_get_approve', ['id' => $qr_code_number]);
         $qr_code  = QrCode::size(100)->generate($orderUrl);
-    
-        return view('orders/order_add',compact('metals', 'melting','branchesArray','pageTitle','login','activePage','user_branch','user_permissions','order_number','order_number','qr_code','qr_code_number','last_order_id','colors'));
+        $type = $request->input('type');
+        
+        return view('orders/order_add',compact('metals', 'melting','branchesArray','pageTitle','login','activePage','user_branch','user_permissions','order_number','order_number','qr_code','qr_code_number','last_order_id','colors','type'));
     }
 
     private function generateUniqueNumber($column)

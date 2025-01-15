@@ -149,14 +149,14 @@
                             <div class="card-body">
                                 <h4 class="h2">Item Details</h4>
                                 <div class="row">
-                                    <div class="col-sm-6">
+                                    <div class="col-3">
                                         <label for="item_name" class="form-label">Name
                                             <span style="color: red;">*</span>
                                         </label>
                                         <input type="text" class="form-control" id="item_name" placeholder="Select Item"
                                             value="{{$order['items'][0]['item_name']}}" />
                                     </div>
-                                    <div class="col-sm-6 mt-sm-0 mt-3">
+                                    <div class="col-2">
                                         <label for="item_metal" class="form-label">Metal
                                             <span style="color: red;">*</span>
                                         </label>
@@ -170,9 +170,9 @@
                                             @endforeach
                                         </select>
                                     </div>
-                                </div>
-                                <div class="row mt-3">
-                                    <div class="col-sm-4">
+                                 
+
+                                   <div class="col-2">
                                         <label for="item_melting" class="form-label">Melting
                                             <span style="color: red;">*</span>
                                         </label>
@@ -185,7 +185,7 @@
                                             @endforeach
                                         </select>
                                     </div>
-                                    <div class="col-sm-4 mt-sm-0 mt-3">
+                                    <div class="col-2">
                                         <label for="item_weight" class="form-label">Weight
                                             <span style="color: red;">*</span>
                                         </label>
@@ -193,7 +193,7 @@
                                             name="example-text-input" value="{{$order['items'][0]['item_weight']}}"
                                             placeholder="Weight of item" />
                                     </div>
-                                    <div class="col-sm-4 mt-sm-0 mt-3">
+                                    <div class="col-2">
                                         <label for="item_colors" class="form-label">Colors</label>
                                         <select class="form-select" id="item_colors">
                                             @foreach ($colors as $color)

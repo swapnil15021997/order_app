@@ -21,6 +21,14 @@
                 <div class="btn-list">
                     @if(in_array(7, $user_permissions))
 
+                        <a href="{{route('order-add-page', ['type' => 'order'])}}" class="btn btn-primary d-none d-sm-inline-block">
+
+                            Order Form
+                        </a>
+                        <a href="{{route('order-add-page', ['type' => 'repairing'])}}" class="btn btn-primary d-none d-sm-inline-block">
+
+                            Repairing Form
+                        </a>
                         <a href="{{route('order-add-page')}}" class="btn btn-primary d-none d-sm-inline-block">
 
                             Create new Order

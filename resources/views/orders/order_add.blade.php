@@ -27,7 +27,9 @@
                         <div class="card">
                             <div class="card-body">
                                 <div class="row">
-                                    <h2 class="font-bold">#{{$order_number}}</h2>
+                                    <h2 class="font-bold">
+                                    <span id="form_title">{{ $type == 'order' ? 'Order Form' : ($type == 'repairing' ? 'Repairing Form' : '') }}</span> 
+                                                                            #{{$order_number}}</h2>
                                     <div class="col-sm-6">
                                         <input type="hidden" id="order_number" name="order_number"
                                             value="{{$order_number}}">
@@ -42,8 +44,8 @@
                                             <label for="order_type" class="form-label">Order Type</label>
                                             <select id="order_type" class="form-select" type="text">
 
-                                                <option value="order">Order</option>
-                                                <option value="reparing" selected>Reparing</option>
+                                                <option value="order" {{ $type == 'order' ? 'selected' : '' }}>Order</option>
+                                                <option value="reparing" {{ $type == 'repairing' ? 'selected' : '' }}>Reparing</option>
                                             </select>
                                             <!-- <div class="d-flex align-items-center">
                                                 <label class="form-check-label ms-2">Order</label>
@@ -132,21 +134,18 @@
                             <div class="card-body">
                                 <h4 class="h2">Item Details</h4>
                                 <div class="row">
-                                    <div class="col-sm-6">
+                                    <div class="col-3">
                                         <label for="item_name" class="form-label">Name
                                             <span style="color: red;">*</span>
                                         </label>
-                                        <input type="text" class="form-control" id="item_name"
-                                            placeholder="Select Item" />
+                                        <input type="text" class="form-control" id="item_name" placeholder="Select Item" />
                                     </div>
-                                    <div class="col-sm-6 mt-3 mt-sm-0">
+                                    <div class="col-2">
                                         <label for="item_metal" class="form-label">Metal
                                             <span style="color: red;">*</span>
                                         </label>
                                         <select class="form-select" id="item_metal">
-
                                             <option value="" disabled selected>Select a metal</option>
-
                                             @foreach ($metals as $metal)
                                                 <option value="{{ $metal->metal_name }}" selected>
                                                     {{ $metal->metal_name }}
@@ -154,9 +153,7 @@
                                             @endforeach
                                         </select>
                                     </div>
-                                </div>
-                                <div class="row mt-3">
-                                    <div class="col-sm-4">
+                                    <div class="col-2">
                                         <label for="item_melting" class="form-label">Melting
                                             <span style="color: red;">*</span>
                                         </label>
@@ -169,14 +166,13 @@
                                             @endforeach
                                         </select>
                                     </div>
-                                    <div class="col-sm-4 mt-3 mt-sm-0">
+                                    <div class="col-2">
                                         <label for="item_weight" class="form-label">Weight
                                             <span style="color: red;">*</span>
                                         </label>
-                                        <input type="number" class="form-control" id="item_weight"
-                                            name="example-text-input" placeholder="Weight of item" />
+                                        <input type="number" class="form-control" id="item_weight" placeholder="Weight of item" />
                                     </div>
-                                    <div class="col-sm-4 mt-3 mt-sm-0">
+                                    <div class="col-2">
                                         <label for="item_colors" class="form-label">Colors</label>
                                         <select class="form-select" id="item_colors">
                                             @foreach ($colors as $color)
@@ -630,13 +626,24 @@
             $("#order_date").datepicker("setDate", today);
         });
 
+        const orderType = "{{ $type  ?: 'order' }}"; 
+        const paymentDiv = $('#payment');
+
+        if (orderType === 'order') {
+            paymentDiv.removeClass('d-none');
+        } else {
+            paymentDiv.addClass('d-none');
+        }
 
         $('#order_type').on('change', function () {
             console.log(this.value);
             const paymentDiv = $('#payment');
+            const formTitle = $('#form_title'); 
             if (this.value == 'order') {
+                formTitle.text('Order Form');
                 paymentDiv.removeClass('d-none');
             } else {
+                formTitle.text('Repairing Form');
                 paymentDiv.addClass('d-none');
             }
         });

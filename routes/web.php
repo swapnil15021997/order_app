@@ -118,7 +118,7 @@ Route::post('customer-add-edit', [CustomerController::class, 'add_edit_customer'
 Route::post('customer-list',     [CustomerController::class, 'customer_list'])->name('customer_list');
 
 
-Route::get('order-add', [OrderController::class, 'order_add_page'])->name('order-add-page');
+Route::get('/order-add', [OrderController::class, 'order_add_page'])->name('order-add-page');
 Route::get('edit-order/{id}', [OrderController::class, 'order_edit_page'])->name('order_edit_page');
 
 
