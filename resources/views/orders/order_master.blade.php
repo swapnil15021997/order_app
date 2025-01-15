@@ -89,6 +89,7 @@
                                 <th>Order Number</th>
                                 <th>Customer Name</th>                                
                                 <th>Order Info</th>
+                                <th>Item</th>
                                  <th>Action</th>
                             </tr>
                         </thead>
@@ -239,10 +240,14 @@
 
                         if (response.status === 200) {
                             orderArray = response.data.orders; 
-                           
-                            // return response.data.orders;
-
+                            console.log(response.data.orders);
                             return response.data.orders;
+                            // return {
+                            //     draw: response.draw,
+                            //     recordsTotal: response.data.recordsTotal,
+                            //     recordsFiltered: response.data.recordsFiltered,
+                            //     data: response.data.orders
+                            // };
                         }
                         return [];  
                     }
@@ -299,6 +304,13 @@
                                         ${activeBranchHtml}
                             </div>`
                         }   
+                    },
+                    {
+                        data: 'item',
+                        name: 'item',
+                        render: function (data, type, row) {
+                            return `${row.items[0].item_name}--${row.items[0].item_metal}--${row.items[0].item_weight}`;
+                        }
                     },
                         {
                         data: 'order_id',
@@ -360,7 +372,8 @@
                     });
                 },
                 "pageLength": 10,
-                "lengthMenu": [10, 25, 50, 100]
+                "lengthMenu": [10, 25, 50, 100],
+                "paging": true,
             });
             $('input[aria-controls="branch_table"]').on('keyup', function () {
                 table.search(this.value).draw();

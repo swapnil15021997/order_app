@@ -596,7 +596,7 @@ class OrderController extends Controller
         if (!in_array($sortColumn, $allowedSortColumns)) {
             $sortColumn = 'order_id'; 
         }
-        $ordersQuery = Order::with('transactions')    
+        $ordersQuery = Order::with('transactions','items')    
         ->leftJoin('branch AS from_branch', 'from_branch.branch_id', '=', 'orders.order_from_branch_id')  
         ->leftJoin('branch AS to_branch', 'to_branch.branch_id', '=', 'orders.order_to_branch_id')  
         ->leftJoin('branch AS current_branch', 'current_branch.branch_id', '=', 'orders.order_current_branch')  
@@ -651,11 +651,11 @@ class OrderController extends Controller
             ],
             'draw' => intval($request->input('draw')),
 
-            'recordsTotal'  => $total_orders,
-            'recordsFiltered' => $orders->count(),
-            'per_page'     => $perPage,
-            'current_page' => $page,
-            'total_pages'  => $total_pages,
+            // 'recordsTotal'  => $total_orders,
+            // 'recordsFiltered' => $orders->count(),
+            // 'per_page'     => $perPage,
+            // 'current_page' => $page,
+            // 'total_pages'  => $total_pages,
     
         ]);
     }
