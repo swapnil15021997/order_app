@@ -227,35 +227,56 @@
         function startScanner() {
             // Show the video element
 
+            // document.getElementById("my-qr-reader").style.display = "block";
+            // startButton.textContent = "Stop Scanner";
+
+            // // Initialize QR scanner if not already created
+            // if (!qrScanner) {
+            //     qrScanner = new QrScanner(
+            //         videoElem,
+            //         onScanSuccess,
+            //         {
+            //             highlightScanRegion: true,
+            //             highlightCodeOutline: true,
+            //         }
+            //     );
+            // }
+
+            // // Start scanning
+            // qrScanner.start();
+            // create_order_array(3,7656545, 1, 5765654,6/34/3432)
+            
+            // html5
             document.getElementById("my-qr-reader").style.display = "block";
             startButton.textContent = "Stop Scanner";
 
-            // Initialize QR scanner if not already created
-            if (!qrScanner) {
-                qrScanner = new QrScanner(
-                    videoElem,
-                    onScanSuccess,
-                    {
-                        highlightScanRegion: true,
-                        highlightCodeOutline: true,
-                    }
-                );
+            // Initialize Html5Qrcode if not already created
+            if (!html5QrCode) {
+                html5QrCode = new Html5Qrcode("videoElem");
             }
 
             // Start scanning
-            qrScanner.start();
-            create_order_array(3,7656545, 1, 5765654,6/34/3432)
-   
+            html5QrCode.start(
+                { facingMode: "environment" }, // Use the back camera
+                {
+                    fps: 10, // Frames per second for the scan
+                    qrbox: { width: 250, height: 250 }, // Set scanning region size
+                },
+                onScanSuccess, // Callback for successful scan
+                (errorMessage) => {
+                    console.warn("QR Code scan error:", errorMessage);
+                }
+            ).catch((err) => {
+                console.error("Error starting QR scanner:", err);
+            });
         }
 
-        function onScanSuccess(result) {
+        // function onScanSuccess(result) {
             // Display the result
-            const scannedText = result.data || result;
-            // If the result is a URL, open it in a new tab
-            // if (scannedText.startsWith('http')) {
-            //     window.open(scannedText, '_blank');
-                
-            // }
+            // const scannedText = result.data || result;
+        function onScanSuccess(decodedText, decodedResult) {
+            const scannedText = decodedText;
+        
             alert(scannedText);
             const [order_id,orderQrCode, orderStatus, orderNumber, orderDate] = scannedText.split('|');
             create_order_array(order_id,orderQrCode, orderStatus, orderNumber,orderDate);
@@ -264,15 +285,27 @@
         }
 
         function stopScanner() {
-            if (qrScanner) {
-                qrScanner.stop();
-            }
+            // if (qrScanner) {
+            //     qrScanner.stop();
+            // }
             // document.getElementById("my-qr-reader").style.display = "none";
             // startButton.textContent = "Start Scanner";
+            if (html5QrCode) {
+                html5QrCode.stop().then(() => {
+                    console.log("QR Code scanning stopped.");
+                }).catch((err) => {
+                    console.error("Error stopping QR scanner:", err);
+                });
+            }
         }
 
         startButton.addEventListener("click", function () {
-            if (qrScanner && qrScanner.isScanning()) {
+            // if (qrScanner && qrScanner.isScanning()) {
+            //     stopScanner();
+            // } else {
+            //     startScanner();
+            // }
+            if (html5QrCode && html5QrCode.isScanning) {
                 stopScanner();
             } else {
                 startScanner();
