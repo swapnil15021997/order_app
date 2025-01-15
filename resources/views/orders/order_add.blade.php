@@ -1765,15 +1765,19 @@
 
 
     function handleFileUpload(event) {
+        const orderId = $('#temp_order_id').val();
+     
         const file = event.target.files;
         if (file) {
             const formData = new FormData();
             formData.append('notes_text', '');
             for (var i = 0; i < file.length; i++) {
                 formData.append('notes_file[]', file[i]);
-                formData.append('notes_type', 3);
-
+                formData.append('notes_type', 2);
+                
             }
+            formData.append('notes_order_id', '');
+            formData.append('temp_order_id',orderId);
             $.ajax({
                 url: "{{ route('notes_add') }}",
                 type: 'POST',

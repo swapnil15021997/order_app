@@ -1924,14 +1924,17 @@
 
     function handleFileUpload(event) {
         const file = event.target.files;
+        const orderId = $('#order_id').val();
+     
         if (file) {
             const formData = new FormData();
             formData.append('notes_text', '');
             for (var i = 0; i < file.length; i++) {
                 formData.append('notes_file[]', file[i]);
-                formData.append('notes_type', 3);
-
+                formData.append('notes_type', 2);
             }
+            formData.append('notes_order_id', orderId);
+            formData.append('temp_order_id','');
             $.ajax({
                 url: "{{ route('notes_add') }}",
                 type: 'POST',

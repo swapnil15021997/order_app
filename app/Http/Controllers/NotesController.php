@@ -53,12 +53,12 @@ class NotesController extends Controller
                 'errors'  => $validator->errors(), 
             ]);
         } 
-        
+
         $notes_save = new Notes();
         $notes_save->notes_text = $params['notes_text'];
         $notes_save->notes_type = $params['notes_type'];
-        $notes_save->notes_order_id = $params['notes_order_id'] ?? null;;
-        $notes_save->notes_temp_order_id = $params['temp_order_id'] ?? null;
+        $notes_save->notes_order_id = $params['notes_order_id'] ?? null;
+        $notes_save->notes_temp_order_id = $params['temp_order_id'];
         $fileIds = [];
 
         if ($request->hasFile('notes_file')) {
