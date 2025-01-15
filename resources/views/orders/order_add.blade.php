@@ -1585,10 +1585,12 @@
 
     const recordButton = document.getElementById("startRec");
     const recordStopButton = document.getElementById("audio_stop");
-    const recordSendutton = document.getElementById("audio_send");
+    const recordSendButton = document.getElementById("audio_send");
     let isRecording = false;
     let recorder, audio_stream, audioBlob;
 
+    let shouldUpload = true;
+    let isResetting = false;
 
 
     // Start recording
@@ -1653,31 +1655,36 @@
 
                 recorder.onstop = function () {
                     // Create an audio blob
-                    audioBlob = new Blob(audioChunks, { type: "audio/wav" });
-                    console.log("Audio Blob Created:", audioBlob);
-                    console.log("Audio Blob Size:", audioBlob.size);
+                    console.log("Resetting",isResetting,'ShouldUploaded',shouldUpload)
+                   
+                    if (!isResetting && shouldUpload) { 
+                    
+                        audioBlob = new Blob(audioChunks, { type: "audio/wav" });
+                        console.log("Audio Blob Created:", audioBlob);
+                        console.log("Audio Blob Size:", audioBlob.size);
 
 
-                    if (audioBlob.size === 0) {
-                        alert("Audio blob is empty! Recording may have failed.");
-                        return;
-                    }
-                    // Create a URL for the blob and set it as the audio playback source
-                    const url = URL.createObjectURL(audioBlob);
-                    var preview = document.getElementById('audio-playback');
-                    preview.src = url;
+                        if (audioBlob.size === 0) {
+                            alert("Audio blob is empty! Recording may have failed.");
+                            return;
+                        }
+                        // Create a URL for the blob and set it as the audio playback source
+                        const url = URL.createObjectURL(audioBlob);
+                        var preview = document.getElementById('audio-playback');
+                        preview.src = url;
 
-                    // Unhide the audio playback element
-                    $("#audioPlaybackContainer").removeClass("d-none");
+                        // Unhide the audio playback element
+                        $("#audioPlaybackContainer").removeClass("d-none");
 
-                    preview.load();
-                    console.log("Audio recording ready for playback.");
-                    if (audioBlob.size > 0) {
-                        sendButton.audioBlob = audioBlob; 
-                        uploadRecording();
-                        console.log("Audio Blob assigned to sendButton:", sendButton.audioBlob);
-                    } else {
-                        console.error("Audio Blob is empty. Recording may have failed.");
+                        preview.load();
+                        console.log("Audio recording ready for playback.");
+                        if (audioBlob.size > 0) {
+                            sendButton.audioBlob = audioBlob; 
+                            uploadRecording();
+                            console.log("Audio Blob assigned to sendButton:", sendButton.audioBlob);
+                        } else {
+                            console.error("Audio Blob is empty. Recording may have failed.");
+                        }
                     }
                 };
 
@@ -1692,11 +1699,11 @@
 
     function stopRecording() {
         audioBlob = null;
-        audio_stream = null;
         if (recorder) {
             recorder.stop();
             audio_stream.getAudioTracks()[0].stop();
         }
+        audio_stream = null;
         recorder = null;
         $('#audio_box').css("display", "none");
 

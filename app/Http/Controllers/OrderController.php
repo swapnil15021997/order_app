@@ -561,7 +561,7 @@ class OrderController extends Controller
     // List of order table
     public function order_list(Request $request){
         $login         = auth()->user()->toArray();
-       
+        
         $rules = [
             'search'   => ['nullable', 'string'], 
             'per_page' => ['nullable', 'integer', 'min:1'], 
@@ -596,22 +596,48 @@ class OrderController extends Controller
         if (!in_array($sortColumn, $allowedSortColumns)) {
             $sortColumn = 'order_id'; 
         }
-        $ordersQuery = Order::with('transactions','items')    
-        ->leftJoin('branch AS from_branch', 'from_branch.branch_id', '=', 'orders.order_from_branch_id')  
-        ->leftJoin('branch AS to_branch', 'to_branch.branch_id', '=', 'orders.order_to_branch_id')  
-        ->leftJoin('branch AS current_branch', 'current_branch.branch_id', '=', 'orders.order_current_branch')  
-        ->leftJoin('customers AS cust', 'cust.cust_id', '=', 'orders.order_customer_id')  
-        ->select(
-            'orders.*', 
-            'from_branch.branch_name AS order_from_name',   
-            'to_branch.branch_name AS order_to_name',
-            'current_branch.branch_name AS order_current_branch',
-            'cust.cust_name'
-            )
-            ->distinct()  
-        ->where('orders.is_delete',0)
+        $userBranchIds = $login['user_branch_ids'];
+        if($login['user_role_id']==1){
 
-        ->orderBy($sortColumn, $sortOrder);
+            $ordersQuery = Order::with('transactions','items')    
+            ->leftJoin('branch AS from_branch', 'from_branch.branch_id', '=', 'orders.order_from_branch_id')  
+            ->leftJoin('branch AS to_branch', 'to_branch.branch_id', '=', 'orders.order_to_branch_id')  
+            ->leftJoin('branch AS current_branch', 'current_branch.branch_id', '=', 'orders.order_current_branch')  
+            ->leftJoin('customers AS cust', 'cust.cust_id', '=', 'orders.order_customer_id')  
+            ->select(
+                'orders.*', 
+                'from_branch.branch_name AS order_from_name',   
+                'to_branch.branch_name AS order_to_name',
+                'current_branch.branch_name AS order_current_branch',
+                'cust.cust_name'
+                )
+                ->distinct()  
+            ->where('orders.is_delete',0)
+    
+            ->orderBy($sortColumn, $sortOrder);
+        }else{
+            $ordersQuery = Order::with('transactions','items')    
+            ->leftJoin('branch AS from_branch', 'from_branch.branch_id', '=', 'orders.order_from_branch_id')  
+            ->leftJoin('branch AS to_branch', 'to_branch.branch_id', '=', 'orders.order_to_branch_id')  
+            ->leftJoin('branch AS current_branch', 'current_branch.branch_id', '=', 'orders.order_current_branch')  
+            ->leftJoin('customers AS cust', 'cust.cust_id', '=', 'orders.order_customer_id')  
+            ->select(
+                'orders.*', 
+                'from_branch.branch_name AS order_from_name',   
+                'to_branch.branch_name AS order_to_name',
+                'current_branch.branch_name AS order_current_branch',
+                'cust.cust_name'
+                )
+                ->distinct()  
+            ->where('orders.is_delete',0)
+            ->where(function ($query) use ($userBranchIds) {
+                $query->whereIn('orders.order_from_branch_id', explode(',', $userBranchIds))
+                      ->orWhereHas('transactions', function ($transQuery) use ($userBranchIds) {
+                          $transQuery->whereIn('trans_to', explode(',', $userBranchIds));
+                      });
+            })
+            ->orderBy($sortColumn, $sortOrder);
+        }
        
         if (!empty($searchQuery)) {
             $ordersQuery->where(function ($query) use ($searchQuery) {

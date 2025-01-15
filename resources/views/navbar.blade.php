@@ -24,33 +24,41 @@
               </a>
 
             </div> -->
-            <div class="nav-item dropdown d-none d-xl-flex me-4">
-                <a href="#" class="nav-link d-flex lh-1 text-reset p-0" data-bs-toggle="dropdown"
-                    aria-label="Open user menu">
-                    <span class="avatar avatar-sm">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
-                            <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
-                            <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"/>
-                        </svg>
-                    </span>
-                    <div class="d-none d-xl-block ps-2">
-                        <div>{{$login['name']}}</div>
+            @if(in_array(5, $user_permissions))
+            <div class="btn-list me-2 {{ $activePage === 'orders' ? 'active' : '' }}">
 
-                        <div class="mt-1 small text-secondary">{{session('role_name', '')}}</div>
-                    </div>
-                </a>
-
-
-
-
-                <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                    <!-- <a href="{{route('profile.edit')}}" class="dropdown-item">Profile</a> -->
-                    <a href="{{route('settings')}}" class="dropdown-item">Settings</a>
-                    <a href="" onclick="logout()" class="dropdown-item">Logout</a>
-
+                    <a class="btn" href="{{route('order-master')}}">
+                        <span
+                            class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/checkbox -->
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                class="bi bi-receipt" viewBox="0 0 16 16">
+                                <path
+                                    d="M1.92.506a.5.5 0 0 1 .434.14L3 1.293l.646-.647a.5.5 0 0 1 .708 0L5 1.293l.646-.647a.5.5 0 0 1 .708 0L7 1.293l.646-.647a.5.5 0 0 1 .708 0L9 1.293l.646-.647a.5.5 0 0 1 .708 0l.646.647.646-.647a.5.5 0 0 1 .708 0l.646.647.646-.647a.5.5 0 0 1 .801.13l.5 1A.5.5 0 0 1 15 2v12a.5.5 0 0 1-.053.224l-.5 1a.5.5 0 0 1-.8.13L13 14.707l-.646.647a.5.5 0 0 1-.708 0L11 14.707l-.646.647a.5.5 0 0 1-.708 0L9 14.707l-.646.647a.5.5 0 0 1-.708 0L7 14.707l-.646.647a.5.5 0 0 1-.708 0L5 14.707l-.646.647a.5.5 0 0 1-.708 0L3 14.707l-.646.647a.5.5 0 0 1-.801-.13l-.5-1A.5.5 0 0 1 1 14V2a.5.5 0 0 1 .053-.224l.5-1a.5.5 0 0 1 .367-.27m.217 1.338L2 2.118v11.764l.137.274.51-.51a.5.5 0 0 1 .707 0l.646.647.646-.646a.5.5 0 0 1 .708 0l.646.646.646-.646a.5.5 0 0 1 .708 0l.646.646.646-.646a.5.5 0 0 1 .708 0l.646.646.646-.646a.5.5 0 0 1 .708 0l.646.646.646-.646a.5.5 0 0 1 .708 0l.509.509.137-.274V2.118l-.137-.274-.51.51a.5.5 0 0 1-.707 0L12 1.707l-.646.647a.5.5 0 0 1-.708 0L10 1.707l-.646.647a.5.5 0 0 1-.708 0L8 1.707l-.646.647a.5.5 0 0 1-.708 0L6 1.707l-.646.647a.5.5 0 0 1-.708 0L4 1.707l-.646.647a.5.5 0 0 1-.708 0z" />
+                                <path
+                                    d="M3 4.5a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5m8-6a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5" />
+                            </svg>
+                        </span>
+                        <span class="nav-link-title">
+                            Orders
+                        </span>
+                    </a>
+                
                 </div>
-            </div>
-            <div class="ps-2 nav-item dropdown">
+                @endif
+            <div class=" btn-list my-md-0 flex-grow-1 flex-md-grow-0 d-md-flex d-none">
+                    <button class="btn" id="start-scan">
+                        <span class="me-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-qr-code-scan" viewBox="0 0 16 16">
+                                <path d="M0 .5A.5.5 0 0 1 .5 0h3a.5.5 0 0 1 0 1H1v2.5a.5.5 0 0 1-1 0zm12 0a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-1 0V1h-2.5a.5.5 0 0 1-.5-.5M.5 12a.5.5 0 0 1 .5.5V15h2.5a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5v-3a.5.5 0 0 1 .5-.5m15 0a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1 0-1H15v-2.5a.5.5 0 0 1 .5-.5M4 4h1v1H4z"/>
+                                <path d="M7 2H2v5h5zM3 3h3v3H3zm2 8H4v1h1z"/>
+                                <path d="M7 9H2v5h5zm-4 1h3v3H3zm8-6h1v1h-1z"/>
+                                <path d="M9 2h5v5H9zm1 1v3h3V3zM8 8v2h1v1H8v1h2v-2h1v2h1v-1h2v-1h-3V8zm2 2H9V9h1zm4 2h-1v1h-2v1h3zm-4 2v-1H8v1z"/>
+                                <path d="M12 9h2V8h-2z"/>
+                            </svg>
+                        </span>
+                        Scan</button>
+                </div>
+            <div class="me-2 ps-2 nav-item dropdown">
                 <div class="btn-list">
                     <a href="#" data-bs-toggle="dropdown" class=" btn  dropdown-toggle no-arrow">
                         <svg class="me-2" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-geo-alt" viewBox="0 0 16 16">
@@ -71,57 +79,43 @@
                     </div>
                 </div>
             </div>
+            <div class="nav-item dropdown d-none d-xl-flex me-4">
+                <a href="#" class="nav-link d-flex lh-1 text-reset p-0" data-bs-toggle="dropdown"
+                    aria-label="Open user menu">
+                    <span class="avatar avatar-sm">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
+                            <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
+                            <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"/>
+                        </svg>
+                    </span>
+                    <div class="d-none d-xl-block ps-2">
+                        <div>{{$login['name']}}</div>
+
+                        <div class="mt-1 small text-secondary">{{session('role_name', '')}}</div>
+                    </div>
+                </a>
+
+                <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                    <!-- <a href="{{route('profile.edit')}}" class="dropdown-item">Profile</a> -->
+                    <a href="{{route('settings')}}" class="dropdown-item">Settings</a>
+                    <a href="" onclick="logout()" class="dropdown-item">Logout</a>
+
+                </div>
+            </div>
 </header>
-<header class="navbar-expand-md">
+<!-- <header class="navbar-expand-md">
     <div class="collapse navbar-collapse" id="navbar-menu">
         <div class="navbar">
             <div class="container-xl">
                 <ul class="navbar-nav">
-                    <!-- <li class="nav-item {{ $activePage === 'dashboard' ? 'active' : '' }}">
-                        <a class="nav-link" href="{{route('dashboard')}}">
-                            <span
-                                class="nav-link-icon d-md-none d-lg-inline-block">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
-                                    viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
-                                    stroke-linecap="round" stroke-linejoin="round">
-                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                    <path d="M5 12l-2 0l9 -9l9 9l-2 0" />
-                                    <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
-                                    <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
-                                </svg>
-                            </span>
-                            <span class="nav-link-title">
-                                Home
-                            </span>
-                        </a>
-                    </li> -->
-                    @if(in_array(1, $user_permissions))
-                        <!-- <li class="nav-item {{ $activePage === 'branch' ? 'active' : '' }}">
-                            <a class="nav-link" href="{{route('branch-master')}}">
-                                <span
-                                    class="nav-link-icon d-md-none d-lg-inline-block">
-
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                                        class="bi bi-buildings" viewBox="0 0 16 16">
-                                        <path
-                                            d="M14.763.075A.5.5 0 0 1 15 .5v15a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5V14h-1v1.5a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5V10a.5.5 0 0 1 .342-.474L6 7.64V4.5a.5.5 0 0 1 .276-.447l8-4a.5.5 0 0 1 .487.022M6 8.694 1 10.36V15h5zM7 15h2v-1.5a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 .5.5V15h2V1.309l-7 3.5z" />
-                                        <path
-                                            d="M2 11h1v1H2zm2 0h1v1H4zm-2 2h1v1H2zm2 0h1v1H4zm4-4h1v1H8zm2 0h1v1h-1zm-2 2h1v1H8zm2 0h1v1h-1zm2-2h1v1h-1zm0 2h1v1h-1zM8 7h1v1H8zm2 0h1v1h-1zm2 0h1v1h-1zM8 5h1v1H8zm2 0h1v1h-1zm2 0h1v1h-1zm0-2h1v1h-1z" />
-                                    </svg>
-                                </span>
-                                <span class="nav-link-title">
-                                    Branch
-                                </span>
-                            </a>
-
-                        </li> -->
-                    @endif
+                   
                     @if(in_array(5, $user_permissions))
 
                         <li class="nav-item {{ $activePage === 'orders' ? 'active' : '' }}">
                             <a class="nav-link" href="{{route('order-master')}}">
                                 <span
-                                    class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/checkbox -->
+                                    class="nav-link-icon d-md-none d-lg-inline-block">
+
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                                         class="bi bi-receipt" viewBox="0 0 16 16">
                                         <path
@@ -136,27 +130,7 @@
                             </a>
                         </li>
                     @endif
-                    @if(in_array(9, $user_permissions))
-
-                        <!-- <li class="nav-item {{ $activePage === 'users' ? 'active' : '' }}">
-                            <a class="nav-link" href="{{route('user-master')}}">
-                                <span
-                                    class="nav-link-icon d-md-none d-lg-inline-block">
-
-                                    
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                                        class="bi bi-people" viewBox="0 0 16 16">
-                                        <path
-                                            d="M15 14s1 0 1-1-1-4-5-4-5 3-5 4 1 1 1 1zm-7.978-1L7 12.996c.001-.264.167-1.03.76-1.72C8.312 10.629 9.282 10 11 10c1.717 0 2.687.63 3.24 1.276.593.69.758 1.457.76 1.72l-.008.002-.014.002zM11 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4m3-2a3 3 0 1 1-6 0 3 3 0 0 1 6 0M6.936 9.28a6 6 0 0 0-1.23-.247A7 7 0 0 0 5 9c-4 0-5 3-5 4q0 1 1 1h4.216A2.24 2.24 0 0 1 5 13c0-1.01.377-2.042 1.09-2.904.243-.294.526-.569.846-.816M4.92 10A5.5 5.5 0 0 0 4 13H1c0-.26.164-1.03.76-1.724.545-.636 1.492-1.256 3.16-1.275ZM1.5 5.5a3 3 0 1 1 6 0 3 3 0 0 1-6 0m3-2a2 2 0 1 0 0 4 2 2 0 0 0 0-4" />
-                                    </svg>
-                                </span>
-                                <span class="nav-link-title">
-                                    Users & Roles
-                                </span>
-                            </a>
-                        </li> -->
-                    @endif
-
+                   
 
                 </ul>
                 <div class="my-2 btn-list my-md-0 flex-grow-1 flex-md-grow-0 d-md-flex d-none">
@@ -179,7 +153,7 @@
     <input type="hidden" name="" id="transfer_order_id">
 
   
-</header>
+</header> -->
 <!-- <script  src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
 <!-- <script defer src="https://cdnjs.cloudflare.com/ajax/libs/qr-scanner/1.4.2/qr-scanner.umd.min.js"></script>
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script> -->
