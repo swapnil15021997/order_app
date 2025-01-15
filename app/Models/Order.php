@@ -29,7 +29,8 @@ class Order extends Model
         'order_to_branch_id',
         'order_user_id',
         'order_type',
-        'order_status'
+        'order_status',
+        'order_remark'
     ];
 
 

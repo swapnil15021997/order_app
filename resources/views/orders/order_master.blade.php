@@ -20,8 +20,19 @@
             <div class="col-auto ms-auto d-print-none">
                 <div class="btn-list">
                     @if(in_array(7, $user_permissions))
+                        
 
-                        <a href="{{route('order-add-page', ['type' => 'order'])}}" class="btn btn-primary d-none d-sm-inline-block">
+                        <a id="accept_btn" href="#" onclick="approve_multiple_order()" class="d-none btn btn-danger" >
+
+                            Accept Item/s
+                        </a>
+
+                        <a href="#" id="transfer_btn" onclick="transfer_order_open()" class="d-none btn btn-danger">
+
+                            Transfer Item/s
+                        </a>
+
+                        <a href="{{route('order-add-page', ['type' => 'order'])}}" class="btn btn-warning d-none d-sm-inline-block">
 
                             Order Form
                         </a>
@@ -29,10 +40,7 @@
 
                             Repairing Form
                         </a>
-                        <a href="{{route('order-add-page')}}" class="btn btn-primary d-none d-sm-inline-block">
-
-                            Create new Order
-                        </a>
+                       
                     @endif
                     <a href="{{route('order-add-page')}}" class="btn btn-primary d-sm-none btn-icon"
                         aria-label="Create new report">
@@ -76,19 +84,12 @@
                     <table id="branch_table" class="table card-table table-vcenter text-nowrap datatable">
                         <thead>
                             <tr>
-                                <th class="w-1"><input class="form-check-input m-0 align-middle" type="checkbox"
-                                        aria-label="Select all invoices"></th>
-
-                                <th>Order Date</th>
-                                <th>Order Type</th>
-                                <th>From Branch</th>
-                                <th>To Branch</th>
-
-                                <th>order_number</th>
-                                <th>Item Current Brach</th>
-
-                                <th>qr_number</th>
-                                <th>Operations</th>
+                                <th class="w-1"></th>
+                                <th>Sr No</th>
+                                <th>Order Number</th>
+                                <th>Customer Name</th>                                
+                                <th>Order Info</th>
+                                 <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -161,6 +162,39 @@
         </div>
     </div>
 
+    <div class="modal modal-blur fade" id="transfer_order_modal" tabindex="-2" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h5 class="modal-title">Transfer Order</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+
+                    <label class="form-label">Order To</label>
+                    <div class="row">
+                        <div class="col-6 select-full">
+                            <select id="TransfersearchableSelectTo" class="form-select select-2  w-100 " type="text">
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="modal-footer">
+                    <a href="#" class="btn btn-secondary" data-bs-dismiss="modal">
+                        Cancel
+                    </a>
+                    <a id="TransferOrderBtn" onclick="transfer_this()" href="#" class="btn btn-primary">
+                        Transfer This Order
+                    </a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script defer src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
@@ -170,6 +204,7 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
     <script>
+        let orderArray;
         $(document).ready(function () {
             $('#order_date').val('');
             $('#order_type').val('');
@@ -203,50 +238,98 @@
                     dataSrc: function (response) {
 
                         if (response.status === 200) {
+                            orderArray = response.data.orders; 
+                           
+                            // return response.data.orders;
+
                             return response.data.orders;
                         }
-                        return [];  // Return an empty array if no data
+                        return [];  
                     }
                 },
                 columns: [
-                    { data: 'serial_number', name: 'serial_number', orderable: false },
-                    { data: 'order_date', name: 'order_date', orderable: true },
-                    { data: 'order_type', name: 'order_type', orderable: false },
-                    { data: 'order_from_name', name: 'order_from_name', orderable: false },
-                    { data: 'order_to_name', name: 'order_to_name', orderable: false },
-                    { data: 'order_number', name: 'order_number', orderable: false },
-                    { data: 'order_current_branch', name: 'order_current_branch', orderable: false },
-                    { data: 'order_qr_code', name: 'order_qr_code', orderable: false },
                     {
+                        data: 'order_id',
+                        name: 'order_id',
+                        orderable: false,
+                        render: function (data, type, row) {
+                            if (row && row.order_id) {
+                                return `<input type="checkbox" class="form-check-input" data-order-id="${row.order_id}">`;
+                            }
+                            return '';
+                        }
+                    },
+                    { data: 'serial_number', name: 'serial_number', orderable: false },
+                    
+                    { data: 'order_qr_code', name: 'order_qr_code', orderable: false,
+                        render: function (data, type, row) {
+                            if (row && row.order_type) {
+                                return `${row.order_type} # ${row.order_qr_code}`;
+                            }
+                            return '';
+                        }
+
+
+                     },
+                     { data: 'cust_name', name: 'cust_name', orderable: false,
+                        render: function (data, type, row) {
+                            if (row && row.cust_name) {
+                                return `${row.cust_name}`;
+                            }
+                            return '';
+                        }
+
+
+                     },
+                   
+                    {
+                        render: function (data, type, row) {
+                            let activeBranchHtml = '';
+                            if (row.order_current_branch && row.order_current_branch.trim() !== '') {
+                                activeBranchHtml = `
+                                    <br/>
+                                    <div style="background-color: green; color: white; padding: 5px; border-radius: 4px; margin-top: 5px; display: inline-block;">
+                                        ${row.order_current_branch}
+                                    </div>
+                                `;
+                            }
+                            return `<div>
+                                        <span>${row.order_from_name} ------>${row.order_to_name}</span>
+                                        <br/>
+                                        ${activeBranchHtml}
+                            </div>`
+                        }   
+                    },
+                        {
                         data: 'order_id',
                         name: 'operations',
                         render: function (data, type, row) {
-                            console.log(row);
+                             
                             let dropdown = `<button data-bs-toggle="dropdown" type="button" class="btn dropdown-toggle dropdown-toggle-split"></button>
                                 <div class="dropdown-menu dropdown-menu-end drop-option">
                                   <a class="dropdown-item" href="#" onclick="edit_order(${row.order_id})">
-                                    Edit
+                                    <i class="bi bi-pencil-fill"></i>
                                   </a>
                                   <a class="dropdown-item" href="#" onclick="view_order(${row.order_qr_code})">
-                                    View
+                                    <i class="bi bi-receipt"></i>
                                   </a>
                                   <a class="dropdown-item" href="#" onclick="transfer_order(${row.order_id})">
-                                    Transfer Order
+                                    <i class="bi bi-send"></i>
                                   </a>
                                   <a class="dropdown-item" href="#" onclick="track_order(${row.order_id})">
-                                    Track Order
+                                    <i class="bi bi-geo-alt-fill"></i>
                                   </a>
                                   <a class="dropdown-item" href="#" onclick="delete_order(${row.order_id})">
-                                    Delete
+                                    <i class="bi bi-trash"></i>
                                   </a>`;
 
                             let showApprove = false;
                             let transaction_id;
                             row.transactions.forEach(transaction => {
-                                console.log(transaction, userActiveBranch);
+
                                 if (parseInt(userActiveBranch) === parseInt(transaction.trans_to) && transaction.trans_status === 0) {
                                     showApprove = true;
-                                    console.log(transaction.trans_id, userActiveBranch);
+
                                     transaction_id = transaction.trans_id;
                                 }
                             });
@@ -268,6 +351,14 @@
                         },
                     }
                 ],
+                initComplete: function () {
+
+                    $('#branch_table').on('change', '.form-check-input', function () {
+                        var orderId = $(this).data('order-id');
+                        var isChecked = $(this).prop('checked');
+                        handleCheckboxChange(orderId, isChecked);
+                    });
+                },
                 "pageLength": 10,
                 "lengthMenu": [10, 25, 50, 100]
             });
@@ -565,5 +656,230 @@
             }
         }
 
+
+        function handleCheckboxChange(orderId, isChecked) {
+            console.log(orderArray)
+            if (isChecked) {
+                CheckType(orderId);
+            } else {
+                console.log('Checkbox for order ID ' + orderId + ' is unchecked.');
+                RemoveFromArray(orderId);
+            }
+            // You can add your custom logic here based on checkbox status
+        }
+
+        let approve_orders_array  = [];
+        let transfer_orders_array = [];
+        let scanned_orders        = [];
+        let mismatch       = [];
+        function CheckType(order_id){
+
+            let order = orderArray.find(order => order.order_id === order_id);
+            let lastTransaction = order.transactions.length > 0 ? order.transactions[order.transactions.length - 1] : null;
+   
+            let isAnyOrderApproved    = approve_orders_array.length > 0;
+            let isAnyOrderTransferred = transfer_orders_array.length > 0;  
+            if (lastTransaction != null){
+
+                if (lastTransaction.trans_status === 1 && isAnyOrderApproved) {
+                    mismatch.push(order_id);
+                    toggleButtons();
+                    alert("Previous order was approved, and the current order is of transfer. Please handle accordingly.");
+                    return;
+                }
+                if (lastTransaction.trans_status === 0 && isAnyOrderTransferred) { 
+                    mismatch.push(order_id);
+                    toggleButtons();
+                    alert("Previous order was transfer, and the current order is of approve. Please handle accordingly.");
+                    return;
+                }
+                if (lastTransaction.trans_status === 0) {
+                    // Add to approve_orders_array
+                    approve_orders_array.push(order_id);
+
+                }
+                else {
+                    if (isAnyOrderApproved) {
+    
+                        approve_orders_array.push(order_id);
+    
+                    }else{
+                       
+                                    
+                     transfer_orders_array.push(order_id); 
+                                  
+                    }
+                }
+            }else{
+                approve_orders_array.push(order_id);
+            }
+            toggleButtons();
+        }   
+
+
+        function RemoveFromArray(orderId){
+
+            approve_orders_array  = approve_orders_array.filter(id => id !== orderId);
+            transfer_orders_array = transfer_orders_array.filter(id => id !== orderId);
+            scanned_orders        = scanned_orders.filter(id => id !==orderId);
+            mismatch       = mismatch.filter(id => id !== orderId);
+            toggleButtons();
+        }
+
+
+        function toggleButtons(){
+            console.log("toggleButtons",approve_orders_array);
+            console.log("toggleButtons Transfer",transfer_orders_array);
+            if (mismatch.length > 0) {
+                $('#accept_btn').prop('disabled', true).addClass('d-none');
+                $('#transfer_btn').prop('disabled', true).addClass('d-none');
+            }else{
+
+                if (approve_orders_array.length > 0) {
+                    $('#accept_btn').prop('disabled', false).removeClass('d-none');
+                } else {
+                    $('#accept_btn').addClass('d-none');
+                }
+    
+                // Show "Transfer" button if there are any transferred orders
+                if (transfer_orders_array.length > 0) {
+                    $('#transfer_btn').prop('disabled', false).removeClass('d-none');
+                } else {
+                    $('#transfer_btn').addClass('d-none');
+                }
+            }
+
+        }
+
+
+        function transfer_order_open() {
+            $('#transfer_order_modal').modal('show');
+        }
+
+
+
+        var csrfToken = $('meta[name="csrf-token"]').attr('content');
+
+        $('#TransfersearchableSelectTo').select2({
+            dropdownParent: $('#transfer_order'),
+            placeholder: "Select an option",
+            allowClear: true,
+            ajax: {
+                url: "{{route('branch_list')}}",
+                dataType: 'json',
+                type: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': csrfToken  // Add CSRF token in the header
+                },
+                delay: 250,
+                data: function (params) {
+                    return {
+
+                        search: params.term,
+                        per_page: 10,
+                        page: params.page || 1
+                    };
+                },
+                processResults: function (data) {
+
+                    return {
+                        results: data.data.branches.map(function (item) {
+                            return {
+                                id: item.branch_id,
+                                text: item.branch_name
+                            };
+                        }),
+                        pagination: {
+                            more: data.data.length >= 10 // Check if there are more results
+                        }
+                    };
+                },
+                cache: true
+            }
+        });
+
+
+        function transfer_this(){
+            if (transfer_orders_array.length == 0){
+                alert('Cant transfer with empty array');
+            }
+            var csrfToken = $('meta[name="csrf-token"]').attr('content');
+            var transferTo = $('#TransfersearchableSelectTo').val();
+
+            $.ajax({
+                url: "{{ route('multiple_transfer') }}",
+                type: 'POST',
+                data: {
+                    _token: csrfToken,
+                    order_id: transfer_orders_array,
+                    transfer_to: transferTo
+
+                },
+                success: function (response) {
+                    if (response.status == 200) {
+                        $('#transfer_order_id').val('');
+                        $('#TransfersearchableSelectTo').val('');
+                        $('#transfer_order').modal('hide');
+                        alert(response.message);
+                        showAlert('success', response.message);
+
+                        setTimeout(function () {
+                            location.reload();
+                        }, 2000);
+                    } else {
+                        alert(response.message);
+
+                        showAlert('success', response.message);
+                        $('#TransfersearchableSelectTo').val('');
+
+
+                    }
+                },
+                error: function (xhr, status, error) {
+                    showAlert('success', error);
+
+                    $('#TransfersearchableSelectTo').val('');
+
+                }
+            });
+        }
+
+        function approve_multiple_order(){
+
+            if (approve_orders_array.length == 0){
+                alert('Cant approve with empty array');
+            }
+            var csrfToken = $('meta[name="csrf-token"]').attr('content');
+
+            $.ajax({
+                url: "{{ route('multiple_approve') }}",
+                type: 'POST',
+                data: {
+                    _token  : csrfToken,
+                    order_id: approve_orders_array
+                },
+                success: function (response) {
+                    if (response.status == 200) {
+                        
+                            
+                        showAlert('success', response.message);
+                        alert(response.message);
+
+                        setTimeout(function () {
+                            location.reload();
+                        }, 2000);
+                    } else {
+                        alert(response.message);
+
+                        showAlert('warning', response.message);
+                        
+
+                    }
+                },
+                error: function (xhr, status, error) {
+                    showAlert('success', error);
+                }
+            });
+        }
     </script>
     @endsection

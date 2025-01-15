@@ -148,15 +148,15 @@
                         <div class="card">
                             <div class="card-body">
                                 <h4 class="h2">Item Details</h4>
-                                <div class="row">
-                                    <div class="col-3">
+                                <div class="row g-3">
+                                    <div class="col-12 col-md-6 col-lg-3">
                                         <label for="item_name" class="form-label">Name
                                             <span style="color: red;">*</span>
                                         </label>
                                         <input type="text" class="form-control" id="item_name" placeholder="Select Item"
                                             value="{{$order['items'][0]['item_name']}}" />
                                     </div>
-                                    <div class="col-2">
+                                    <div class="col-12 col-md-6 col-lg-2">
                                         <label for="item_metal" class="form-label">Metal
                                             <span style="color: red;">*</span>
                                         </label>
@@ -172,7 +172,7 @@
                                     </div>
                                  
 
-                                   <div class="col-2">
+                                   <div class="col-12 col-md-6 col-lg-2">
                                         <label for="item_melting" class="form-label">Melting
                                             <span style="color: red;">*</span>
                                         </label>
@@ -185,7 +185,7 @@
                                             @endforeach
                                         </select>
                                     </div>
-                                    <div class="col-2">
+                                    <div class="col-12 col-md-6 col-lg-2">
                                         <label for="item_weight" class="form-label">Weight
                                             <span style="color: red;">*</span>
                                         </label>
@@ -193,7 +193,7 @@
                                             name="example-text-input" value="{{$order['items'][0]['item_weight']}}"
                                             placeholder="Weight of item" />
                                     </div>
-                                    <div class="col-2">
+                                    <div class="col-12 col-md-6 col-lg-2">
                                         <label for="item_colors" class="form-label">Colors</label>
                                         <select class="form-select" id="item_colors">
                                             @foreach ($colors as $color)
@@ -242,6 +242,13 @@
                                             </div>
                                         </form>
                                     </div>
+                                </div>
+                                <div class="row mt-3">
+                                    <label for="customer_address" class="form-label">Notes
+                                         
+                                    </label>
+                                    <textarea type="text" placeholder="Enter Notes" id="order_remarks"
+                                        class="form-control" form>{{$order['order_remark']}}</textarea>
                                 </div>
                                 <!-- <div class="row mt-3" id="uploaded-images">
                                     @foreach($order['items'] as $file)
@@ -541,7 +548,7 @@
                 <span class="custom-btn">
                     <input type="file" id="fileInput" style="display: none;" onchange="click_image()" multiple />
                     <a href="#" onclick="click_image()" data-bs-toggle="tooltip"
-                        aria-label="Please Select file to upload" data-bs-original-title="Images File">
+                        aria-label="Please Select file to upload" data-bs-original-title="Capture Photo">
                         <svg width="22" height="20" viewBox="0 0 22 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path
                                 d="M6 4V4.75C6.25076 4.75 6.48494 4.62467 6.62404 4.41603L6 4ZM7.40627 1.8906L6.78223 1.47457V1.47457L7.40627 1.8906ZM14.5937 1.8906L15.2178 1.47457L14.5937 1.8906ZM16 4L15.376 4.41603C15.5151 4.62467 15.7492 4.75 16 4.75V4ZM13.25 11.5C13.25 12.7426 12.2426 13.75 11 13.75V15.25C13.0711 15.25 14.75 13.5711 14.75 11.5H13.25ZM11 13.75C9.75736 13.75 8.75 12.7426 8.75 11.5H7.25C7.25 13.5711 8.92893 15.25 11 15.25V13.75ZM8.75 11.5C8.75 10.2574 9.75736 9.25 11 9.25V7.75C8.92893 7.75 7.25 9.42893 7.25 11.5H8.75ZM11 9.25C12.2426 9.25 13.25 10.2574 13.25 11.5H14.75C14.75 9.42893 13.0711 7.75 11 7.75V9.25ZM6.62404 4.41603L8.0303 2.30662L6.78223 1.47457L5.37596 3.58397L6.62404 4.41603ZM9.07037 1.75H12.9296V0.25H9.07037V1.75ZM13.9697 2.30662L15.376 4.41603L16.624 3.58397L15.2178 1.47457L13.9697 2.30662ZM12.9296 1.75C13.3476 1.75 13.7379 1.95888 13.9697 2.30662L15.2178 1.47457C14.7077 0.709528 13.8491 0.25 12.9296 0.25V1.75ZM8.0303 2.30662C8.26214 1.95888 8.65243 1.75 9.07037 1.75V0.25C8.1509 0.25 7.29226 0.709528 6.78223 1.47457L8.0303 2.30662ZM20.25 8V15H21.75V8H20.25ZM17 18.25H5V19.75H17V18.25ZM1.75 15V8H0.25V15H1.75ZM5 18.25C3.20507 18.25 1.75 16.7949 1.75 15H0.25C0.25 17.6234 2.37665 19.75 5 19.75V18.25ZM20.25 15C20.25 16.7949 18.7949 18.25 17 18.25V19.75C19.6234 19.75 21.75 17.6234 21.75 15H20.25ZM17 4.75C18.7949 4.75 20.25 6.20507 20.25 8H21.75C21.75 5.37665 19.6234 3.25 17 3.25V4.75ZM5 3.25C2.37665 3.25 0.25 5.37665 0.25 8H1.75C1.75 6.20507 3.20507 4.75 5 4.75V3.25ZM5 4.75H6V3.25H5V4.75ZM17 3.25H16V4.75H17V3.25Z"
@@ -553,7 +560,7 @@
                     <input type="file" id="fileInput" style="display: none;" onchange="record_audio()" multiple />
                     <!-- onclick="record_audio()" -->
                     <div id="startRec" data-bs-toggle="tooltip" aria-label="Please Select file to upload"
-                        data-bs-original-title="Audio File">
+                        data-bs-original-title="Record Audio">
                         <svg width="16" height="22" viewBox="0 0 16 22" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path
                                 d="M15 10V11C15 14.866 11.866 18 8 18M1 10V11C1 14.866 4.13401 18 8 18M8 18V21M8 21H11M8 21H5M8 15C5.79086 15 4 13.2091 4 11V5C4 2.79086 5.79086 1 8 1C10.2091 1 12 2.79086 12 5V11C12 13.2091 10.2091 15 8 15Z"
@@ -808,6 +815,7 @@
             var payment_booking = $('#payment_booking').val();
             var item_color = $('#item_colors').val();
             var cust = $('#searchableCust').val();
+            var remarks = $('#order_remarks').val();
 
             if (orderType == "reparing") {
                 orderType = 2;
@@ -830,6 +838,7 @@
                 formData.append('order_user_id', cust);
                 formData.append('item_color', item_color);
 
+                formData.append('order_remark', orderRemarks);
 
                 var custName = userInput;
                 var custAddress = $('#customer_address').val();

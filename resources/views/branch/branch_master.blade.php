@@ -221,7 +221,7 @@
                     }
                 ],
                 order: [[0, 'desc']],
-                "pageLength": 10,
+                "pageLength": 5,
                 "lengthMenu": [10, 25, 50, 100]
             });
             $('input[aria-controls="branch_table"]').on('keyup', function () {

@@ -139,7 +139,7 @@ class OrderController extends Controller
 
         $activePage       = 'orders';
         $user_permissions = session('combined_permissions', []);
-        session()->forget('temp_order_id');
+    // session()->forget('temp_order_id');
         return view('orders/order_master',compact('pageTitle','login','activePage','user_branch','user_permissions','activeBranchName'));
     }
 
@@ -178,6 +178,7 @@ class OrderController extends Controller
             'customer_address'      => ['nullable','string'],
             'customer_phone_number' => ['nullable','string'],
             'customer_new'          => ['nullable','string'],
+            'order_remark'          => ['nullable','string'],
             ]; 
         $messages = [
                 'order_date.required'            => 'Order date is required.',
@@ -270,6 +271,7 @@ class OrderController extends Controller
         $order->order_type           = $params['order_type'];
         $order->order_user_id        = $login->id;
         $order->order_customer_id    = $customer_id;
+        $order->order_remark         = $params['order_remark'];
         $order->save();
 
         
@@ -558,6 +560,8 @@ class OrderController extends Controller
 
     // List of order table
     public function order_list(Request $request){
+        $login         = auth()->user()->toArray();
+       
         $rules = [
             'search'   => ['nullable', 'string'], 
             'per_page' => ['nullable', 'integer', 'min:1'], 
@@ -596,14 +600,13 @@ class OrderController extends Controller
         ->leftJoin('branch AS from_branch', 'from_branch.branch_id', '=', 'orders.order_from_branch_id')  
         ->leftJoin('branch AS to_branch', 'to_branch.branch_id', '=', 'orders.order_to_branch_id')  
         ->leftJoin('branch AS current_branch', 'current_branch.branch_id', '=', 'orders.order_current_branch')  
-        
-        // ->leftJoin('transactions', 'transactions.trans_order_id', '=', 'orders.order_id')  
-  
+        ->leftJoin('customers AS cust', 'cust.cust_id', '=', 'orders.order_customer_id')  
         ->select(
             'orders.*', 
             'from_branch.branch_name AS order_from_name',   
             'to_branch.branch_name AS order_to_name',
-            'current_branch.branch_name AS order_current_branch'
+            'current_branch.branch_name AS order_current_branch',
+            'cust.cust_name'
             )
             ->distinct()  
         ->where('orders.is_delete',0)
@@ -619,6 +622,7 @@ class OrderController extends Controller
 
         
         $total_orders = $ordersQuery->count();
+
         $orders = $ordersQuery
         ->offset($offset)
         ->limit($perPage)
@@ -626,6 +630,7 @@ class OrderController extends Controller
         $orders->each(function ($order, $index) {
             $order->serial_number = $index + 1; 
             $order->order_date = Carbon::parse($order->order_date)->format('d-m-Y');
+            $order->order_type = $order->order_type == 1 ? 'Order' : 'Repairing';
 
         });
 
@@ -637,11 +642,15 @@ class OrderController extends Controller
             'message' => 'Orders list fetched successfully!',
             'data'    => [
                 'orders'     => $orders,
-                'total'        => $total_orders,
+                'recordsTotal'  => $total_orders,
+                'recordsFiltered' => $orders->count(),
                 'per_page'     => $perPage,
                 'current_page' => $page,
                 'total_pages'  => $total_pages,
+            
             ],
+            'draw' => intval($request->input('draw')),
+
             'recordsTotal'  => $total_orders,
             'recordsFiltered' => $orders->count(),
             'per_page'     => $perPage,
@@ -675,6 +684,7 @@ class OrderController extends Controller
             'customer_address' => ['nullable','string'],
             'customer_phone_number' => ['nullable','string'],
             'customer_new' => ['nullable','string'],
+            'order_remark' => ['nullable','string'],
         ]; 
         $messages = [
                 'order_id.required' => 'Order ID is required.',
@@ -771,7 +781,8 @@ class OrderController extends Controller
         $order_rec->order_to_branch_id   = $params['order_to_branch_id'];
         $order_rec->order_type           = $params['order_type'];
         $order_rec->order_customer_id    = $customer_id;
-       
+        $order_rec->order_remark         = $params['order_remark'];
+
         $order_rec->save();
         $item = Item::where('item_order_id', $order_rec->order_id)->first();
 

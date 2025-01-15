@@ -8,6 +8,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
+use DB;
 
 class AuthenticatedSessionController extends Controller
 {
@@ -24,9 +25,15 @@ class AuthenticatedSessionController extends Controller
      */
     public function store(LoginRequest $request): RedirectResponse
     {
+        
         $request->authenticate();
+        \Log::info(['Before Session Regeneration'=> session()->getId()]);
+
 
         $request->session()->regenerate();
+        \Log::info(['Session Regenerated' => session()->getId()]);
+
+        // $sessionId = session()->getId();
 
         // return redirect()->intended(route('dashboard', absolute: false));
         return redirect()->route('dashboard');
