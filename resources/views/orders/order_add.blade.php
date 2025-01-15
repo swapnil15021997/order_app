@@ -1619,7 +1619,8 @@
     recordButton.addEventListener("mousedown", startRecord);
     recordStopButton.addEventListener("mousedown", stopRecord);
     // recordStopButton.addEventListener("mousedown", uploadRecording);
-    
+    recordSendButton.addEventListener("click", stopRecord);
+
     // For touch devices
     recordButton.addEventListener("touchstart", (e) => {
         e.preventDefault();
@@ -1690,16 +1691,16 @@
     }
 
     function stopRecording() {
+        audioBlob = null;
+        audio_stream = null;
         if (recorder) {
             recorder.stop();
             audio_stream.getAudioTracks()[0].stop();
         }
+        recorder = null;
         $('#audio_box').css("display", "none");
 
     //     // Reset audio variables
-        audioBlob = null;
-        audio_stream = null;
-        recorder = null;
     }
 
   

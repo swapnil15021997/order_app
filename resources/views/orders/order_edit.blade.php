@@ -1712,14 +1712,15 @@
 
     const recordButton = document.getElementById("startRec");
     const recordStopButton = document.getElementById("audio_stop");
-    const recordSendutton = document.getElementById("audio_send");
+    const recordSendButton = document.getElementById("audio_send");
     let isRecording = false;
     let recorder, audio_stream, audioBlob;
-
-
+    let shouldUpload = true;
+    let isResetting = false;
 
     // Start recording
     const startRecord = () => {
+        console.log("Starting recording", isRecording);
         if (!isRecording) {
             isRecording = true;
             console.log("Recording started...");
@@ -1741,12 +1742,14 @@
     };
 
 
+    
+
 
     // Add event listeners
     recordButton.addEventListener("mousedown", startRecord);
     recordStopButton.addEventListener("mousedown", stopRecord);
-    // recordSendutton.addEventListener("mousedown", uploadRecording);
-    
+    recordSendButton.addEventListener("click", stopRecord);
+
     // For touch devices
     recordButton.addEventListener("touchstart", (e) => {
         e.preventDefault();
@@ -1778,32 +1781,35 @@
                 };
 
                 recorder.onstop = function () {
-                    // Create an audio blob
-                    audioBlob = new Blob(audioChunks, { type: "audio/wav" });
-                    console.log("Audio Blob Created:", audioBlob);
-                    console.log("Audio Blob Size:", audioBlob.size);
+                    console.log("Resetting",isResetting,'ShouldUploaded',shouldUpload)
+                    if (!isResetting && shouldUpload) { 
+                        // Create an audio blob
+                        audioBlob = new Blob(audioChunks, { type: "audio/wav" });
+                        console.log("Audio Blob Created:", audioBlob);
+                        console.log("Audio Blob Size:", audioBlob.size);
 
 
-                    if (audioBlob.size === 0) {
-                        alert("Audio blob is empty! Recording may have failed.");
-                        return;
-                    }
-                    // Create a URL for the blob and set it as the audio playback source
-                    const url = URL.createObjectURL(audioBlob);
-                    var preview = document.getElementById('audio-playback');
-                    preview.src = url;
+                        if (audioBlob.size === 0) {
+                            alert("Audio blob is empty! Recording may have failed.");
+                            return;
+                        }
+                        // Create a URL for the blob and set it as the audio playback source
+                        const url = URL.createObjectURL(audioBlob);
+                        var preview = document.getElementById('audio-playback');
+                        preview.src = url;
 
-                    // Unhide the audio playback element
-                    $("#audioPlaybackContainer").removeClass("d-none");
+                        // Unhide the audio playback element
+                        $("#audioPlaybackContainer").removeClass("d-none");
 
-                    preview.load();
-                    console.log("Audio recording ready for playback.");
-                    if (audioBlob.size > 0) {
-                        sendButton.audioBlob = audioBlob; // Assign to sendButton
-                        uploadRecording()
-                        console.log("Audio Blob assigned to sendButton:", sendButton.audioBlob);
-                    } else {
-                        console.error("Audio Blob is empty. Recording may have failed.");
+                        preview.load();
+                        console.log("Audio recording ready for playback.");
+                        if (audioBlob.size > 0) {
+                            sendButton.audioBlob = audioBlob; // Assign to sendButton
+                            uploadRecording()
+                            console.log("Audio Blob assigned to sendButton:", sendButton.audioBlob);
+                        } else {
+                            console.error("Audio Blob is empty. Recording may have failed.");
+                        }
                     }
                 };
 
@@ -1817,18 +1823,46 @@
     }
 
     function stopRecording() {
+
+        audioBlob = null;
+        audio_stream = null;
         if (recorder) {
             recorder.stop();
             audio_stream.getAudioTracks()[0].stop();
         }
+        recorder = null;
         $('#audio_box').css("display", "none");
 
-    //     // Reset audio variables
+    }
+
+    function resetRecording(){
         audioBlob = null;
         audio_stream = null;
         recorder = null;
-    }
+        setTimeout(function () {
+        // Stop the recorder and audio stream if active
+        if (recorder && recorder.state !== 'inactive') {
+            recorder.stop();
+            console.log("Recording stopped.");
+        }
 
+        if (audio_stream) {
+            const tracks = audio_stream.getTracks();
+            tracks.forEach(track => track.stop());
+            console.log("Audio stream stopped.");
+        }
+
+        // Reset all variables and UI
+        
+        $('#audio_box').css("display", "none");
+        $("#audioPlaybackContainer").addClass("d-none");
+        console.log("Recording reset.");
+
+        // Allow uploads again after reset
+        isResetting = false;
+        shouldUpload = true;
+    }, 0)
+    }
   
 
     function uploadRecording() {
