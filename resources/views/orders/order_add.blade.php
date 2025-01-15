@@ -421,7 +421,7 @@
                         <div class="bar"></div>
                     </div>
                     <div class="d-flex gap-1 align-items-center">
-                        <button id=" audio_send" class="stop">
+                        <button id="audio_send" class="stop">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
                                 <g fill="none" stroke="currentColor" stroke-linejoin="round">
                                     <path d="M14.5 8a6.5 6.5 0 1 1-13 0a6.5 6.5 0 0 1 13 0Z" />
@@ -1566,7 +1566,6 @@
     let isRecording = false;
     let recorder, audio_stream, audioBlob;
 
-    let sendButton = $('#audio_send');
 
 
     // Start recording
@@ -1596,7 +1595,7 @@
     // Add event listeners
     recordButton.addEventListener("mousedown", startRecord);
     recordStopButton.addEventListener("mousedown", stopRecord);
-    recordSendutton.addEventListener("mousedown", uploadRecording);
+    // recordStopButton.addEventListener("mousedown", uploadRecording);
     
     // For touch devices
     recordButton.addEventListener("touchstart", (e) => {
@@ -1610,7 +1609,8 @@
 
     // Audio recording
    
-        $('#audio_send').on('click', uploadRecording);
+    const sendButton = $('#audio_stop');
+    $('#audio_stop').on('click', uploadRecording);
    
 
     function startRecording() {
@@ -1633,7 +1633,7 @@
                     console.log("Audio Blob Created:", audioBlob);
                     console.log("Audio Blob Size:", audioBlob.size);
 
-   
+
                     if (audioBlob.size === 0) {
                         alert("Audio blob is empty! Recording may have failed.");
                         return;
@@ -1649,7 +1649,8 @@
                     preview.load();
                     console.log("Audio recording ready for playback.");
                     if (audioBlob.size > 0) {
-                        sendButton.audioBlob = audioBlob; // Assign to sendButton
+                        sendButton.audioBlob = audioBlob; 
+                        uploadRecording();
                         console.log("Audio Blob assigned to sendButton:", sendButton.audioBlob);
                     } else {
                         console.error("Audio Blob is empty. Recording may have failed.");
@@ -1671,7 +1672,7 @@
             audio_stream.getAudioTracks()[0].stop();
         }
         $('#audio_box').css("display", "none");
-    
+
     //     // Reset audio variables
         audioBlob = null;
         audio_stream = null;
@@ -1681,8 +1682,9 @@
   
 
     function uploadRecording() {
+      
        console.log("Send Button Blob:", sendButton.audioBlob);
-        
+
         if (!sendButton.audioBlob) {
             alert("No audio file available for upload!");
             return;
@@ -1718,7 +1720,7 @@
                     audio_stream.getAudioTracks()[0].stop();
                 }
                 $('#audio_box').css("display", "none");
-            
+
                 // Reset audio variables
                 audioBlob = null;
                 audio_stream = null;
