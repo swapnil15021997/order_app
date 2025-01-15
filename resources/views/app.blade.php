@@ -8,6 +8,7 @@
                 @include('navbar')
             </div>
             <div class="page-wrapper">
+                <div id="alert_container"></div>
                 @yield('content')
             </div>
             <div class="d-md-none d-block" id="footer-wrapper">
