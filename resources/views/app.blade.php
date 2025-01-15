@@ -8,7 +8,7 @@
                 @include('navbar')
             </div>
             <div class="page-wrapper">
-                <div id="alert_container"></div>
+                <div id="alert-site"></div>
                 @yield('content')
             </div>
             <div class="d-md-none d-block" id="footer-wrapper">
@@ -320,14 +320,14 @@
             
             if (isScanning) {
                 alert("Please wait until the current scan is complete.");
-                return; // Stop further execution
+                return; 
             } 
             isScanning = true;
             
             if (scanned.includes(order_id)) {
                 isScanning = false;
                 alert("This order is already approved.");
-                return; // Stop further execution
+                return; 
             }
 
             
@@ -567,46 +567,68 @@
             });
         }
 
-            function approve_order(){
-                
-                if (approve_array.length == 0){
-                    alert('Cant approve with empty array');
-                }
-                var csrfToken = $('meta[name="csrf-token"]').attr('content');
-        
-                $.ajax({
-                    url: "{{ route('multiple_approve') }}",
-                    type: 'POST',
-                    data: {
-                        _token  : csrfToken,
-                        order_id: approve_array
-                    },
-                    success: function (response) {
-                        if (response.status == 200) {
-                            $('#transfer_order_id').val('');
-                            $('#TransfersearchableSelectTo').val('');
-                             
-                            showAlert('success', response.message);
+        function approve_order(){
+            
+            if (approve_array.length == 0){
+                alert('Cant approve with empty array');
+            }
+            var csrfToken = $('meta[name="csrf-token"]').attr('content');
+    
+            $.ajax({
+                url: "{{ route('multiple_approve') }}",
+                type: 'POST',
+                data: {
+                    _token  : csrfToken,
+                    order_id: approve_array
+                },
+                success: function (response) {
+                    if (response.status == 200) {
+                        
+                            
+                        showAlert('success', response.message);
 
-                            setTimeout(function () {
-                                location.reload();
-                            }, 2000);
-                        } else {
+                        setTimeout(function () {
+                            location.reload();
+                        }, 2000);
+                    } else {
 
-                            showAlert('success', response.message);
-                            $('#TransfersearchableSelectTo').val('');
-
-
-                        }
-                    },
-                    error: function (xhr, status, error) {
-                        showAlert('success', error);
-
-                        $('#TransfersearchableSelectTo').val('');
+                        showAlert('warning', response.message);
+                        
 
                     }
-                });
-            }
+                },
+                error: function (xhr, status, error) {
+                    showAlert('success', error);
+                }
+            });
+        }
+
+        function showAlert(type, message) {
+            const alertContainer = document.getElementById('alert-site');
+            const alertHTML = `
+                    <div class="alert alert-${type} alert-dismissible" role="alert">
+                        <div class="d-flex">
+                            <div>
+                                ${type === 'success' ? `
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icon alert-icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                    <path d="M5 12l5 5l10 -10" />
+                                </svg>` : `
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icon alert-icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                    <path d="M10.24 3.957l-8.422 14.06a1.989 1.989 0 0 0 1.7 2.983h16.845a1.989 1.989 0 0 0 1.7 -2.983l-8.423 -14.06a1.989 1.989 0 0 0 -3.4 0z" />
+                                    <path d="M12 9v4" />
+                                    <path d="M12 17h.01" />
+                                </svg>`}
+                            </div>
+                            <div>${message}</div>
+                        </div>
+                        <a class="btn-close" data-bs-dismiss="alert" aria-label="close"></a>
+                    </div>
+                `;
+            alertContainer.innerHTML = alertHTML;
+            console.log("here");
+        }
 
 
         </script>
