@@ -61,7 +61,7 @@
             </h1>
             <div class="navbar-nav flex-row order-md-last">
                 <div class="d-md-none d-flex align-items-center ps-3">
-                    <button class="btn btn-ghost-primary btn-icon" onclick="startScanner()" id="start-scann" style="max-height:40px;">
+                    <button class="btn btn-ghost-primary btn-icon"  id="start-scann" style="max-height:40px;">
                         <svg fill="currentColor" version="1.1" id="Capa_1" width="24" xmlns="http://www.w3.org/2000/svg"
                             xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 64 64" xml:space="preserve">
                             <g>
@@ -193,7 +193,9 @@
 </footer>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qr-scanner/1.4.2/qr-scanner.umd.min.js"></script>
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/qr-scanner/1.4.2/qr-scanner.umd.min.js"></script> -->
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.8/html5-qrcode.min.js" ></script>
+
 <style>
     @media (max-width:768px) {
         .page-body {
@@ -217,6 +219,7 @@
     }
 
     let qrScanner = null;
+    let html5QrCode = null;
     domReady(function () {
 
         const videoElem   = document.getElementById("videoElem");
@@ -227,55 +230,67 @@
         function startScanner() {
             // Show the video element
 
-            // document.getElementById("my-qr-reader").style.display = "block";
-            // startButton.textContent = "Stop Scanner";
-
-            // // Initialize QR scanner if not already created
-            // if (!qrScanner) {
-            //     qrScanner = new QrScanner(
-            //         videoElem,
-            //         onScanSuccess,
-            //         {
-            //             highlightScanRegion: true,
-            //             highlightCodeOutline: true,
-            //         }
-            //     );
-            // }
-
-            // // Start scanning
-            // qrScanner.start();
-            // create_order_array(3,7656545, 1, 5765654,6/34/3432)
-            
-            // html5
             document.getElementById("my-qr-reader").style.display = "block";
             startButton.textContent = "Stop Scanner";
 
-            // Initialize Html5Qrcode if not already created
-            if (!html5QrCode) {
-                html5QrCode = new Html5Qrcode("videoElem");
+            // Initialize QR scanner if not already created
+            if (!qrScanner) {
+                qrScanner = new QrScanner(
+                    videoElem,
+                    onScanSuccess,
+                    {
+                        highlightScanRegion: true,
+                        highlightCodeOutline: true,
+                    }
+                );
             }
 
             // Start scanning
-            html5QrCode.start(
-                { facingMode: "environment" }, // Use the back camera
-                {
-                    fps: 10, // Frames per second for the scan
-                    qrbox: { width: 250, height: 250 }, // Set scanning region size
-                },
-                onScanSuccess, // Callback for successful scan
-                (errorMessage) => {
-                    console.warn("QR Code scan error:", errorMessage);
-                }
-            ).catch((err) => {
+            qrScanner.start()  .then(() => {
+                console.log("QR Scanner started successfully");
+            })
+            .catch((err) => {
                 console.error("Error starting QR scanner:", err);
+                alert("An error occurred while starting the QR scanner. Please try again." +err);
             });
+            // create_order_array(3,7656545, 1, 5765654,6/34/3432)
+            
+            // html5
+        //     document.getElementById("my-qr-reader").style.display = "block";
+        //     startButton.textContent = "Stop Scanner";
+
+        //     // Initialize Html5Qrcode if not already created
+        //     if (!html5QrCode) {
+        //         html5QrCode = new Html5Qrcode("videoElem");
+        //     }
+
+        //     // Start scanning
+        //     Html5Qrcode.getCameras().then((devices) => {
+        //     if (devices && devices.length) {
+        //         console.log("Cameras found:", devices);
+        //         html5QrCode.start(
+        //             { deviceId: devices[0].id },
+        //             videoElem,
+        //             onScanSuccess,
+        //             (errorMessage) => {
+        //                 console.warn("QR Code scan error:", errorMessage);
+        //             }
+        //         ).catch((err) => {
+        //             console.error("Error starting QR scanner:", err);
+        //         });
+        //     } else {
+        //         console.error("No cameras found.");
+        //     }
+        // }).catch((err) => {
+        //     console.error("Error fetching cameras:", err);
+        // });
         }
 
-        // function onScanSuccess(result) {
-            // Display the result
-            // const scannedText = result.data || result;
-        function onScanSuccess(decodedText, decodedResult) {
-            const scannedText = decodedText;
+        function onScanSuccess(result) {
+
+            const scannedText = result.data || result;
+        // function onScanSuccess(decodedText, decodedResult) {
+        //     const scannedText = decodedText;
         
             alert(scannedText);
             const [order_id,orderQrCode, orderStatus, orderNumber, orderDate] = scannedText.split('|');
@@ -285,31 +300,31 @@
         }
 
         function stopScanner() {
-            // if (qrScanner) {
-            //     qrScanner.stop();
-            // }
+            if (qrScanner) {
+                qrScanner.stop();
+            }
             // document.getElementById("my-qr-reader").style.display = "none";
             // startButton.textContent = "Start Scanner";
-            if (html5QrCode) {
-                html5QrCode.stop().then(() => {
-                    console.log("QR Code scanning stopped.");
-                }).catch((err) => {
-                    console.error("Error stopping QR scanner:", err);
-                });
-            }
+            // if (html5QrCode) {
+            //     html5QrCode.stop().then(() => {
+            //         console.log("QR Code scanning stopped.");
+            //     }).catch((err) => {
+            //         console.error("Error stopping QR scanner:", err);
+            //     });
+            // }
         }
 
         startButton.addEventListener("click", function () {
-            // if (qrScanner && qrScanner.isScanning()) {
-            //     stopScanner();
-            // } else {
-            //     startScanner();
-            // }
-            if (html5QrCode && html5QrCode.isScanning) {
+            if (qrScanner && qrScanner.isScanning()) {
                 stopScanner();
             } else {
                 startScanner();
             }
+            // if (html5QrCode && html5QrCode.isScanning) {
+            //     stopScanner();
+            // } else {
+            //     startScanner();
+            // }
         });
 
 
