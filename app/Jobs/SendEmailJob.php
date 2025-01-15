@@ -55,8 +55,8 @@ class SendEmailJob implements ShouldQueue
         }
         if($this->type == "Approve" || $this->type == "Transfer"){
             $trans   = Transactions::get_trans_by_order($order['order_id']);
-            
             $to_site = $trans->trans_to;
+
             $site    = Branch::get_branch_by_id($to_site);
 
             $mail_data = [

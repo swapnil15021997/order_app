@@ -86,7 +86,7 @@ class SendNotification implements ShouldQueue
         }else if($this->type=='Transfer'){
             $subject = "Chalan Transfer for " .$data['order_name'];
             $message = "This is to inform you about a Transfer chalan of type " .$data['order_name'];
-            $trans   = Transactions::get_trans_by_order_id($order['order_id']);
+            $trans   = Transactions::get_trans_by_order($order['order_id']);
             $to_site = $trans->trans_to;
             $site    = Branch::get_branch_by_id($to_site);
             $message.="\nFrom Branch Name: ".$order['order_form'];
@@ -95,7 +95,7 @@ class SendNotification implements ShouldQueue
         }else if($this->type=='Approve'){
             $subject = "Chalan Approved for " .$data['order_name'];
             $message = "This is to inform you about a Approval of chalan of type " .$data['order_name'];
-            $trans   = Transactions::get_trans_by_order_id($order['order_id']);
+            $trans   = Transactions::get_trans_by_order($order['order_id']);
             $to_site = $trans->trans_to;
             $site    = Branch::get_branch_by_id($to_site);
             $message.="\nFrom Branch Name: ".$order['order_form'];

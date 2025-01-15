@@ -50,8 +50,7 @@ class Transactions extends Model
     {
         $trasnaction = Transactions::where('trans_order_id', $order_id)
             ->where('trans_status',1)
-            ->get()
-            ->latest()
+            ->orderBy('trans_id', 'desc')
             ->first();
         return $trasnaction;
 

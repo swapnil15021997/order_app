@@ -547,12 +547,14 @@
                         $('#transfer_order_id').val('');
                         $('#TransfersearchableSelectTo').val('');
                         $('#transfer_order').modal('hide');
+                        alert(response.message);
                         showAlert('success', response.message);
 
                         setTimeout(function () {
                             location.reload();
                         }, 2000);
                     } else {
+                        alert(response.message);
 
                         showAlert('success', response.message);
                         $('#TransfersearchableSelectTo').val('');
@@ -588,11 +590,13 @@
                         
                             
                         showAlert('success', response.message);
+                        alert(response.message);
 
                         setTimeout(function () {
                             location.reload();
                         }, 2000);
                     } else {
+                        alert(response.message);
 
                         showAlert('warning', response.message);
                         
