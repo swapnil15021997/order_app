@@ -555,7 +555,7 @@
                     processResults: function (data) {
 
                         return {
-                            results: data.data.branches.map(function (item) {
+                            results: data.data.map(function (item) {
                                 return {
                                     id: item.branch_id,
                                     text: item.branch_name
@@ -795,7 +795,7 @@
                 processResults: function (data) {
 
                     return {
-                        results: data.data.branches.map(function (item) {
+                        results: data.data.map(function (item) {
                             return {
                                 id: item.branch_id,
                                 text: item.branch_name

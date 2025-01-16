@@ -888,7 +888,7 @@
                 processResults: function (data) {
 
                     return {
-                        results: data.data.branches.map(function (item) {
+                        results: data.data.map(function (item) {
                             return {
                                 id: item.branch_id,
                                 text: item.branch_name
@@ -1728,7 +1728,7 @@
     //     $('#audio_box').css("display", "none");
         
     // }
-    
+
 // Recording working code
 
     const recordButton = document.getElementById("startRec");
