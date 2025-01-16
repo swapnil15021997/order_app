@@ -1225,6 +1225,8 @@ class OrderController extends Controller
             $trans->trans_status = 1;
             $trans->trans_approved_by = $login['id'];
             $trans->save();
+            \Log::info(' Approve Transaction id');
+            \Log::info(['Transaction id'=>$trans->trans_id,'Order id'=>$trans->trans_order_id]);
             $order = Order::get_order_by_id($trans->trans_order_id);
             $order->order_status        = 1;
             $order->order_current_branch= $trans->trans_to;
@@ -1270,7 +1272,8 @@ class OrderController extends Controller
                 'errors'  => $validator->errors(), 
             ]);
         } 
-
+        \Log::info(' Transfer Transaction id');
+        
         foreach ($params['order_id'] as $order_id) {
             
             $order = Order::get_order_with_items($params['order_id']);
@@ -1289,6 +1292,7 @@ class OrderController extends Controller
                     'message' => 'You are not allowed to transfer this order'
                 ]);
             }
+           
             // if( $order->order_to_branch_id == $params['transfer_to']){
             //     return response()->json([
             //         'status' => 500,
@@ -1324,6 +1328,7 @@ class OrderController extends Controller
             $trans->trans_time          = Carbon::now()->toDateTimeString(); 
             $trans->trans_status        = 0;
             $trans->save();
+            \Log::info(['Transaction id'=>$trans->trans_id,'Order id'=>$trans->trans_order_id]);
         }
         SendEmailJob::dispatch($order->order_id,$type="Transfer");
         SendNotification::dispatch($order->order_id,$type="Transfer");
