@@ -35,21 +35,6 @@
                     <p>{{$formattedDate}}</p>
                 </div>
 
-                <!-- @foreach($check_order['transactions'] as $transaction)
-                        @php
-
-                            $formattedDate = \Carbon\Carbon::parse($transaction['trans_time'])->format('g:i, M j, Y');
-                        @endphp
-                    @if(!empty($transaction))
-
-                    <div class="timeline-item {{ $transaction['trans_approved_by'] ? 'completed' : '' }}">
-                        <h3>Transfered -- {{$transaction['trans_user']['name']}} -- {{$transaction['trans_to']['branch_name']}}</h3>
-                        <p>{{$formattedDate}}</p>
-                        <h3>Accepted -- {{$transaction['trans_approved_by']['name']}} -- {{$transaction['trans_to']['branch_name']}}</h3>
-                    </div>
-                    @endif
-                @endforeach -->
-
                 @if(isset($check_order['transactions']) && is_array($check_order['transactions']))
                     @foreach($check_order['transactions'] as $transaction)
                         @if(!empty($transaction))
