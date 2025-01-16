@@ -88,7 +88,7 @@
                                  
                                 <th>Order Number</th>
                                 <th>Customer Name</th>                                
-                                <th>Order Info</th>
+                                <th>From --> To</th>
                                 <th>Item</th>
                                  <th>Action</th>
                             </tr>
@@ -288,6 +288,7 @@
                      },
                    
                     {
+                        orderable: false,
                         render: function (data, type, row) {
                             let activeBranchHtml = '';
                             if (row.order_current_branch && row.order_current_branch.trim() !== '') {
@@ -308,6 +309,7 @@
                     {
                         data: 'item',
                         name: 'item',
+                        orderable: false,
                         render: function (data, type, row) {
                             return `${row.items[0].item_name}--${row.items[0].item_metal}--${row.items[0].item_weight}`;
                         }
@@ -315,6 +317,7 @@
                         {
                         data: 'order_id',
                         name: 'operations',
+                        orderable: false,
                         render: function (data, type, row) {
                              
                             let dropdown = `<button data-bs-toggle="dropdown" type="button" class="btn dropdown-toggle dropdown-toggle-split"></button>
