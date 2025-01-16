@@ -139,7 +139,7 @@ class OrderController extends Controller
 
         $activePage       = 'orders';
         $user_permissions = session('combined_permissions', []);
-    // session()->forget('temp_order_id');
+        session()->forget('temp_order_id');
         return view('orders/order_master',compact('pageTitle','login','activePage','user_branch','user_permissions','activeBranchName'));
     }
 

@@ -85,7 +85,7 @@
                         <thead>
                             <tr>
                                 <th class="w-1"></th>
-                                <th>Sr No</th>
+                                 
                                 <th>Order Number</th>
                                 <th>Customer Name</th>                                
                                 <th>Order Info</th>
@@ -264,8 +264,7 @@
                             return '';
                         }
                     },
-                    { data: 'serial_number', name: 'serial_number', orderable: false },
-                    
+                      
                     { data: 'order_qr_code', name: 'order_qr_code', orderable: false,
                         render: function (data, type, row) {
                             if (row && row.order_type) {
