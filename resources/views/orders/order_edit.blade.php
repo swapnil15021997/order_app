@@ -216,8 +216,15 @@
 
                                                 <input name="file" class="d-none" type="file" id="item_image_id"
                                                     multiple />
+                                                @php
+                                                    $hasFiles = false;
+                                                @endphp
                                                 @foreach($order['items'] as $file)
-                                                    @if(!empty($file['files']))
+
+                                                @if(!empty($file['files']) && $file['files']->isNotEmpty())
+                                                @php
+                                                    $hasFiles = true;
+                                                @endphp
                                                         @foreach($file['files'] as $file)
                                                             <div
                                                                 class="dz-preview dz-processing dz-error dz-complete dz-image-preview">
@@ -231,14 +238,14 @@
                                                                 </div>
                                                             </div>
                                                         @endforeach
-                                                    @else
+                                                         
+                                                        @endif
+                                                @endforeach
+                                                @if(!$hasFiles)
                                                         <div class="dz-default dz-message">
                                                             <p class="dz-button">Drop files here to upload</p>
                                                         </div>
-                                                    @endif
-                                                @endforeach
-
-
+                                                @endif
                                             </div>
                                         </form>
                                     </div>
