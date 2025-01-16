@@ -695,7 +695,7 @@
    
             let isAnyOrderApproved    = approve_orders_array.length > 0;
             let isAnyOrderTransferred = transfer_orders_array.length > 0;  
-            console.log("Last Transaction",lastTransaction)
+            
             if (lastTransaction != null){
 
                 if (lastTransaction.trans_status === 1 && isAnyOrderApproved) {
@@ -847,6 +847,9 @@
 
                         showAlert('warning', response.message);
                         $('#TransferOrder').val('');
+                        setTimeout(function () {
+                            location.reload();
+                        }, 2000);
 
 
                     }
@@ -888,7 +891,9 @@
                         alert(response.message);
 
                         showAlert('warning', response.message);
-                        
+                        setTimeout(function () {
+                            location.reload();
+                        }, 2000);
 
                     }
                 },
