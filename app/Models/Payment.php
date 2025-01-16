@@ -22,8 +22,12 @@ class Payment extends Model
 
 
     public static function get_payment_by_id($order_id){
-        $payment = Payment::where('payment_order_id',$order_id)->where('is_delete',0)->first()->toArray();
-        return $payment;
+        $payment = Payment::where('payment_order_id',$order_id)->where('is_delete',0)->first();
+        if ($payment) {
+            return $payment->toArray();
+        }else{
+            return null;
+        }
 
     }
 
