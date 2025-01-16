@@ -22,16 +22,7 @@
                     @if(in_array(7, $user_permissions))
                         
 
-                        <a id="accept_btn" href="#" onclick="approve_multiple_order()" class="d-none btn btn-danger" >
-
-                            Accept Item/s
-                        </a>
-
-                        <a href="#" id="transfer_btn" onclick="transfer_order_open()" class="d-none btn btn-danger">
-
-                            Transfer Item/s
-                        </a>
-
+                    
                         <a href="{{route('order-add-page', ['type' => 'order'])}}" class="btn btn-warning d-none d-sm-inline-block">
 
                             Order Form
@@ -40,6 +31,15 @@
 
                             Repairing Form
                         </a>
+                        <a id="accept_btn" href="#" onclick="approve_multiple_order()" class="d-none btn btn-danger" >
+
+                            Approve Orders
+                        </a>
+
+                        <a href="#" id="transfer_btn" onclick="transfer_order_open()" class="d-none btn btn-danger">
+                            Transfer Orders
+                        </a>
+
                        
                     @endif
                     <a href="{{route('order-add-page')}}" class="btn btn-primary d-sm-none btn-icon"
