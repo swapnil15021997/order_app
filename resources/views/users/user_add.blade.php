@@ -170,36 +170,97 @@
 
 
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-        <script src="{{ asset('libs/tom-select/dist/js/tom-select.base.min.js')}}?1692870487" defer></script>
+        <!-- <script src="{{ asset('libs/tom-select/dist/js/tom-select.base.min.js')}}?1692870487" defer></script> -->
+        <link href="https://cdn.jsdelivr.net/npm/tom-select/dist/css/tom-select.css" rel="stylesheet">
+        <script src="https://cdn.jsdelivr.net/npm/tom-select/dist/js/tom-select.complete.min.js"></script>
 
         <script>
             function cancel_save(){
                 location.href = "{{route('user-master')}}"
             }
             // @formatter:off
-            document.addEventListener("DOMContentLoaded", function () {
-                var el;
-                window.TomSelect && (new TomSelect(el = document.getElementById('select-states'), {
-                    copyClassesToDropdown: false,
-                    dropdownParent: 'body',
-                    controlInput: '<input>',
-                    render:{
-                        item: function(data,escape) {
-                            if( data.customProperties ){
-                                return '<div><span class="dropdown-item-indicator">' + data.customProperties + '</span>' + escape(data.text) + '</div>';
-                            }
-                            return '<div>' + escape(data.text) + '</div>';
-                        },
-                        option: function(data,escape){
-                            if( data.customProperties ){
-                                return '<div><span class="dropdown-item-indicator">' + data.customProperties + '</span>' + escape(data.text) + '</div>';
-                            }
-                            return '<div>' + escape(data.text) + '</div>';
-                        },
-                    },
-                }));
-            });
+            // document.addEventListener("DOMContentLoaded", function () {
+            //     var el;
+            //     window.TomSelect && (new TomSelect(el = document.getElementById('select-states'), {
+            //         copyClassesToDropdown: false,
+            //         dropdownParent: 'body',
+                    
+            //         controlInput: '<input>',
+            //         render:{
+            //             item: function(data,escape) {
+            //                 if( data.customProperties ){
+            //                     return '<div><span class="dropdown-item-indicator">' + data.customProperties + '</span>' + escape(data.text) + '</div>';
+            //                 }
+            //                 return '<div>' + escape(data.text) + '</div>';
+            //             },
+            //             option: function(data,escape){
+            //                 if( data.customProperties ){
+            //                     return '<div><span class="dropdown-item-indicator">' + data.customProperties + '</span>' + escape(data.text) + '</div>';
+            //                 }
+            //                 return '<div>' + escape(data.text) + '</div>';
+            //             },
+            //         },
+            //     }));
+
+                
+            // });
             // @formatter:on
+
+            // Tom select working code.
+            document.addEventListener("DOMContentLoaded", function () {
+            var el;
+            const selectInstance = new TomSelect(el = document.getElementById('select-states'), {
+                copyClassesToDropdown: false,
+                dropdownParent: 'body',
+                controlInput: '<input>',
+                
+                plugins: ['remove_button'],
+                
+                onDelete: function(values) {
+
+                    values.forEach(value => {
+                        selectInstance.removeItem(value);
+                        
+                        const optionToRemove = el.querySelector(`option[value="${value}"]`);
+                        if (optionToRemove) {
+                            optionToRemove.remove();
+                        }
+                    });
+                    return values;
+                },
+                
+                render: {
+                    item: function(data, escape) {
+                        if (data.customProperties) {
+                            return '<div><span class="dropdown-item-indicator">' + data.customProperties + '</span>' + escape(data.text) + '</div>';
+                        }
+                        return '<div>' + escape(data.text) + '</div>';
+                    },
+                    option: function(data, escape) {
+                        if (data.customProperties) {
+                            return '<div><span class="dropdown-item-indicator">' + data.customProperties + '</span>' + escape(data.text) + '</div>';
+                        }
+                        return '<div>' + escape(data.text) + '</div>';
+                    },
+                },
+            });
+            
+            // Add click handler for selected items
+            selectInstance.control.addEventListener('click', function (event) {
+                const clickedElement = event.target.closest('.item');
+                if (clickedElement) {
+                    const value = clickedElement.dataset.value;
+                    if (value) {
+                        selectInstance.removeItem(value);
+
+                        const optionToRemove = el.querySelector(`option[value="${value}"]`);
+                        if (optionToRemove) {
+                            optionToRemove.remove();
+                        }
+                    }
+                }
+            });
+        });
         </script>
         <script>
             function fetchRoleDetails(roleId) {
@@ -258,8 +319,7 @@
                     const roleId = $('#select_role').val();
                     const user_email = $('#user_email').val();
                     const selected_sites = $('#select-states').val();
-
-
+                
                     // Validate data
                     if (!userName || !userPhone || !roleId ) {
                         showAlertUser('warning', 'Please fill all fields and select at least one permission');

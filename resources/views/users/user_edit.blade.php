@@ -87,8 +87,7 @@
 
                             @foreach($branch as $b)
                                 <option value="{{ $b['branch_id'] }}"
-                                @if (in_array($b['branch_id'], array_column($edit_user_branch, 'branch_id'))) selected @endif
-                                >{{ $b['branch_name'] }}</option>
+                                 @if (in_array($b['branch_id'], array_column($edit_user_branch, 'branch_id'))) selected @endif >{{ $b['branch_name'] }}</option>
                                 @endforeach
                             @endif
                             </select>
@@ -178,36 +177,102 @@
     <div>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="{{ asset('libs/tom-select/dist/js/tom-select.base.min.js')}}?1692870487" defer></script>
+    <link href="https://cdn.jsdelivr.net/npm/tom-select/dist/css/tom-select.css" rel="stylesheet">
+        <script src="https://cdn.jsdelivr.net/npm/tom-select/dist/js/tom-select.complete.min.js"></script>
 
     <script>
         function cancel_update(){
             location.href = "{{route('user-master')}}"
         }
             // @formatter:off
-            document.addEventListener("DOMContentLoaded", function () {
-                var el;
-                window.TomSelect && (new TomSelect(el = document.getElementById('select-states'), {
-                    copyClassesToDropdown: false,
-                    dropdownParent: 'body',
-                    controlInput: '<input>',
-                    render:{
-                        item: function(data,escape) {
-                            if( data.customProperties ){
-                                return '<div><span class="dropdown-item-indicator">' + data.customProperties + '</span>' + escape(data.text) + '</div>';
-                            }
-                            return '<div>' + escape(data.text) + '</div>';
-                        },
-                        option: function(data,escape){
-                            if( data.customProperties ){
-                                return '<div><span class="dropdown-item-indicator">' + data.customProperties + '</span>' + escape(data.text) + '</div>';
-                            }
-                            return '<div>' + escape(data.text) + '</div>';
-                        },
-                    },
-                }));
-            });
+            // document.addEventListener("DOMContentLoaded", function () {
+            //     var el;
+            //     window.TomSelect && (new TomSelect(el = document.getElementById('select-states'), {
+            //         copyClassesToDropdown: false,
+            //         dropdownParent: 'body',
+            //         controlInput: '<input>',
+            //         render:{
+            //             item: function(data,escape) {
+            //                 if( data.customProperties ){
+            //                     return '<div><span class="dropdown-item-indicator">' + data.customProperties + '</span>' + escape(data.text) + '</div>';
+            //                 }
+            //                 return '<div>' + escape(data.text) + '</div>';
+            //             },
+            //             option: function(data,escape){
+            //                 if( data.customProperties ){
+            //                     return '<div><span class="dropdown-item-indicator">' + data.customProperties + '</span>' + escape(data.text) + '</div>';
+            //                 }
+            //                 return '<div>' + escape(data.text) + '</div>';
+            //             },
+            //         },
+            //     }));
+            // });
             // @formatter:on
+
+
+            document.addEventListener("DOMContentLoaded", function () {
+    const el = document.getElementById('select-states');
+
+    // Initialize TomSelect
+    const selectInstance = new TomSelect(el, {
+        copyClassesToDropdown: false,
+        dropdownParent: 'body',
+        controlInput: '<input>',
+        
+        // Enable remove button plugin
+        plugins: ['remove_button'],
+        
+        onDelete: function (values) {
+            // Loop through removed values
+            values.forEach(value => {
+                // Remove the item from TomSelect
+                selectInstance.removeItem(value);
+                
+                // Remove the option from the original <select> element
+                const optionToRemove = el.querySelector(`option[value="${value}"]`);
+                if (optionToRemove) {
+                    optionToRemove.remove();
+                }
+            });
+
+            // Allow deletion to proceed
+            return values;
+        },
+        
+        render: {
+            item: function (data, escape) {
+                if (data.customProperties) {
+                    return '<div><span class="dropdown-item-indicator">' + data.customProperties + '</span>' + escape(data.text) + '</div>';
+                }
+                return '<div>' + escape(data.text) + '</div>';
+            },
+            option: function (data, escape) {
+                if (data.customProperties) {
+                    return '<div><span class="dropdown-item-indicator">' + data.customProperties + '</span>' + escape(data.text) + '</div>';
+                }
+                return '<div>' + escape(data.text) + '</div>';
+            },
+        },
+    });
+
+    // Add click handler for selected items (optional feature)
+    selectInstance.control.addEventListener('click', function (event) {
+        const clickedElement = event.target.closest('.item');
+        if (clickedElement) {
+            const value = clickedElement.dataset.value;
+            if (value) {
+                selectInstance.removeItem(value);
+
+                // Remove from the original <select> element
+                const optionToRemove = el.querySelector(`option[value="${value}"]`);
+                if (optionToRemove) {
+                    optionToRemove.remove();
+                }
+            }
+        }
+    });
+});
+
         </script>
     <script>
          function fetchRoleDetails(roleId) {
