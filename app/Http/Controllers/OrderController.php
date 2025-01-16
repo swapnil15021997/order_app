@@ -974,6 +974,16 @@ class OrderController extends Controller
                 'message' => 'You are not allowed to transfer this order'
             ]);
         }
+        if($login['user_role_id'] !== 1){
+            $user_branch = $login['user_branch_ids'];
+            $user_branch_array = explode(',', $user_branch); 
+            if ($trans->trans_to && !in_array($trans->trans_to, $user_branch_array)) {
+                return response()->json([
+                    'status' => 500,
+                    'message' => 'Sorry You cant transfer this order !'
+                ]);
+            }
+        }
         // if( $order->order_to_branch_id == $params['transfer_to']){
         //     return response()->json([
         //         'status' => 500,
@@ -1063,6 +1073,16 @@ class OrderController extends Controller
                 'message' => 'You are not allowed to approve this order'
             ]);
         }
+        if($login['user_role_id'] !== 1){
+            $user_branch = $login['user_branch_ids'];
+            $user_branch_array = explode(',', $user_branch); 
+            if ($trans->trans_to && !in_array($trans->trans_to, $user_branch_array)) {
+                return response()->json([
+                    'status' => 500,
+                    'message' => 'Sorry You cant transfer this order !'
+                ]);
+            }
+        }
         $trans->trans_status = 1;
         $trans->trans_approved_by = $login['id'];
         $trans->save();
@@ -1106,6 +1126,17 @@ class OrderController extends Controller
                 'status' => 500,
                 'message' => 'You are not allowed to approve this order'
             ]);
+        }
+
+        if($login['user_role_id'] !== 1){
+            $user_branch = $login['user_branch_ids'];
+            $user_branch_array = explode(',', $user_branch); 
+            if ($trans->trans_to && !in_array($trans->trans_to, $user_branch_array)) {
+                return response()->json([
+                    'status' => 500,
+                    'message' => 'Sorry You cant transfer this order !'
+                ]);
+            }
         }
     
         SendEmailJob::dispatch($order->order_id,$type="Approve");
@@ -1222,6 +1253,16 @@ class OrderController extends Controller
                     'message' => 'You are not allowed to approve this order'
                 ]);
             }
+            if($login['user_role_id'] !== 1){
+                $user_branch = $login['user_branch_ids'];
+                $user_branch_array = explode(',', $user_branch); 
+                if ($trans->trans_to && !in_array($trans->trans_to, $user_branch_array)) {
+                    return response()->json([
+                        'status' => 500,
+                        'message' => 'Sorry You cant accept this order !'
+                    ]);
+                }
+            }
             $trans->trans_status = 1;
             $trans->trans_approved_by = $login['id'];
             $trans->save();
@@ -1307,6 +1348,16 @@ class OrderController extends Controller
                     return response()->json([
                         'status' => 500,
                         'message' => 'Cant transfer item right now Please approve previous order'
+                    ]);
+                }
+            }
+            if($login['user_role_id'] !== 1){
+                $user_branch = $login['user_branch_ids'];
+                $user_branch_array = explode(',', $user_branch); 
+                if ($check_transaction->trans_to && !in_array($check_transaction->trans_to, $user_branch_array)) {
+                    return response()->json([
+                        'status' => 500,
+                        'message' => 'Sorry You cant transfer this order !'
                     ]);
                 }
             }
