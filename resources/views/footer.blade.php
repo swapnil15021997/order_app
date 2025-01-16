@@ -231,8 +231,7 @@
             // Show the video element
 
             document.getElementById("my-qr-reader").style.display = "block";
-            startButton.textContent = "Stop Scanner";
-
+           
             // Initialize QR scanner if not already created
             if (!qrScanner) {
                 qrScanner = new QrScanner(
@@ -253,83 +252,39 @@
                 console.error("Error starting QR scanner:", err);
                 alert("An error occurred while starting the QR scanner. Please try again." +err);
             });
-            // create_order_array(3,7656545, 1, 5765654,6/34/3432)
-            
-            // html5
-        //     document.getElementById("my-qr-reader").style.display = "block";
-        //     startButton.textContent = "Stop Scanner";
-
-        //     // Initialize Html5Qrcode if not already created
-        //     if (!html5QrCode) {
-        //         html5QrCode = new Html5Qrcode("videoElem");
-        //     }
-
-        //     // Start scanning
-        //     Html5Qrcode.getCameras().then((devices) => {
-        //     if (devices && devices.length) {
-        //         console.log("Cameras found:", devices);
-        //         html5QrCode.start(
-        //             { deviceId: devices[0].id },
-        //             videoElem,
-        //             onScanSuccess,
-        //             (errorMessage) => {
-        //                 console.warn("QR Code scan error:", errorMessage);
-        //             }
-        //         ).catch((err) => {
-        //             console.error("Error starting QR scanner:", err);
-        //         });
-        //     } else {
-        //         console.error("No cameras found.");
-        //     }
-        // }).catch((err) => {
-        //     console.error("Error fetching cameras:", err);
-        // });
+          
         }
 
         function onScanSuccess(result) {
 
             const scannedText = result.data || result;
-        // function onScanSuccess(decodedText, decodedResult) {
-        //     const scannedText = decodedText;
-        
             alert(scannedText);
             const [order_id,orderQrCode, orderStatus, orderNumber, orderDate] = scannedText.split('|');
             create_order_array(order_id,orderQrCode, orderStatus, orderNumber,orderDate);
-            // Stop scanning
-            // stopScanner();
+             
         }
 
         function stopScanner() {
+            console.log("Stopping here");
             if (qrScanner) {
                 qrScanner.stop();
+                qrScanner.destroy();
             }
-            // document.getElementById("my-qr-reader").style.display = "none";
-            // startButton.textContent = "Start Scanner";
-            // if (html5QrCode) {
-            //     html5QrCode.stop().then(() => {
-            //         console.log("QR Code scanning stopped.");
-            //     }).catch((err) => {
-            //         console.error("Error stopping QR scanner:", err);
-            //     });
-            // }
+            qrScanner=null;
+            document.getElementById("my-qr-reader").style.display = "none";
         }
 
         startButton.addEventListener("click", function () {
-            if (qrScanner && qrScanner.isScanning()) {
-                stopScanner();
-            } else {
-                startScanner();
-            }
-            // if (html5QrCode && html5QrCode.isScanning) {
-            //     stopScanner();
-            // } else {
-            //     startScanner();
-            // }
+            
+            startScanner();
+            
+           
         });
 
 
     });
     function stopScanner() {
+        console.log("Stopping there");
         if (qrScanner) {
             qrScanner.stop();
         }

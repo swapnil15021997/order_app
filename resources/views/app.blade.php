@@ -252,61 +252,23 @@
 
                 // Start scanning
                 qrScanner.start();
-
-
-                // html 5
-                // if (!html5QrCode) {
-                //     html5QrCode = new Html5Qrcode("videoElem");
-                // }
-
-                // // Start scanning
-                // html5QrCode.start(
-                //     { facingMode: "environment" }, // Use the back camera
-                //     {
-                //         fps: 10, // Frames per second for the scan
-                //         qrbox: { width: 250, height: 250 }, // Set scanning region size
-                //     },
-                //     onScanSuccess, // Callback for successful scan
-                //     (errorMessage) => {
-                //         console.warn("QR Code scan error:", errorMessage);
-                //     }
-                // ).catch((err) => {
-                //     console.error("Error starting QR scanner:", err);
-                // });
             }
 
             function stopScanner() {
+                console.log("Stopping");
                 if (qrScanner) {
                     qrScanner.stop();
+                    qrScanner.destroy();
                 }
+                document.getElementById("my-qr-reader").style.display = "none";
 
-                // document.getElementById("my-qr-reader").style.display = "none";
-                // startButton.textContent = "Start Scanner";
-                // html 5
-                // if (html5QrCode) {
-                //     html5QrCode.stop().then(() => {
-                //         console.log("QR Code scanning stopped.");
-                //     }).catch((err) => {
-                //         console.error("Error stopping QR scanner:", err);
-                //     });
-                // }
             }
 
             // Toggle scanner on button click
             startButton.addEventListener("click", function () {
-                if (qrScanner && qrScanner.isScanning()) {
-                    stopScanner();
-                } else {
                     startScanner();
-                }
             });
 
-           
-
-            // Handle errors
-            // window.addEventListener('error', function(e) {
-            //     resultDiv.innerHTML = `<p style="color: red;">Error: ${e.message}</p>`;
-            // });
         });
 
         let approve_array  = [];
