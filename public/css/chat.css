@@ -710,3 +710,10 @@
         right: 1rem;
     }
 }
+
+.fixed-footer{
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+}

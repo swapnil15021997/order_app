@@ -320,23 +320,23 @@
                         orderable: false,
                         render: function (data, type, row) {
                              
-                            let dropdown = `<button data-bs-toggle="dropdown" type="button" class="btn dropdown-toggle dropdown-toggle-split"></button>
-                                <div class="dropdown-menu dropdown-menu-end drop-option">
-                                  <a class="dropdown-item" href="#" onclick="edit_order(${row.order_id})">
-                                    <i class="bi bi-pencil-fill"></i>
-                                  </a>
-                                  <a class="dropdown-item" href="#" onclick="view_order(${row.order_qr_code})">
-                                    <i class="bi bi-receipt"></i>
-                                  </a>
-                                  <a class="dropdown-item" href="#" onclick="transfer_order(${row.order_id})">
-                                    <i class="bi bi-send"></i>
-                                  </a>
-                                  <a class="dropdown-item" href="#" onclick="track_order(${row.order_id})">
-                                    <i class="bi bi-geo-alt-fill"></i>
-                                  </a>
-                                  <a class="dropdown-item" href="#" onclick="delete_order(${row.order_id})">
-                                    <i class="bi bi-trash"></i>
-                                  </a>`;
+                            let dropdown = `
+                           <div class="d-flex align-items-center justify-content-start action-list">
+            <a href="#" onclick="edit_order(${row.order_id})" class="action-item" title="Edit Order">
+                <i class="bi bi-pencil-fill text-primary fs-5 mx-2"></i> 
+            </a>
+            <a href="#" onclick="view_order(${row.order_qr_code})" class="action-item" title="View Order">
+                <i class="bi bi-receipt text-success fs-5 mx-2"></i> 
+            </a>
+            <a href="#" onclick="transfer_order(${row.order_id})" class="action-item" title="Transfer Order">
+                <i class="bi bi-send text-warning fs-5 mx-2"></i> 
+            </a>
+            <a href="#" onclick="track_order(${row.order_id})" class="action-item" title="Order Roadmap">
+                <i class="bi bi-geo-alt-fill text-info fs-5 mx-2"></i> 
+            <a href="#" onclick="delete_order(${row.order_id})" class="action-item" title="Delete Order">
+                <i class="bi bi-trash text-danger fs-5 mx-2"></i> 
+            </a>
+        </div>`;
 
                             let showApprove = false;
                             let transaction_id;
