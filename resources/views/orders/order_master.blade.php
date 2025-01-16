@@ -236,12 +236,12 @@
                     headers: {
                         'X-CSRF-TOKEN': csrfToken  // Add CSRF token in the header
                     },
-                    // dataSrc: function (response) {
+                    dataSrc: function (response) {
 
-                    //     if (response.status === 200) {
-                    //         orderArray = response.data.orders; 
-                    //         console.log(response.data);
-                    //         return response.data;
+                        if (response.status === 200) {
+                            orderArray = response.data; 
+                            console.log(response.data);
+                            return response.data;
                     //         // return {
                     //         //     draw: response.draw,
                     //         //     recordsTotal: response.recordsTotal,
@@ -249,9 +249,9 @@
                     //         //     data: response.data
                     //         // };
                           
-                    //     }
+                        }
                     //     return [];  
-                    // }
+                    }
                 },
                 columns: [
                     {
