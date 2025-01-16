@@ -41,7 +41,7 @@
                             $formattedDate = \Carbon\Carbon::parse($transaction['trans_time'])->format('g:i, M j, Y');
                         @endphp
                     @if(!empty($transaction))
-                    @dd($transaction)
+                    @dd($transaction,$check_order)
                     <div class="timeline-item {{ $transaction['trans_approved_by'] ? 'completed' : '' }}">
                         <h3>Transfered -- {{$transaction['trans_user']['name']}} -- {{$transaction['trans_to']['branch_name']}}</h3>
                         <p>{{$formattedDate }}</p>
