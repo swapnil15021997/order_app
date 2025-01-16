@@ -194,7 +194,7 @@
                     dataSrc: function (response) {
 
                         if (response.status === 200) {
-                            return response.data.branches;
+                            return response.data;
                         }
                         return [];  // Return an empty array if no data
                     }
@@ -209,7 +209,7 @@
                         name: 'operations',
                         render: function (data, type, row) {
                             return `<button data-bs-toggle="dropdown" type="button" class="btn dropdown-toggle dropdown-toggle-split"></button>
-                                <div class="dropdown-menu dropdown-menu-end">
+                                <div class="dropdown-menu dropdown-menu-start">
                                   <a class="dropdown-item" href="#" onclick="edit_branch(${row.branch_id})">
                                     Edit
                                   </a>
@@ -221,8 +221,10 @@
                     }
                 ],
                 order: [[0, 'desc']],
-                "pageLength": 5,
-                "lengthMenu": [10, 25, 50, 100]
+                "pageLength": 10,
+                "lengthMenu": [10, 25, 50, 100],
+                "paging": true,
+
             });
             $('input[aria-controls="branch_table"]').on('keyup', function () {
                 table.search(this.value).draw();

@@ -169,13 +169,12 @@ class BranchController extends Controller
         return response()->json([
             'status' => 200,
             'message' => 'Branch list fetched successfully!',
-            'data'    => [
-                'branches'     => $branches,
-            ],
+            'data'    =>  $branches,
+            
             'draw' => intval($request->input('draw')),
 
-            'recordsTotal'        => $total_branches,
-            'recordsFiltered' => $branches->count(),
+            'recordsTotal'        => $branches->count(),
+            'recordsFiltered' => $total_branches,
             'per_page'     => $perPage,
             'current_page' => $page,
             'total_pages'  => $total_pages,
