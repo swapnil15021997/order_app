@@ -1621,8 +1621,7 @@
     recordButton.addEventListener("mousedown", startRecord);
     recordStopButton.addEventListener("mousedown", stopRecord);
     // recordStopButton.addEventListener("mousedown", uploadRecording);
-    recordSendButton.addEventListener("click", stopRecord);
-
+    recordSendButton.addEventListener("click", resetRecording);
     // For touch devices
     recordButton.addEventListener("touchstart", (e) => {
         e.preventDefault();
@@ -1708,6 +1707,26 @@
         $('#audio_box').css("display", "none");
 
     //     // Reset audio variables
+    }
+
+    function resetRecording(){
+        audioBlob = null;
+        audio_stream = null;
+        recorder = null;
+        location.reload();
+        isRecording = false;
+           
+      
+
+        if (audio_stream) {
+            const tracks = audio_stream.getTracks();
+            tracks.forEach(track => track.stop());
+            console.log("Audio stream stopped.");
+        }
+
+        
+        $('#audio_box').css("display", "none");
+        
     }
 
   

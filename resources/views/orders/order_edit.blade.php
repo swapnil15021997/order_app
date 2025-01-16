@@ -1748,7 +1748,7 @@
     // Add event listeners
     recordButton.addEventListener("mousedown", startRecord);
     recordStopButton.addEventListener("mousedown", stopRecord);
-    recordSendButton.addEventListener("click", stopRecord);
+    recordSendButton.addEventListener("click", resetRecording);
 
     // For touch devices
     recordButton.addEventListener("touchstart", (e) => {
@@ -1839,12 +1839,10 @@
         audioBlob = null;
         audio_stream = null;
         recorder = null;
-        setTimeout(function () {
-        // Stop the recorder and audio stream if active
-        if (recorder && recorder.state !== 'inactive') {
-            recorder.stop();
-            console.log("Recording stopped.");
-        }
+        location.reload();
+        isRecording = false;
+           
+      
 
         if (audio_stream) {
             const tracks = audio_stream.getTracks();
@@ -1852,16 +1850,9 @@
             console.log("Audio stream stopped.");
         }
 
-        // Reset all variables and UI
         
         $('#audio_box').css("display", "none");
-        $("#audioPlaybackContainer").addClass("d-none");
-        console.log("Recording reset.");
-
-        // Allow uploads again after reset
-        isResetting = false;
-        shouldUpload = true;
-    }, 0)
+        
     }
   
 
