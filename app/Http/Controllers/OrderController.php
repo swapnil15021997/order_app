@@ -1141,7 +1141,7 @@ class OrderController extends Controller
                 'message' => 'Order does not exist'
             ]);
         }
-        $pageTitle     = 'Orders';
+        $pageTitle     = 'Orders Roadmap';
         $login         = auth()->user()->toArray();
         $activePage    = 'orders';
        
