@@ -980,7 +980,9 @@ class OrderController extends Controller
         //         'message' => 'Cant transfer to the same branch'
         //     ]);
         // }
-        $check_transaction = Transactions::where('trans_order_id',$order->order_id)->first();
+        $check_transaction = Transactions::where('trans_order_id',$order->order_id)
+        ->orderBy('trans_id', 'desc')
+        ->first();
         if(!empty($check_transaction)){
             if ($order->order_status==0){
                 return response()->json([
