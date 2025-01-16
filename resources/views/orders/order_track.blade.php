@@ -35,7 +35,7 @@
                     <p>{{$formattedDate}}</p>
                 </div>
 
-                @foreach($check_order['transactions'] as $transaction)
+                <!-- @foreach($check_order['transactions'] as $transaction)
                         @php
 
                             $formattedDate = \Carbon\Carbon::parse($transaction['trans_time'])->format('g:i, M j, Y');
@@ -48,7 +48,34 @@
                         <h3>Accepted -- {{$transaction['trans_approved_by']['name']}} -- {{$transaction['trans_to']['branch_name']}}</h3>
                     </div>
                     @endif
-                @endforeach
+                @endforeach -->
+
+                @if(isset($check_order['transactions']) && is_array($check_order['transactions']))
+                    @foreach($check_order['transactions'] as $transaction)
+                        @if(!empty($transaction))
+                            @php
+                                $formattedDate = isset($transaction['trans_time']) 
+                                    ? \Carbon\Carbon::parse($transaction['trans_time'])->format('g:i, M j, Y') 
+                                    : 'N/A';
+                            @endphp
+                            <div class="timeline-item {{ isset($transaction['trans_approved_by']) ? 'completed' : '' }}">
+                                <h3>
+                                    Transfered -- 
+                                    {{ $transaction['trans_user']['name'] ?? '' }} -- 
+                                    {{ $transaction['trans_to']['branch_name'] ?? '' }}
+                                </h3>
+                                <p>{{ $formattedDate }}</p>
+                                @if(isset($transaction['trans_approved_by']))
+                                    <h3>
+                                        Accepted -- 
+                                        {{ $transaction['trans_approved_by']['name'] ?? ' }} -- 
+                                        {{ $transaction['trans_to']['branch_name'] ?? '' }}
+                                    </h3>
+                                @endif
+                            </div>
+                        @endif
+                    @endforeach
+                @endif
                
             </div>
             <div class="tracking-info">
