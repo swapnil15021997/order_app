@@ -68,7 +68,7 @@
                                 @if(isset($transaction['trans_approved_by']))
                                     <h3>
                                         Accepted -- 
-                                        {{ $transaction['trans_approved_by']['name'] ?? ' }} -- 
+                                        {{ $transaction['trans_approved_by']['name'] ?? '' }} -- 
                                         {{ $transaction['trans_to']['branch_name'] ?? '' }}
                                     </h3>
                                 @endif
