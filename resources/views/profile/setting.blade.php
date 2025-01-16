@@ -128,7 +128,7 @@
                                         <div class="row mt-3">
                                             <div class="col-md-3 mb-3">
 
-                                                <h3 class="card-title mt-4">Change Active Branch</h3>
+                                                <h3 class="card-title mt-4">Active Branch</h3>
                                                 <select class="form-select" onchange="changeBranch(this.value)">
                                                     @foreach($user_branch as $branch)
                                                         <option value="{{ $branch['branch_id'] }}"
