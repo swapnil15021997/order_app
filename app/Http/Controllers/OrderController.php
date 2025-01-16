@@ -1317,7 +1317,7 @@ class OrderController extends Controller
         
         foreach ($params['order_id'] as $order_id) {
             
-            $order = Order::get_order_with_items($params['order_id']);
+            $order = Order::get_order_with_items($order_id);
             if (empty($order)){
                 return response()->json([
                     'status' => 500,
@@ -1344,6 +1344,7 @@ class OrderController extends Controller
             ->orderBy('trans_id', 'desc')
             ->first();
             if(!empty($check_transaction)){
+                \Log::info(['Order STatus' => $order->order_id]);
                 if ($order->order_status==0){
                     return response()->json([
                         'status' => 500,
