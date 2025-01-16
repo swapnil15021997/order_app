@@ -695,6 +695,7 @@
    
             let isAnyOrderApproved    = approve_orders_array.length > 0;
             let isAnyOrderTransferred = transfer_orders_array.length > 0;  
+            console.log("Last Transaction",lastTransaction)
             if (lastTransaction != null){
 
                 if (lastTransaction.trans_status === 1 && isAnyOrderApproved) {
@@ -744,8 +745,10 @@
 
 
         function toggleButtons(){
-            console.log("toggleButtons",approve_orders_array);
+            console.log("toggleButtons Approve",approve_orders_array);
             console.log("toggleButtons Transfer",transfer_orders_array);
+            console.log("Mismatch Transfer",mismatch);
+            
             if (mismatch.length > 0) {
                 $('#accept_btn').prop('disabled', true).addClass('d-none');
                 $('#transfer_btn').prop('disabled', true).addClass('d-none');
