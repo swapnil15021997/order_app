@@ -838,7 +838,7 @@
                 formData.append('order_user_id', cust);
                 formData.append('item_color', item_color);
 
-                formData.append('order_remark', orderRemarks);
+                formData.append('order_remark', remarks);
 
                 var custName = userInput;
                 var custAddress = $('#customer_address').val();
