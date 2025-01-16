@@ -716,16 +716,10 @@
 
                 }
                 else {
-                    if (isAnyOrderApproved) {
-    
-                        approve_orders_array.push(order_id);
-    
-                    }else{
-                       
-                                    
-                     transfer_orders_array.push(order_id); 
+                                   
+                    transfer_orders_array.push(order_id); 
                                   
-                    }
+                    
                 }
             }else{
                 approve_orders_array.push(order_id);
