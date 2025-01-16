@@ -638,7 +638,8 @@ class OrderController extends Controller
             })
             ->orderBy($sortColumn, $sortOrder);
         }
-       
+        $total_orders = Order::where('is_delete',0)->count();
+
         if (!empty($searchQuery)) {
             $ordersQuery->where(function ($query) use ($searchQuery) {
                 $query->where('order_number', 'like', "%{$searchQuery}%")
@@ -647,8 +648,7 @@ class OrderController extends Controller
         }
 
         
-        $total_orders = $ordersQuery->count();
-
+        
         $orders = $ordersQuery
         ->offset($offset)
         ->limit($perPage)
@@ -661,28 +661,25 @@ class OrderController extends Controller
         });
 
         
-        $total_pages = ceil($total_orders / $perPage);
+        $total_pages  = ceil($total_orders / $perPage);
+        // $orders_array = $orders->toArray();
+        
+        // $orders_array['recordsTotal']  = $total_orders;
+        // $orders_array['recordsFiltered'] = $orders->count();
+        // $orders_array['per_page']     = $perPage;
+        // $orders_array['current_page'] = $page;
+        // $orders_array['total_pages']  = $total_pages;
         
         return response()->json([
             'status' => 200,
             'message' => 'Orders list fetched successfully!',
-            'data'    => [
-                'orders'     => $orders,
-                'recordsTotal'  => $total_orders,
-                'recordsFiltered' => $orders->count(),
-                'per_page'     => $perPage,
-                'current_page' => $page,
-                'total_pages'  => $total_pages,
-            
-            ],
+            'data'    => $orders,
             'draw' => intval($request->input('draw')),
-
-            // 'recordsTotal'  => $total_orders,
-            // 'recordsFiltered' => $orders->count(),
-            // 'per_page'     => $perPage,
-            // 'current_page' => $page,
-            // 'total_pages'  => $total_pages,
-    
+            'recordsTotal'  => $orders->count(),
+            'recordsFiltered' => $total_orders,
+            'per_page'     => $perPage,
+            'current_page' => $page,
+            'total_pages'  => $total_pages
         ]);
     }
 
