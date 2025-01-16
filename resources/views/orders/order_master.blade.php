@@ -176,7 +176,7 @@
                     <label class="form-label">Order To</label>
                     <div class="row">
                         <div class="col-6 select-full">
-                            <select id="TransfersearchableSelectTo" class="form-select select-2  w-100 " type="text">
+                            <select id="TransferOrder" class="form-select select-2  w-100 " type="text">
                             </select>
                         </div>
                     </div>
@@ -187,7 +187,7 @@
                     <a href="#" class="btn btn-secondary" data-bs-dismiss="modal">
                         Cancel
                     </a>
-                    <a id="TransferOrderBtn" onclick="transfer_this()" href="#" class="btn btn-primary">
+                    <a id="TransferOrderBtns" onclick="transfer_multiple_order()" href="#" class="btn btn-primary">
                         Transfer This Order
                     </a>
                 </div>
@@ -776,8 +776,8 @@
 
         var csrfToken = $('meta[name="csrf-token"]').attr('content');
 
-        $('#TransfersearchableSelectTo').select2({
-            dropdownParent: $('#transfer_order'),
+        $('#TransferOrder').select2({
+            dropdownParent: $('#transfer_order_modal'),
             placeholder: "Select an option",
             allowClear: true,
             ajax: {
@@ -815,12 +815,13 @@
         });
 
 
-        function transfer_this(){
+        function transfer_multiple_order(){
+            console.log("Transfer",transfer_orders_array);
             if (transfer_orders_array.length == 0){
                 alert('Cant transfer with empty array');
             }
             var csrfToken = $('meta[name="csrf-token"]').attr('content');
-            var transferTo = $('#TransfersearchableSelectTo').val();
+            var transferTo = $('#TransferOrder').val();
 
             $.ajax({
                 url: "{{ route('multiple_transfer') }}",
@@ -834,8 +835,8 @@
                 success: function (response) {
                     if (response.status == 200) {
                         $('#transfer_order_id').val('');
-                        $('#TransfersearchableSelectTo').val('');
-                        $('#transfer_order').modal('hide');
+                        $('#TransferOrder').val('');
+                        $('#transfer_order_modal').modal('hide');
                         alert(response.message);
                         showAlert('success', response.message);
 
@@ -843,10 +844,12 @@
                             location.reload();
                         }, 2000);
                     } else {
+                        $('#transfer_order_modal').modal('hide');
+                        
                         alert(response.message);
 
-                        showAlert('success', response.message);
-                        $('#TransfersearchableSelectTo').val('');
+                        showAlert('warning', response.message);
+                        $('#TransferOrder').val('');
 
 
                     }
@@ -854,7 +857,7 @@
                 error: function (xhr, status, error) {
                     showAlert('success', error);
 
-                    $('#TransfersearchableSelectTo').val('');
+                    $('#TransferOrder').val('');
 
                 }
             });
