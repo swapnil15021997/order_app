@@ -931,7 +931,8 @@ class OrderController extends Controller
 
     public function order_transfer(Request $request){
 
-
+        $login  = auth()->user()->toArray();
+      
         $params = $request->all();
              
         $rules = [   

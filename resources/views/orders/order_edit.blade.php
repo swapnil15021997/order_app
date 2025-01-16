@@ -25,11 +25,11 @@
                                     @if ($lastTransaction && $lastTransaction['trans_status'] === 0)
                                         <!-- If both conditions are satisfied, show the "Approve" button -->
 
-                                        <button class="btn" onclick="approve_order({{ $order['order_qr_code'] }})">
+                                        <button class="btn" onclick="approve_order_edit({{ $order['order_qr_code'] }})">
                                             Approve Order
                                         </button>
                                     @else
-                                        <button class="btn " onclick="transfer_order({{$order['order_id']}})">
+                                        <button class="btn " onclick="transfer_edit_order({{$order['order_id']}})">
                                             Transfer Order
                                         </button>
                                     @endif
@@ -324,7 +324,7 @@
         </div>
         <input type="hidden" name="" id="transfer_order_id">
 
-        <div class="modal modal-blur fade" id="transfer_order" tabindex="-2" role="dialog" aria-hidden="true">
+        <div class="modal modal-blur fade" id="transfer_order_edit_modal" tabindex="-2" role="dialog" aria-hidden="true">
             <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
 
@@ -337,7 +337,7 @@
                         <label class="form-label">Order To</label>
                         <div class="row">
                             <div class="col-6 select-full">
-                                <select id="TransfersearchableSelectTo" class="form-select  w-100 " type="text">
+                                <select id="Transferedit" class="form-select  w-100 " type="text">
                                 </select>
                             </div>
                         </div>
@@ -348,7 +348,7 @@
                         <a href="#" class="btn btn-secondary" data-bs-dismiss="modal">
                             Cancel
                         </a>
-                        <a id="TransferOrderBtn" href="#" class="btn btn-primary">
+                        <a id="TransferOrderBtnEdit" href="#" class="btn btn-primary">
                             Transfer This Order
                         </a>
                     </div>
@@ -1113,8 +1113,8 @@
 
         var csrfToken = $('meta[name="csrf-token"]').attr('content');
 
-        $('#TransfersearchableSelectTo').select2({
-            dropdownParent: $('#transfer_order'),
+        $('#Transferedit').select2({
+            dropdownParent: $('#transfer_order_edit_modal'),
             placeholder: "Select an option",
             allowClear: true,
             ajax: {
@@ -1153,17 +1153,17 @@
     });
 
 
-    function transfer_order(order_id) {
+    function transfer_edit_order(order_id) {
 
         $('#transfer_order_id').val(order_id);
-        $('#transfer_order').modal('show');
+        $('#transfer_order_edit_modal').modal('show');
     }
 
-    $('#TransferOrderBtn').click(function (e) {
+    $('#TransferOrderBtnEdit').click(function (e) {
         e.preventDefault();
 
         var orderId = $('#transfer_order_id').val();
-        var transferTo = $('#TransfersearchableSelectTo').val();
+        var transferTo = $('#Transferedit').val();
 
         if (orderId) {
             $.ajax({
@@ -1178,8 +1178,8 @@
                 success: function (response) {
                     if (response.status == 200) {
                         $('#transfer_order_id').val('');
-                        $('#TransfersearchableSelectTo').val('');
-                        $('#transfer_order').modal('hide');
+                        $('#Transferedit').val('');
+                        $('#transfer_order_edit_modal').modal('hide');
                         showAlert('success', response.message);
 
                         setTimeout(function () {
@@ -1208,7 +1208,7 @@
 
 
 
-    function approve_order(transaction_id) {
+    function approve_order_edit(transaction_id) {
         if (transaction_id) {
             $.ajax({
                 url: "{{ route('order_approve') }}",

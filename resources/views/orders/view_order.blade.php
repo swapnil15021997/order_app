@@ -29,11 +29,11 @@
 
                 @if ($lastTransaction && $lastTransaction['trans_status'] === 0)
                     <!-- If both conditions are satisfied, show the "Approve" button -->
-                    <a class="btn btn-primary" href="#" onclick="approve_order({{ $order['order_qr_code'] }})">
+                    <a class="btn btn-primary" href="#" onclick="approve_order_view({{ $order['order_qr_code'] }})">
                         Approve Order
                     </a>
                 @else
-                    <a class="btn btn-primary" href="#" onclick="transfer_order({{$order['order_id']}})">
+                    <a class="btn btn-primary" href="#" onclick="transfer_order_view({{$order['order_id']}})">
                         Transfer Order
                     </a>
                 @endif
@@ -43,8 +43,8 @@
             </div>
         </div>
     </div>
-    <input type="hidden" name="" id="transfer_order_id">
-    <div class="modal modal-blur fade" id="transfer_order" tabindex="-1" role="dialog" aria-hidden="true">
+    <input type="hidden" name="" id="transfer_order_id_view">
+    <div class="modal modal-blur fade" id="transfer_order_view" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -54,7 +54,7 @@
                 <div class="modal-body">
                     <div id="transfer-container"></div>
                     <label class="form-label">Order To</label>
-                    <select id="searchableSelectTo" class="form-select select2">
+                    <select id="searchableSelectToView" class="form-select select2">
 
 
                     </select>
@@ -65,7 +65,7 @@
                     <a href="#" class="btn btn-secondary" data-bs-dismiss="modal">
                         Cancel
                     </a>
-                    <a id="TransferOrderBtn" href="#" class="btn btn-primary">
+                    <a id="TransferOrderBtnView" href="#" class="btn btn-primary">
                         Transfer This Order
                     </a>
                 </div>
@@ -477,18 +477,18 @@
         var csrfToken = $('meta[name="csrf-token"]').attr('content');
           
 
-        function transfer_order(order_id) {
-            $('#transfer_order_id').val(order_id);
-            $('#transfer_order').modal('show');
+        function transfer_order_view(order_id) {
+            $('#transfer_order_id_view').val(order_id);
+            $('#transfer_order_view').modal('show');
 
         }
 
 
-        $('#TransferOrderBtn').click(function (e) {
+        $('#TransferOrderBtnView').click(function (e) {
             e.preventDefault();
 
-            var orderId = $('#transfer_order_id').val();
-            var transferTo = $('#searchableSelectTo').val();
+            var orderId = $('#transfer_order_id_view').val();
+            var transferTo = $('#searchableSelectToView').val();
 
             if (orderId) {
                 $.ajax({
@@ -502,9 +502,9 @@
                     },
                     success: function (response) {
                         if (response.status == 200) {
-                            $('#transfer_order_id').val('');
-                            $('#searchableSelectTo').val('');
-                            $('#transfer_order').modal('hide');
+                            $('#transfer_order_id_view').val('');
+                            $('#searchableSelectToView').val('');
+                            $('#transfer_order_view').modal('hide');
                             alert(response.message);
                             showAlertTransfer('success', response.message);
 
@@ -514,7 +514,7 @@
                         } else {
                             
                             showAlertTransfer('success', response.message);
-                            $('#searchableSelectTo').val('');
+                            $('#searchableSelectToView').val('');
 
 
                         }
@@ -522,7 +522,7 @@
                     error: function (xhr, status, error) {
                         showAlertTransfer('success', error);
                             
-                        $('#searchableSelectTo').val('');
+                        $('#searchableSelectToView').val('');
 
                     }
                 });
@@ -559,7 +559,7 @@
         }
 
 
-        function approve_order(transaction_id) {
+        function approve_order_view(transaction_id) {
             if (transaction_id) {
                 $.ajax({
                     url: "{{ route('order_approve') }}",
@@ -615,12 +615,12 @@
         }
 
         $(document).ready(function () {
-            $('#searchableSelectTo').on('select2:open', function () {
+            $('#searchableSelectToView').on('select2:open', function () {
                 $('.select2-search__field').on('input', function () {
                     userInput = $(this).val();
                 });
             });
-             $('#searchableSelectTo').select2({
+             $('#searchableSelectToView').select2({
 
                 placeholder: "Select an option",
                 allowClear: true,
