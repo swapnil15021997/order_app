@@ -270,6 +270,15 @@
             });
 
         });
+        function stopScanner() {
+           
+            if (qrScanner) {
+                qrScanner.stop();
+                qrScanner.destroy();
+            }
+            document.getElementById("my-qr-reader").style.display = "none";
+            // startButton.textContent = "Start Scanner";
+        }
 
         let approve_array  = [];
         let transfer_array = [];
