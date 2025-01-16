@@ -112,7 +112,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    Home<div id="transfer-container"></div>
+                    <div id="transfer-container"></div>
                     <label for="searchableSelectTo" class="form-label">Order To</label>
                     <div class="row">
                         <div class="col-6 select-full">
@@ -328,15 +328,13 @@
             <a href="#" onclick="view_order(${row.order_qr_code})" class="action-item" title="View Order">
                 <i class="bi bi-receipt text-success fs-5 mx-2"></i> 
             </a>
-            <a href="#" onclick="transfer_order(${row.order_id})" class="action-item" title="Transfer Order">
-                <i class="bi bi-send text-warning fs-5 mx-2"></i> 
-            </a>
+           
             <a href="#" onclick="track_order(${row.order_id})" class="action-item" title="Order Roadmap">
                 <i class="bi bi-geo-alt-fill text-info fs-5 mx-2"></i> 
             <a href="#" onclick="delete_order(${row.order_id})" class="action-item" title="Delete Order">
                 <i class="bi bi-trash text-danger fs-5 mx-2"></i> 
             </a>
-        </div>`;
+        `;
 
                             let showApprove = false;
                             let transaction_id;
@@ -348,17 +346,18 @@
                                     transaction_id = transaction.trans_id;
                                 }
                             });
-                            // if (parseInt(userActiveBranch) === parseInt(row.trans_to) && row.trans_status === 0) {
-                            //     dropdown += `
-                            //         <a class="dropdown-item" href="#" onclick="approve_order(${row.order_id})">
-                            //             Approve this
-                            //         </a>`;
-                            // }
+                         
                             if (showApprove) {
                                 dropdown += `
-                                        <a class="dropdown-item" href="#" onclick="approve_order(${row.order_qr_code})">
-                                            Approve this
+                                        <a class="action-item" href="#"  title="Approve Order" onclick="approve_order(${row.order_qr_code})">
+                                            <i class="bi bi-check-square text-primary fs-5 mx-2"></i>
                                         </a>`;
+                            }else{
+                                dropdown += `
+                                 <a href="#" onclick="transfer_order(${row.order_id})" class="action-item" title="Transfer Order">
+                                    <i class="bi bi-send text-warning fs-5 mx-2"></i> 
+                                </a>
+                                `;
                             }
                             dropdown += `</div>`;
                             return dropdown;
