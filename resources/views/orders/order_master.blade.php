@@ -321,19 +321,19 @@
                         render: function (data, type, row) {
                              
                             let dropdown = `
-                           <div class="d-flex align-items-center justify-content-start action-list">
-            <a href="#" onclick="edit_order(${row.order_id})" class="action-item" title="Edit Order">
-                <i class="bi bi-pencil-fill text-primary fs-5 mx-2"></i> 
-            </a>
-            <a href="#" onclick="view_order(${row.order_qr_code})" class="action-item" title="View Order">
-                <i class="bi bi-receipt text-success fs-5 mx-2"></i> 
-            </a>
-           
-            <a href="#" onclick="track_order(${row.order_id})" class="action-item" title="Order Roadmap">
-                <i class="bi bi-geo-alt-fill text-info fs-5 mx-2"></i> 
-            <a href="#" onclick="delete_order(${row.order_id})" class="action-item" title="Delete Order">
-                <i class="bi bi-trash text-danger fs-5 mx-2"></i> 
-            </a>
+                           <ul class="action-list d-flex list-unstyled">
+            <li class="action-item" title="Edit Order" onclick="edit_order(${row.order_id})">
+                <i class="bi bi-pencil fs-5 mx-2"></i>  
+            </li>
+            <li class="action-item" title="View Order" onclick="view_order(${row.order_qr_code})">
+                <i class="bi bi-receipt fs-5 mx-2"></i> 
+            </li>
+            <li class="action-item" title="Order Roadmap" onclick="track_order(${row.order_id})">
+                <i class="bi bi-geo-alt fs-5 mx-2"></i>  
+            </li>
+            <li class="action-item" title="Delete Order" onclick="delete_order(${row.order_id})">
+                <i class="bi bi-trash fs-5 mx-2"></i>  
+            </li>
         `;
 
                             let showApprove = false;
@@ -349,14 +349,14 @@
                          
                             if (showApprove) {
                                 dropdown += `
-                                        <a class="action-item" href="#"  title="Approve Order" onclick="approve_order(${row.order_qr_code})">
-                                            <i class="bi bi-check-square text-primary fs-5 mx-2"></i>
-                                        </a>`;
+                                        <li class="action-item" title="Approve Order" onclick="approve_order(${row.order_qr_code})">
+                <i class="bi bi-check-square fs-5 mx-2"></i>  
+            </li>`;
                             }else{
                                 dropdown += `
-                                 <a href="#" onclick="transfer_order(${row.order_id})" class="action-item" title="Transfer Order">
-                                    <i class="bi bi-send text-warning fs-5 mx-2"></i> 
-                                </a>
+                                  <li class="action-item" title="Transfer Order" onclick="transfer_order(${row.order_id})">
+                <i class="bi bi-send fs-5 mx-2"></i> 
+            </li>
                                 `;
                             }
                             dropdown += `</div>`;

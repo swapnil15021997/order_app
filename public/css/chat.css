@@ -717,3 +717,6 @@
     left: 0;
     width: 100%;
 }
+.action-item {
+cursor: pointer;
+}
