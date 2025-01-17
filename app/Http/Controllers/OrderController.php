@@ -268,6 +268,7 @@ class OrderController extends Controller
         $order->order_qr_code        = $params['qr_code_number'];
         $order->order_from_branch_id = $params['order_from_branch_id'];
         $order->order_to_branch_id   = $params['order_to_branch_id'];
+        $order->order_branch_id      = $params['order_to_branch_id'];
         $order->order_type           = $params['order_type'];
         $order->order_user_id        = $login->id;
         $order->order_customer_id    = $customer_id;
@@ -597,6 +598,7 @@ class OrderController extends Controller
             $sortColumn = 'order_id'; 
         }
         $userBranchIds = $login['user_branch_ids'];
+        
         if($login['user_role_id']==1){
 
             $ordersQuery = Order::with('transactions','items')    
@@ -802,6 +804,7 @@ class OrderController extends Controller
         $order_rec->order_date           = $formattedDate;
         $order_rec->order_from_branch_id = $params['order_from_branch_id'];
         $order_rec->order_to_branch_id   = $params['order_to_branch_id'];
+        $order_rec->order_branch_id      = $params['order_to_branch_id'];
         $order_rec->order_type           = $params['order_type'];
         $order_rec->order_customer_id    = $customer_id;
         $order_rec->order_remark         = $params['order_remark'];
@@ -1003,7 +1006,14 @@ class OrderController extends Controller
             }
         }
         $items = $order->items->toArray();
-        // $order->order_current_branch= $params['transfer_to'];
+        // Previous branches
+        $prev_branches = $order->order_branch_id;
+
+        $branches   = $prev_branches ? explode(',', $prev_branches) : [];
+        // Current branch
+        $branches[] = $params['transfer_to'];
+        // comma seperated again
+        $order->order_branch_id     = implode(',', $branches);
         $order->order_status        = 0;
         $order->save();
 
@@ -1364,7 +1374,15 @@ class OrderController extends Controller
                 }
             }
             $items = $order->items->toArray();
-            // $order->order_current_branch= $params['transfer_to'];
+             
+            // Previous branches    
+            $prev_branches = $order->order_branch_id;
+
+            $branches   = $prev_branches ? explode(',', $prev_branches) : [];
+            // Current branch
+            $branches[] = $params['transfer_to'];
+            // comma seperated again
+            $order->order_branch_id     = implode(',', $branches);
             $order->order_status        = 0;
             $order->save();
     

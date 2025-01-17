@@ -30,7 +30,8 @@ class Order extends Model
         'order_user_id',
         'order_type',
         'order_status',
-        'order_remark'
+        'order_remark',
+        'order_branch_id',
     ];
 
 

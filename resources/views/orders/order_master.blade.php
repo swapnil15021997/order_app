@@ -253,6 +253,7 @@
                     //     return [];  
                     }
                 },
+                order: [[0, 'desc']],
                 columns: [
                     {
                         data: 'order_id',
@@ -355,7 +356,7 @@
                             let transaction_id;
                             row.transactions.forEach(transaction => {
 
-                                if (parseInt(userActiveBranch) === parseInt(transaction.trans_to) && transaction.trans_status === 0) {
+                                if ( transaction.trans_status === 0) {
                                     showApprove = true;
 
                                     transaction_id = transaction.trans_id;
