@@ -487,10 +487,12 @@
         $('#TransferOrderBtnView').click(function (e) {
             e.preventDefault();
 
-            var orderId = $('#transfer_order_id_view').val();
+            var orderId    = $('#transfer_order_id_view').val();
             var transferTo = $('#searchableSelectToView').val();
 
             if (orderId) {
+                $('body').addClass('loading');
+                $('#TransferOrderBtnView').prop('disabled',true);
                 $.ajax({
                     url: "{{ route('order_transfer') }}",
                     type: 'POST',
@@ -502,6 +504,9 @@
                     },
                     success: function (response) {
                         if (response.status == 200) {
+                            $('body').removeClass('loading');
+                            $('#TransferOrderBtnView').prop('disabled',false);
+
                             $('#transfer_order_id_view').val('');
                             $('#searchableSelectToView').val('');
                             $('#transfer_order_view').modal('hide');
@@ -512,7 +517,9 @@
                                 location.href = "{{ route('order-master') }}";
                             }, 2000);
                         } else {
-                            
+                            $('body').removeClass('loading');
+                            $('#TransferOrderBtnView').prop('disabled',false);
+
                             showAlertTransfer('success', response.message);
                             $('#searchableSelectToView').val('');
 
@@ -520,6 +527,9 @@
                         }
                     },
                     error: function (xhr, status, error) {
+                        $('body').removeClass('loading');
+                        $('#TransferOrderBtnView').prop('disabled',false);
+                        
                         showAlertTransfer('success', error);
                             
                         $('#searchableSelectToView').val('');
@@ -561,6 +571,8 @@
 
         function approve_order_view(transaction_id) {
             if (transaction_id) {
+                $('body').addClass('loading');
+                $('#accept_btn').prop('disabled',true);
                 $.ajax({
                     url: "{{ route('order_approve') }}",
                     type: 'POST',
@@ -570,18 +582,25 @@
                     },
                     success: function (response) {
                         if (response.status == 200) {
-
+                            $('body').removeClass('loading');
+                            $('#accept_btn').prop('disabled',false);
                             location.reload();
                             showAlert('success', response.message);
                         } else {
+                            $('body').removeClass('loading');
+                            $('#accept_btn').prop('disabled',false);
                             showAlert('warning', response.message);
                         }
                     },
                     error: function (xhr, status, error) {
+                        $('body').removeClass('loading');
+                        $('#accept_btn').prop('disabled',false);
                         showAlert('warning', error.message);
                     }
                 });
             } else {
+                $('body').removeClass('loading');
+                $('#accept_btn').prop('disabled',false);
                 showAlert('warning', 'Please select Transaction id');
             }
         }

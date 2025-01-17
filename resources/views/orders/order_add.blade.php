@@ -696,6 +696,8 @@
                 orderType = 1;
             }
             if (orderDate && orderType && orderFrom && orderTo) {
+                $('body').addClass('loading');
+                $('#saveBranchBtn').prop('disabled', true);
                 var formData = new FormData();
                 formData.append('_token', csrfToken);  // Add CSRF token
                 formData.append('order_date', orderDate);
@@ -754,6 +756,8 @@
                     processData: false,
                     success: function (response) {
                         if (response.status == 200) {
+                            $('body').removeClass('loading');
+                            $('#saveBranchBtn').prop('disabled', false);
                             $('#branch_table').DataTable().ajax.reload();  // Reload table
 
                             showOrderAlert('success', response.message);
@@ -774,17 +778,22 @@
                                 location.href = "{{ route('order-master') }}";
                             }, 1000);
                         } else {
-
+                            $('body').removeClass('loading');
+                            $('#saveBranchBtn').prop('disabled', false);
                             showOrderAlert('warning', response.message);
                         }
                     },
                     error: function (xhr, status, error) {
+                        $('#saveBranchBtn').prop('disabled', false);
+                        $('body').removeClass('loading');
+
                         // alert('An error occurred: ' + error);
                         showOrderAlert('warning', error);
                     }
                 });
             } else {
-
+                $('#saveBranchBtn').prop('disabled', false);
+                $('body').removeClass('loading');
 
                 showOrderAlert('warning', 'Please fill in all fields orderDate, orderType and Order To');
             }

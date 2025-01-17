@@ -839,7 +839,9 @@
             }
             var csrfToken = $('meta[name="csrf-token"]').attr('content');
             var transferTo = $('#TransferOrder').val();
-
+            $('body').addClass('loading');
+            $('#TransferOrderBtns').prop('disabled', true);
+          
             $.ajax({
                 url: "{{ route('multiple_transfer') }}",
                 type: 'POST',
@@ -851,6 +853,9 @@
                 },
                 success: function (response) {
                     if (response.status == 200) {
+                        $('body').removeClass('loading');
+                        $('#TransferOrderBtns').prop('disabled', false);
+          
                         $('#transfer_order_id').val('');
                         $('#TransferOrder').val('');
                         $('#transfer_order_modal').modal('hide');
@@ -861,6 +866,9 @@
                             location.reload();
                         }, 2000);
                     } else {
+                        $('body').removeClass('loading');
+                        $('#TransferOrderBtns').prop('disabled', false);
+          
                         $('#transfer_order_modal').modal('hide');
                         
                         alert(response.message);
@@ -875,6 +883,9 @@
                     }
                 },
                 error: function (xhr, status, error) {
+                    $('body').removeClass('loading');
+                    $('#TransferOrderBtns').prop('disabled', false);
+          
                     showAlert('success', error);
 
                     $('#TransferOrder').val('');
@@ -889,7 +900,9 @@
                 alert('Cant approve with empty array');
             }
             var csrfToken = $('meta[name="csrf-token"]').attr('content');
-
+            $('body').addClass('loading');
+            $('#accept_btn').prop('disabled', true);
+          
             $.ajax({
                 url: "{{ route('multiple_approve') }}",
                 type: 'POST',
@@ -900,7 +913,8 @@
                 success: function (response) {
                     if (response.status == 200) {
                         
-                            
+                        $('body').removeClass('loading');
+                        $('#accept_btn').prop('disabled', false);
                         showAlert('success', response.message);
                         alert(response.message);
 
@@ -908,6 +922,8 @@
                             location.reload();
                         }, 2000);
                     } else {
+                        $('body').removeClass('loading');
+                        $('#accept_btn').prop('disabled', false);
                         alert(response.message);
 
                         showAlert('warning', response.message);
@@ -918,6 +934,8 @@
                     }
                 },
                 error: function (xhr, status, error) {
+                    $('body').removeClass('loading');
+                    $('#accept_btn').prop('disabled', false);
                     showAlert('success', error);
                 }
             });
