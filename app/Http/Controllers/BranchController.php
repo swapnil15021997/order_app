@@ -134,7 +134,9 @@ class BranchController extends Controller
                 'errors'  => $validator->errors(),
             ]);
         }
-    
+        
+        $login   = auth()->user()->toArray();
+       
         $searchQuery = $request->input('search', ''); 
 
         $perPage     = $request->input('per_page', 15);   
@@ -147,8 +149,19 @@ class BranchController extends Controller
         if (!in_array($sortColumn, $allowedSortColumns)) {
             $sortColumn = 'branch_id'; // Fallback to default
         }
+        if(!empty($login)){
+            if ($login['user_role_id']!=1){
 
-        $branchQuery  = Branch::query()->where('is_delete',0);      
+                $user_branch_ids = $login['user_branch_ids'];
+                $branchIdsArray = explode(',', $user_branch_ids);
+        
+                $branchQuery  = Branch::query()->where('is_delete',0)
+                ->whereIn('branch_id', $branchIdsArray);      
+            }else{
+                $branchQuery  = Branch::query()->where('is_delete',0);      
+
+            }
+        }
          
         if (!empty($searchQuery)) {
             $branchQuery->where(function ($query) use ($searchQuery) {
