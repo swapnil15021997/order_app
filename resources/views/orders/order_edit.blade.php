@@ -839,6 +839,9 @@
             }
 
             if (orderDate && orderType && orderFrom && orderTo) {
+                $('body').addClass('loading');
+                $('#updateOrderBtn').prop('disabled', true);
+               
                 var formData = new FormData();
                 formData.append('_token', csrfToken);
                 formData.append('order_id', orderId);
@@ -888,25 +891,34 @@
                     processData: false,
                     success: function (response) {
                         if (response.status == 200) {
-
+                            $('body').removeClass('loading');
+                            $('#updateOrderBtn').prop('disabled', false);
+               
                             showAlert('success', response.message);
                             setTimeout(function () {
                                 location.href = "{{ route('order-master') }}";
                             }, 1000);
 
                         } else {
-
+                            $('body').removeClass('loading');
+                            $('#updateOrderBtn').prop('disabled', false);
+               
                             showAlert('warning', response.message);
 
                         }
                     },
                     error: function (xhr, status, error) {
-
+                        $('body').removeClass('loading');
+                        $('#updateOrderBtn').prop('disabled', false);
+               
                         showAlert('warning', error);
 
                     }
                 });
             } else {
+                $('body').removeClass('loading');
+                $('#updateOrderBtn').prop('disabled', false);
+    
                 showAlert('warning', 'Please fill in all fields orderDate, orderType and Order To');
 
             }
@@ -1181,6 +1193,9 @@
         var transferTo = $('#Transferedit').val();
 
         if (orderId) {
+            $('body').addClass('loading');
+            $('#TransferOrderBtnEdit').prop('disabled', true);
+              
             $.ajax({
                 url: "{{ route('order_transfer') }}",
                 type: 'POST',
@@ -1192,6 +1207,9 @@
                 },
                 success: function (response) {
                     if (response.status == 200) {
+                        $('body').removeClass('loading');
+                        $('#TransferOrderBtnEdit').prop('disabled',false);
+            
                         $('#transfer_order_id').val('');
                         $('#Transferedit').val('');
                         $('#transfer_order_edit_modal').modal('hide');
@@ -1201,17 +1219,19 @@
                             location.reload();
                         }, 2000);
                     } else {
-
+                        $('body').removeClass('loading');
+                        $('#TransferOrderBtnEdit').prop('disabled',false);
                         showAlert('success', response.message);
-                        $('#TransfersearchableSelectTo').val('');
+                        $('#Transferedit').val('');
 
 
                     }
                 },
                 error: function (xhr, status, error) {
+                    $('body').removeClass('loading');
+                    $('#TransferOrderBtnEdit').prop('disabled',false);
                     showAlert('success', error);
-
-                    $('#TransfersearchableSelectTo').val('');
+                    $('#Transferedit').val('');
 
                 }
             });
@@ -1225,6 +1245,8 @@
 
     function approve_order_edit(transaction_id) {
         if (transaction_id) {
+            $('body').addClass('loading');
+            
             $.ajax({
                 url: "{{ route('order_approve') }}",
                 type: 'POST',
@@ -1234,14 +1256,17 @@
                 },
                 success: function (response) {
                     if (response.status == 200) {
-
-                        location.reload();
+                        $('body').removeClass('loading');
+            
                         showAlert('success', response.message);
+                        location.reload();
                     } else {
+                        $('body').removeClass('loading');
                         showAlert('warning', response.message);
                     }
                 },
                 error: function (xhr, status, error) {
+                    $('body').removeClass('loading');
                     showAlert('warning', error.message);
                 }
             });
