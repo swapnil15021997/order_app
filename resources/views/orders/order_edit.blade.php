@@ -170,9 +170,9 @@
                                             @endforeach
                                         </select>
                                     </div>
-                                 
 
-                                   <div class="col-12 col-md-6 col-lg-2">
+
+                                    <div class="col-12 col-md-6 col-lg-2">
                                         <label for="item_melting" class="form-label">Melting
                                             <span style="color: red;">*</span>
                                         </label>
@@ -221,30 +221,30 @@
                                                 @endphp
                                                 @foreach($order['items'] as $file)
 
-                                                @if(!empty($file['files']) && $file['files']->isNotEmpty())
-                                                @php
-                                                    $hasFiles = true;
-                                                @endphp
-                                                        @foreach($file['files'] as $file)
-                                                            <div
-                                                                class="dz-preview dz-processing dz-error dz-complete dz-image-preview">
-                                                                <div class="dz-image">
-                                                                    <img data-dz-thumbnail src="{{ asset($file->file_url) }}"
-                                                                        alt="${fileName}" />
-                                                                    <button type="button"
-                                                                        class="btn btn-danger btn-sm position-absolute top-0 end-0 m-1"
-                                                                        onclick="removeFile({{ $file->file_id }}, {{$order['order_id']}})"><i
-                                                                            class="bi bi-x"></i></button>
-                                                                </div>
-                                                            </div>
-                                                        @endforeach
-                                                         
-                                                        @endif
+                                                                                            @if(!empty($file['files']) && $file['files']->isNotEmpty())
+                                                                                                                                        @php
+                                                                                                                                            $hasFiles = true;
+                                                                                                                                        @endphp
+                                                                                                                                        @foreach($file['files'] as $file)
+                                                                                                                                            <div
+                                                                                                                                                class="dz-preview dz-processing dz-error dz-complete dz-image-preview">
+                                                                                                                                                <div class="dz-image">
+                                                                                                                                                    <img data-dz-thumbnail src="{{ asset($file->file_url) }}"
+                                                                                                                                                        alt="${fileName}" />
+                                                                                                                                                    <button type="button"
+                                                                                                                                                        class="btn btn-danger btn-sm position-absolute top-0 end-0 m-1"
+                                                                                                                                                        onclick="removeFile({{ $file->file_id }}, {{$order['order_id']}})"><i
+                                                                                                                                                            class="bi bi-x"></i></button>
+                                                                                                                                                </div>
+                                                                                                                                            </div>
+                                                                                                                                        @endforeach
+
+                                                                                            @endif
                                                 @endforeach
                                                 @if(!$hasFiles)
-                                                        <div class="dz-default dz-message">
-                                                            <p class="dz-button">Drop files here to upload</p>
-                                                        </div>
+                                                    <div class="dz-default dz-message">
+                                                        <p class="dz-button">Drop files here to upload</p>
+                                                    </div>
                                                 @endif
                                             </div>
                                         </form>
@@ -252,7 +252,7 @@
                                 </div>
                                 <div class="row mt-3">
                                     <label for="customer_address" class="form-label">Notes
-                                         
+
                                     </label>
                                     <textarea type="text" placeholder="Enter Notes" id="order_remarks"
                                         class="form-control" form>{{$order['order_remark']}}</textarea>
@@ -331,7 +331,8 @@
         </div>
         <input type="hidden" name="" id="transfer_order_id">
 
-        <div class="modal modal-blur fade" id="transfer_order_edit_modal" tabindex="-2" role="dialog" aria-hidden="true">
+        <div class="modal modal-blur fade" id="transfer_order_edit_modal" tabindex="-2" role="dialog"
+            aria-hidden="true">
             <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
 
@@ -474,9 +475,12 @@
                                         <path d="M5 21c4.372-5.225 9.274-12.116 16.498-7.458" />
                                     </g>
                                 </svg> -->
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M13.5616 10.4384L9.81389 14.186M10.349 15.1085L10.5514 15.458C12.466 18.7651 13.4233 20.4187 14.7092 20.2877C15.9952 20.1567 16.5994 18.3441 17.8078 14.7188L19.5413 9.51837C20.6451 6.20679 21.1971 4.551 20.323 3.67697C19.449 2.80293 17.7932 3.35487 14.4816 4.45873L9.28119 6.1922C5.65593 7.40063 3.8433 8.00484 3.7123 9.29076C3.5813 10.5767 5.23485 11.534 8.54196 13.4486L8.89146 13.651C9.35038 13.9167 9.57983 14.0495 9.76516 14.2348C9.95048 14.4202 10.0833 14.6496 10.349 15.1085Z" stroke="black" stroke-width="1.6" stroke-linecap="round"/>
-                                </svg>  
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M13.5616 10.4384L9.81389 14.186M10.349 15.1085L10.5514 15.458C12.466 18.7651 13.4233 20.4187 14.7092 20.2877C15.9952 20.1567 16.5994 18.3441 17.8078 14.7188L19.5413 9.51837C20.6451 6.20679 21.1971 4.551 20.323 3.67697C19.449 2.80293 17.7932 3.35487 14.4816 4.45873L9.28119 6.1922C5.65593 7.40063 3.8433 8.00484 3.7123 9.29076C3.5813 10.5767 5.23485 11.534 8.54196 13.4486L8.89146 13.651C9.35038 13.9167 9.57983 14.0495 9.76516 14.2348C9.95048 14.4202 10.0833 14.6496 10.349 15.1085Z"
+                                        stroke="black" stroke-width="1.6" stroke-linecap="round" />
+                                </svg>
                             </button>
                             <div class="btn btn-ghost-secondary btn-icon"></div>
                         </div>
@@ -489,7 +493,9 @@
 
 
         <div class="note-sidebar" id="note_sheet">
-
+            <div class="note-loader">
+                <img src="{{ asset('static/sonic-large.svg')}}" alt="logo" width="120" height="40" />
+            </div>
             <div class="note-header">
                 <h5 class="mb-0">Notes</h5>
                 <button class="btn btn-tabler btn-ghost-secondary note-close-btn ms-auto btn-icon"
@@ -636,7 +642,7 @@
         });
 
         dropzone[0].addEventListener("click", function (e) {
-       
+
             inputFile[0].click();
         });
 
@@ -841,7 +847,7 @@
             if (orderDate && orderType && orderFrom && orderTo) {
                 $('body').addClass('loading');
                 $('#updateOrderBtn').prop('disabled', true);
-               
+
                 var formData = new FormData();
                 formData.append('_token', csrfToken);
                 formData.append('order_id', orderId);
@@ -893,7 +899,7 @@
                         if (response.status == 200) {
                             $('body').removeClass('loading');
                             $('#updateOrderBtn').prop('disabled', false);
-               
+
                             showAlert('success', response.message);
                             setTimeout(function () {
                                 location.href = "{{ route('order-master') }}";
@@ -902,7 +908,7 @@
                         } else {
                             $('body').removeClass('loading');
                             $('#updateOrderBtn').prop('disabled', false);
-               
+
                             showAlert('warning', response.message);
 
                         }
@@ -910,7 +916,7 @@
                     error: function (xhr, status, error) {
                         $('body').removeClass('loading');
                         $('#updateOrderBtn').prop('disabled', false);
-               
+
                         showAlert('warning', error);
 
                     }
@@ -918,7 +924,7 @@
             } else {
                 $('body').removeClass('loading');
                 $('#updateOrderBtn').prop('disabled', false);
-    
+
                 showAlert('warning', 'Please fill in all fields orderDate, orderType and Order To');
 
             }
@@ -1195,7 +1201,7 @@
         if (orderId) {
             $('body').addClass('loading');
             $('#TransferOrderBtnEdit').prop('disabled', true);
-              
+
             $.ajax({
                 url: "{{ route('order_transfer') }}",
                 type: 'POST',
@@ -1208,8 +1214,8 @@
                 success: function (response) {
                     if (response.status == 200) {
                         $('body').removeClass('loading');
-                        $('#TransferOrderBtnEdit').prop('disabled',false);
-            
+                        $('#TransferOrderBtnEdit').prop('disabled', false);
+
                         $('#transfer_order_id').val('');
                         $('#Transferedit').val('');
                         $('#transfer_order_edit_modal').modal('hide');
@@ -1220,7 +1226,7 @@
                         }, 2000);
                     } else {
                         $('body').removeClass('loading');
-                        $('#TransferOrderBtnEdit').prop('disabled',false);
+                        $('#TransferOrderBtnEdit').prop('disabled', false);
                         showAlert('success', response.message);
                         $('#Transferedit').val('');
 
@@ -1229,7 +1235,7 @@
                 },
                 error: function (xhr, status, error) {
                     $('body').removeClass('loading');
-                    $('#TransferOrderBtnEdit').prop('disabled',false);
+                    $('#TransferOrderBtnEdit').prop('disabled', false);
                     showAlert('success', error);
                     $('#Transferedit').val('');
 
@@ -1246,7 +1252,7 @@
     function approve_order_edit(transaction_id) {
         if (transaction_id) {
             $('body').addClass('loading');
-            
+
             $.ajax({
                 url: "{{ route('order_approve') }}",
                 type: 'POST',
@@ -1257,7 +1263,7 @@
                 success: function (response) {
                     if (response.status == 200) {
                         $('body').removeClass('loading');
-            
+
                         showAlert('success', response.message);
                         location.reload();
                     } else {
@@ -1395,7 +1401,7 @@
     document.addEventListener("DOMContentLoaded", function () {
         // Function to load notes
         loadNotes = function (isScrollUp = false) {
-            console.log("Loading notes",isLoading,page);
+            console.log("Loading notes", isLoading, page);
             if (isLoading) return;
 
             isLoading = true;
@@ -1495,8 +1501,8 @@
                     }
 
                     if (!isScrollUp) {
-                    page++;
-                }
+                        page++;
+                    }
 
                     // Scroll position handling after load
                     if (isScrollUp) {
@@ -1557,7 +1563,7 @@
                                 'notes_text': text,
                                 'notes_file': null,
                                 'notes_order_id': order_id,
-                                'temp_order_id':null,
+                                'temp_order_id': null,
                                 'notes_type': 1
 
                             },
@@ -1591,7 +1597,7 @@
                             'notes_file': null,
                             'notes_order_id': order_id,
                             'notes_type': 1,
-                            'temp_order_id':null,
+                            'temp_order_id': null,
 
                         },
                         headers: {
@@ -1719,7 +1725,7 @@
         formData.append('notes_file[]', imageFile);
         formData.append('notes_type', 4);
         formData.append('notes_order_id', orderId);
-        formData.append('temp_order_id',null);
+        formData.append('temp_order_id', null);
 
 
         $.ajax({
@@ -1782,7 +1788,7 @@
     // };
 
 
-    
+
 
 
     // // Add event listeners
@@ -1801,13 +1807,13 @@
     // });
 
     // // Audio recording
-   
+
     // const sendButton = $('#audio_stop');
     // $('#audio_stop').on('click', uploadRecording);
-   
+
 
     // function startRecording() {
-      
+
 
     //     navigator.mediaDevices.getUserMedia({ audio: true })
     //         .then(function (stream) {
@@ -1822,7 +1828,7 @@
 
     //             recorder.onstop = function () {
     //                 console.log("Resetting",isResetting,'ShouldUploaded',shouldUpload)
-    //                 if (!isResetting && shouldUpload) { 
+    //                 if (!isResetting && shouldUpload) {
     //                     // Create an audio blob
     //                     audioBlob = new Blob(audioChunks, { type: "audio/wav" });
     //                     console.log("Audio Blob Created:", audioBlob);
@@ -1881,8 +1887,8 @@
     //     recorder = null;
     //     location.reload();
     //     isRecording = false;
-           
-      
+
+
 
     //     if (audio_stream) {
     //         const tracks = audio_stream.getTracks();
@@ -1890,170 +1896,170 @@
     //         console.log("Audio stream stopped.");
     //     }
 
-        
+
     //     $('#audio_box').css("display", "none");
-        
+
     // }
 
-// Recording working code
+    // Recording working code
     const recordButton = document.getElementById("startRec");
-const recordStopButton = document.getElementById("audio_stop");
-const recordSendButton = document.getElementById("audio_send");
-const sendButton = $('#audio_stop');
-let isRecording = false;
-let recorder, audio_stream, audioBlob;
-let shouldUpload = true;
-let isResetting = false;
+    const recordStopButton = document.getElementById("audio_stop");
+    const recordSendButton = document.getElementById("audio_send");
+    const sendButton = $('#audio_stop');
+    let isRecording = false;
+    let recorder, audio_stream, audioBlob;
+    let shouldUpload = true;
+    let isResetting = false;
 
-// Start recording
-const startRecord = () => {
-    if (!isRecording) {
-        isRecording = true;
-        shouldUpload = true;
-        isResetting = false;
-        console.log("Recording started...");
-        $('#audio_box').css("display", "flex");
-        startRecording();
-    }
-};
+    // Start recording
+    const startRecord = () => {
+        if (!isRecording) {
+            isRecording = true;
+            shouldUpload = true;
+            isResetting = false;
+            console.log("Recording started...");
+            $('#audio_box').css("display", "flex");
+            startRecording();
+        }
+    };
 
-// Stop recording and send
-const stopRecord = () => {
-    if (isRecording && !isResetting) {
-        isRecording = false;
-        console.log("Recording stopped. Sending audio...");
-        $('#audio_box').css("display", "none");
-        stopRecording();
-    }
-};
+    // Stop recording and send
+    const stopRecord = () => {
+        if (isRecording && !isResetting) {
+            isRecording = false;
+            console.log("Recording stopped. Sending audio...");
+            $('#audio_box').css("display", "none");
+            stopRecording();
+        }
+    };
 
-// Add event listeners
-recordButton.addEventListener("mousedown", startRecord);
-recordStopButton.addEventListener("mousedown", stopRecord);
+    // Add event listeners
+    recordButton.addEventListener("mousedown", startRecord);
+    recordStopButton.addEventListener("mousedown", stopRecord);
 
-// Remove the click event listener for upload from the stop button
-$('#audio_stop').off('click', uploadRecording);
-// Add it with a condition
-$('#audio_stop').on('click', function() {
-    if (!isResetting) {
-        uploadRecording();
-    }
-});
+    // Remove the click event listener for upload from the stop button
+    $('#audio_stop').off('click', uploadRecording);
+    // Add it with a condition
+    $('#audio_stop').on('click', function () {
+        if (!isResetting) {
+            uploadRecording();
+        }
+    });
 
-// Add reset event listener
-recordSendButton.addEventListener("click", function(e) {
-    e.preventDefault();
-    e.stopPropagation();  // Prevent event bubbling
-    isResetting = true;
-    resetRecording();
-});
+    // Add reset event listener
+    recordSendButton.addEventListener("click", function (e) {
+        e.preventDefault();
+        e.stopPropagation();  // Prevent event bubbling
+        isResetting = true;
+        resetRecording();
+    });
 
-function startRecording() {
-    navigator.mediaDevices.getUserMedia({ audio: true })
-        .then(function (stream) {
-            audio_stream = stream;
-            recorder = new MediaRecorder(stream);
-            let audioChunks = [];
+    function startRecording() {
+        navigator.mediaDevices.getUserMedia({ audio: true })
+            .then(function (stream) {
+                audio_stream = stream;
+                recorder = new MediaRecorder(stream);
+                let audioChunks = [];
 
-            recorder.ondataavailable = function (e) {
-                if (!isResetting) {
-                    audioChunks.push(e.data);
-                }
-            };
-
-            recorder.onstop = function () {
-                console.log("Recorder stopped. isResetting:", isResetting);
-                
-                if (!isResetting && shouldUpload) {
-                    audioBlob = new Blob(audioChunks, { type: "audio/wav" });
-                    console.log("Audio Blob Created:", audioBlob);
-
-                    if (audioBlob.size > 0) {
-                        const url = URL.createObjectURL(audioBlob);
-                        var preview = document.getElementById('audio-playback');
-                        preview.src = url;
-                        $("#audioPlaybackContainer").removeClass("d-none");
-                        preview.load();
-                        
-                        $('#audio_stop').data('audioBlob', audioBlob);
-                        
-                        sendButton.audioBlob = audioBlob; 
-                        uploadRecording();
-                    } else {
-                        console.error("Audio Blob is empty. Recording may have failed.");
+                recorder.ondataavailable = function (e) {
+                    if (!isResetting) {
+                        audioChunks.push(e.data);
                     }
-                }
-                audioChunks = [];  // Clear the chunks after processing
-            };
+                };
 
-            recorder.start();
+                recorder.onstop = function () {
+                    console.log("Recorder stopped. isResetting:", isResetting);
 
-            timeout_status = setTimeout(function () {
-                if (!isResetting) {
-                    console.log("5 min timeout");
-                    stopRecording();
-                }
-            }, 300000);
-        });
-}
+                    if (!isResetting && shouldUpload) {
+                        audioBlob = new Blob(audioChunks, { type: "audio/wav" });
+                        console.log("Audio Blob Created:", audioBlob);
 
-function stopRecording() {
-    if (recorder && recorder.state === "recording") {
-        recorder.stop();
-    }
-    if (audio_stream) {
-        audio_stream.getAudioTracks().forEach(track => track.stop());
-    }
-    $('#audio_box').css("display", "none");
-}
+                        if (audioBlob.size > 0) {
+                            const url = URL.createObjectURL(audioBlob);
+                            var preview = document.getElementById('audio-playback');
+                            preview.src = url;
+                            $("#audioPlaybackContainer").removeClass("d-none");
+                            preview.load();
 
-function resetRecording() {
-    console.log("Reset initiated");
-    isResetting = true;
-    shouldUpload = false;
-    
-    // Stop any ongoing recording
-    if (recorder && recorder.state === "recording") {
-        recorder.stop();
+                            $('#audio_stop').data('audioBlob', audioBlob);
+
+                            sendButton.audioBlob = audioBlob;
+                            uploadRecording();
+                        } else {
+                            console.error("Audio Blob is empty. Recording may have failed.");
+                        }
+                    }
+                    audioChunks = [];  // Clear the chunks after processing
+                };
+
+                recorder.start();
+
+                timeout_status = setTimeout(function () {
+                    if (!isResetting) {
+                        console.log("5 min timeout");
+                        stopRecording();
+                    }
+                }, 300000);
+            });
     }
-    
-    // Stop and clear the audio stream
-    if (audio_stream) {
-        audio_stream.getAudioTracks().forEach(track => track.stop());
+
+    function stopRecording() {
+        if (recorder && recorder.state === "recording") {
+            recorder.stop();
+        }
+        if (audio_stream) {
+            audio_stream.getAudioTracks().forEach(track => track.stop());
+        }
+        $('#audio_box').css("display", "none");
     }
-    
-    // Clear all data
-    audioBlob = null;
-    audio_stream = null;
-    recorder = null;
-    isRecording = false;
-    
-    // Reset UI
-    $('#audio_box').css("display", "none");
-    $("#audioPlaybackContainer").addClass("d-none");
-    
-    // Clear audio preview
-    var preview = document.getElementById('audio-playback');
-    if (preview) {
-        preview.src = '';
+
+    function resetRecording() {
+        console.log("Reset initiated");
+        isResetting = true;
+        shouldUpload = false;
+
+        // Stop any ongoing recording
+        if (recorder && recorder.state === "recording") {
+            recorder.stop();
+        }
+
+        // Stop and clear the audio stream
+        if (audio_stream) {
+            audio_stream.getAudioTracks().forEach(track => track.stop());
+        }
+
+        // Clear all data
+        audioBlob = null;
+        audio_stream = null;
+        recorder = null;
+        isRecording = false;
+
+        // Reset UI
+        $('#audio_box').css("display", "none");
+        $("#audioPlaybackContainer").addClass("d-none");
+
+        // Clear audio preview
+        var preview = document.getElementById('audio-playback');
+        if (preview) {
+            preview.src = '';
+        }
+
+        // Remove any stored audio blob
+        $('#audio_stop').removeData('audioBlob');
+
+        console.log("Reset completed");
+
+        // Reset flags after a short delay to ensure all operations are complete
+        setTimeout(() => {
+            isResetting = false;
+            shouldUpload = true;
+        }, 100);
     }
-    
-    // Remove any stored audio blob
-    $('#audio_stop').removeData('audioBlob');
-    
-    console.log("Reset completed");
-    
-    // Reset flags after a short delay to ensure all operations are complete
-    setTimeout(() => {
-        isResetting = false;
-        shouldUpload = true;
-    }, 100);
-}
-  
-  
+
+
 
     function uploadRecording() {
-       console.log("Send Button Blob:", sendButton.audioBlob);
+        console.log("Send Button Blob:", sendButton.audioBlob);
 
         if (!sendButton.audioBlob) {
             alert("No audio file available for upload!");
@@ -2067,7 +2073,7 @@ function resetRecording() {
         formData.append('notes_file[]', audioFile);
         formData.append('notes_type', 3);
         formData.append('notes_order_id', orderId);
-        formData.append('temp_order_id',orderId);
+        formData.append('temp_order_id', orderId);
         $.ajax({
             url: "{{ route('notes_add') }}",
             type: 'POST',
@@ -2112,7 +2118,7 @@ function resetRecording() {
     function handleFileUpload(event) {
         const file = event.target.files;
         const orderId = $('#order_id').val();
-     
+
         if (file) {
             const formData = new FormData();
             formData.append('notes_text', '');
@@ -2121,7 +2127,7 @@ function resetRecording() {
                 formData.append('notes_type', 2);
             }
             formData.append('notes_order_id', orderId);
-            formData.append('temp_order_id','');
+            formData.append('temp_order_id', '');
             $.ajax({
                 url: "{{ route('notes_add') }}",
                 type: 'POST',

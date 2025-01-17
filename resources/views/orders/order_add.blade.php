@@ -28,7 +28,7 @@
                             <div class="card-body">
                                 <div class="row">
                                     <h2 class="font-bold">
-                                    <span id="form_title">{{ $type == 'order' ? 'Order Form -' : ($type == 'repairing' ? 'Repairing Form -' : '') }}</span> 
+                                    <span id="form_title">{{ $type == 'order' ? 'Order Form -' : ($type == 'repairing' ? 'Repairing Form -' : '') }}</span>
                                                                             #{{$order_number}}</h2>
                                     <div class="col-sm-6">
                                         <input type="hidden" id="order_number" name="order_number"
@@ -222,7 +222,7 @@
                                 </div>
                                 <div class="row mt-3">
                                     <label for="customer_address" class="form-label">Notes
-                                         
+
                                     </label>
                                     <textarea type="text" placeholder="Enter Notes" id="order_remarks"
                                         class="form-control" form></textarea>
@@ -269,7 +269,7 @@
 
             </div>
         </div>
-        
+
         <input type="hidden" name="" id="temp_order_id" value="{{session('temp_order_id')}}">
 
         <div class="modal modal-blur fade" id="record_audio" tabindex="-2" role="dialog" aria-hidden="true">
@@ -382,7 +382,7 @@
                                 </svg> -->
                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M13.5616 10.4384L9.81389 14.186M10.349 15.1085L10.5514 15.458C12.466 18.7651 13.4233 20.4187 14.7092 20.2877C15.9952 20.1567 16.5994 18.3441 17.8078 14.7188L19.5413 9.51837C20.6451 6.20679 21.1971 4.551 20.323 3.67697C19.449 2.80293 17.7932 3.35487 14.4816 4.45873L9.28119 6.1922C5.65593 7.40063 3.8433 8.00484 3.7123 9.29076C3.5813 10.5767 5.23485 11.534 8.54196 13.4486L8.89146 13.651C9.35038 13.9167 9.57983 14.0495 9.76516 14.2348C9.95048 14.4202 10.0833 14.6496 10.349 15.1085Z" stroke="black" stroke-width="1.6" stroke-linecap="round"/>
-                                </svg>  
+                                </svg>
                             </button>
                             <div class="btn btn-ghost-secondary btn-icon"></div>
                         </div>
@@ -392,7 +392,9 @@
         </div>
 
         <div class="note-sidebar" id="note_sheet">
-
+        <div class="note-loader">
+        <img src="{{ asset('static/sonic-large.svg')}}"  alt="logo" width="120" height="40" />
+        </div>
             <div class="note-header">
                 <h5 class="mb-0">Notes</h5>
                 <button class="btn btn-tabler btn-ghost-secondary note-close-btn ms-auto btn-icon"
@@ -407,7 +409,8 @@
                 </button>
             </div>
             <div id="notes-container"></div>
-            <div class="space-y-2 scrollable h-100 py-2 px-1" id="notes_body"></div>
+            <div class="space-y-2 scrollable h-100 position-relative py-2 px-1" id="notes_body">
+            </div>
             <div class="note-footer">
             <div class="audio-box" id="audio_box">
                     <div class="visualizer">
@@ -535,7 +538,7 @@
             addFilesToInput(e.dataTransfer.files);
         });
         dropzone[0].addEventListener("click", function (e) {
-       
+
             inputFile[0].click();
         });
 
@@ -604,7 +607,7 @@
 
 
 
-    
+
 </script>
 <script>
 
@@ -646,7 +649,7 @@
             $("#order_date").datepicker("setDate", today);
         });
 
-        const orderType = "{{ $type  ?: 'order' }}"; 
+        const orderType = "{{ $type  ?: 'order' }}";
         const paymentDiv = $('#payment');
 
         if (orderType === 'order') {
@@ -658,7 +661,7 @@
         $('#order_type').on('change', function () {
             console.log(this.value);
             const paymentDiv = $('#payment');
-            const formTitle = $('#form_title'); 
+            const formTitle = $('#form_title');
             if (this.value == 'order') {
                 formTitle.text('Order Form');
                 paymentDiv.removeClass('d-none');
@@ -688,7 +691,7 @@
             var payment_booking = $('#payment_booking').val();
             var temp_order_id   = $('#temp_order_id').val();
             var itemImages = $('#item_image_id')[0].files;
-            
+
             var formattedOrderDate = formatDate(orderDate);
             if (orderType == "reparing") {
                 orderType = 2;
@@ -1260,7 +1263,7 @@
             const notesBody = $('#notes_body');
             const order_id = $('#order_id').val();
             const temp_order_id = $('#temp_order_id').val();
-            
+
             console.log("Order ID: " + order_id);
             notesBody.html('');
             const scrollTopBeforeLoad = notesBody.scrollTop();
@@ -1653,13 +1656,13 @@
     // });
 
     // // Audio recording
-   
+
     // const sendButton = $('#audio_stop');
     // $('#audio_stop').on('click', uploadRecording);
-   
+
 
     // function startRecording() {
-      
+
 
     //     navigator.mediaDevices.getUserMedia({ audio: true })
     //         .then(function (stream) {
@@ -1675,9 +1678,9 @@
     //             recorder.onstop = function () {
     //                 // Create an audio blob
     //                 console.log("Resetting",isResetting,'ShouldUploaded',shouldUpload)
-                   
-    //                 if (!isResetting && shouldUpload) { 
-                    
+
+    //                 if (!isResetting && shouldUpload) {
+
     //                     audioBlob = new Blob(audioChunks, { type: "audio/wav" });
     //                     console.log("Audio Blob Created:", audioBlob);
     //                     console.log("Audio Blob Size:", audioBlob.size);
@@ -1698,7 +1701,7 @@
     //                     preview.load();
     //                     console.log("Audio recording ready for playback.");
     //                     if (audioBlob.size > 0) {
-    //                         sendButton.audioBlob = audioBlob; 
+    //                         sendButton.audioBlob = audioBlob;
     //                         uploadRecording();
     //                         console.log("Audio Blob assigned to sendButton:", sendButton.audioBlob);
     //                     } else {
@@ -1735,8 +1738,8 @@
     //     recorder = null;
     //     location.reload();
     //     isRecording = false;
-           
-      
+
+
 
     //     if (audio_stream) {
     //         const tracks = audio_stream.getTracks();
@@ -1744,9 +1747,9 @@
     //         console.log("Audio stream stopped.");
     //     }
 
-        
+
     //     $('#audio_box').css("display", "none");
-        
+
     // }
 
 // Recording working code
@@ -1818,7 +1821,7 @@ function startRecording() {
 
             recorder.onstop = function () {
                 console.log("Recorder stopped. isResetting:", isResetting);
-                
+
                 if (!isResetting && shouldUpload) {
                     audioBlob = new Blob(audioChunks, { type: "audio/wav" });
                     console.log("Audio Blob Created:", audioBlob);
@@ -1829,10 +1832,10 @@ function startRecording() {
                         preview.src = url;
                         $("#audioPlaybackContainer").removeClass("d-none");
                         preview.load();
-                        
+
                         $('#audio_stop').data('audioBlob', audioBlob);
-                        
-                        sendButton.audioBlob = audioBlob; 
+
+                        sendButton.audioBlob = audioBlob;
                         uploadRecording();
                     } else {
                         console.error("Audio Blob is empty. Recording may have failed.");
@@ -1866,48 +1869,48 @@ function resetRecording() {
     console.log("Reset initiated");
     isResetting = true;
     shouldUpload = false;
-    
+
     // Stop any ongoing recording
     if (recorder && recorder.state === "recording") {
         recorder.stop();
     }
-    
+
     // Stop and clear the audio stream
     if (audio_stream) {
         audio_stream.getAudioTracks().forEach(track => track.stop());
     }
-    
+
     // Clear all data
     audioBlob = null;
     audio_stream = null;
     recorder = null;
     isRecording = false;
-    
+
     // Reset UI
     $('#audio_box').css("display", "none");
     $("#audioPlaybackContainer").addClass("d-none");
-    
+
     // Clear audio preview
     var preview = document.getElementById('audio-playback');
     if (preview) {
         preview.src = '';
     }
-    
+
     // Remove any stored audio blob
     $('#audio_stop').removeData('audioBlob');
-    
+
     console.log("Reset completed");
-    
+
     // Reset flags after a short delay to ensure all operations are complete
     setTimeout(() => {
         isResetting = false;
         shouldUpload = true;
     }, 100);
 }
-  
+
 
     function uploadRecording() {
-      
+
        console.log("Send Button Blob:", sendButton.audioBlob);
 
         if (!sendButton.audioBlob) {
@@ -1967,7 +1970,7 @@ function resetRecording() {
 
     function handleFileUpload(event) {
         const orderId = $('#temp_order_id').val();
-     
+
         const file = event.target.files;
         if (file) {
             const formData = new FormData();
@@ -1975,7 +1978,7 @@ function resetRecording() {
             for (var i = 0; i < file.length; i++) {
                 formData.append('notes_file[]', file[i]);
                 formData.append('notes_type', 2);
-                
+
             }
             formData.append('notes_order_id', '');
             formData.append('temp_order_id',orderId);
