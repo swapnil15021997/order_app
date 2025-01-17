@@ -711,39 +711,13 @@
     }
 }
 
-.fixed-footer {
+.fixed-footer{
     position: fixed;
     bottom: 0;
     left: 0;
     width: 100%;
 }
 .action-item {
-    cursor: pointer;
-    margin-right: 5px;
-}
-
-.loader-screeen {
-    display: none;
-}
-
-body.loading{
-    width: 100%;
-    height: 100dvh;
-    overflow: hidden;
-}
-
-body.loading .loader-screeen {
-    position: fixed;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.8);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.loader-screeen img {
-    width: 320px;
-    height: 90px;
+cursor: pointer;
+margin-right: 5px;
 }
