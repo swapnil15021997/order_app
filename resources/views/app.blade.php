@@ -160,6 +160,10 @@
         </div>
     </div>
 
+    <div class="loader-screeen">
+        <img src="{{ asset('static/sonic-large.svg')}}"  alt="logo" class="navbar-brand-image">
+    </div>
+
         <!-- new qr finish  -->
 
 
