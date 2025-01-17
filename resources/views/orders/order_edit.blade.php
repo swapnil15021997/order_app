@@ -635,6 +635,11 @@
             addFilesToInput(e.dataTransfer.files);
         });
 
+        dropzone[0].addEventListener("click", function (e) {
+       
+            inputFile[0].click();
+        });
+
         inputFile[0].addEventListener("change", function () {
             handleFiles(inputFile[0].files);
         });

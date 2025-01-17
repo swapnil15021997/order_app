@@ -534,6 +534,10 @@
             handleFiles(e.dataTransfer.files);
             addFilesToInput(e.dataTransfer.files);
         });
+        dropzone[0].addEventListener("click", function (e) {
+       
+            inputFile[0].click();
+        });
 
         inputFile[0].addEventListener("change", function () {
             handleFiles(inputFile[0].files);
@@ -597,6 +601,10 @@
             $('.dz-default').show();
         }
     }
+
+
+
+    
 </script>
 <script>
 
@@ -680,7 +688,7 @@
             var payment_booking = $('#payment_booking').val();
             var temp_order_id   = $('#temp_order_id').val();
             var itemImages = $('#item_image_id')[0].files;
-            console.log("ItemImages: " + itemImages, itemImages.length)
+            
             var formattedOrderDate = formatDate(orderDate);
             if (orderType == "reparing") {
                 orderType = 2;
