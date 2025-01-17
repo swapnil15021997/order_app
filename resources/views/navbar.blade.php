@@ -195,6 +195,7 @@
 
 <script>
     function logout() {
+        alert();
         var csrfToken = $('meta[name="csrf-token"]').attr('content');
 
         $.ajax({
@@ -205,8 +206,8 @@
 
             },
             success: function (response) {
-                if (response.success) {
-                    console.log(response);
+                console.log(response);
+                if (response.status==200) {
                     location.href = "{{ route('login') }}";
                 }
             }

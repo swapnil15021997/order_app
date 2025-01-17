@@ -425,7 +425,7 @@
 
             },
             success: function (response) {
-                if (response.success) {
+                if (response.status==200) {
                     console.log(response);
                     location.href = "{{ route('login') }}";
                 }
