@@ -23,23 +23,23 @@
                             </a>
                         </li>
                         @if (in_array(5, $user_permissions))
-                            <li class="nav-item {{ $activePage === 'orders' ? 'active' : '' }}">
-                                <a class="nav-link" href="{{ route('order-master') }}">
-                                    <span
-                                        class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/checkbox -->
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                                            fill="currentColor" class="bi bi-receipt" viewBox="0 0 16 16">
-                                            <path
-                                                d="M1.92.506a.5.5 0 0 1 .434.14L3 1.293l.646-.647a.5.5 0 0 1 .708 0L5 1.293l.646-.647a.5.5 0 0 1 .708 0L7 1.293l.646-.647a.5.5 0 0 1 .708 0L9 1.293l.646-.647a.5.5 0 0 1 .708 0l.646.647.646-.647a.5.5 0 0 1 .708 0l.646.647.646-.647a.5.5 0 0 1 .801.13l.5 1A.5.5 0 0 1 15 2v12a.5.5 0 0 1-.053.224l-.5 1a.5.5 0 0 1-.8.13L13 14.707l-.646.647a.5.5 0 0 1-.708 0L11 14.707l-.646.647a.5.5 0 0 1-.708 0L9 14.707l-.646.647a.5.5 0 0 1-.708 0L7 14.707l-.646.647a.5.5 0 0 1-.708 0L5 14.707l-.646.647a.5.5 0 0 1-.708 0L3 14.707l-.646.647a.5.5 0 0 1-.801-.13l-.5-1A.5.5 0 0 1 1 14V2a.5.5 0 0 1 .053-.224l.5-1a.5.5 0 0 1 .367-.27m.217 1.338L2 2.118v11.764l.137.274.51-.51a.5.5 0 0 1 .707 0l.646.647.646-.646a.5.5 0 0 1 .708 0l.646.646.646-.646a.5.5 0 0 1 .708 0l.646.646.646-.646a.5.5 0 0 1 .708 0l.646.646.646-.646a.5.5 0 0 1 .708 0l.646.646.646-.646a.5.5 0 0 1 .708 0l.509.509.137-.274V2.118l-.137-.274-.51.51a.5.5 0 0 1-.707 0L12 1.707l-.646.647a.5.5 0 0 1-.708 0L10 1.707l-.646.647a.5.5 0 0 1-.708 0L8 1.707l-.646.647a.5.5 0 0 1-.708 0L6 1.707l-.646.647a.5.5 0 0 1-.708 0L4 1.707l-.646.647a.5.5 0 0 1-.708 0z" />
-                                            <path
-                                                d="M3 4.5a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5m8-6a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5" />
-                                        </svg>
-                                    </span>
-                                    <span class="nav-link-title">
-                                        Orders
-                                    </span>
-                                </a>
-                            </li>
+                        <li class="nav-item {{ $activePage === 'orders' ? 'active' : '' }}">
+                            <a class="nav-link" href="{{ route('order-master') }}">
+                                <span
+                                    class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/checkbox -->
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                        class="bi bi-receipt" viewBox="0 0 16 16">
+                                        <path
+                                            d="M1.92.506a.5.5 0 0 1 .434.14L3 1.293l.646-.647a.5.5 0 0 1 .708 0L5 1.293l.646-.647a.5.5 0 0 1 .708 0L7 1.293l.646-.647a.5.5 0 0 1 .708 0L9 1.293l.646-.647a.5.5 0 0 1 .708 0l.646.647.646-.647a.5.5 0 0 1 .708 0l.646.647.646-.647a.5.5 0 0 1 .801.13l.5 1A.5.5 0 0 1 15 2v12a.5.5 0 0 1-.053.224l-.5 1a.5.5 0 0 1-.8.13L13 14.707l-.646.647a.5.5 0 0 1-.708 0L11 14.707l-.646.647a.5.5 0 0 1-.708 0L9 14.707l-.646.647a.5.5 0 0 1-.708 0L7 14.707l-.646.647a.5.5 0 0 1-.708 0L5 14.707l-.646.647a.5.5 0 0 1-.708 0L3 14.707l-.646.647a.5.5 0 0 1-.801-.13l-.5-1A.5.5 0 0 1 1 14V2a.5.5 0 0 1 .053-.224l.5-1a.5.5 0 0 1 .367-.27m.217 1.338L2 2.118v11.764l.137.274.51-.51a.5.5 0 0 1 .707 0l.646.647.646-.646a.5.5 0 0 1 .708 0l.646.646.646-.646a.5.5 0 0 1 .708 0l.646.646.646-.646a.5.5 0 0 1 .708 0l.646.646.646-.646a.5.5 0 0 1 .708 0l.646.646.646-.646a.5.5 0 0 1 .708 0l.509.509.137-.274V2.118l-.137-.274-.51.51a.5.5 0 0 1-.707 0L12 1.707l-.646.647a.5.5 0 0 1-.708 0L10 1.707l-.646.647a.5.5 0 0 1-.708 0L8 1.707l-.646.647a.5.5 0 0 1-.708 0L6 1.707l-.646.647a.5.5 0 0 1-.708 0L4 1.707l-.646.647a.5.5 0 0 1-.708 0z" />
+                                        <path
+                                            d="M3 4.5a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5m8-6a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5" />
+                                    </svg>
+                                </span>
+                                <span class="nav-link-title">
+                                    Orders
+                                </span>
+                            </a>
+                        </li>
                         @endif
                     </ul>
                 </div>
@@ -48,20 +48,19 @@
     </div> --}}
     <div class="navbar navbar-expand-md d-print-none">
         <div class="container-xl">
-           
-          
+
+
             <h1 class="navbar-brand navbar-brand-autodark d-none-navbar-horizontal pe-0 pe-md-3">
                 <a href="{{ route('dashboard') }}">
                     <img src="{{ asset('static/sonic-large.svg') }}" width="110" height="35" alt="Tabler"
-                    class="navbar-brand-image">
+                        class="navbar-brand-image">
                 </a>
             </h1>
             <div class="navbar-nav flex-row order-md-last">
                 <div class="d-md-none d-flex align-items-center ps-3">
                     <button class="btn btn-ghost-primary btn-icon" id="start-scann" style="max-height:40px;">
-                        <svg fill="currentColor" version="1.1" id="Capa_1" width="24"
-                            xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-                            viewBox="0 0 64 64" xml:space="preserve">
+                        <svg fill="currentColor" version="1.1" id="Capa_1" width="24" xmlns="http://www.w3.org/2000/svg"
+                            xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 64 64" xml:space="preserve">
                             <g>
                                 <rect x="38" y="23" width="2" height="5" />
                                 <rect x="42" y="23" width="2" height="5" />
@@ -80,9 +79,12 @@
                                     d="M4,5v12c0,0.552,0.448,1,1,1h12c0.552,0,1-0.448,1-1V5c0-0.552-0.448-1-1-1H5C4.448,4,4,4.448,4,5z M6,6h10v10H6V6z" />
                                 <path
                                     d="M13,8H9C8.448,8,8,8.448,8,9v4c0,0.552,0.448,1,1,1h4c0.552,0,1-0.448,1-1V9C14,8.448,13.552,8,13,8z M12,12h-2v-2h2V12z" />
-                                <path d="M47,18h12c0.552,0,1-0.448,1-1V5c0-0.552-0.448-1-1-1H47c-0.552,0-1,0.448-1,1v12C46,17.552,46.448,18,47,18z M48,6h10v10H48V6z" />
-                                <path d="M55,8h-4c-0.552,0-1,0.448-1,1v4c0,0.552,0.448,1,1,1h4c0.552,0,1-0.448,1-1V9C56,8.448,55.552,8,55,8z M54,12h-2v-2h2V12z" />
-                                <path d="M17,46H5c-0.552,0-1,0.448-1,1v12c0,0.552,0.448,1,1,1h12c0.552,0,1-0.448,1-1V47C18,46.448,17.552,46,17,46z M16,58H6V48h10V58z" />
+                                <path
+                                    d="M47,18h12c0.552,0,1-0.448,1-1V5c0-0.552-0.448-1-1-1H47c-0.552,0-1,0.448-1,1v12C46,17.552,46.448,18,47,18z M48,6h10v10H48V6z" />
+                                <path
+                                    d="M55,8h-4c-0.552,0-1,0.448-1,1v4c0,0.552,0.448,1,1,1h4c0.552,0,1-0.448,1-1V9C56,8.448,55.552,8,55,8z M54,12h-2v-2h2V12z" />
+                                <path
+                                    d="M17,46H5c-0.552,0-1,0.448-1,1v12c0,0.552,0.448,1,1,1h12c0.552,0,1-0.448,1-1V47C18,46.448,17.552,46,17,46z M16,58H6V48h10V58z" />
                                 <path
                                     d="M9,56h4c0.552,0,1-0.448,1-1v-4c0-0.552-0.448-1-1-1H9c-0.552,0-1,0.448-1,1v4C8,55.552,8.448,56,9,56z M10,52h2v2h-2V52z" />
                                 <path d="M44,19h-7V7h-2v13c0,0.552,0.448,1,1,1h8V19z" />
@@ -145,8 +147,8 @@
                     <a href="#" class="nav-link d-flex lh-1 text-reset p-0" data-bs-toggle="dropdown"
                         aria-label="Open user menu">
                         <span class="avatar avatar-sm">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                                fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                class="bi bi-person-circle" viewBox="0 0 16 16">
                                 <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0" />
                                 <path fill-rule="evenodd"
                                     d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1" />
@@ -173,8 +175,8 @@
 
                     <div class="dropdown-menu dropdown-menu-end">
                         @foreach ($user_branch as $branch)
-                            <a class="dropdown-item  @if ($branch['branch_id'] == $login['user_active_branch']) active @endif" href="#"
-                                onclick="changeBranch('{{ $branch['branch_id'] }}')">
+                            <a class="dropdown-item  @if ($branch['branch_id'] == $login['user_active_branch']) active @endif"
+                                href="#" onclick="changeBranch('{{ $branch['branch_id'] }}')">
                                 {{ $branch['branch_name'] }}
                             </a>
                         @endforeach
@@ -215,8 +217,8 @@
                             <a class="dropdown-item" href="{{ route('order-master') }}">
                                 <span
                                     class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/checkbox -->
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                                        fill="currentColor" class="icon" viewBox="0 0 16 16">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                        class="icon" viewBox="0 0 16 16">
                                         <path
                                             d="M1.92.506a.5.5 0 0 1 .434.14L3 1.293l.646-.647a.5.5 0 0 1 .708 0L5 1.293l.646-.647a.5.5 0 0 1 .708 0L7 1.293l.646-.647a.5.5 0 0 1 .708 0L9 1.293l.646-.647a.5.5 0 0 1 .708 0l.646.647.646-.647a.5.5 0 0 1 .708 0l.646.647.646-.647a.5.5 0 0 1 .801.13l.5 1A.5.5 0 0 1 15 2v12a.5.5 0 0 1-.053.224l-.5 1a.5.5 0 0 1-.8.13L13 14.707l-.646.647a.5.5 0 0 1-.708 0L11 14.707l-.646.647a.5.5 0 0 1-.708 0L9 14.707l-.646.647a.5.5 0 0 1-.708 0L7 14.707l-.646.647a.5.5 0 0 1-.708 0L5 14.707l-.646.647a.5.5 0 0 1-.708 0L3 14.707l-.646.647a.5.5 0 0 1-.801-.13l-.5-1A.5.5 0 0 1 1 14V2a.5.5 0 0 1 .053-.224l.5-1a.5.5 0 0 1 .367-.27m.217 1.338L2 2.118v11.764l.137.274.51-.51a.5.5 0 0 1 .707 0l.646.647.646-.646a.5.5 0 0 1 .708 0l.646.646.646-.646a.5.5 0 0 1 .708 0l.646.646.646-.646a.5.5 0 0 1 .708 0l.646.646.646-.646a.5.5 0 0 1 .708 0l.646.646.646-.646a.5.5 0 0 1 .708 0l.509.509.137-.274V2.118l-.137-.274-.51.51a.5.5 0 0 1-.707 0L12 1.707l-.646.647a.5.5 0 0 1-.708 0L10 1.707l-.646.647a.5.5 0 0 1-.708 0L8 1.707l-.646.647a.5.5 0 0 1-.708 0L6 1.707l-.646.647a.5.5 0 0 1-.708 0L4 1.707l-.646.647a.5.5 0 0 1-.708 0z" />
                                         <path
@@ -241,7 +243,7 @@
 <style>
     @media (max-width:768px) {
         .page-body {
-            margin-bottom: 0 !important;
+            margin-bottom: 5rem !important;
             margin-top: 1rem !important;
         }
     }
@@ -262,7 +264,7 @@
 
     let qrScanner = null;
     let html5QrCode = null;
-    domReady(function() {
+    domReady(function () {
 
         const videoElem = document.getElementById("videoElem");
         const startButton = document.getElementById("start-scann");
@@ -273,36 +275,36 @@
             // Show the video element
 
             document.getElementById("my-qr-reader").style.display = "block";
-           
+
             // Initialize QR scanner if not already created
             if (!qrScanner) {
                 qrScanner = new QrScanner(
                     videoElem,
                     onScanSuccess, {
-                        highlightScanRegion: true,
-                        highlightCodeOutline: true,
-                    }
+                    highlightScanRegion: true,
+                    highlightCodeOutline: true,
+                }
                 );
             }
 
             // Start scanning
-            qrScanner.start()  .then(() => {
+            qrScanner.start().then(() => {
                 console.log("QR Scanner started successfully");
             })
-            .catch((err) => {
-                console.error("Error starting QR scanner:", err);
-                alert("An error occurred while starting the QR scanner. Please try again." +err);
-            });
-          
+                .catch((err) => {
+                    console.error("Error starting QR scanner:", err);
+                    alert("An error occurred while starting the QR scanner. Please try again." + err);
+                });
+
         }
 
         function onScanSuccess(result) {
 
             const scannedText = result.data || result;
             alert(scannedText);
-            const [order_id,orderQrCode, orderStatus, orderNumber, orderDate] = scannedText.split('|');
-            create_order_array(order_id,orderQrCode, orderStatus, orderNumber,orderDate);
-             
+            const [order_id, orderQrCode, orderStatus, orderNumber, orderDate] = scannedText.split('|');
+            create_order_array(order_id, orderQrCode, orderStatus, orderNumber, orderDate);
+
         }
 
         function stopScanner() {
@@ -311,15 +313,15 @@
                 qrScanner.stop();
                 qrScanner.destroy();
             }
-            qrScanner=null;
+            qrScanner = null;
             document.getElementById("my-qr-reader").style.display = "none";
         }
 
         startButton.addEventListener("click", function () {
-            
+
             startScanner();
-            
-           
+
+
         });
 
 
@@ -340,7 +342,7 @@
 
 
 
-    domReady(function() {
+    domReady(function () {
         // Get DOM elements
         // const videoElem = document.getElementById("videoElem");
         // const startButton = document.getElementById("start-scann");
@@ -422,7 +424,7 @@
                 _token: csrfToken,
 
             },
-            success: function(response) {
+            success: function (response) {
                 if (response.success) {
                     console.log(response);
                     location.href = "{{ route('login') }}";
@@ -441,7 +443,7 @@
                 _token: csrfToken,
                 branch_id: branch_id,
             },
-            success: function(response) {
+            success: function (response) {
                 // Handle success
 
                 if (response.status == 200) {
@@ -455,7 +457,7 @@
                     showAlert('warning', response.message);
                 }
             },
-            error: function(xhr, status, error) {
+            error: function (xhr, status, error) {
                 // alert('An error occurred: ' + error);
                 showAlert('warning', error);
             }

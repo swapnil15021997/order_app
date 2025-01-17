@@ -17,12 +17,12 @@
         </div>
 
 
- 
-<!-- 
+
+<!--
         <div id="my-qr-reader"
-           
+
             style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1000; background: rgba(0, 0, 0, 0.8);">
-    
+
             <video id="videoElem" style="width: 100%; height: 100%; object-fit: cover;"></video>
             <div style="position:fixed; top: 1rem; right: 1rem; z-index: 1111;">
                 <button class="btn btn-secondary btn-icon" id="close_qr_code">
@@ -38,12 +38,12 @@
                     </svg>
                 </button>
             </div>
-            
+
         </div> -->
 
         <!-- <div id="my-qr-reader" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1000; background: rgba(0, 0, 0, 0.8);">
-    
-            
+
+
             <div style="display: flex; flex-direction: column; height: 100%;">
 
                 <div id="scanner-container" style="flex: 1; position: relative; background: black; color: white; overflow: hidden;">
@@ -69,7 +69,7 @@
     <script src="{{ asset('libs/jsvectormap/maps/world-merc.js')}}" defer></script>
 
     <!-- <script src="{{ asset('libs/dropzone/dist/dropzone-min.js')}}" defer></script> -->
-    
+
     <!-- Tabler Core -->
     <script src="{{ asset('js/tabler.min.js')}}" defer></script>
     <script src="{{ asset('js/demo.min.js')}}" defer></script>
@@ -82,7 +82,7 @@
     <script defer src="https://cdnjs.cloudflare.com/ajax/libs/qr-scanner/1.4.2/qr-scanner.umd.min.js"></script>
     <script defer src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
 
-    
+
 
         <!-- new qr  -->
 
@@ -197,14 +197,14 @@
         <style>
             @media (max-width:768px) {
                 .page-body {
-                    margin-bottom: 0 !important;
+                    margin-bottom: 5rem !important;
                     margin-top: 1rem !important;
                 }
             }
         </style>
         <script>
-            
-        
+
+
         domReady(function () {
             // Get DOM elements
             const videoElem   = document.getElementById("videoElem");
@@ -215,13 +215,13 @@
 
             function onScanSuccess(result) {
             // function onScanSuccess(decodedText, decodedResult) {
-    
+
             //     // Display the result
                 const scannedText = result.data || result;
                 // If the result is a URL, open it in a new tab
                 // if (scannedText.startsWith('http')) {
                 //     window.open(scannedText, '_blank');
-                    
+
                 // }
 
                 const [order_id,orderQrCode, orderStatus, orderNumber, orderDate] = scannedText.split('|');
@@ -232,7 +232,7 @@
 
             function startScanner() {
                 // create_order_array(3,7656545, 1, 5765654,6/34/3432)
-            
+
                 // Show the video element
 
                 document.getElementById("my-qr-reader").style.display = "block";
@@ -271,7 +271,7 @@
 
         });
         function stopScanner() {
-           
+
             if (qrScanner) {
                 qrScanner.stop();
                 qrScanner.destroy();
@@ -290,20 +290,20 @@
             let my_ord;
             let buttonHtml = '';
             var csrfToken = $('meta[name="csrf-token"]').attr('content');
-            
+
             if (isScanning) {
                 alert("Please wait until the current scan is complete.");
-                return; 
-            } 
+                return;
+            }
             isScanning = true;
-            
+
             if (scanned.includes(order_id)) {
                 isScanning = false;
                 alert("This order is already approved.");
-                return; 
+                return;
             }
 
-            
+
             $.ajax({
                 url: "{{ route('order_details') }}",  // Adjust the route as needed
                 type: 'POST',
@@ -314,15 +314,15 @@
                 },
                 success: function (response) {
                     console.log(response);
-                        
+
                     if (response.data.transactions && response.data.transactions.length > 0) {
 
                         let lastTransaction = response.data.transactions[response.data.transactions.length - 1];
-                        
+
 
                         let isAnyOrderApproved = approve_array.length > 0;
-                        let isAnyOrderTransferred = transfer_array.length > 0;  
-                        
+                        let isAnyOrderTransferred = transfer_array.length > 0;
+
                         if (lastTransaction.trans_status === 1 && isAnyOrderApproved) {
                             isScanning = false;
                             alert("Previous order was approved, and the current order is of transfer. Please handle accordingly.");
@@ -333,13 +333,13 @@
                             alert("Previous order was transfer, and the current order is of approve. Please handle accordingly.");
                             return;
                         }
-                        
+
                         if (lastTransaction.trans_status === 0) {
                             // Add to approve_array
                             approve_array.push(order_id);
 
                             my_ord = `
-                            
+
                                <li class="card">
                                     <div class="card-body">
                                         <div>
@@ -357,7 +357,7 @@
                                         </div>
                                     </div>
                                 </li>
-                                
+
                             `;
                         } else {
                             // If any previous order was approved, do not allow transfer
@@ -382,12 +382,12 @@
                                         </div>
                                     </div>
                                 </li>
-                                
-                                    
+
+
                                 `;
                             } else {
-                                
-                                transfer_array.push(order_id); 
+
+                                transfer_array.push(order_id);
                                 my_ord = `
                                      <li class="card">
                                     <div class="card-body">
@@ -406,8 +406,8 @@
                                         </div>
                                     </div>
                                 </li>
-                                
-                                    
+
+
                                 `;
                             }
                         }
@@ -418,20 +418,20 @@
                                     <button class="btn" onclick="approve_order()">
                                         Approve Order
                                     </button>
-                                   
+
                                 </div>
                             `;
                         }else{
                             buttonHtml = `
                                 <div class="btn-list">
-                                    
+
                                     <button class="btn" onclick="transfer_order()">
                                         Transfer Order
                                     </button>
                                 </div>
                             `;
                         }
-                       
+
 
                         my_orders.innerHTML += my_ord;
 
@@ -443,9 +443,9 @@
                     }
                     isScanning = false;
                 }
-            
+
             });
-    
+
         }
 
 
@@ -454,7 +454,7 @@
             $('#transfer_order').modal('show');
         }
 
-        
+
 
         var csrfToken = $('meta[name="csrf-token"]').attr('content');
 
@@ -495,7 +495,7 @@
                 cache: true
             }
         });
-        
+
 
         function transfer_this(){
             if (transfer_array.length == 0){
@@ -543,12 +543,12 @@
         }
 
         function approve_order(){
-            
+
             if (approve_array.length == 0){
                 alert('Cant approve with empty array');
             }
             var csrfToken = $('meta[name="csrf-token"]').attr('content');
-    
+
             $.ajax({
                 url: "{{ route('multiple_approve') }}",
                 type: 'POST',
@@ -558,8 +558,8 @@
                 },
                 success: function (response) {
                     if (response.status == 200) {
-                        
-                            
+
+
                         showAlert('success', response.message);
                         alert(response.message);
 
@@ -570,7 +570,7 @@
                         alert(response.message);
 
                         showAlert('warning', response.message);
-                        
+
 
                     }
                 },
