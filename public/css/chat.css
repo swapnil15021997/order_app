@@ -717,11 +717,11 @@
     left: 0;
     width: 100%;
 }
+
 .action-item {
     cursor: pointer;
     margin-right: 5px;
 }
-
 
 .loader-screeen {
     display: none;
@@ -742,6 +742,7 @@ body.loading .loader-screeen {
     display: flex;
     align-items: center;
     justify-content: center;
+    z-index: 9999;
 }
 
 .loader-screeen img {
