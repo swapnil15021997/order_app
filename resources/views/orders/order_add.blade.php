@@ -1410,6 +1410,7 @@
                     const text = event.target.value.trim();
                     const order_id = $('#temp_order_id').val();
                     if (text) {
+                        $('#note_sheet').addClass('loading');
                         $.ajax({
                             url: "{{ route('notes_add') }}",
                             type: 'POST',
@@ -1424,6 +1425,7 @@
                                 'X-CSRF-TOKEN': csrfToken
                             },
                             success: function (response) {
+                                $('#note_sheet').removeClass('loading');
                                 showAlertNotes('success', response.message);
                                 notesList.push(response.data);
                                 $('#TextNotes').val('');
@@ -1433,6 +1435,7 @@
                             }
                         });
                     } else {
+                        $('#note_sheet').removeClass('loading');
                         alert("Please enter some text.");
                         showAlertNotes('warning', 'Please enter some text');
                     }
@@ -1443,6 +1446,7 @@
                 const text = $("#TextNotes").val().trim();
                 const order_id = $('#temp_order_id').val();
                 if (text) {
+                    $('#note_sheet').addClass('loading');
                     $.ajax({
                         url: "{{ route('notes_add') }}",
                         type: 'POST',
@@ -1456,6 +1460,7 @@
                             'X-CSRF-TOKEN': csrfToken
                         },
                         success: function (response) {
+                            $('#note_sheet').removeClass('loading');
                             showAlertNotes('success', response.message);
                             notesList.push(response.data);
                             $('#TextNotes').val('');
@@ -1465,6 +1470,7 @@
                         }
                     });
                 } else {
+                    $('#note_sheet').removeClass('loading');
                     alert("Please enter some text.");
                     showAlertNotes('warning', 'Please enter some text');
                 }
@@ -1570,6 +1576,7 @@
             alert('No image captured!');
             return;
         }
+        $('#note_sheet').addClass('loading');
         const orderId = $('#temp_order_id').val();
         const formData = new FormData();
         const imageFile = dataURLToFile(capturedImage, 'captured-image.png');
@@ -1590,7 +1597,7 @@
                 'X-CSRF-TOKEN': csrfToken
             },
             success: function (response) {
-                console.log('Audio uploaded successfully:', response);
+                $('#note_sheet').removeClass('loading');
                 notesList.push(response.data);
                 $('#click_image').modal('hide');
                 showAlertNotes('success', 'Image file uploaded successfully!');
@@ -1598,6 +1605,7 @@
                 loadNotes();
             },
             error: function (error) {
+                $('#note_sheet').removeClass('loading');
                 console.error('Image upload failed:', error);
             }
         });
@@ -1911,12 +1919,11 @@ function resetRecording() {
 
     function uploadRecording() {
 
-       console.log("Send Button Blob:", sendButton.audioBlob);
-
         if (!sendButton.audioBlob) {
             alert("No audio file available for upload!");
             return;
         }
+        $('#note_sheet').addClass('loading');
         const orderId = $('#temp_order_id').val();
         const audioFile = new File([sendButton.audioBlob], 'recording.wav', { type: 'audio/wav' });
 
@@ -1938,9 +1945,10 @@ function resetRecording() {
                 console.log('Audio uploaded successfully:', response);
                 notesList.push(response.data);
                 if (response.status == 200) {
-
+                    $('#note_sheet').removeClass('loading');
                     showAlertNotes('success', 'Audio file uploaded successfully!');
                 } else {
+                    $('#note_sheet').removeClass('loading');
                     showAlertNotes('warning', response.message);
                 }
                 $('#audio_box').css("display", "none");
@@ -1961,6 +1969,7 @@ function resetRecording() {
                 loadNotes();
             },
             error: function (error) {
+                $('#note_sheet').removeClass('loading');
                 console.error('Audio upload failed:', error);
             }
         });
@@ -1973,6 +1982,7 @@ function resetRecording() {
 
         const file = event.target.files;
         if (file) {
+            $('#note_sheet').addClass('loading');
             const formData = new FormData();
             formData.append('notes_text', '');
             for (var i = 0; i < file.length; i++) {
@@ -1992,6 +2002,7 @@ function resetRecording() {
                     'X-CSRF-TOKEN': csrfToken
                 },
                 success: function (response) {
+                    $('#note_sheet').removeClass('loading');
                     showAlertNotes('success', response.message);
                     isLoading = false;
                     loadNotes();
@@ -1999,6 +2010,7 @@ function resetRecording() {
                 }
             });
         } else {
+            $('#note_sheet').removeClass('loading');
             console.log("No file selected");
         }
     }
