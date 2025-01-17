@@ -219,7 +219,7 @@
                 onDelete: function(values) {
 
                     values.forEach(value => {
-                        selectInstance.removeItem(value);
+                        // selectInstance.removeItem(value);
                         
                         const optionToRemove = el.querySelector(`option[value="${value}"]`);
                         if (optionToRemove) {
@@ -246,20 +246,20 @@
             });
             
             // Add click handler for selected items
-            selectInstance.control.addEventListener('click', function (event) {
-                const clickedElement = event.target.closest('.item');
-                if (clickedElement) {
-                    const value = clickedElement.dataset.value;
-                    if (value) {
-                        selectInstance.removeItem(value);
+            // selectInstance.control.addEventListener('click', function (event) {
+            //     const clickedElement = event.target.closest('.item');
+            //     if (clickedElement) {
+            //         const value = clickedElement.dataset.value;
+            //         if (value) {
+            //             selectInstance.removeItem(value);
 
-                        const optionToRemove = el.querySelector(`option[value="${value}"]`);
-                        if (optionToRemove) {
-                            optionToRemove.remove();
-                        }
-                    }
-                }
-            });
+            //             const optionToRemove = el.querySelector(`option[value="${value}"]`);
+            //             if (optionToRemove) {
+            //                 optionToRemove.remove();
+            //             }
+            //         }
+            //     }
+            // });
         });
         </script>
         <script>
@@ -319,7 +319,7 @@
                     const roleId = $('#select_role').val();
                     const user_email = $('#user_email').val();
                     const selected_sites = $('#select-states').val();
-                
+                   
                     // Validate data
                     if (!userName || !userPhone || !roleId ) {
                         showAlertUser('warning', 'Please fill all fields and select at least one permission');

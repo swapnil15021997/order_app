@@ -223,14 +223,15 @@
         plugins: ['remove_button'],
         
         onDelete: function (values) {
+           
             // Loop through removed values
             values.forEach(value => {
+                console.log(value);
                 // Remove the item from TomSelect
-                selectInstance.removeItem(value);
-                
-                // Remove the option from the original <select> element
-                const optionToRemove = el.querySelector(`option[value="${value}"]`);
+                // selectInstance.removeItem(value);
+                                const optionToRemove = el.querySelector(`option[value="${value}"]`);
                 if (optionToRemove) {
+                    console.log("Removal on delete",optionToRemove);
                     optionToRemove.remove();
                 }
             });
@@ -256,21 +257,23 @@
     });
 
     // Add click handler for selected items (optional feature)
-    selectInstance.control.addEventListener('click', function (event) {
-        const clickedElement = event.target.closest('.item');
-        if (clickedElement) {
-            const value = clickedElement.dataset.value;
-            if (value) {
-                selectInstance.removeItem(value);
+    // selectInstance.control.addEventListener('click', function (event) {
+    //     const clickedElement = event.target.closest('.item');
+    //     if (clickedElement) {
+    //         const value = clickedElement.dataset.value;
+    //         if (value) {
+                
+    //             selectInstance.removeItem(value);
 
-                // Remove from the original <select> element
-                const optionToRemove = el.querySelector(`option[value="${value}"]`);
-                if (optionToRemove) {
-                    optionToRemove.remove();
-                }
-            }
-        }
-    });
+    //             // Remove from the original <select> element
+    //             const optionToRemove = el.querySelector(`option[value="${value}"]`);
+    //             if (optionToRemove) {
+    //                 console.log("Removal",optionToRemove);
+    //                 optionToRemove.remove();
+    //             }
+    //         }
+    //     }
+    // });
 });
 
         </script>
