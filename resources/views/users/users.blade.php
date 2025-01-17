@@ -721,7 +721,7 @@
                     render: function (data, type, row) {
                         console.log(row);
                         return `<button data-bs-toggle="dropdown" type="button" class="btn dropdown-toggle dropdown-toggle-split"></button>
-                                <div class="dropdown-menu dropdown-menu-end">
+                                <div class="dropdown-menu dropdown-menu-start">
                                   <a class="dropdown-item" href="#" onclick="editUser(${row.id})">
                                     Edit User
                                   </a>
