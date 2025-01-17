@@ -257,7 +257,7 @@
                             <th>User Name</th>
                             <th>Phone No</th>
                             <th>Role</th>
-                            <th>Operations</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>

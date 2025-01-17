@@ -269,7 +269,10 @@
                     { data: 'order_qr_code', name: 'order_qr_code', orderable: false,
                         render: function (data, type, row) {
                             if (row && row.order_type) {
-                                return `${row.order_type} # ${row.order_qr_code}`;
+                                return `${row.order_type} # ${row.order_qr_code}
+                                <br />
+                                ${row.order_date}
+                                `;
                             }
                             return '';
                         }
@@ -293,15 +296,14 @@
                             let activeBranchHtml = '';
                             if (row.order_current_branch && row.order_current_branch.trim() !== '') {
                                 activeBranchHtml = `
-                                    <br/>
-                                    <div style="background-color: green; color: white; padding: 5px; border-radius: 4px; margin-top: 5px; display: inline-block;">
+                                    
+                                    <div style="border: 2px solid green; width: -webkit-max-content; padding: 4px; border-radius: 5px; color: green; font-weight: 500;">
                                         ${row.order_current_branch}
                                     </div>
                                 `;
                             }
                             return `<div>
-                                        <span>${row.order_from_name} ------>${row.order_to_name}</span>
-                                        <br/>
+                                        <span>${row.order_from_name} ==>${row.order_to_name}</span>
                                         ${activeBranchHtml}
                             </div>`
                         }   

@@ -45,7 +45,7 @@
                 
                 </div>
                 @endif
-            <div class=" btn-list my-md-0 flex-grow-1 flex-md-grow-0 d-md-flex d-none">
+            <div class="btn-list my-md-0 flex-grow-1 flex-md-grow-0 d-md-flex d-none">
                     <button class="btn" id="start-scan">
                         <span class="me-2">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-qr-code-scan" viewBox="0 0 16 16">

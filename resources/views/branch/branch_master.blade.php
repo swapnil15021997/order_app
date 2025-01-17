@@ -54,12 +54,15 @@
                     <table id="branch_table" class="table card-table table-vcenter text-nowrap datatable">
                         <thead>
                             <tr>
-                                <th class="w-1"><input class="form-check-input m-0 align-middle" type="checkbox"
-                                        aria-label="Select all invoices"></th>
+                                <th class="w-1">
+                                    Sr No
+                                    <!-- <input class="form-check-input m-0 align-middle" type="checkbox"
+                                        aria-label="Select all invoices"> -->
+                                    </th>
 
                                 <th>Branch Name</th>
                                 <th>Branch Address</th>
-                                <th>Operations</th>
+                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -82,12 +85,16 @@
                 <div class="modal-body">
                     <div class="mb-3">
                         <input type="hidden" id="branch_id" value="">
-                        <label class="form-label">Branch Name</label>
+                        <label class="form-label">Branch Name
+                            <span style="color: red;">*</span>
+                        </label>
                         <input id="branch_name" required type="text" name="branch_name" class="form-control"
-                            placeholder="Add branch Name">
+                            placeholder="Enter branch Name">
                     </div>
                     <div class="mb-3">
-                        <label class="form-label">Branch Address</label>
+                        <label class="form-label">Branch Address
+                            <span style="color: red;">*</span>
+                        </label>
                         <textarea id="branch_address" required name="branch_address" class="form-control"
                             rows="3"></textarea>
                     </div>
@@ -118,12 +125,16 @@
 
                     <div class="mb-3">
                         <input type="hidden" id="edit_branch_id" value="">
-                        <label class="form-label">Branch Name</label>
+                        <label class="form-label">Branch Name
+                            <span style="color: red;">*</span>
+                        </label>
                         <input id="edit_branch_name" type="text" name="branch_name" class="form-control"
                             placeholder="Add branch Name">
                     </div>
                     <div class="mb-3">
-                        <label class="form-label">Branch Address</label>
+                        <label class="form-label">Branch Address
+                            <span style="color: red;">*</span>
+                        </label>
                         <textarea id="edit_branch_address" name="branch_address" class="form-control"
                             rows="3"></textarea>
                     </div>

@@ -427,14 +427,16 @@ class UserController extends Controller
         if (!in_array($sortColumn, $allowedSortColumns)) {
             $sortColumn = 'id'; 
         }
+
         $usersQuery = User::query()
         ->leftJoin('user_roles as roles', 'users.user_role_id', '=', 'roles.role_id')
         ->select(
             'users.id',
             'users.user_name',
             'users.user_phone_number',
-            'roles.role_name'
+            'roles.*'
         )->where('users.is_delete',0)
+        
         ->orderBy($sortColumn, $sortOrder);       
         if (!empty($searchQuery)) {
             $usersQuery->where(function ($query) use ($searchQuery) {
@@ -442,7 +444,7 @@ class UserController extends Controller
                       ->orWhere('user_phone_number', 'like', "%{$searchQuery}%");
             });
         }
-
+        
         
         $total_users = $usersQuery->count();
         $users = $usersQuery
@@ -452,6 +454,8 @@ class UserController extends Controller
         $users->each(function ($user, $index) {
             $user->serial_number = $index + 1; 
         });
+ 
+        
         $total_pages = ceil($total_users / $perPage);
 
         return response()->json([

@@ -656,7 +656,7 @@ class OrderController extends Controller
         $orders->each(function ($order, $index) {
             $order->serial_number = $index + 1; 
             $order->order_date = Carbon::parse($order->order_date)->format('d-m-Y');
-            $order->order_type = $order->order_type == 1 ? 'Order' : 'Repairing';
+            $order->order_type = $order->order_type == 1 ? 'O' : 'R';
 
         });
 
