@@ -9,7 +9,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\NotesController;
 use App\Http\Controllers\MailController;
 use App\Http\Controllers\CustomerController;
-
+use App\Http\Controllers\TransferController;
 use App\Http\Controllers\Auth\PasswordController;
 use Illuminate\Support\Facades\Route;
 use App\Models\Branch;
@@ -138,6 +138,8 @@ Route::post('multiple-approve', [OrderController::class, 'multiple_approve'])->n
 
 Route::post('multiple-transfer', [OrderController::class, 'multiple_transfer'])->name('multiple_transfer');
 
+Route::post('transfer-list', [TransferController::class, 'transfer_list'])->name('transfer-list');
+Route::get('transfer-master',   [TransferController::class, 'transfer_index'])->name('transfer-master');
 
 
 

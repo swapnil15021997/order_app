@@ -13,7 +13,7 @@ use App\Models\Customers;
 use App\Models\Colors;
 use App\Models\TempOrders;
 use App\Models\Notes;
-
+use App\Models\Transfer;
 use DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Arr;
@@ -634,11 +634,11 @@ class OrderController extends Controller
             ->where('orders.is_delete',0)
             ->where(function ($query) use ($userBranchIds) {
                 $query->whereIn('orders.order_from_branch_id', explode(',', $userBranchIds))
-                      ->orWhereHas('transactions', function ($transQuery) use ($userBranchIds) {
-                          $transQuery->whereIn('trans_to', explode(',', $userBranchIds));
-                      });
-            })
-            ->orderBy($sortColumn, $sortOrder);
+                ->orWhereIn('orders.order_branch_id', explode(',', $userBranchIds));     
+                // ->orWhereHas('transactions', function ($transQuery) use ($userBranchIds) {
+                //           $transQuery->whereIn('trans_to', explode(',', $userBranchIds));
+                //       });
+            })->orderBy($sortColumn, $sortOrder);
         }
         $total_orders = Order::where('is_delete',0)->count();
 
@@ -1325,7 +1325,7 @@ class OrderController extends Controller
             ]);
         } 
         \Log::info(' Transfer Transaction id');
-        
+        $trans_ids = [];
         foreach ($params['order_id'] as $order_id) {
             
             $order = Order::get_order_with_items($order_id);
@@ -1400,7 +1400,14 @@ class OrderController extends Controller
             $trans->trans_status        = 0;
             $trans->save();
             \Log::info(['Transaction id'=>$trans->trans_id,'Order id'=>$trans->trans_order_id]);
+            $trans_ids[] = $trans->trans_id;
+
         }
+
+        $multiple = new Transfer();
+        $multiple->trans_ids    = implode(',', $trans_ids);
+        $multiple->trans_status = 0;
+        $multiple->save();
         SendEmailJob::dispatch($order->order_id,$type="Transfer");
         SendNotification::dispatch($order->order_id,$type="Transfer");
         return response()->json([

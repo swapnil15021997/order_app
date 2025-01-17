@@ -75,4 +75,11 @@ class Transactions extends Model
         return $this->belongsTo(Branch::class, 'trans_to', 'branch_id');
     }
 
+    public function items()
+    {
+        return $this->hasMany(Item::class,'item_id', 'trans_item_id');  
+    }
+
+
+
 }
