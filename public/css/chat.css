@@ -149,8 +149,9 @@
 .note-open-btn {
     position: fixed;
     right: 1rem;
-    bottom: 1rem;
+    bottom: 4rem;
     display: none;
+    z-index: 100;
 }
 
 .note-close-btn {
@@ -764,4 +765,9 @@ body.loading .loader-screeen {
     align-items: center;
     justify-content: center;
     z-index: 9999;
+}
+
+#branch-dropdown-toggle{
+    min-width: 100%;
+    max-width: 100%;
 }
