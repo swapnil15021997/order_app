@@ -42,7 +42,7 @@
                                         </div>
                                         <div class="col-12 mt-3">
                                             <label for="order_type" class="form-label">Order Type</label>
-                                            <select id="order_type" class="form-select" type="text" tabindex="2">
+                                            <select id="order_type" class="form-select" type="text" tabindex="3">
 
                                                 <option value="order" {{ $type == 'order' ? 'selected' : '' }}>Order</option>
                                                 <option value="reparing" {{ $type == 'repairing' ? 'selected' : '' }}>Reparing</option>
@@ -63,7 +63,7 @@
                                                 <span style="color: red;">*</span>
                                             </label>
 
-                                            <select id="searchableCust" class="form-select select2" tabindex="3">
+                                            <select id="searchableCust" class="form-select select2" tabindex="2">
 
                                             </select>
                                         </div>

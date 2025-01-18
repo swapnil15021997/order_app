@@ -50,13 +50,13 @@
                                             <label for="order_date" class="form-label">Order Date
                                                 <span style="color: red;">*</span>
                                             </label>
-                                            <input type="text" id="edit_order_date" class="form-control">
+                                            <input type="text" id="edit_order_date" class="form-control" tabindex="1">
                                         </div>
                                         <div class="col-12 mt-3">
                                             <label for="order_type" class="form-label">Order Type
                                                 <span style="color: red;">*</span>
                                             </label>
-                                            <select id="order_type" class="form-select" type="text">
+                                            <select id="order_type" class="form-select" type="text" tabindex="3">
                                                 <option value="" disabled selected>Select type</option>
                                                 <option value="order" {{ $order['order_type'] == 1 ? 'selected' : '' }}>
                                                     Order</option>
@@ -73,7 +73,7 @@
 
                                         <div class="col-12">
                                             <label class="form-label">Select Customer</label>
-                                            <select id="searchableCust" class="form-select select2">
+                                            <select id="searchableCust" class="form-select select2" tabindex="2">
                                                 @foreach ($customer as $branch)
                                                     <option value="{{ $branch['cust_id'] }}" @if ($branch['cust_id'] == $order['order_customer_id']) selected @endif>
                                                         {{ $branch['cust_name'] }}
@@ -87,21 +87,21 @@
                                                 <label for="order_customer_name" class="form-label">Customer name
                                                     <span style="color: red;">*</span>
                                                 </label>
-                                                <input type="text" placeholder="Enter name" id="order_customer_name"
+                                                <input type="text" placeholder="Enter name" id="order_customer_name" tabindex="4"
                                                     class="form-control" form>
                                             </div>
                                             <div class="mt-3">
                                                 <label for="cust_phone_no" class="form-label">Phone number
                                                     <span style="color: red;">*</span>
                                                 </label>
-                                                <input type="text" placeholder="Enter number" id="cust_phone_no"
+                                                <input type="text" placeholder="Enter number" id="cust_phone_no" tabindex="5"
                                                     class="form-control" form>
                                             </div>
                                             <div class="mt-3">
                                                 <label for="customer_address" class="form-label">Address
                                                     <span style="color: red;">*</span>
                                                 </label>
-                                                <textarea type="text" placeholder="Enter Address" id="customer_address"
+                                                <textarea type="text" placeholder="Enter Address" id="customer_address" tabindex="6"
                                                     class="form-control" form></textarea>
                                             </div>
                                         </div>
@@ -118,7 +118,7 @@
                                             <span style="color: red;">*</span>
                                         </label>
 
-                                        <select id="edit_searchableSelectFrom" class="form-select" type="text">
+                                        <select id="edit_searchableSelectFrom" class="form-select" type="text" tabindex="7">
 
                                             @foreach ($user_branch as $branch)
 
@@ -133,7 +133,7 @@
                                             <span style="color: red;">*</span>
                                         </label>
 
-                                        <select id="edit_searchableSelectTo" class="form-select w-100" type="text">
+                                        <select id="edit_searchableSelectTo" class="form-select w-100" type="text" tabindex="8">
 
                                             @foreach ($branchesArray as $branch)
                                                 <option value="{{ $branch['branch_id'] }}" @if ($branch['branch_id'] == $order['order_to_branch_id']) selected @endif>
@@ -154,13 +154,13 @@
                                             <span style="color: red;">*</span>
                                         </label>
                                         <input type="text" class="form-control" id="item_name" placeholder="Select Item"
-                                            value="{{$order['items'][0]['item_name']}}" />
+                                            value="{{$order['items'][0]['item_name']}}"  tabindex="9"/>
                                     </div>
                                     <div class="col-12 col-md-6 col-lg-2">
                                         <label for="item_metal" class="form-label">Metal
                                             <span style="color: red;">*</span>
                                         </label>
-                                        <select class="form-select" id="item_metal">
+                                        <select class="form-select" id="item_metal" tabindex="10">
                                             <option value="" disabled selected>Select a metal</option>
 
                                             @foreach ($metals as $metal)
@@ -176,7 +176,7 @@
                                         <label for="item_melting" class="form-label">Melting
                                             <span style="color: red;">*</span>
                                         </label>
-                                        <select class="form-select" id="item_melting">
+                                        <select class="form-select" id="item_melting" tabindex="11">
                                             <option value="" disabled selected>Select a melting</option>
                                             @foreach ($melting as $melt)
                                                 <option value="{{ $melt->melting_name }}" selected>
@@ -189,13 +189,13 @@
                                         <label for="item_weight" class="form-label">Weight
                                             <span style="color: red;">*</span>
                                         </label>
-                                        <input type="number" class="form-control" id="item_weight"
+                                        <input type="number" class="form-control" id="item_weight" tabindex="12"
                                             name="example-text-input" value="{{$order['items'][0]['item_weight']}}"
                                             placeholder="Weight of item" step="0.01"/>
                                     </div>
                                     <div class="col-12 col-md-6 col-lg-2">
                                         <label for="item_colors" class="form-label">Colors</label>
-                                        <select class="form-select" id="item_colors">
+                                        <select class="form-select" id="item_colors" tabindex="13">
                                             @foreach ($colors as $color)
                                                 <option value="{{ $color['color_id'] }}" @if ($color['color_id'] == $order['items'][0]['item_color']) selected @endif>
                                                     {{ $color['color_name'] }}
@@ -254,7 +254,7 @@
                                     <label for="customer_address" class="form-label">Notes
 
                                     </label>
-                                    <textarea type="text" placeholder="Enter Notes" id="order_remarks"
+                                    <textarea type="text" placeholder="Enter Notes" id="order_remarks" tabindex="14"
                                         class="form-control" form>{{$order['order_remark']}}</textarea>
                                 </div>
                                 <!-- <div class="row mt-3" id="uploaded-images">
@@ -294,14 +294,14 @@
                                 <div class="row">
                                     <div class="col-sm-6">
                                         <label for="payment_advance" class="form-label">Advance cash deposit</label>
-                                        <input type="number" placeholder="Enter here" class="form-control"
+                                        <input type="number" placeholder="Enter here" class="form-control" tabindex="15"
                                             id="payment_advance"
                                             value="{{ optional($paymentArray)['payment_advance_cash'] }}"
                                             name="example-text-input">
                                     </div>
                                     <div class="col-sm-6 mt-sm-0 mt-3">
                                         <label for="payment_booking" class="form-label">Rate</label>
-                                        <input type="number" class="form-control" id="payment_booking"
+                                        <input type="number" class="form-control" id="payment_booking" tabindex="16"
                                             value="{{ optional($paymentArray)['payment_booking_rate'] }}"
                                             placeholder="Enter here">
                                     </div>
@@ -311,12 +311,12 @@
                         <div class="card">
                             <div class="card-body">
                                 <div class="d-flex justify-content-end align-items-end">
-                                    <a href="#" onclick="cancel_update()"
+                                    <a href="#" onclick="cancel_update()" tabindex="17"
                                         class="btn btn-secondary me-2 d-flex justify-content-end align-items-end">
 
                                         Cancel
                                     </a>
-                                    <a href="#" class="btn btn-primary d-flex justify-content-end align-items-end"
+                                    <a href="#" tabindex="18" class="btn btn-primary d-flex justify-content-end align-items-end"
                                         id="updateOrderBtn">
 
                                         Save
@@ -552,7 +552,7 @@
                         </button>
                     </div>
                 </div>
-                <input type="text" autocomplete="off" placeholder="Write your message" id="TextNotes" />
+                <input type="text" autocomplete="off" tabindex="19" placeholder="Write your message" id="TextNotes" />
                 <span class="custom-btn">
                     <input type="file" id="fileInput" style="display: none;" onchange="handleFileUpload(event)"
                         multiple />
