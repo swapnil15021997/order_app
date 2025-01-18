@@ -9,6 +9,7 @@ use App\Models\Item;
 use App\Models\TempOrders;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Arr;
+use Intervention\Image\Facades\Image;
 
 class NotesController extends Controller
 {
@@ -66,9 +67,10 @@ class NotesController extends Controller
             \Log::info('Files uploaded: ' . count($files));
             foreach ($files as $file) {
 
-                if ($params['notes_type']==4){
+                if ($params['notes_type']==2 || $params['notes_type']==4){
                     \Log::info(['File types '=>$file->getMimeType()]);
                     if(in_array($file->getMimeType(), ['image/jpeg', 'image/png'])){
+
                         $maxWidth  = 800; 
                         $maxHeight = 600;
                         $image = Image::make($file);
@@ -77,16 +79,20 @@ class NotesController extends Controller
                             $constraint->aspectRatio();  
                             $constraint->upsize();       
                         });
+                  
                         $image->encode($file->getClientOriginalExtension(), 75);
                         $filePath = 'uploads/' . $file->hashName();
                         $image->save(storage_path('app/public/' . $filePath));
+                        $resizedFileSize = filesize(storage_path('app/public/' . $filePath));
+
+                        
                         $fileModel = new File();
                         $fileModel->file_name = $file->hashName();
                         $fileModel->file_original_name = $file->getClientOriginalName();
                         $fileModel->file_path = $filePath;
                         $fileModel->file_url = asset('storage/' . $filePath);
                         $fileModel->file_type = $file->getClientMimeType();
-                        $fileModel->file_size = $file->getSize();
+                        $fileModel->file_size = $resizedFileSize;
                         $fileModel->save();
                         $fileIds[] = $fileModel->file_id;  
 
