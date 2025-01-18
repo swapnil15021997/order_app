@@ -76,7 +76,7 @@
 
             </div> -->
             <div class="me-2 ps-2 nav-item dropdown">
-                <div class="btn-list" >
+                <div class="btn-list"  >
                     <a href="#" data-bs-toggle="dropdown" class=" btn  dropdown-toggle no-arrow">
                         <svg class="me-2" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                             class="bi bi-geo-alt" viewBox="0 0 16 16">
@@ -86,9 +86,12 @@
                         </svg>
 
                             <!-- <span class="me-2">{{ session('active_branch', '') }}</span> -->
-                            <div style="border: 2px solid green; width: -webkit-max-content; padding: 4px; border-radius: 5px; color: green; font-weight: 500;">
-                            {{ session('active_branch', '') }}
-                            </div>
+                            <!-- <div style="border: 2px solid green; width: -webkit-max-content; padding: 4px; border-radius: 5px; color: green; font-weight: 500;"> -->
+                            <span style="color: green;">
+
+                                {{ session('active_branch', '') }}
+                            </span>
+                            <!-- </div> -->
                         </a>
                     <div class="dropdown-menu dropdown-menu-end">
                         @foreach($user_branch as $branch)
