@@ -121,12 +121,19 @@ $(document).ready(function () {
                         data: 'branch_id',
                         name: 'operations',
                         render: function (data, type, row) {
-                            return `<button data-bs-toggle="dropdown" type="button" class="btn dropdown-toggle dropdown-toggle-split"></button>
-                                <div class="dropdown-menu dropdown-menu-start">
-                                  <a class="dropdown-item" href="#" onclick="view_receipt(${row.trans_id})">
-                                    View Receipt
-                                  </a>                                  
-                                </div>`;
+                            return `
+                         
+                                 <ul class="action-list d-flex list-unstyled">
+          
+            <li class="action-item" title="View Receipt" onclick="view_receipt(${row.trans_id})">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M2.45448 13.8458C1.84656 12.7245 1.84656 11.3653 2.45447 10.2441C4.29523 6.84896 7.87965 4.54492 11.9999 4.54492C16.1202 4.54492 19.7046 6.84897 21.5454 10.2441C22.1533 11.3653 22.1533 12.7245 21.5454 13.8458C19.7046 17.2409 16.1202 19.5449 11.9999 19.5449C7.87965 19.5449 4.29523 17.2409 2.45448 13.8458Z" stroke="black" stroke-width="1.6"/>
+<path d="M15.0126 12C15.0126 13.6569 13.6695 15 12.0126 15C10.3558 15 9.01263 13.6569 9.01263 12C9.01263 10.3431 10.3558 9 12.0126 9C13.6695 9 15.0126 10.3431 15.0126 12Z" stroke="black" stroke-width="1.6"/>
+</svg>
+ 
+            </li>
+                                
+                                `;
                         },
                     }
                 ],

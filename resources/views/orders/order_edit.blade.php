@@ -25,11 +25,12 @@
                                     @if ($lastTransaction && $lastTransaction['trans_status'] === 0)
                                         <!-- If both conditions are satisfied, show the "Approve" button -->
 
-                                        <button class="btn" onclick="approve_order_edit({{ $order['order_qr_code'] }})">
+                                        <button class="btn btn-outline-secondary w-100" onclick="approve_order_edit({{ $order['order_qr_code'] }})">
                                             Approve Order
                                         </button>
+                                        
                                     @else
-                                        <button class="btn " onclick="transfer_edit_order({{$order['order_id']}})">
+                                        <button class="btn btn-outline-secondary w-100 " onclick="transfer_edit_order({{$order['order_id']}})">
                                             Transfer Order
                                         </button>
                                     @endif
