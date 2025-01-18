@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Models\User;
 use App\Models\Branch;
+use App\Models\Order;
 
 class Transactions extends Model
 {
@@ -80,6 +81,9 @@ class Transactions extends Model
         return $this->hasMany(Item::class,'item_id', 'trans_item_id');  
     }
 
-
+    public function orders()
+    {
+        return $this->hasMany(Order::class,'order_id', 'trans_order_id');  
+    }
 
 }

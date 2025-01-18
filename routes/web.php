@@ -140,6 +140,7 @@ Route::post('multiple-transfer', [OrderController::class, 'multiple_transfer'])-
 
 Route::post('transfer-list', [TransferController::class, 'transfer_list'])->name('transfer-list');
 Route::get('transfer-master',   [TransferController::class, 'transfer_index'])->name('transfer-master');
+Route::get('view-receipt/{id}', [TransferController::class, 'view_receipt'])->name('view_receipt');
 
 
 

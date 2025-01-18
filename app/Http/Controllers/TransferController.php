@@ -182,7 +182,68 @@ class TransferController extends Controller
     }
 
 
-    public function view_receipt(Request $request){
+    public function view_receipt(Request $request,$id){
         
+         
+        $pageTitle     = 'Orders';
+        $login         = auth()->user();
+       
+        if(!empty($login)){
+            if($login['user_role_id'] != 1){
+
+                $userBranchIds = explode(',', $login['user_branch_ids']);
+                $userBranchIds = array_map('trim', $userBranchIds); 
+                $userBranchIds = array_filter($userBranchIds); 
+              
+                if(!empty($userBranchIds)){
+
+                    $user_branch  = Branch::get_users_branch($userBranchIds);
+                }else{
+                    $user_branch  = [];
+                }
+                
+            }else{
+                $user_branch  = Branch::get_all_branch();
+    
+            }
+            if(!empty($user_branch)){
+                foreach ($user_branch as $branch) {
+                    if ($branch['branch_id'] == $login['user_active_branch']) {
+                        $activeBranchName = $branch['branch_name'];
+                        break;
+                    }
+                }
+            }
+            $activeBranchName = '';
+
+        }
+
+        $activePage       = 'orders';
+        $user_permissions = session('combined_permissions', []);
+
+
+        $transferQuery  = Transfer::query()
+        ->where('is_delete',0)
+        ->where('trans_id',$id)
+        ->get();
+        foreach ($transferQuery as $transfer) {
+            $trans_Ids = explode(',', $transfer->trans_ids);
+            $transactions = Transactions::whereIn('trans_id', $trans_Ids)
+            ->leftJoin('branch AS from_branch', 'from_branch.branch_id', '=', 'transactions.trans_from')
+            ->leftJoin('branch AS to_branch', 'to_branch.branch_id', '=', 'transactions.trans_to')        
+            ->with('items','transUser', 'transApprovedBy','orders')
+            ->select(
+                'transactions.*',
+                'from_branch.branch_name AS from_branch_name',
+                'to_branch.branch_name AS to_branch_name',
+            ) 
+            ->get();
+            $transfer->transactions = $transactions->toArray();
+        }
+
+        $transfer_array = $transferQuery->toArray();
+        
+        return view('orders/receipt',compact('pageTitle','login','activePage','user_branch','user_permissions','activeBranchName','transfer_array'));
+
     }
 }
