@@ -43,20 +43,27 @@
                                     ? \Carbon\Carbon::parse($transaction['trans_time'])->format('g:i, M j, Y') 
                                     : 'N/A';
                             @endphp
-                            <div class="timeline-item {{ isset($transaction['trans_approved_by']) ? 'completed' : '' }}">
+                            <div class="timeline-item completed">
                                 <h3>
-                                    Transfered -- 
+                                    Transfered From --  {{ $transaction['trans_from']['branch_name'] ?? '' }}
                                     {{ $transaction['trans_user']['name'] ?? '' }} -- 
                                     {{ $transaction['trans_to']['branch_name'] ?? '' }}
                                 </h3>
                                 <p>{{ $formattedDate }}</p>
-                                @if(isset($transaction['trans_approved_by']))
-                                    <h3>
-                                        Accepted -- 
-                                        {{ $transaction['trans_approved_by']['name'] ?? '' }} -- 
-                                        {{ $transaction['trans_to']['branch_name'] ?? '' }}
+                                <h3>
+                                        @if(isset($transaction['trans_approved_by']))
+
+                                            @php
+                                                $acceptedDate = isset($transaction['trans_accepted_time']) 
+                                                    ? \Carbon\Carbon::parse($transaction['trans_accepted_time'])->format('g:i, M j, Y') 
+                                                    : 'N/A';
+                                            @endphp
+                                            Accepted -- 
+                                            {{ $transaction['trans_approved_by']['name'] ?? '' }} -- 
+                                            {{ $transaction['trans_to']['branch_name'] ?? '' }}
+                                            <p>{{$acceptedDate}}</p>
+                                        @endif
                                     </h3>
-                                @endif
                             </div>
                         @endif
                     @endforeach

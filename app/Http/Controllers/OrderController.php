@@ -21,7 +21,7 @@ use Carbon\Carbon;
 use App\Jobs\SendEmailJob;
 use App\Jobs\SendNotification;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
-
+use Intervention\Image\Facades\Image;
 
 class OrderController extends Controller
 {
@@ -291,16 +291,37 @@ class OrderController extends Controller
             \Log::info('Files uploaded: ' . count($files));
             foreach ($files as $file) {
 
-                $filePath = $file->store('uploads', 'public'); 
+                // $filePath = $file->store('uploads', 'public'); 
+                // $fileModel = new File();
+                // $fileModel->file_name = $file->hashName(); 
+                // $fileModel->file_original_name = $file->getClientOriginalName();
+                // $fileModel->file_path = $filePath;
+                // $fileModel->file_url = asset('storage/' . $filePath); 
+                // $fileModel->file_type = $file->getClientMimeType();
+                // $fileModel->file_size = $file->getSize();
+                // $fileModel->save();
+                // $fileIds[] = $fileModel->file_id;
+
+                $maxWidth  = 800; 
+                $maxHeight = 600;
+                $image = Image::make($file);
+       
+                $image->resize($maxWidth, $maxHeight, function ($constraint) {
+                    $constraint->aspectRatio();  
+                    $constraint->upsize();       
+                });
+                $image->encode($file->getClientOriginalExtension(), 75);
+                $filePath = 'uploads/' . $file->hashName();
+                $image->save(storage_path('app/public/' . $filePath));
                 $fileModel = new File();
-                $fileModel->file_name = $file->hashName(); 
+                $fileModel->file_name = $file->hashName();
                 $fileModel->file_original_name = $file->getClientOriginalName();
                 $fileModel->file_path = $filePath;
-                $fileModel->file_url = asset('storage/' . $filePath); 
+                $fileModel->file_url = asset('storage/' . $filePath);
                 $fileModel->file_type = $file->getClientMimeType();
                 $fileModel->file_size = $file->getSize();
                 $fileModel->save();
-                $fileIds[] = $fileModel->file_id;
+                $fileIds[] = $fileModel->file_id;        
             }
         }
         $item->item_file_images = implode(',', $fileIds);
@@ -618,7 +639,7 @@ class OrderController extends Controller
     
             ->orderBy($sortColumn, $sortOrder);
         }else{
-            $ordersQuery = Order::with('transactions','items')    
+            $ordersQuery = Order::with('transactions','items','transactions.trans_from','transactions.trans_to')    
             ->leftJoin('branch AS from_branch', 'from_branch.branch_id', '=', 'orders.order_from_branch_id')  
             ->leftJoin('branch AS to_branch', 'to_branch.branch_id', '=', 'orders.order_to_branch_id')  
             ->leftJoin('branch AS current_branch', 'current_branch.branch_id', '=', 'orders.order_current_branch')  
@@ -824,16 +845,37 @@ class OrderController extends Controller
             \Log::info('Files uploaded: ' . count($files));
             foreach ($files as $file) {
 
-                $filePath = $file->store('uploads', 'public'); 
+                // $filePath = $file->store('uploads', 'public'); 
+                // $fileModel = new File();
+                // $fileModel->file_name = $file->hashName(); 
+                // $fileModel->file_original_name = $file->getClientOriginalName();
+                // $fileModel->file_path = $filePath;
+                // $fileModel->file_url = asset('storage/' . $filePath); 
+                // $fileModel->file_type = $file->getClientMimeType();
+                // $fileModel->file_size = $file->getSize();
+                // $fileModel->save();
+                // $fileIds[] = $fileModel->file_id;
+                // Image compression code
+                $maxWidth  = 800; 
+                $maxHeight = 600;
+                $image = Image::make($file);
+       
+                $image->resize($maxWidth, $maxHeight, function ($constraint) {
+                    $constraint->aspectRatio();  
+                    $constraint->upsize();       
+                });
+                $image->encode($file->getClientOriginalExtension(), 75);
+                $filePath = 'uploads/' . $file->hashName();
+                $image->save(storage_path('app/public/' . $filePath));
                 $fileModel = new File();
-                $fileModel->file_name = $file->hashName(); 
+                $fileModel->file_name = $file->hashName();
                 $fileModel->file_original_name = $file->getClientOriginalName();
                 $fileModel->file_path = $filePath;
-                $fileModel->file_url = asset('storage/' . $filePath); 
+                $fileModel->file_url = asset('storage/' . $filePath);
                 $fileModel->file_type = $file->getClientMimeType();
                 $fileModel->file_size = $file->getSize();
                 $fileModel->save();
-                $fileIds[] = $fileModel->file_id;
+                $fileIds[] = $fileModel->file_id; 
             }
         }
         $existing_file_ids = explode(',', $item->item_file_images);

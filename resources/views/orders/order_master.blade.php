@@ -313,7 +313,7 @@
                                         activeBranchHtml = `
                                             
                                             <div style="border: 2px solid red; width: -webkit-max-content; padding: 4px; border-radius: 5px; color: green; font-weight: 500;"  title="Transfer from ${lastTransaction.trans_from.branch_name} and Accepted by ${lastTransaction.trans_to.branch_name}">
-                                                A-${lastTransaction.trans_from.branch_name}
+                                                A-${lastTransaction.trans_to.branch_name}
                                             </div>
                                         `;
                                     

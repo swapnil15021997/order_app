@@ -65,16 +65,56 @@ class NotesController extends Controller
             $files = $request->file('notes_file');
             \Log::info('Files uploaded: ' . count($files));
             foreach ($files as $file) {
-                $filePath = $file->store('uploads', 'public'); 
-                $fileModel = new File();
-                $fileModel->file_name = $file->hashName(); 
-                $fileModel->file_original_name = $file->getClientOriginalName();
-                $fileModel->file_path = $filePath;
-                $fileModel->file_url = asset('storage/' . $filePath); 
-                $fileModel->file_type = $file->getClientMimeType();
-                $fileModel->file_size = $file->getSize();
-                $fileModel->save();
-                $fileIds[] = $fileModel->file_id;
+
+                if ($params['notes_type']==4){
+                    \Log::info(['File types '=>$file->getMimeType()]);
+                    if(in_array($file->getMimeType(), ['image/jpeg', 'image/png'])){
+                        $maxWidth  = 800; 
+                        $maxHeight = 600;
+                        $image = Image::make($file);
+               
+                        $image->resize($maxWidth, $maxHeight, function ($constraint) {
+                            $constraint->aspectRatio();  
+                            $constraint->upsize();       
+                        });
+                        $image->encode($file->getClientOriginalExtension(), 75);
+                        $filePath = 'uploads/' . $file->hashName();
+                        $image->save(storage_path('app/public/' . $filePath));
+                        $fileModel = new File();
+                        $fileModel->file_name = $file->hashName();
+                        $fileModel->file_original_name = $file->getClientOriginalName();
+                        $fileModel->file_path = $filePath;
+                        $fileModel->file_url = asset('storage/' . $filePath);
+                        $fileModel->file_type = $file->getClientMimeType();
+                        $fileModel->file_size = $file->getSize();
+                        $fileModel->save();
+                        $fileIds[] = $fileModel->file_id;  
+
+                    }else{
+                        $filePath = $file->store('uploads', 'public'); 
+                        $fileModel = new File();
+                        $fileModel->file_name = $file->hashName(); 
+                        $fileModel->file_original_name = $file->getClientOriginalName();
+                        $fileModel->file_path = $filePath;
+                        $fileModel->file_url = asset('storage/' . $filePath); 
+                        $fileModel->file_type = $file->getClientMimeType();
+                        $fileModel->file_size = $file->getSize();
+                        $fileModel->save();
+                        $fileIds[] = $fileModel->file_id;
+                    }
+                }else{
+
+                    $filePath = $file->store('uploads', 'public'); 
+                    $fileModel = new File();
+                    $fileModel->file_name = $file->hashName(); 
+                    $fileModel->file_original_name = $file->getClientOriginalName();
+                    $fileModel->file_path = $filePath;
+                    $fileModel->file_url = asset('storage/' . $filePath); 
+                    $fileModel->file_type = $file->getClientMimeType();
+                    $fileModel->file_size = $file->getSize();
+                    $fileModel->save();
+                    $fileIds[] = $fileModel->file_id;
+                }
     
             }
             $notes_save->notes_file_id = implode(',', $fileIds);
