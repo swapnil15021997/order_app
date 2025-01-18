@@ -419,7 +419,7 @@
                         if(approve_array.length >= 1){
                             buttonHtml = `
                                 <div class="btn-list">
-                                    <button class="btn" onclick="approve_order()">
+                                    <button class="btn" id="aprove_btn" onclick="approve_order()">
                                         Approve Order
                                     </button>
 
@@ -507,7 +507,9 @@
             }
             var csrfToken = $('meta[name="csrf-token"]').attr('content');
             var transferTo = $('#TransfersearchableSelectTo').val();
-
+            $('body').addClass('loading');
+            $('#TransferOrderBtn').prop('disabled', true);
+          
             $.ajax({
                 url: "{{ route('multiple_transfer') }}",
                 type: 'POST',
@@ -519,6 +521,9 @@
                 },
                 success: function (response) {
                     if (response.status == 200) {
+                        $('body').removeClass('loading');
+                        $('#TransferOrderBtn').prop('disabled', false);
+          
                         $('#transfer_order_id').val('');
                         $('#TransfersearchableSelectTo').val('');
                         $('#transfer_order').modal('hide');
@@ -529,6 +534,8 @@
                             location.reload();
                         }, 2000);
                     } else {
+                        $('body').removeClass('loading');
+                        $('#TransferOrderBtn').prop('disabled', false);
                         alert(response.message);
 
                         showAlert('success', response.message);
@@ -538,6 +545,8 @@
                     }
                 },
                 error: function (xhr, status, error) {
+                    $('body').removeClass('loading');
+                    $('#TransferOrderBtn').prop('disabled', false);
                     showAlert('success', error);
 
                     $('#TransfersearchableSelectTo').val('');
@@ -552,7 +561,8 @@
                 alert('Cant approve with empty array');
             }
             var csrfToken = $('meta[name="csrf-token"]').attr('content');
-
+            $('body').addClass('loading');
+            $('#aprove_btn').prop('disabled', true);
             $.ajax({
                 url: "{{ route('multiple_approve') }}",
                 type: 'POST',
@@ -563,7 +573,9 @@
                 success: function (response) {
                     if (response.status == 200) {
 
-
+                        $('body').removeClass('loading');
+                        $('#aprove_btn').prop('disabled', false);
+        
                         showAlert('success', response.message);
                         alert(response.message);
 
@@ -571,6 +583,8 @@
                             location.reload();
                         }, 2000);
                     } else {
+                        $('body').removeClass('loading');
+                        $('#aprove_btn').prop('disabled', false);
                         alert(response.message);
 
                         showAlert('warning', response.message);
@@ -579,6 +593,8 @@
                     }
                 },
                 error: function (xhr, status, error) {
+                    $('body').removeClass('loading');
+                    $('#aprove_btn').prop('disabled', false);
                     showAlert('success', error);
                 }
             });
