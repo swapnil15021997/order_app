@@ -52,9 +52,9 @@
 
                     
                 @if($firstTransaction)
-                    <h2>Transfer From: {{ $firstTransaction['from_branch_name'] }}</h2>
-                    <h2>Transfer To: {{ $firstTransaction['to_branch_name'] }}</h2>
-              
+                <p class="me-2">Transfer From:  {{ $firstTransaction['from_branch_name'] }} </p>
+                <p>Transfer To:  {{ $firstTransaction['to_branch_name'] }} </p>
+                
                 @endif
 
                     <table id="branch_table" class="table card-table table-vcenter text-nowrap datatable">

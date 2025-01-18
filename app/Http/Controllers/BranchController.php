@@ -138,7 +138,7 @@ class BranchController extends Controller
         $login   = auth()->user()->toArray();
        
         $searchQuery = $request->input('search', ''); 
-
+        $draw        = $request->input('draw', '');
         $perPage     = $request->input('per_page', 15);   
         $page        = $request->input('page', 1);  
         $offset      = ($page - 1) * $perPage;
@@ -170,10 +170,16 @@ class BranchController extends Controller
         }
         $branchQuery->orderBy($sortColumn, $sortOrder);
         $total_branches = $branchQuery->count();
-        $branches = $branchQuery
-            ->offset($offset)
-            ->limit($perPage)
+        if($draw==''){
+            $branches = $branchQuery
             ->get();
+        }else{
+
+            $branches = $branchQuery
+                ->offset($offset)
+                ->limit($perPage)
+                ->get();
+        }
         $branches->each(function ($branches, $index) {
             $branches->serial_number = $index + 1; 
         });

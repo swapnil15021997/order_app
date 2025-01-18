@@ -845,18 +845,21 @@ class OrderController extends Controller
         if($params['order_type'] == 1){
             
             $payment = Payment::where('payment_order_id', $params['order_id'])->first();
+            
             if(!empty($payment)){
                 $payment->payment_booking_rate  = $params['payment_booking'];
                 $payment->payment_advance_cash  = $params['payment_advance'];
                 $payment->save();
             }else{
-                $payment = new Payment();
-                $payment->payment_order_id      = $order_rec->order_id;
-                $payment->payment_booking_rate  = $params['payment_booking'];
-                $payment->payment_customer_id   = 1;
-                $payment->payment_advance_cash  = $params['payment_advance'];
-                $payment->payment_date          = Carbon::now()->toDateString();
-                $payment->save();
+                if(!empty($params['payment_booking'])){
+                    $payment = new Payment();
+                    $payment->payment_order_id      = $order_rec->order_id;
+                    $payment->payment_booking_rate  = $params['payment_booking'];
+                    $payment->payment_customer_id   = 1;
+                    $payment->payment_advance_cash  = $params['payment_advance'];
+                    $payment->payment_date          = Carbon::now()->toDateString();
+                    $payment->save();
+                }
             }
         }
         SendEmailJob::dispatch($order_rec->order_id,$type="Edit");

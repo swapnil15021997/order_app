@@ -191,7 +191,7 @@
                                         </label>
                                         <input type="number" class="form-control" id="item_weight"
                                             name="example-text-input" value="{{$order['items'][0]['item_weight']}}"
-                                            placeholder="Weight of item" />
+                                            placeholder="Weight of item" step="0.01"/>
                                     </div>
                                     <div class="col-12 col-md-6 col-lg-2">
                                         <label for="item_colors" class="form-label">Colors</label>
@@ -533,11 +533,15 @@
                     </div>
                     <div class="d-flex gap-1 align-items-center">
                         <button id="audio_send" class="stop">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
+                            <!-- <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
                                 <g fill="none" stroke="currentColor" stroke-linejoin="round">
                                     <path d="M14.5 8a6.5 6.5 0 1 1-13 0a6.5 6.5 0 0 1 13 0Z" />
                                     <path d="M6 6h4v4H6z" />
                                 </g>
+                            </svg> -->
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 32 32">
+                                    <path fill="currentColor"
+                                        d="M13.5 6.5V7h5v-.5a2.5 2.5 0 0 0-5 0m-2 .5v-.5a4.5 4.5 0 1 1 9 0V7H28a1 1 0 1 1 0 2h-1.508L24.6 25.568A5 5 0 0 1 19.63 30h-7.26a5 5 0 0 1-4.97-4.432L5.508 9H4a1 1 0 0 1 0-2zM9.388 25.34a3 3 0 0 0 2.98 2.66h7.263a3 3 0 0 0 2.98-2.66L24.48 9H7.521zM13 12.5a1 1 0 0 1 1 1v10a1 1 0 1 1-2 0v-10a1 1 0 0 1 1-1m7 1a1 1 0 1 0-2 0v10a1 1 0 1 0 2 0z" />
                             </svg>
                         </button>
                         <button id="audio_stop" class="send">
@@ -1436,7 +1440,7 @@
                                 <div class="my-note-box">
                                     <div class="chat-bubble-title"></div>
                                     <div class="chat-bubble-body">
-                                        <p>${note.notes_text}.</p>
+                                        <p>${note.notes_text}</p>
                                     </div>
                                 </div>`);
                             }
@@ -1573,7 +1577,7 @@
                             },
                             success: function (response) {
                                 $('#note_sheet').removeClass('loading');
-                                showAlertNotes('success', response.message);
+                                // showAlertNotes('success', response.message);
                                 $('#TextNotes').val('');
                                 isLoading = false;
                                 page = 1;
@@ -1610,7 +1614,7 @@
                         },
                         success: function (response) {
                             $('#note_sheet').removeClass('loading');
-                            showAlertNotes('success', response.message);
+                            // showAlertNotes('success', response.message);
                             $('#TextNotes').val('');
                             isLoading = false;
                             page = 1;
@@ -1749,7 +1753,7 @@
             success: function (response) {
                 $('#note_sheet').removeClass('loading');
                 $('#click_image').modal('hide');
-                showAlertNotes('success', 'Image file uploaded successfully!');
+                // showAlertNotes('success', 'Image file uploaded successfully!');
                 isLoading = false;
                 page = 1;
                 loadNotes();
@@ -2099,7 +2103,7 @@
                 console.log('Audio uploaded successfully:', response);
                 if (response.status == 200) {
                     $('#note_sheet').removeClass('loading');
-                    showAlertNotes('success', 'Audio file uploaded successfully!');
+                    // showAlertNotes('success', 'Audio file uploaded successfully!');
                 } else {
                     $('#note_sheet').removeClass('loading');
                     showAlertNotes('warning', response.message);
@@ -2153,7 +2157,7 @@
                 },
                 success: function (response) {
                     $('#note_sheet').removeClass('loading');
-                    showAlertNotes('success', response.message);
+                    // showAlertNotes('success', response.message);
                     isLoading = false;
                     page = 1;
                     loadNotes();

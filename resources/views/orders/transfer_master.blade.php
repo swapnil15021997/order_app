@@ -48,7 +48,7 @@
                             <tr>
                                 <th class="w-1">Sr No</th>
                                 <th class="">Date</th>
-                                <th class="">Count</th>                                 
+                                <th class="">Total Orders</th>                                 
                                 <th>Action</th>
                             </tr>
                         </thead>
