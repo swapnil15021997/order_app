@@ -103,7 +103,7 @@
 
 
 
-    <input type="hidden" name="" id="transfer_order_id">
+    <input type="hidden" name="" id="transfer_order_id_master">
     <div class="modal modal-blur fade" id="transfer_order" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
@@ -365,7 +365,7 @@
                          
                             if (showApprove) {
                                 dropdown += `
-                                        <li class="action-item" title="Approve Order" onclick="approve_order(${row.order_qr_code})">
+                                        <li class="action-item" title="Approve Order" onclick="approve_order_master(${row.order_qr_code})">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path d="M16.6704 9.39887L12.3611 13.7082C11.6945 14.3749 11.3611 14.7082 10.9469 14.7082C10.5327 14.7082 10.1994 14.3749 9.53269 13.7082L8 12.1755M11 21H13C16.7712 21 18.6569 21 19.8284 19.8284C21 18.6569 21 16.7712 21 13V11C21 7.22876 21 5.34315 19.8284 4.17157C18.6569 3 16.7712 3 13 3H11C7.22876 3 5.34315 3 4.17157 4.17157C3 5.34315 3 7.22876 3 11V13C3 16.7712 3 18.6569 4.17157 19.8284C5.34315 21 7.22876 21 11 21Z" stroke="black" stroke-width="1.6" stroke-linecap="round"/>
 </svg>
@@ -373,7 +373,7 @@
             </li>`;
                             }else{
                                 dropdown += `
-                                  <li class="action-item" title="Transfer Order" onclick="transfer_order(${row.order_id})">
+                                  <li class="action-item" title="Transfer Order" onclick="transfer_order_master(${row.order_id})">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path d="M13.5616 10.4384L9.81389 14.186M10.349 15.1085L10.5514 15.458C12.466 18.7651 13.4233 20.4187 14.7092 20.2877C15.9952 20.1567 16.5994 18.3441 17.8078 14.7188L19.5413 9.51837C20.6451 6.20679 21.1971 4.551 20.323 3.67697C19.449 2.80293 17.7932 3.35487 14.4816 4.45873L9.28119 6.1922C5.65593 7.40063 3.8433 8.00484 3.7123 9.29076C3.5813 10.5767 5.23485 11.534 8.54196 13.4486L8.89146 13.651C9.35038 13.9167 9.57983 14.0495 9.76516 14.2348C9.95048 14.4202 10.0833 14.6496 10.349 15.1085Z" stroke="black" stroke-width="1.6" stroke-linecap="round"/>
 </svg>
@@ -540,9 +540,9 @@
 
 
 
-        function transfer_order(order_id) {
+        function transfer_order_master(order_id) {
 
-            $('#transfer_order_id').val(order_id);
+            $('#transfer_order_id_master').val(order_id);
             $('#transfer_order').modal('show');
 
         }
@@ -596,10 +596,13 @@
             $('#TransferOrderBtn').click(function (e) {
                 e.preventDefault();
 
-                var orderId = $('#transfer_order_id').val();
+                var orderId = $('#transfer_order_id_master').val();
                 var transferTo = $('#searchableSelectTo').val();
 
                 if (orderId) {
+                    $('body').addClass('loading');
+                    $('#TransferOrderBtn').prop('disabled', true);
+          
                     $.ajax({
                         url: "{{ route('order_transfer') }}",
                         type: 'POST',
@@ -611,8 +614,11 @@
                         },
                         success: function (response) {
                             if (response.status == 200) {
+                                $('body').removeClass('loading');
+                                $('#TransferOrderBtn').prop('disabled', false);
+          
                                 showAlertTransfer('success', response.message);
-                                $('#transfer_order_id').val('');
+                                $('#transfer_order_id_master').val('');
                                 $('#searchableSelectTo').val('');
                                 $('#branch_table').DataTable().ajax.reload();
 
@@ -621,12 +627,16 @@
                                     $('#transfer_order').modal('hide');
                                 }, 2000);
                             } else {
+                                $('body').removeClass('loading');
+                                $('#TransferOrderBtn').prop('disabled', false);
                                 showAlertTransfer('warning', response.message);
                                 $('#searchableSelectTo').val('');
 
                             }
                         },
                         error: function (xhr, status, error) {
+                            $('body').removeClass('loading');
+                            $('#TransferOrderBtn').prop('disabled', false);
                             showAlertTransfer('warning', error);
 
                             $('#searchableSelectTo').val('');
@@ -666,8 +676,9 @@
             }
 
         });
-        function approve_order(transaction_id) {
+        function approve_order_master(transaction_id) {
             if (transaction_id) {
+                $('body').addClass('loading');
                 $.ajax({
                     url: "{{ route('order_approve') }}",
                     type: 'POST',
@@ -677,14 +688,16 @@
                     },
                     success: function (response) {
                         if (response.status == 200) {
-
+                            $('body').removeClass('loading');
                             $('#branch_table').DataTable().ajax.reload();
                             showAlertOrder('success', response.message);
                         } else {
+                            $('body').removeClass('loading');
                             showAlertOrder('warning', response.message);
                         }
                     },
                     error: function (xhr, status, error) {
+                        $('body').removeClass('loading');
                         showAlertOrder('warning', error.message);
                     }
                 });
