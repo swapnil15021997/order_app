@@ -78,6 +78,20 @@ class BranchController extends Controller
             $branch->branch_address   = $params['branch_address'];
             $branch->branch_added_by  = $user->id;
             $branch->save();
+            
+            if($user->user_role_id  !=  1){
+                $prev_branches = $user->user_branch_ids;
+
+                $branches   = $prev_branches ? explode(',', $prev_branches) : [];
+                // Current branch
+                $branches[] = $branch->branch_id;
+                // comma seperated again
+                $user = User::find($user->id);
+
+                $user->user_branch_ids     = implode(',', $branches);
+                $user->save();
+            } 
+
             return response()->json([
                 'status' => 200,
                 'message' => 'Branch added successfully' 

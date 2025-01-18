@@ -601,7 +601,7 @@ class OrderController extends Controller
         
         if($login['user_role_id']==1){
 
-            $ordersQuery = Order::with('transactions','items')    
+            $ordersQuery = Order::with('transactions','items','transactions.trans_from','transactions.trans_to')    
             ->leftJoin('branch AS from_branch', 'from_branch.branch_id', '=', 'orders.order_from_branch_id')  
             ->leftJoin('branch AS to_branch', 'to_branch.branch_id', '=', 'orders.order_to_branch_id')  
             ->leftJoin('branch AS current_branch', 'current_branch.branch_id', '=', 'orders.order_current_branch')  
@@ -1099,6 +1099,7 @@ class OrderController extends Controller
         }
         $trans->trans_status = 1;
         $trans->trans_approved_by = $login['id'];
+        $trans->trans_accepted_time = Carbon::now()->toDateTimeString();
         $trans->save();
         $order = Order::get_order_by_id($trans->trans_order_id);
         $order->order_status        = 1;
@@ -1157,6 +1158,7 @@ class OrderController extends Controller
         SendNotification::dispatch($order->order_id,$type="Approve");
         $trans->trans_status = 1;
         $trans->trans_approved_by = $login['id'];
+        $trans->trans_accepted_time = Carbon::now()->toDateTimeString();
         $trans->save();
         $order = Order::get_order_by_id($trans->trans_order_id);
         $order->order_status        = 1;
@@ -1279,6 +1281,7 @@ class OrderController extends Controller
             }
             $trans->trans_status = 1;
             $trans->trans_approved_by = $login['id'];
+            $trans->trans_accepted_time = Carbon::now()->toDateTimeString();
             $trans->save();
             \Log::info(' Approve Transaction id');
             \Log::info(['Transaction id'=>$trans->trans_id,'Order id'=>$trans->trans_order_id]);

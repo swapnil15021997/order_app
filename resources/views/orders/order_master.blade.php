@@ -295,13 +295,29 @@
                         orderable: false,
                         render: function (data, type, row) {
                             let activeBranchHtml = '';
-                            if (row.order_current_branch && row.order_current_branch.trim() !== '') {
-                                activeBranchHtml = `
+                            let lastTransaction = row.transactions.length > 0 ? row.transactions[row.transactions.length - 1] : null;
+                            console.log("Last Transaction",lastTransaction);
+                            if (lastTransaction != null){
+                                if (lastTransaction.trans_status == 0){
+                                  
+                                    activeBranchHtml = `
+                                        
+                                        <div style="border: 2px solid green; width: -webkit-max-content; padding: 4px; border-radius: 5px; color: green; font-weight: 500;" title="Transfer from ${lastTransaction.trans_from.branch_name} and not Accepted by ${lastTransaction.trans_to.branch_name}">
+                                            T-${lastTransaction.trans_from.branch_name}
+                                        </div>
+                                    `;
                                     
-                                    <div style="border: 2px solid green; width: -webkit-max-content; padding: 4px; border-radius: 5px; color: green; font-weight: 500;">
-                                        ${row.order_current_branch}
-                                    </div>
-                                `;
+
+                                }else{
+                                    
+                                        activeBranchHtml = `
+                                            
+                                            <div style="border: 2px solid red; width: -webkit-max-content; padding: 4px; border-radius: 5px; color: green; font-weight: 500;"  title="Transfer from ${lastTransaction.trans_from.branch_name} and Accepted by ${lastTransaction.trans_to.branch_name}">
+                                                A-${lastTransaction.trans_from.branch_name}
+                                            </div>
+                                        `;
+                                    
+                                }
                             }
                             return `<div>
                                         <span>${row.order_from_name} ==>${row.order_to_name}</span>
