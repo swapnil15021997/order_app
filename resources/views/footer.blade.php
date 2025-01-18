@@ -157,7 +157,7 @@
                     </a>
                     <div class="dropdown-menu dropdown-menu-end">
                         <!-- <a href="{{ route('profile.edit') }}" class="dropdown-item">Profile</a> -->
-                        <a href="{{ route('settings') }}" class="dropdown-item">Settings</a>
+                        <a href="{{ route('settings') }}" class="dropdown-item">Account & Settings</a>
                         <a href="" onclick="logout()" class="dropdown-item">Logout</a>
 
                     </div>

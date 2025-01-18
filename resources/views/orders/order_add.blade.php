@@ -38,11 +38,11 @@
                                             <label for="order_date" class="form-label" required>Order Date
                                                 <span style="color: red;">*</span>
                                             </label>
-                                            <input type="text" id="order_date" required class="form-control">
+                                            <input type="text" id="order_date" required class="form-control" tabindex="1">
                                         </div>
                                         <div class="col-12 mt-3">
                                             <label for="order_type" class="form-label">Order Type</label>
-                                            <select id="order_type" class="form-select" type="text">
+                                            <select id="order_type" class="form-select" type="text" tabindex="2">
 
                                                 <option value="order" {{ $type == 'order' ? 'selected' : '' }}>Order</option>
                                                 <option value="reparing" {{ $type == 'repairing' ? 'selected' : '' }}>Reparing</option>
@@ -63,7 +63,7 @@
                                                 <span style="color: red;">*</span>
                                             </label>
 
-                                            <select id="searchableCust" class="form-select select2">
+                                            <select id="searchableCust" class="form-select select2" tabindex="3">
 
                                             </select>
                                         </div>
@@ -73,21 +73,21 @@
                                                 <label for="order_customer_name" class="form-label">Customer name
                                                     <span style="color: red;">*</span>
                                                 </label>
-                                                <input type="text" placeholder="Enter name" id="order_customer_name"
+                                                <input type="text" placeholder="Enter name" id="order_customer_name" tabindex="4"
                                                     class="form-control" form>
                                             </div>
                                             <div class="mt-3">
                                                 <label for="cust_phone_no" class="form-label">Phone number
                                                     <span style="color: red;">*</span>
                                                 </label>
-                                                <input type="text" placeholder="Enter number" id="cust_phone_no"
+                                                <input type="text" placeholder="Enter number" id="cust_phone_no" tabindex="5"
                                                     class="form-control" form>
                                             </div>
                                             <div class="mt-3">
                                                 <label for="customer_address" class="form-label">Address
                                                     <span style="color: red;">*</span>
                                                 </label>
-                                                <textarea type="text" placeholder="Enter Address" id="customer_address"
+                                                <textarea type="text" placeholder="Enter Address" id="customer_address" tabindex="6"
                                                     class="form-control" form></textarea>
                                             </div>
                                         </div>
@@ -104,7 +104,7 @@
                                             <span style="color: red;">*</span>
                                         </label>
 
-                                        <select id="searchableSelectFrom" class="form-select" type="text">
+                                        <select id="searchableSelectFrom" class="form-select" type="text" tabindex="7">
 
                                             @foreach ($user_branch as $branch)
 
@@ -119,7 +119,7 @@
                                             <span style="color: red;">*</span>
                                         </label>
 
-                                        <select id="searchableSelectTo" class="form-select w-100" type="text">
+                                        <select id="searchableSelectTo" class="form-select w-100" type="text" tabindex="8">
                                         <option value="#">select branch to transfer</option>
                                             @foreach ($branchesArray as $branch)
                                                 <option value="{{ $branch['branch_id'] }}">{{ $branch['branch_name'] }}
@@ -138,13 +138,13 @@
                                         <label for="item_name" class="form-label">Name
                                             <span style="color: red;">*</span>
                                         </label>
-                                        <input type="text" class="form-control" id="item_name" placeholder="Select Item" />
+                                        <input type="text" class="form-control" id="item_name" placeholder="Select Item"  tabindex="9"/>
                                     </div>
                                     <div class="col-12 col-md-6 col-lg-2">
                                         <label for="item_metal" class="form-label">Metal
                                             <span style="color: red;">*</span>
                                         </label>
-                                        <select class="form-select" id="item_metal">
+                                        <select class="form-select" id="item_metal" tabindex="10">
                                             <option value="" disabled selected>Select a metal</option>
                                             @foreach ($metals as $metal)
                                                 <option value="{{ $metal->metal_name }}" selected>
@@ -157,7 +157,7 @@
                                         <label for="item_melting" class="form-label">Melting
                                             <span style="color: red;">*</span>
                                         </label>
-                                        <select class="form-select" id="item_melting">
+                                        <select class="form-select" id="item_melting" tabindex="11">
                                             <option value="" disabled selected>Select a melting</option>
                                             @foreach ($melting as $melt)
                                                 <option value="{{ $melt->melting_name }}" selected>
@@ -170,11 +170,11 @@
                                         <label for="item_weight" class="form-label">Weight
                                             <span style="color: red;">*</span>
                                         </label>
-                                        <input type="number" class="form-control" id="item_weight" placeholder="Weight of item" step="0.01" />
+                                        <input type="number" class="form-control" id="item_weight" placeholder="Weight of item" step="0.01" tabindex="12" />
                                     </div>
                                     <div class="col-12 col-md-6 col-lg-2">
                                         <label for="item_colors" class="form-label">Colors</label>
-                                        <select class="form-select" id="item_colors">
+                                        <select class="form-select" id="item_colors" tabindex="13">
                                             @foreach ($colors as $color)
                                                 <option value="{{ $color['color_id'] }}">{{ $color['color_name'] }}</option>
                                             @endforeach
@@ -224,7 +224,7 @@
                                     <label for="customer_address" class="form-label">Notes
 
                                     </label>
-                                    <textarea type="text" placeholder="Enter Notes" id="order_remarks"
+                                    <textarea type="text" placeholder="Enter Notes" id="order_remarks" tabindex="14"
                                         class="form-control" form></textarea>
                                 </div>
                             </div>
@@ -236,12 +236,12 @@
                                 <div class="row">
                                     <div class="col-sm-6">
                                         <label for="payment_advance" class="form-label">Advance cash deposit</label>
-                                        <input type="number" placeholder="Enter here" class="form-control"
+                                        <input type="number" placeholder="Enter here" class="form-control" tabindex="15"
                                             id="payment_advance" name="example-text-input">
                                     </div>
                                     <div class="col-sm-6 mt-3 mt-sm-0">
                                         <label for="payment_booking" class="form-label">Rate</label>
-                                        <input type="number" class="form-control" id="payment_booking"
+                                        <input type="number" class="form-control" id="payment_booking" tabindex="16"
                                             placeholder="Enter here">
                                     </div>
                                 </div>
@@ -251,12 +251,12 @@
                         <div class="card">
                             <div class="card-body">
                                 <div class="d-flex justify-content-end align-items-center">
-                                    <a href="#" onclick="cancel_save()"
+                                    <a href="#" onclick="cancel_save()" tabindex="17"
                                         class="btn btn-secondary me-2 d-flex justify-content-end align-items-end">
 
                                         Cancel
                                     </a>
-                                    <a href="#" class="btn btn-primary  d-flex justify-content-end align-items-end"
+                                    <a href="#" tabindex="18" class="btn btn-primary  d-flex justify-content-end align-items-end"
                                         id="saveBranchBtn">
 
                                         Save
@@ -452,7 +452,7 @@
                         </button>
                     </div>
                 </div>
-                <input type="text" autocomplete="off" placeholder="Write your message" id="TextNotes" />
+                <input type="text" autocomplete="off" placeholder="Write your message" id="TextNotes" tabindex="20" />
                 <span class="custom-btn">
                     <input type="file" id="fileInput" style="display: none;" onchange="handleFileUpload(event)"
                         multiple />

@@ -392,7 +392,10 @@
                     $('#branch_table').on('change', '.form-check-input', function () {
                         var orderId = $(this).data('order-id');
                         var isChecked = $(this).prop('checked');
-                        handleCheckboxChange(orderId, isChecked);
+                        // handleCheckboxChange(orderId, isChecked);
+                        if (!handleCheckboxChange(orderId, isChecked)) {
+                            $(this).prop('checked', false);
+                        }
                     });
                 },
                 "pageLength": 10,
@@ -710,12 +713,14 @@
         function handleCheckboxChange(orderId, isChecked) {
             console.log(orderArray)
             if (isChecked) {
-                CheckType(orderId);
+                // CheckType(orderId);
+                return CheckType(orderId);
             } else {
                 console.log('Checkbox for order ID ' + orderId + ' is unchecked.');
                 RemoveFromArray(orderId);
             }
-            // You can add your custom logic here based on checkbox status
+
+            return true;
         }
 
         let approve_orders_array  = [];
@@ -736,13 +741,13 @@
                     mismatch.push(order_id);
                     toggleButtons();
                     alert("Previous order was approved, and the current order is of transfer. Please handle accordingly.");
-                    return;
+                    return false;
                 }
                 if (lastTransaction.trans_status === 0 && isAnyOrderTransferred) { 
                     mismatch.push(order_id);
                     toggleButtons();
                     alert("Previous order was transfer, and the current order is of approve. Please handle accordingly.");
-                    return;
+                    return false;
                 }
                 if (lastTransaction.trans_status === 0) {
                     // Add to approve_orders_array
@@ -759,6 +764,7 @@
                 approve_orders_array.push(order_id);
             }
             toggleButtons();
+            return true;
         }   
 
 
@@ -777,10 +783,10 @@
             console.log("toggleButtons Transfer",transfer_orders_array);
             console.log("Mismatch Transfer",mismatch);
             
-            if (mismatch.length > 0) {
-                $('#accept_btn').prop('disabled', true).addClass('d-none');
-                $('#transfer_btn').prop('disabled', true).addClass('d-none');
-            }else{
+            // if (mismatch.length > 0) {
+            //     $('#accept_btn').prop('disabled', true).addClass('d-none');
+            //     $('#transfer_btn').prop('disabled', true).addClass('d-none');
+            // }else{
 
                 if (approve_orders_array.length > 0) {
                     $('#accept_btn').prop('disabled', false).removeClass('d-none');
@@ -794,7 +800,7 @@
                 } else {
                     $('#transfer_btn').addClass('d-none');
                 }
-            }
+            // }
 
         }
 
