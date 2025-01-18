@@ -1,5 +1,11 @@
 @import url("https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap");
 
+body{
+    width: 100%;
+    overflow-x: hidden;
+    height: 100%;
+}
+
 .note-popver {
     bottom: 1rem;
     right: 1rem;
@@ -771,3 +777,9 @@ body.loading .loader-screeen {
     min-width: 100%;
     max-width: 100%;
 }
+
+#branch-dropdown-toggle::after{
+    content: "";
+    display: none;
+}
+

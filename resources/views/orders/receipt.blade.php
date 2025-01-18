@@ -43,18 +43,18 @@
                 <div class="alert-site">
 
                 </div>
-                <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
-                
+                <div class="table-responsive" style="overflow-y: auto;">
+
                 @php
 
                     $firstTransaction = $transfer_array[0]['transactions'][0] ?? null;
                 @endphp
 
-                    
+
                 @if($firstTransaction)
                 <p class="me-2">Transfer From:  {{ $firstTransaction['from_branch_name'] }} </p>
                 <p>Transfer To:  {{ $firstTransaction['to_branch_name'] }} </p>
-                
+
                 @endif
 
                     <table id="branch_table" class="table card-table table-vcenter text-nowrap datatable">
@@ -63,9 +63,9 @@
                                 <th class="w-1">Sr No</th>
                                 <th class="">Order Date</th>
                                 <th class="">Order Number</th>
-                                <th class="">Transfer By</th>                                 
-                                <th class="">Items</th>                                 
-                                 
+                                <th class="">Transfer By</th>
+                                <th class="">Items</th>
+
                             </tr>
                         </thead>
                         <tbody>
@@ -76,7 +76,7 @@
                                     <td>{{ $transaction['orders'][0]['order_number'] ?? 'N/A' }}</td>
                                     <td>{{ $transaction['trans_user']['name'] ?? 'N/A' }}</td>
                                     <td>{{ $transaction['items'][0]['item_name']}} -- {{ $transaction['items'][0]['item_weight'] ?? 'N/A'  }}</td>
-                                
+
                                 </tr>
                             @endforeach
                         </tbody>
@@ -87,7 +87,7 @@
     </div>
 
 
-    
+
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script defer src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
     <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-beta.1/js/select2.min.js"></script> -->
