@@ -1,6 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap");
 
-body{
+body {
     width: 100%;
     overflow-x: hidden;
     height: 100%;
@@ -773,13 +773,42 @@ body.loading .loader-screeen {
     z-index: 9999;
 }
 
-#branch-dropdown-toggle{
+#branch-dropdown-toggle {
     min-width: 100%;
     max-width: 100%;
 }
 
-#branch-dropdown-toggle::after{
+#branch-dropdown-toggle::after {
     content: "";
     display: none;
 }
 
+.nav-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    border-radius: 8px;
+    -webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+    -ms-border-radius: 8px;
+    -o-border-radius: 8px;
+    font-size: 14px;
+    background-color: transparent;
+    outline: none;
+    border: 1px solid transparent;
+    color: black;
+    font-weight: 400;
+    padding: 8px 12px;
+}
+
+.nav-btn.active,
+.nav-btn:hover {
+    background-color: rgba(132, 43, 37, 0.08);
+    color: #842b25;
+    text-decoration: none;
+}
+
+.box-shadow-none {
+    box-shadow: none !important;
+}

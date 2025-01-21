@@ -1,64 +1,86 @@
-<header class="navbar navbar-expand-md d-print-none">
+<header class="navbar navbar-expand-md d-print-none box-shadow-none">
     <div class="container-xl">
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-menu"
-            aria-controls="navbar-menu" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <h1 class="navbar-brand navbar-brand-autodark d-none-navbar-horizontal pe-0 pe-md-3">
-            <a href="{{route('dashboard')}}">
-                <img src="{{ asset('static/sonic-large.svg')}}" width="110" height="35" alt="Tabler"
-                    class="navbar-brand-image">
-            </a>
-        </h1>
-        <div class="navbar-nav flex-row align-items-center">
-            @if(in_array(5, $user_permissions))
-                <div class=me-2 {{ $activePage === 'orders' ? 'active' : '' }}">
+        <div class="d-flex align-items-center gap-4">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-menu"
+                aria-controls="navbar-menu" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <h1 class="navbar-brand navbar-brand-autodark d-none-navbar-horizontal">
+                <a href="{{route('dashboard')}}">
+                    <img src="{{ asset('static/sonic-large.svg')}}" width="110" height="35" alt="Tabler"
+                        class="navbar-brand-image">
+                </a>
+            </h1>
+            <div class="navbar-nav flex-row align-items-center gap-1">
+                @if(in_array(5, $user_permissions))
+                    <div>
+                        <a class="nav-btn" href="/dashboard">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                class="lucide lucide-house">
+                                <path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8" />
+                                <path
+                                    d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                            </svg>
+                            <span class="nav-link-title">
+                                Home
+                            </span>
+                        </a>
+                    </div>
+                    <div>
+                        <a class="nav-btn {{ $activePage === 'orders' ? 'active' : '' }}" href="{{route('order-master')}}">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                class="lucide lucide-box">
+                                <path
+                                    d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z" />
+                                <path d="m3.3 7 8.7 5 8.7-5" />
+                                <path d="M12 22V12" />
+                            </svg>
+                            <span class="nav-link-title">
+                                Orders
+                            </span>
+                        </a>
+                    </div>
+                    <div>
+                        <a class="nav-btn {{ $activePage === 'transfer' ? 'active' : '' }}"
+                            href="{{route('transfer-master')}}">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                class="lucide lucide-receipt-text">
+                                <path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1Z" />
+                                <path d="M14 8H8" />
+                                <path d="M16 12H8" />
+                                <path d="M13 16H8" />
+                            </svg>
+                            <span class="nav-link-title">
+                                Transfer Receipts
+                            </span>
+                        </a>
 
-                    <a class="btn w-100" href="{{route('order-master')}}">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" class="me-2" height="16" fill="currentColor"
-                            class="bi bi-receipt" viewBox="0 0 16 16">
-                            <path
-                                d="M1.92.506a.5.5 0 0 1 .434.14L3 1.293l.646-.647a.5.5 0 0 1 .708 0L5 1.293l.646-.647a.5.5 0 0 1 .708 0L7 1.293l.646-.647a.5.5 0 0 1 .708 0L9 1.293l.646-.647a.5.5 0 0 1 .708 0l.646.647.646-.647a.5.5 0 0 1 .708 0l.646.647.646-.647a.5.5 0 0 1 .801.13l.5 1A.5.5 0 0 1 15 2v12a.5.5 0 0 1-.053.224l-.5 1a.5.5 0 0 1-.8.13L13 14.707l-.646.647a.5.5 0 0 1-.708 0L11 14.707l-.646.647a.5.5 0 0 1-.708 0L9 14.707l-.646.647a.5.5 0 0 1-.708 0L7 14.707l-.646.647a.5.5 0 0 1-.708 0L5 14.707l-.646.647a.5.5 0 0 1-.708 0L3 14.707l-.646.647a.5.5 0 0 1-.801-.13l-.5-1A.5.5 0 0 1 1 14V2a.5.5 0 0 1 .053-.224l.5-1a.5.5 0 0 1 .367-.27m.217 1.338L2 2.118v11.764l.137.274.51-.51a.5.5 0 0 1 .707 0l.646.647.646-.646a.5.5 0 0 1 .708 0l.646.646.646-.646a.5.5 0 0 1 .708 0l.646.646.646-.646a.5.5 0 0 1 .708 0l.646.646.646-.646a.5.5 0 0 1 .708 0l.646.646.646-.646a.5.5 0 0 1 .708 0l.509.509.137-.274V2.118l-.137-.274-.51.51a.5.5 0 0 1-.707 0L12 1.707l-.646.647a.5.5 0 0 1-.708 0L10 1.707l-.646.647a.5.5 0 0 1-.708 0L8 1.707l-.646.647a.5.5 0 0 1-.708 0L6 1.707l-.646.647a.5.5 0 0 1-.708 0L4 1.707l-.646.647a.5.5 0 0 1-.708 0z" />
-                            <path
-                                d="M3 4.5a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5m8-6a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5" />
+                    </div>
+                @endif
+                <div class="my-md-0 flex-grow-1 flex-md-grow-0 d-md-flex d-none">
+                    <button class="nav-btn" id="start-scan">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            class="lucide lucide-qr-code">
+                            <rect width="5" height="5" x="3" y="3" rx="1" />
+                            <rect width="5" height="5" x="16" y="3" rx="1" />
+                            <rect width="5" height="5" x="3" y="16" rx="1" />
+                            <path d="M21 16h-3a2 2 0 0 0-2 2v3" />
+                            <path d="M21 21v.01" />
+                            <path d="M12 7v3a2 2 0 0 1-2 2H7" />
+                            <path d="M3 12h.01" />
+                            <path d="M12 3h.01" />
+                            <path d="M12 16v.01" />
+                            <path d="M16 12h1" />
+                            <path d="M21 12v.01" />
+                            <path d="M12 21v-1" />
                         </svg>
-                        <span class="nav-link-title">
-                            Orders
-                        </span>
-                    </a>
-
+                        Scan
+                    </button>
                 </div>
-                <div class=me-2 {{ $activePage === 'transfer' ? 'active' : '' }}">
-
-                    <a class="btn w-100" href="{{route('transfer-master')}}">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" class="me-2" height="16" fill="currentColor"
-                            class="bi bi-receipt" viewBox="0 0 16 16">
-                            <path
-                                d="M1.92.506a.5.5 0 0 1 .434.14L3 1.293l.646-.647a.5.5 0 0 1 .708 0L5 1.293l.646-.647a.5.5 0 0 1 .708 0L7 1.293l.646-.647a.5.5 0 0 1 .708 0L9 1.293l.646-.647a.5.5 0 0 1 .708 0l.646.647.646-.647a.5.5 0 0 1 .708 0l.646.647.646-.647a.5.5 0 0 1 .801.13l.5 1A.5.5 0 0 1 15 2v12a.5.5 0 0 1-.053.224l-.5 1a.5.5 0 0 1-.8.13L13 14.707l-.646.647a.5.5 0 0 1-.708 0L11 14.707l-.646.647a.5.5 0 0 1-.708 0L9 14.707l-.646.647a.5.5 0 0 1-.708 0L7 14.707l-.646.647a.5.5 0 0 1-.708 0L5 14.707l-.646.647a.5.5 0 0 1-.708 0L3 14.707l-.646.647a.5.5 0 0 1-.801-.13l-.5-1A.5.5 0 0 1 1 14V2a.5.5 0 0 1 .053-.224l.5-1a.5.5 0 0 1 .367-.27m.217 1.338L2 2.118v11.764l.137.274.51-.51a.5.5 0 0 1 .707 0l.646.647.646-.646a.5.5 0 0 1 .708 0l.646.646.646-.646a.5.5 0 0 1 .708 0l.646.646.646-.646a.5.5 0 0 1 .708 0l.646.646.646-.646a.5.5 0 0 1 .708 0l.646.646.646-.646a.5.5 0 0 1 .708 0l.509.509.137-.274V2.118l-.137-.274-.51.51a.5.5 0 0 1-.707 0L12 1.707l-.646.647a.5.5 0 0 1-.708 0L10 1.707l-.646.647a.5.5 0 0 1-.708 0L8 1.707l-.646.647a.5.5 0 0 1-.708 0L6 1.707l-.646.647a.5.5 0 0 1-.708 0L4 1.707l-.646.647a.5.5 0 0 1-.708 0z" />
-                            <path
-                                d="M3 4.5a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5m8-6a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5" />
-                        </svg>
-                        <span class="nav-link-title">
-                            Transfer Receipts
-                        </span>
-                    </a>
-
-                </div>
-            @endif
-            <div class="my-md-0 flex-grow-1 flex-md-grow-0 d-md-flex d-none">
-                <button class="btn w-100" id="start-scan">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" class="me-2" fill="currentColor"
-                        class="bi bi-qr-code-scan" viewBox="0 0 16 16">
-                        <path
-                            d="M0 .5A.5.5 0 0 1 .5 0h3a.5.5 0 0 1 0 1H1v2.5a.5.5 0 0 1-1 0zm12 0a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-1 0V1h-2.5a.5.5 0 0 1-.5-.5M.5 12a.5.5 0 0 1 .5.5V15h2.5a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5v-3a.5.5 0 0 1 .5-.5m15 0a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1 0-1H15v-2.5a.5.5 0 0 1 .5-.5M4 4h1v1H4z" />
-                        <path d="M7 2H2v5h5zM3 3h3v3H3zm2 8H4v1h1z" />
-                        <path d="M7 9H2v5h5zm-4 1h3v3H3zm8-6h1v1h-1z" />
-                        <path
-                            d="M9 2h5v5H9zm1 1v3h3V3zM8 8v2h1v1H8v1h2v-2h1v2h1v-1h2v-1h-3V8zm2 2H9V9h1zm4 2h-1v1h-2v1h3zm-4 2v-1H8v1z" />
-                        <path d="M12 9h2V8h-2z" />
-                    </svg>
-                    Scan
-                </button>
             </div>
         </div>
         <div class="navbar-nav flex-row align-items-center order-md-last">
@@ -76,8 +98,9 @@
 
             </div> -->
             <div class="me-2 ps-2 nav-item dropdown">
-                <div class="btn-list"  >
-                    <a href="#" data-bs-toggle="dropdown" class=" btn  dropdown-toggle no-arrow">
+                <div class="btn-list">
+                    <a href="#" data-bs-toggle="dropdown" class=" btn  dropdown-toggle no-arrow"
+                        style="border:none !important; box-shadow : none !important;">
                         <svg class="me-2" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                             class="bi bi-geo-alt" viewBox="0 0 16 16">
                             <path
@@ -85,14 +108,14 @@
                             <path d="M8 8a2 2 0 1 1 0-4 2 2 0 0 1 0 4m0 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6" />
                         </svg>
 
-                            <!-- <span class="me-2">{{ session('active_branch', '') }}</span> -->
-                            <!-- <div style="border: 2px solid green; width: -webkit-max-content; padding: 4px; border-radius: 5px; color: green; font-weight: 500;"> -->
-                            <span style="color: green;">
+                        <!-- <span class="me-2">{{ session('active_branch', '') }}</span> -->
+                        <!-- <div style="border: 2px solid green; width: -webkit-max-content; padding: 4px; border-radius: 5px; color: green; font-weight: 500;"> -->
+                        <span style="color: green;">
 
-                                {{ session('active_branch', '') }}
-                            </span>
-                            <!-- </div> -->
-                        </a>
+                            {{ session('active_branch', '') }}
+                        </span>
+                        <!-- </div> -->
+                    </a>
                     <div class="dropdown-menu dropdown-menu-end">
                         @foreach($user_branch as $branch)
                             <a class="dropdown-item  @if($branch['branch_id'] == $login['user_active_branch']) active @endif"
@@ -105,9 +128,12 @@
                     </div>
                 </div>
             </div>
-            <div class="nav-item dropdown d-none d-xl-flex me-4">
+            <div class="nav-item dropdown d-none d-xl-flex ms-2">
                 <a href="#" class="nav-link d-flex lh-1 text-reset p-0" data-bs-toggle="dropdown"
                     aria-label="Open user menu">
+                    <div class="d-none d-xl-block pe-2">
+                        <div>{{$login['name']}}</div>
+                    </div>
                     <span class="avatar avatar-sm">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                             class="bi bi-person-circle" viewBox="0 0 16 16">
@@ -116,11 +142,6 @@
                                 d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1" />
                         </svg>
                     </span>
-                    <div class="d-none d-xl-block ps-2">
-                        <div>{{$login['name']}}</div>
-
-                        <div class="mt-1 small text-secondary">{{session('role_name', '')}}</div>
-                    </div>
                 </a>
 
                 <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
@@ -226,7 +247,7 @@
             },
             success: function (response) {
                 console.log(response);
-                if (response.status==200) {
+                if (response.status == 200) {
                     location.href = "{{ route('login') }}";
                 }
             }
