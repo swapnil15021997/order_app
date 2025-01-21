@@ -90,12 +90,12 @@
                     </div>
                     <div class="child">
                         <p><b>Branch</b><br />
-                            
-                        @if (!empty($order['order_current_branch']))
-                            {{ $order['order_current_branch'] }}
-                        @else
-                            {{ $order['order_from_name'] }}
-                        @endif<br />
+
+                            @if (!empty($order['order_current_branch']))
+                                {{ $order['order_current_branch'] }}
+                            @else
+                                {{ $order['order_from_name'] }}
+                            @endif<br />
                             <!-- Amreli,<br />
                             GJ 360 002</p> -->
                     </div>
@@ -103,10 +103,10 @@
                         <ul>
                             <li>
                                 <p><b>Order Number</b></p>
-                                @if($order['order_type']==1)
-                                <p>O - # {{$order['order_qr_code']}}</p>
+                                @if($order['order_type'] == 1)
+                                    <p>O - # {{$order['order_qr_code']}}</p>
                                 @else
-                                <p>R - # {{$order['order_qr_code']}}</p>
+                                    <p>R - # {{$order['order_qr_code']}}</p>
                                 @endif
                             </li>
                             <li>
@@ -129,8 +129,8 @@
                             <br />
                             @if(!empty($customer_order['cust_address'])) {{$customer_order['cust_address']}} @endif
                         </p>
-                        @if($order['order_type']==1)
-                               
+                        @if($order['order_type'] == 1)
+
                             <h1>Order </h1>
                         @else
                             <h1>Reparing</h1>
@@ -168,28 +168,28 @@
                             </div>
                         </div>
                     </div>
-                    <div class="child">
-                    @php
-                        $hasFiles = false;
-                    @endphp
+                    <div class="child" style="display:flex; align-items:start;">
+                        @php
+                            $hasFiles = false;
+                        @endphp
+                        <div class="w-100">
+                            @foreach($order['items'] as $file)
+                                                    @if(!empty($file['files']) && $file['files']->isNotEmpty())
+                                                                            @php
+                                                                                $hasFiles = true;
+                                                                                $firstFile = $file['files']->first();
 
-                    @foreach($order['items'] as $file)
-                        @if(!empty($file['files']) && $file['files']->isNotEmpty())
-                            @php
-                                $hasFiles = true;
-                                $firstFile = $file['files']->first();
-                                
-                            @endphp
+                                                                            @endphp
 
-                            <div class="w-100">
-                            <!-- https://images.unsplash.com/photo-1543294001-f7cd5d7fb516?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D -->
-                                <img src="{{ asset($firstFile->file_url) }}"
-                                    alt="image" width="240px" height="200px" class="rounded-4" />
-                            </div>
 
-                        @endif
+                                                                            <img src="{{ asset($firstFile->file_url) }}" alt="image" width="240px" height="200px"
+                                                                                class="rounded-4" />
 
-                    @endforeach
+                                                    @endif
+
+                            @endforeach
+                        </div>
+
                         <div class="w-100">
                             <p><b>Notes:</b></p>
                             <br />
@@ -197,50 +197,35 @@
                             <!-- <p>Gold Ring with original diamon</p> -->
                         </div>
                     </div>
-                    
+
                     <div class="child">
                         @if($order['order_type'] == 1)
 
-                        <div class="table-my">
-                            <div class="table-col">
+                            <div class="cash-box">
                                 <div>
-                                    <p>Advance Cash</p>
-                                </div>
-                                <div>
+                                    <p><b>Advance Cash</b></p>
                                     <p>
-                                        Cash Deposit
-                                    </p>
-                                </div>
-                                
-                                
-                            </div>
-                            <div class="table-col">
-                                    <div>
-                                        <p>
-                                            @if(!empty($payment['payment_booking_rate']))
-                                                {{$payment['payment_booking_rate']}} 
-                                            @endif
-                                        </p>
-
-                                    </div>
-                                <div>   
-                                    <p>
-                                        
-                                        @if(!empty($payment['payment_advance_cash']))
-                                            {{$payment['payment_advance_cash']}} 
+                                        @if(!empty($payment['payment_booking_rate']))
+                                            {{$payment['payment_booking_rate']}}
                                         @endif
-
                                     </p>
                                 </div>
-
-                                
+                                <div>
+                                    <p>
+                                        <b> Cash Deposit </b>
+                                    </p>
+                                    <p>
+                                        @if(!empty($payment['payment_advance_cash']))
+                                            {{$payment['payment_advance_cash']}}
+                                        @endif
+                                    </p>
+                                </div>
                             </div>
-                            
-                        </div>
+
                         @endif
                     </div>
                 </div>
-                    
+
                 <div class="foot">
                     <div class="child">
                         <div>
@@ -268,7 +253,7 @@
     <style type="text/css">
         /* @media print {
 
-             
+
             @page {
                 margin: 0;
                 size: A4;
@@ -278,12 +263,15 @@
 
         @media print {
             body {
-                font-size: 12px; /* Adjust the base font size for print */
+                font-size: 12px;
+                /* Adjust the base font size for print */
             }
 
             .chalan {
-                width: 100%; /* Make sure it fits within the page width */
-                font-size: 10pt; /* Adjust font size for the specific section */
+                width: 100%;
+                /* Make sure it fits within the page width */
+                font-size: 10pt;
+                /* Adjust font size for the specific section */
             }
 
             /* Optional: Remove unnecessary elements from print */
@@ -496,7 +484,7 @@
                 }
             });
         });
-       
+
         function printDiv() {
             var printContents = document.getElementsByClassName('chalan')[0].innerHTML;
             var originalContents = document.body.innerHTML;
