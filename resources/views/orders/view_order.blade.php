@@ -39,7 +39,7 @@
                 @endif
 
                 <button type="button" class="btn btn-primary printMe" onclick="printDiv()">Print</button>
- 
+
             </div>
         </div>
     </div>
@@ -72,7 +72,7 @@
             </div>
         </div>
     </div>
-    <div class="page-body chalan">
+    <div class="page-body chalan table_print">
         <div class="container-xl ">
             <div class="row" id="transfer-container">
             </div>
@@ -83,399 +83,119 @@
                     </div>
                 @endif
             </div>
-            <div class="row">
-
-                <div>
-                    <h1>Karigar issue</h1>
+            <div class="chalan-card">
+                <div class="head">
+                    <div class="child">
+                        <img src="{{ asset('static/sonic-large.svg')}}" width="240" height="auto" alt="Tabler" />
+                    </div>
+                    <div class="child">
+                        <p><b>Branch</b><br />
+                            Savarkundal<br />
+                            Amreli,<br />
+                            GJ 360 002</p>
+                    </div>
+                    <div class="child">
+                        <ul>
+                            <li>
+                                <p><b>Original</b></p>
+                                <p>R - # 0376387</p>
+                            </li>
+                            <li>
+                                <p><b>Issue Date</b></p>
+                                <p>10 / 11 / 2024</p>
+                            </li>
+                            <li>
+                                <p><b>Due Date</b></p>
+                                <p>01 / 01 / 2025</p>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
-                <div class="table_print">
-                    <div style="display: flex; flex-wrap: wrap">
-                        <div style="width: 50%">
-                            <div style="padding: 8px">
-                                <p><b>Sonic Jewellers Limited-2024-25</b></p>
-                                <p>Company's GSTIN/UIN : <b>24ABDCS4503K1ZG</b></p>
-                                <p>GIN: U36996GJ2020PLC112753</p>
-                            </div>
-                            <div style="border-top: 1px solid #cccccc; padding: 8px">
-                                <p>Buyer (Bill to)</p>
-                                <p>Customer Name: <b> @if(!empty($customer_order['cust_name']))
-                                {{$customer_order['cust_name']}} @endif </b></p>
-                                <p>Customer Address: <b>@if(!empty($customer_order['cust_address']))
-                                {{$customer_order['cust_address']}} @endif </b></p>
-                                <p>Phone No: <b> @if(!empty($customer_order['cust_phone_no']))
-                                {{$customer_order['cust_phone_no']}} @endif </b></p>
-                            </div>
-                        </div>
-                        <div style="width: 50%; border-left: 1px solid #cccccc">
-                            <div style="display: flex; flex-wrap: wrap">
-                                <div style="padding: 8px; width: 50%">
-                                    <p>Delivery Note No.</p>
-                                    <p><b>KARI/24-251217</b></p>
-                                </div>
-                                <div style="border-left: 1px solid #cccccc; padding: 8px; width: 50%">
-                                    <p>Dated</p>
-                                    <p><b>{{$order['order_date']}}</b></p>
-                                </div>
-                                <div style="padding: 8px; width: 50%; border-top: 1px solid #cccccc">
-                                    <p>QR Code: &nbsp; {{$qr_code}}</p>
-
-                                </div>
-                                <div style="
-                          border-left: 1px solid #cccccc;
-                          padding: 8px;
-                          width: 50%;
-                          border-top: 1px solid #cccccc;
-                        ">
-                                    <p>Mode/Terms of Payment</p>
-                                </div>
-                                <div style="padding: 8px; width: 50%; border-top: 1px solid #cccccc">
-                                    <p>Reference No & Date</p>
-                                </div>
-                                <div style="
-                          border-left: 1px solid #cccccc;
-                          padding: 8px;
-                          width: 50%;
-                          border-top: 1px solid #cccccc;
-                        ">
-                                    <p>Other References</p>
-                                </div>
-                                <div style="padding: 8px; width: 50%; border-top: 1px solid #cccccc">
-                                    <p>Byurs's Order NO.</p>
-                                </div>
-                                <div style="
-                          border-left: 1px solid #cccccc;
-                          padding: 8px;
-                          width: 50%;
-                          border-top: 1px solid #cccccc;
-                        ">
-                                    <p>Dated</p>
-                                </div>
-                                <div style="padding: 8px; width: 50%; border-top: 1px solid #cccccc">
-                                    <p>Dispatch Doc No</p>
-
-                                </div>
-                                <div style="
-                          border-left: 1px solid #cccccc;
-                          padding: 8px;
-                          width: 50%;
-                          border-top: 1px solid #cccccc;
-                        ">
-
-                                    @if($order['order_type'] == 1)
-                                        <p>Order Type: &nbsp; &nbsp;&nbsp;&nbsp;<b>Order</b>
-                                            <br />
-                                            Order Number: &nbsp;{{$order['order_number']}}
-                                        </p>
-                                    @else
-                                        <p>Order Type: &nbsp; &nbsp;&nbsp;&nbsp; &nbsp;<b>Repairing</b>
-                                            <br />
-                                            Order Number: &nbsp;<b>{{$order['order_number']}}</b>
-                                        </p>
-                                    @endif
-                                </div>
-                                <div style="padding: 8px; width: 50%; border-top: 1px solid #cccccc">
-                                    <p>Dispatched through <br>
-                                        <b>{{$order['order_from_name']}}</b>
-                                    </p>
-
-                                </div>
-                                <div style="
-                          border-left: 1px solid #cccccc;
-                          padding: 8px;
-                          width: 50%;
-                          border-top: 1px solid #cccccc;
-                        ">
-                                    <p>Destination <br>
-                                        <b>{{$order['order_to_name']}}</b>
-                                    </p>
-
-                                </div>
-
-                                <div style="padding: 8px; width: 100%; border-top: 1px solid #cccccc">
-                                    <p>Terms of Delivery</p>
-                                </div>
-
-                                @if($order['order_type'] == 1)
-
-                                            <div style="padding: 8px; width: 50%; border-top: 1px solid #cccccc">
-                                                <p>Advance Cash Deposit
-                                                    <br>
-                                                    @if(!empty($payment['payment_advance_cash']))
-                                                    {{$payment['payment_advance_cash']}} @endif
-                                                </p>
-
-
-                                            </div>
-                                            <div style="
-                                        border-left: 1px solid #cccccc;
-                                        padding: 8px;
-                                        width: 50%;
-                                        border-top: 1px solid #cccccc;
-                                      ">
-                                                <p>Advance Rate Book
-                                                    <br>
-                                                    <b>@if(!empty($payment['payment_booking_rate']))
-                                                    {{$payment['payment_booking_rate']}} @endif</b>
-                                                </p>
-                                                <p></p>
-                                            </div>
-                                @endif
-                            </div>
-                        </div>
-
-
+                <div class="body">
+                    <div class="child">
+                        <p><b>For,</b><br />
+                            @if(!empty($customer_order['cust_name'])) {{$customer_order['cust_name']}} @endif <br />
+                            @if(!empty($customer_order['cust_phone_no'])) {{$customer_order['cust_phone_no']}} @endif
+                            <br />
+                            @if(!empty($customer_order['cust_address'])) {{$customer_order['cust_address']}} @endif
+                        </p>
+                        <h1>{{$order['order_type']}}</h1>
                     </div>
-                    <div style="
-                    border-top: 1px solid #cccccc;
-                    border-bottom: 1px solid #cccccc;
-                  ">
-                        <div style="
-                      display: flex;
-                      align-items: stretch;
-                      flex-wrap: nowrap;
-                      overflow: hidden;
-                    ">
-                            <div style="padding: 4px; width: 100%; max-width: 4%">
-                                <p>Sr No.</p>
+                    <div class="table-my">
+                        <div class="table-col">
+                            <div>
+                                <p>Item</p>
                             </div>
-                            <div style="
-                        padding: 4px;
-                        border-left: 1px solid #cccccc;
-                        width: 100%;
-                        max-width: 35%;
-                      ">
-                                <p>Desciprion of Goods</p>
+                            <div>
+                                <p>Melting</p>
                             </div>
-                            <div style="
-                        padding: 4px;
-                        border-left: 1px solid #cccccc;
-                        width: 100%;
-                        max-width: 10%;
-                        text-align: center;
-                      ">
-                                <p>HSN/SAC</p>
-                            </div>
-                            <div style="
-                        padding: 4px;
-                        border-left: 1px solid #cccccc;
-                        width: 100%;
-                        max-width: 10%;
-                        text-align: center;
-                      ">
-                                <p>Gross Weight</p>
-                            </div>
-                            <div style="
-                        padding: 4px;
-                        border-left: 1px solid #cccccc;
-                        width: 100%;
-                        max-width: 10%;
-                      ">
-                                <p>Quantity</p>
-                            </div>
-                            <div style="
-                        padding: 4px;
-                        border-left: 1px solid #cccccc;
-                        width: 100%;
-                        max-width: 10%;
-                      ">
-                                <p>Rate</p>
-                            </div>
-                            <div style="
-                        padding: 4px;
-                        border-left: 1px solid #cccccc;
-                        width: 100%;
-                        max-width: 6%;
-                      ">
-                                <p>per</p>
-                            </div>
-                            <div style="
-                        padding: 4px;
-                        border-left: 1px solid #cccccc;
-                        width: 100%;
-                        max-width: 14%;
-                      ">
-                                <p>Amount</p>
+                            <div>
+                                <p>Purity</p>
                             </div>
                         </div>
-
-
-                        <!-- item -->
-                        <div style="
-                      display: flex;
-                      align-items: stretch;
-                      flex-wrap: nowrap;
-                      overflow: hidden;
-                      border-top: 1px solid #cccccc;
-                    ">
-                            <div style="padding: 4px; width: 100%; max-width: 4%">
-                                <p style="text-align: center">1</p>
+                        <div class="table-col">
+                            <div>
+                                <p>Application Design</p>
                             </div>
-                            <div style="
-                        padding: 4px;
-                        border-left: 1px solid #cccccc;
-                        width: 100%;
-                        max-width: 35%;
-                      ">
-                                <p style="text-align: center">{{$order['items'][0]['item_name']}}</p>
+                            <div>
+                                <p>1</p>
                             </div>
-                            <div style="
-                        padding: 4px;
-                        border-left: 1px solid #cccccc;
-                        width: 100%;
-                        max-width: 10%;
-                      ">
-                                <p style="text-align: center">{{$order['items'][0]['item_melting']}}</p>
+                            <div>
+                                <p>$5,500.00</p>
                             </div>
-                            <div style="
-                        padding: 4px;
-                        border-left: 1px solid #cccccc;
-                        width: 100%;
-                        max-width: 10%;
-                      ">
-                                <p style="text-align: center">{{$order['items'][0]['item_weight']}} GRM</p>
-                            </div>
-                            <div style="
-                        padding: 4px;
-                        border-left: 1px solid #cccccc;
-                        width: 100%;
-                        max-width: 10%;
-                      ">
-                                <p style="text-align: center"><b>1</b></p>
-                            </div>
-                            <div style="
-                        padding: 4px;
-                        border-left: 1px solid #cccccc;
-                        width: 100%;
-                        max-width: 10%;
-                      "></div>
-                            <div style="
-                        padding: 4px;
-                        border-left: 1px solid #cccccc;
-                        width: 100%;
-                        max-width: 6%;
-                      "></div>
-                            <div style="
-                        padding: 4px;
-                        border-left: 1px solid #cccccc;
-                        width: 100%;
-                        max-width: 14%;
-                      "></div>
-                        </div>
-                        <div style="
-                      display: flex;
-                      align-items: stretch;
-                      flex-wrap: nowrap;
-                      overflow: hidden;
-                      border-top: 1px solid #cccccc;
-                    ">
-                            <div style="padding: 4px; width: 100%; max-width: 4%"></div>
-                            <div style="
-                        padding: 4px;
-                        border-left: 1px solid #cccccc;
-                        width: 100%;
-                        max-width: 35%;
-                        text-align: center;
-                      ">
-                                <p style="text-align: center">Total</p>
-                            </div>
-                            <div style="
-                        padding: 4px;
-                        border-left: 1px solid #cccccc;
-                        width: 100%;
-                        max-width: 10%;
-                      "></div>
-                            <div style="
-                        padding: 4px;
-                        border-left: 1px solid #cccccc;
-                        width: 100%;
-                        max-width: 10%;
-                        text-align: center;
-                      ">{{$order['items'][0]['item_weight']}} GRM</div>
-                            <div style="
-                        padding: 4px;
-                        border-left: 1px solid #cccccc;
-                        width: 100%;
-                        max-width: 10%;
-                      ">
-                                <p style="text-align: center"><b></b></p>
-                            </div>
-                            <div style="
-                        padding: 4px;
-                        border-left: 1px solid #cccccc;
-                        width: 100%;
-                        max-width: 10%;
-                      "></div>
-                            <div style="
-                        padding: 4px;
-                        border-left: 1px solid #cccccc;
-                        width: 100%;
-                        max-width: 6%;
-                      "></div>
-                            <div style="
-                        padding: 4px;
-                        border-left: 1px solid #cccccc;
-                        width: 100%;
-                        max-width: 14%;
-                      "></div>
                         </div>
                     </div>
-                    <div style="margin-top: 32px; padding: 8px">
-                        <p>Company's GSTIN/UIN : <b>24ABDCS4503K1ZG</b></p>
-                        <p>Companys PAN : <b>ABDCS450Kk</b></p>
+                    <div class="child">
+                        <div class="w-100">
+                            <img src="https://images.unsplash.com/photo-1543294001-f7cd5d7fb516?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                                alt="image" width="240px" height="200px" class="rounded-4" />
+                        </div>
+                        <div class="w-100">
+                            <p><b>Notes:</b></p>
+                            <br />
+                            <p>Measurment. : 20</p>
+                            <p>Gold Ring with original diamon</p>
+                        </div>
                     </div>
-                    <div style="
-                    display: flex;
-                    align-items: stretch;
-                    border-top: 1px solid #cccccc;
-                  ">
-                        <div style="width: 50%; padding: 8px">
-                            <p>Recd. in Good Condition</p>
+                </div>
+                <div class="foot">
+                    <div class="child">
+                        <div>
+                            <p><b>Manager Signatory:</b></p>
                         </div>
-                        <div style="width: 50%; padding: 8px; border-left: 1px solid #cccccc">
-                            <small style="text-align: end; display: block"><b>for Sonic Jewellers
-                                    Limited-2024-25</b></small>
-                            <div style="
-                        display: flex;
-                        align-items: stretch;
-                        justify-content: space-between;
-                      ">
-                                <div>
-                                    <div style="margin: 36px 0"></div>
-                                    <p>Prepared by</p>
-                                </div>
-                                <div>
-                                    <div style="margin: 36px 0"></div>
-                                    <p>verified by</p>
-                                </div>
-                                <div>
-                                    <div style="margin: 36px 0"></div>
-                                    <p>Authorized Signatory</p>
-                                </div>
-                            </div>
+                        <div>
+                            <p><b>Salesman Signatory :</b></p>
                         </div>
+                        <div>
+                            <p><b>Customer Signatory:</b></p>
+                        </div>
+                    </div>
+                    <div class="child">
+                        <p><b>Scan to Accept :</b></p>
+                        {{$qr_code}}
                     </div>
                 </div>
             </div>
         </div>
     </div>
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-    
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jQuery.print/1.6.0/jQuery.print.min.js"></script>
 
-<style type="text/css">
+    <style type="text/css">
+        @media print {
 
-	@media print {
-    /* Adjust the page margins */
-    @page {
-        margin: 0;
-        size: A4;
-    }
+            /* Adjust the page margins */
+            @page {
+                margin: 0;
+                size: A4;
+            }
 
-}
-</style> 
+        }
+    </style>
     <script>
         var csrfToken = $('meta[name="csrf-token"]').attr('content');
-          
+
 
         function transfer_order_view(order_id) {
             $('#transfer_order_id_view').val(order_id);
@@ -487,12 +207,12 @@
         $('#TransferOrderBtnView').click(function (e) {
             e.preventDefault();
 
-            var orderId    = $('#transfer_order_id_view').val();
+            var orderId = $('#transfer_order_id_view').val();
             var transferTo = $('#searchableSelectToView').val();
 
             if (orderId) {
                 $('body').addClass('loading');
-                $('#TransferOrderBtnView').prop('disabled',true);
+                $('#TransferOrderBtnView').prop('disabled', true);
                 $.ajax({
                     url: "{{ route('order_transfer') }}",
                     type: 'POST',
@@ -505,7 +225,7 @@
                     success: function (response) {
                         if (response.status == 200) {
                             $('body').removeClass('loading');
-                            $('#TransferOrderBtnView').prop('disabled',false);
+                            $('#TransferOrderBtnView').prop('disabled', false);
 
                             $('#transfer_order_id_view').val('');
                             $('#searchableSelectToView').val('');
@@ -518,7 +238,7 @@
                             }, 2000);
                         } else {
                             $('body').removeClass('loading');
-                            $('#TransferOrderBtnView').prop('disabled',false);
+                            $('#TransferOrderBtnView').prop('disabled', false);
 
                             showAlertTransfer('success', response.message);
                             $('#searchableSelectToView').val('');
@@ -528,10 +248,10 @@
                     },
                     error: function (xhr, status, error) {
                         $('body').removeClass('loading');
-                        $('#TransferOrderBtnView').prop('disabled',false);
-                        
+                        $('#TransferOrderBtnView').prop('disabled', false);
+
                         showAlertTransfer('success', error);
-                            
+
                         $('#searchableSelectToView').val('');
 
                     }
@@ -572,7 +292,7 @@
         function approve_order_view(transaction_id) {
             if (transaction_id) {
                 $('body').addClass('loading');
-                $('#accept_btn').prop('disabled',true);
+                $('#accept_btn').prop('disabled', true);
                 $.ajax({
                     url: "{{ route('order_approve') }}",
                     type: 'POST',
@@ -583,24 +303,24 @@
                     success: function (response) {
                         if (response.status == 200) {
                             $('body').removeClass('loading');
-                            $('#accept_btn').prop('disabled',false);
+                            $('#accept_btn').prop('disabled', false);
                             location.reload();
                             showAlert('success', response.message);
                         } else {
                             $('body').removeClass('loading');
-                            $('#accept_btn').prop('disabled',false);
+                            $('#accept_btn').prop('disabled', false);
                             showAlert('warning', response.message);
                         }
                     },
                     error: function (xhr, status, error) {
                         $('body').removeClass('loading');
-                        $('#accept_btn').prop('disabled',false);
+                        $('#accept_btn').prop('disabled', false);
                         showAlert('warning', error.message);
                     }
                 });
             } else {
                 $('body').removeClass('loading');
-                $('#accept_btn').prop('disabled',false);
+                $('#accept_btn').prop('disabled', false);
                 showAlert('warning', 'Please select Transaction id');
             }
         }
@@ -639,7 +359,7 @@
                     userInput = $(this).val();
                 });
             });
-             $('#searchableSelectToView').select2({
+            $('#searchableSelectToView').select2({
 
                 placeholder: "Select an option",
                 allowClear: true,
@@ -685,7 +405,7 @@
             window.print();
             document.body.innerHTML = originalContents;
         }
-       
+
     </script>
 
     @endsection

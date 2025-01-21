@@ -1,4 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap");
 
 body {
     width: 100%;
@@ -33,17 +34,6 @@ body {
 }
 .d-flex {
     display: block; /* Ensure the parent doesn't interfere with child scrolling */
-}
-
-.table_print {
-    width: 100%;
-    max-width: 90%;
-    border: 1px solid #cccccc;
-    margin: auto;
-    font-family: "Open Sans", sans-serif;
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
 }
 
 .select2-container--open {
@@ -803,7 +793,8 @@ body.loading .loader-screeen {
 }
 
 .nav-btn.active,
-.nav-btn:hover {
+.nav-btn:hover,
+.nav-btn:focus {
     background-color: rgba(132, 43, 37, 0.08);
     color: #842b25;
     text-decoration: none;
@@ -811,4 +802,162 @@ body.loading .loader-screeen {
 
 .box-shadow-none {
     box-shadow: none !important;
+}
+
+.chalan-card {
+    font-family: "Manrope", serif;
+    width: 100%;
+    background-color: white;
+    max-width: 1140px;
+    margin: auto;
+    border: 1px solid #a6a6a6;
+    color: #212121;
+}
+
+.chalan-card .head {
+    border-bottom: 1px solid #a6a6a6;
+    display: flex;
+    align-items: stretch;
+}
+
+.chalan-card .head .child {
+    padding: 30px 20px 40px 20px;
+    border-left: 1px solid #a6a6a6;
+    flex: 1;
+    display: flex;
+    align-items: center;
+}
+
+.chalan-card .head .child p {
+    font-size: 18px;
+    margin-bottom: 0;
+}
+
+.chalan-card .head .child:nth-child(1) {
+    border-left: 0;
+}
+
+.chalan-card .head .child ul {
+    list-style-type: none;
+    padding-left: 0;
+    width: 100%;
+}
+
+.chalan-card .head .child ul li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    margin-top: 10px;
+}
+
+.chalan-card .head .child ul li:nth-child(1) {
+    margin-top: 0;
+}
+
+.chalan-card .foot {
+    border-top: 1px solid #a6a6a6;
+    display: flex;
+    align-items: stretch;
+}
+
+.chalan-card .foot .child {
+    padding: 40px 20px 30px 20px;
+    border-left: 1px solid #a6a6a6;
+}
+
+.chalan-card .foot .child:nth-child(1) {
+    border-left: 0;
+    width: 75%;
+    display: flex;
+    align-items: stretch;
+}
+
+.chalan-card .foot .child:nth-child(1) div {
+    flex: 1;
+}
+
+.chalan-card .foot .child:nth-child(2) {
+    width: 25%;
+}
+
+.chalan-card .foot .child:nth-child(2) svg {
+    width: 150px;
+    height: 150px;
+    margin: auto;
+}
+
+.chalan-card .foot .child p {
+    font-size: 18px;
+}
+
+.chalan-card .body {
+    padding: 40px 20px 120px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+}
+
+.chalan-card .body p {
+    font-size: 18px;
+    margin-bottom: 0;
+}
+
+.chalan-card .body .child:nth-child(1) {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.chalan-card .body h1 {
+    font-size: 40px;
+    font-weight: 700;
+}
+
+.chalan-card .body .table-my {
+    width: 100%;
+    border: 1px solid #21212166;
+    font-size: 14px !important;
+}
+
+.chalan-card .body .table-my .table-col {
+    border-top: 1px solid #a6a6a6;
+    display: flex;
+    align-items: stretch;
+}
+
+.chalan-card .body .table-my .table-col:nth-child(1) {
+    border-top: 0;
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+.chalan-card .body .table-my .table-col div {
+    padding: 24px;
+    border-left: 1px solid #a6a6a6;
+}
+
+.chalan-card .body .table-my .table-col div:nth-child(1),
+.chalan-card .body .table-my .table-col:nth-child(1) div {
+    border-left: 0;
+}
+
+.chalan-card .body .table-my .table-col div:nth-child(1) {
+    width: 100%;
+    text-align: left;
+}
+
+.chalan-card .body .table-my .table-col div:nth-child(2) {
+    width: 20%;
+    text-align: left;
+}
+.chalan-card .body .table-my .table-col div:nth-child(3) {
+    width: 30%;
+    text-align: end;
+}
+
+.chalan-card .body .child:nth-last-child(1) {
+    display: flex;
+    align-items: start;
 }

@@ -57,7 +57,6 @@
                                 Transfer Receipts
                             </span>
                         </a>
-
                     </div>
                 @endif
                 <div class="my-md-0 flex-grow-1 flex-md-grow-0 d-md-flex d-none">
@@ -100,7 +99,7 @@
             <div class="me-2 ps-2 nav-item dropdown">
                 <div class="btn-list">
                     <a href="#" data-bs-toggle="dropdown" class=" btn  dropdown-toggle no-arrow"
-                        style="border:none !important; box-shadow : none !important;">
+                        style="border:none !important; box-shadow : none !important; color: green; background-color: rgba(60, 179, 113 , 0.10)">
                         <svg class="me-2" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                             class="bi bi-geo-alt" viewBox="0 0 16 16">
                             <path
@@ -110,8 +109,7 @@
 
                         <!-- <span class="me-2">{{ session('active_branch', '') }}</span> -->
                         <!-- <div style="border: 2px solid green; width: -webkit-max-content; padding: 4px; border-radius: 5px; color: green; font-weight: 500;"> -->
-                        <span style="color: green;">
-
+                        <span>
                             {{ session('active_branch', '') }}
                         </span>
                         <!-- </div> -->
@@ -143,7 +141,6 @@
                         </svg>
                     </span>
                 </a>
-
                 <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
                     <!-- <a href="{{route('profile.edit')}}" class="dropdown-item">Profile</a> -->
                     <a href="{{route('settings')}}" class="dropdown-item">Account & Settings</a>
