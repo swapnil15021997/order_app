@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="page-header d-print-none">
-    <div class="container-xl">
+    <div class="container">
         <div class="row g-2 align-items-center">
             <div id="alert-site"></div>
             <div class="col">
@@ -90,36 +90,52 @@
                     </div>
                     <div class="child">
                         <p><b>Branch</b><br />
-                            Savarkundal<br />
-                            Amreli,<br />
-                            GJ 360 002</p>
+                            
+                        @if (!empty($order['order_current_branch']))
+                            {{ $order['order_current_branch'] }}
+                        @else
+                            {{ $order['order_from_name'] }}
+                        @endif<br />
+                            <!-- Amreli,<br />
+                            GJ 360 002</p> -->
                     </div>
                     <div class="child">
                         <ul>
                             <li>
-                                <p><b>Original</b></p>
-                                <p>R - # 0376387</p>
+                                <p><b>Order Number</b></p>
+                                @if($order['order_type']==1)
+                                <p>O - # {{$order['order_qr_code']}}</p>
+                                @else
+                                <p>R - # {{$order['order_qr_code']}}</p>
+                                @endif
                             </li>
                             <li>
-                                <p><b>Issue Date</b></p>
-                                <p>10 / 11 / 2024</p>
+                                <p><b>Order Date</b></p>
+                                <p>{{$order['order_date']}}</p>
                             </li>
-                            <li>
+                            <!-- <li>
                                 <p><b>Due Date</b></p>
                                 <p>01 / 01 / 2025</p>
-                            </li>
+                            </li> -->
                         </ul>
                     </div>
                 </div>
                 <div class="body">
                     <div class="child">
                         <p><b>For,</b><br />
+
                             @if(!empty($customer_order['cust_name'])) {{$customer_order['cust_name']}} @endif <br />
                             @if(!empty($customer_order['cust_phone_no'])) {{$customer_order['cust_phone_no']}} @endif
                             <br />
                             @if(!empty($customer_order['cust_address'])) {{$customer_order['cust_address']}} @endif
                         </p>
-                        <h1>{{$order['order_type']}}</h1>
+                        @if($order['order_type']==1)
+                               
+                            <h1>Order </h1>
+                        @else
+                            <h1>Reparing</h1>
+
+                        @endif
                     </div>
                     <div class="table-my">
                         <div class="table-col">
@@ -130,34 +146,101 @@
                                 <p>Melting</p>
                             </div>
                             <div>
-                                <p>Purity</p>
+                                <p>Weight</p>
+                            </div>
+                            <div>
+                                <p>Color</p>
                             </div>
                         </div>
+
                         <div class="table-col">
                             <div>
-                                <p>Application Design</p>
+                                <p>{{$order['items'][0]['item_name']}}</p>
                             </div>
                             <div>
-                                <p>1</p>
+                                <p>{{$order['items'][0]['item_melting']}}</p>
                             </div>
                             <div>
-                                <p>$5,500.00</p>
+                                <p>{{$order['items'][0]['item_weight']}} GM</p>
+                            </div>
+                            <div>
+                                <p>{{$order['items'][0]['colors']['color_name']}}</p>
                             </div>
                         </div>
                     </div>
                     <div class="child">
-                        <div class="w-100">
-                            <img src="https://images.unsplash.com/photo-1543294001-f7cd5d7fb516?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                                alt="image" width="240px" height="200px" class="rounded-4" />
-                        </div>
+                    @php
+                        $hasFiles = false;
+                    @endphp
+
+                    @foreach($order['items'] as $file)
+                        @if(!empty($file['files']) && $file['files']->isNotEmpty())
+                            @php
+                                $hasFiles = true;
+                                $firstFile = $file['files']->first();
+                                
+                            @endphp
+
+                            <div class="w-100">
+                            <!-- https://images.unsplash.com/photo-1543294001-f7cd5d7fb516?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D -->
+                                <img src="{{ asset($firstFile->file_url) }}"
+                                    alt="image" width="240px" height="200px" class="rounded-4" />
+                            </div>
+
+                        @endif
+
+                    @endforeach
                         <div class="w-100">
                             <p><b>Notes:</b></p>
                             <br />
-                            <p>Measurment. : 20</p>
-                            <p>Gold Ring with original diamon</p>
+                            <p>{{$order['order_remark']}}</p>
+                            <!-- <p>Gold Ring with original diamon</p> -->
                         </div>
                     </div>
+                    
+                    <div class="child">
+                        @if($order['order_type'] == 1)
+
+                        <div class="table-my">
+                            <div class="table-col">
+                                <div>
+                                    <p>Advance Cash</p>
+                                </div>
+                                <div>
+                                    <p>
+                                        Cash Deposit
+                                    </p>
+                                </div>
+                                
+                                
+                            </div>
+                            <div class="table-col">
+                                    <div>
+                                        <p>
+                                            @if(!empty($payment['payment_booking_rate']))
+                                                {{$payment['payment_booking_rate']}} 
+                                            @endif
+                                        </p>
+
+                                    </div>
+                                <div>   
+                                    <p>
+                                        
+                                        @if(!empty($payment['payment_advance_cash']))
+                                            {{$payment['payment_advance_cash']}} 
+                                        @endif
+
+                                    </p>
+                                </div>
+
+                                
+                            </div>
+                            
+                        </div>
+                        @endif
+                    </div>
                 </div>
+                    
                 <div class="foot">
                     <div class="child">
                         <div>
@@ -183,14 +266,30 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jQuery.print/1.6.0/jQuery.print.min.js"></script>
 
     <style type="text/css">
-        @media print {
+        /* @media print {
 
-            /* Adjust the page margins */
+             
             @page {
                 margin: 0;
                 size: A4;
             }
 
+        } */
+
+        @media print {
+            body {
+                font-size: 12px; /* Adjust the base font size for print */
+            }
+
+            .chalan {
+                width: 100%; /* Make sure it fits within the page width */
+                font-size: 10pt; /* Adjust font size for the specific section */
+            }
+
+            /* Optional: Remove unnecessary elements from print */
+            .no-print {
+                display: none;
+            }
         }
     </style>
     <script>
@@ -397,6 +496,7 @@
                 }
             });
         });
+       
         function printDiv() {
             var printContents = document.getElementsByClassName('chalan')[0].innerHTML;
             var originalContents = document.body.innerHTML;

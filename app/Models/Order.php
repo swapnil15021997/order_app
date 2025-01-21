@@ -37,7 +37,7 @@ class Order extends Model
 
     public static function get_order_by_qr_number_id($qr_number){
 
-        $order = Order::with('transactions')
+        $order = Order::with(['transactions','items.colors'])
         ->leftJoin('branch AS from_branch', 'from_branch.branch_id', '=', 'orders.order_from_branch_id')  // Join to get 'order_from_branch' name
         ->leftJoin('branch AS to_branch', 'to_branch.branch_id', '=', 'orders.order_to_branch_id')  // Join to get 'order_to_branch' name
         ->select(
@@ -45,10 +45,15 @@ class Order extends Model
             'from_branch.branch_name AS order_from_name',   
             'to_branch.branch_name AS order_to_name'
         )
-        ->with('items') 
+        // ->with('items') 
         ->distinct()
         ->where('orders.order_qr_code', $qr_number)  
         ->first();
+        if ($order) {
+            foreach ($order->items as $item) {
+                $item->files = File::whereIn('file_id', explode(',', $item->item_file_images))->where('is_delete', 0)->get();
+            }
+        }
     return $order;
     }
 
@@ -76,6 +81,7 @@ class Order extends Model
             ->distinct()
             ->where('orders.order_id', $id)  
             ->first();
+        
         return $order;
     }
 

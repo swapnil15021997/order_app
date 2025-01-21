@@ -20,7 +20,7 @@ class Customers extends Model
 
 
     public static function get_cust_by_id($cust_id){
-        $customer = Customers::where('cust_id',$cust_id)->where('is_delete',1)->first();
+        $customer = Customers::where('cust_id',$cust_id)->where('is_delete',0)->first();
         return $customer;
     }
 

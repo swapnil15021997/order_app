@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-
+use App\Models\Colors;
 class Item extends Model
 {
     use HasFactory;
@@ -31,6 +31,11 @@ class Item extends Model
     public function order()
     {
         return $this->belongsTo(Order::class, 'item_order_id', 'order_id');
+    }
+
+    public function colors()
+    {
+        return $this->belongsTo(Colors::class, 'item_color', 'color_id');
     }
    
 

@@ -71,6 +71,7 @@ class OrderController extends Controller
         if(!empty($order['order_customer_id'])){
             $customer_order = Customers::get_cust_by_id($order['order_customer_id']);
         }
+
         $payment = [];
         if($order['order_type']==1){
             $payment = Payment::get_payment_by_id($order['order_id']);

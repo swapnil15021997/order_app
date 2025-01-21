@@ -222,7 +222,7 @@
                                                 @endphp
                                                 @foreach($order['items'] as $file)
 
-                                                                                            @if(!empty($file['files']) && $file['files']->isNotEmpty())
+                                                                                                                                        @if(!empty($file['files']) && $file['files']->isNotEmpty())
                                                                                                                                         @php
                                                                                                                                             $hasFiles = true;
                                                                                                                                         @endphp
