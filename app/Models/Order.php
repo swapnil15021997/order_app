@@ -54,7 +54,33 @@ class Order extends Model
                 $item->files = File::whereIn('file_id', explode(',', $item->item_file_images))->where('is_delete', 0)->get();
             }
         }
-    return $order;
+        return $order;
+    }
+    
+    public static function get_order_by_qr_number_array($qr_number){
+        $order = Order::with(['transactions','items.colors'])
+        ->leftJoin('branch AS from_branch', 'from_branch.branch_id', '=', 'orders.order_from_branch_id')  // Join to get 'order_from_branch' name
+        ->leftJoin('branch AS to_branch', 'to_branch.branch_id', '=', 'orders.order_to_branch_id')  // Join to get 'order_to_branch' name
+        ->select(
+            'orders.*', 
+            'from_branch.branch_name AS order_from_name',   
+            'to_branch.branch_name AS order_to_name'
+        )
+        // ->with('items') 
+        ->distinct()
+        ->whereIn('orders.order_qr_code', $qr_number)  
+        ->get();
+         
+        if ($order) {
+            foreach ($order as $ord) {
+                foreach ($ord->items as $item) {
+                    $item->files = File::whereIn('file_id', explode(',', $item->item_file_images))
+                        ->where('is_delete', 0)
+                        ->get()->toArray();
+                }
+            }
+        }
+        return $order;
     }
 
     public static function get_order_by_number_id($order_number){

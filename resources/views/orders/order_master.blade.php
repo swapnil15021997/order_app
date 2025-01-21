@@ -297,7 +297,7 @@
                         render: function (data, type, row) {
                             let activeBranchHtml = '';
                             let lastTransaction = row.transactions.length > 0 ? row.transactions[row.transactions.length - 1] : null;
-                            console.log("Last Transaction",lastTransaction);
+
                             if (lastTransaction != null){
                                 if (lastTransaction.trans_status == 0){
 
@@ -371,14 +371,30 @@
 
                             let showApprove = false;
                             let transaction_id;
-                            row.transactions.forEach(transaction => {
-
-                                if ( transaction.trans_status === 0) {
-                                    showApprove = true;
-
-                                    transaction_id = transaction.trans_id;
+                            let lastTransaction = row.transactions.length > 0 ? row.transactions[row.transactions.length - 1] : null;
+                            console.log("Last Transaction",lastTransaction, row.order_id);
+                            if (lastTransaction != null){
+                                if (lastTransaction.trans_status == 0){
+                                    showApprove=true
+                                }else{
+                                    showApprove=false
                                 }
-                            });
+                            }else{
+                                if(row.order_status==0){
+
+                                    showApprove=true;
+                                }else{
+                                    showApprove=false;
+                                }
+                            }
+                            // row.transactions.forEach(transaction => {
+
+                            //     if ( transaction.trans_status === 0) {
+                            //         showApprove = true;
+
+                            //         transaction_id = transaction.trans_id;
+                            //     }
+                            // });
 
                             if (showApprove) {
                                 dropdown += `

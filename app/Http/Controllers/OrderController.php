@@ -538,6 +538,46 @@ class OrderController extends Controller
 
     }
 
+    public function qr_details(Request $request){
+        $params = $request->all();
+             
+        $rules = [   
+            
+            'qr_number' => ['required','array'],
+           
+            ]; 
+        $messages = [
+ 
+                'qr_number.required'         => 'Order id is required.',
+                'qr_number.array'           => 'Order id must be a array.'
+
+            ]; 
+            
+        $validator = Validator::make($params, $rules, $messages);
+        
+        if($validator->fails()){
+            return response()->json([
+                'status' => 500,
+                'message' => Arr::flatten($validator->errors()->toArray())[0], 
+                'errors'  => $validator->errors(), 
+            ]);
+        } 
+ 
+        $check_order = Order::get_order_by_qr_number_array($params['qr_number']);
+
+        if (empty($check_order)){
+            return response()->json([
+                'status' => 500,
+                'message' => 'Order does not exist'
+            ]);
+        }
+
+        return response()->json([
+            'status'  => 200,
+            'message' => 'Order details fetch successfully',
+            'data'    => $check_order
+        ]);
+    }
 
     public function order_details(Request $request){
         $params = $request->all();
