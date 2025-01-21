@@ -65,6 +65,8 @@
                                 <th class="">Order Number</th>
                                 <th class="">Transfer By</th>
                                 <th class="">Items</th>
+                                <th class="">Action</th>
+                                
 
                             </tr>
                         </thead>
@@ -73,10 +75,17 @@
                                 <tr>
                                     <td>{{ $index + 1 }}</td>
                                     <td>{{ $transaction['orders'][0]['order_date'] ?? 'N/A' }}</td>
-                                    <td>{{ $transaction['orders'][0]['order_number'] ?? 'N/A' }}</td>
+                                    <td>{{ $transaction['orders'][0]['order_qr_code'] ?? 'N/A' }}</td>
                                     <td>{{ $transaction['trans_user']['name'] ?? 'N/A' }}</td>
                                     <td>{{ $transaction['items'][0]['item_name']}} -- {{ $transaction['items'][0]['item_weight'] ?? 'N/A'  }}</td>
-
+                                    <td> 
+                                        <span onclick="view_order({{    $transaction['orders'][0]['order_qr_code']    }})">
+                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M2.45448 13.8458C1.84656 12.7245 1.84656 11.3653 2.45447 10.2441C4.29523 6.84896 7.87965 4.54492 11.9999 4.54492C16.1202 4.54492 19.7046 6.84897 21.5454 10.2441C22.1533 11.3653 22.1533 12.7245 21.5454 13.8458C19.7046 17.2409 16.1202 19.5449 11.9999 19.5449C7.87965 19.5449 4.29523 17.2409 2.45448 13.8458Z" stroke="black" stroke-width="1.6"/>
+                                                <path d="M15.0126 12C15.0126 13.6569 13.6695 15 12.0126 15C10.3558 15 9.01263 13.6569 9.01263 12C9.01263 10.3431 10.3558 9 12.0126 9C13.6695 9 15.0126 10.3431 15.0126 12Z" stroke="black" stroke-width="1.6"/>
+                                            </svg>
+                                        </span>
+                                    </td>
                                 </tr>
                             @endforeach
                         </tbody>
@@ -97,6 +106,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
 
     <script>
-
+        
+        function view_order(trans_id) {
+            window.location.href = `/view-order/${trans_id}`;
+        }
     </script>
     @endsection

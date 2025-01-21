@@ -149,5 +149,8 @@ $(document).ready(function () {
         function view_receipt(trans_id) {
             window.location.href = `/view-receipt/${trans_id}`;
         }
+
+
+
     </script>
     @endsection
