@@ -61,6 +61,7 @@ class Order extends Model
         $order = Order::with(['transactions','items.colors'])
         ->leftJoin('branch AS from_branch', 'from_branch.branch_id', '=', 'orders.order_from_branch_id')  // Join to get 'order_from_branch' name
         ->leftJoin('branch AS to_branch', 'to_branch.branch_id', '=', 'orders.order_to_branch_id')  // Join to get 'order_to_branch' name
+        ->leftJoin('branch AS current_branch', 'current_branch.branch_id', '=', 'orders.order_current_branch')  
         ->select(
             'orders.*', 
             'from_branch.branch_name AS order_from_name',   

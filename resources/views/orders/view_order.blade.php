@@ -90,8 +90,8 @@
                     </div>
                     <div class="child">
                         <p><b>Branch</b><br />
-
-                            @if (!empty($order['order_current_branch']))
+                             
+                            @if (!empty($order['current_branch']))
                                 {{ $order['order_current_branch'] }}
                             @else
                                 {{ $order['order_from_name'] }}
