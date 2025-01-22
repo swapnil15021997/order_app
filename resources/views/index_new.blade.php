@@ -151,7 +151,8 @@
                             </div>
                             <div class="row mt-3">
                                 <div class="col-md-4">
-                                    <button id="detailBtn" onclick="get_details_of_qr_code()" class="btn btn-secondary"> Click Here to Approve or Transfer </button>
+                                    <!-- <button id="detailBtn" onclick="get_details_of_qr_code()" class="btn btn-secondary"> Click Here to Approve or Transfer </button> -->
+                                    <button id="mismatchBtn" onclick="remove_mismatch()" class="btn d-none btn-secondary"> Remove Mismatch QR </button>
                                     <button id="resetBtn" onclick="reset()" class="btn d-none btn-secondary"> Reset </button>
                                 </div>
                                 
@@ -294,7 +295,7 @@
             var qr_num_array = qr_num.split(',');
             total_qr_array = qr_num_array
             $('#resetBtn').removeClass('d-none');
-            $('#detailBtn').addClass('d-none');
+            // $('#detailBtn').addClass('d-none');
             
             $.ajax({
                 url: "{{ route('qr_details') }}",  // Adjust the route as needed
@@ -373,6 +374,7 @@
                 $('#transfer_button').addClass('d-none');
             }
             if (mismatch_qr.length > 0) {
+                $('#mismatchBtn').removeClass('d-none');
                 $('#accept_button').addClass('d-none');
                 $('#transfer_button').addClass('d-none');                
             }
@@ -393,27 +395,50 @@
             
             
         }
+
+        function remove_mismatch(){
+            approve_qr_array  = approve_qr_array.filter(item => !mismatch_qr.includes(item.qr_code));
+            transfer_qr_array = transfer_qr_array.filter(item => !mismatch_qr.includes(item.qr_code));
+            
+            mismatch_qr = [];
+          
+            let aprove_qr = approve_qr_array.map(item => item.qr_code);            
+            let transfer_qr = transfer_qr_array.map(item => item.qr_code);            
+          
+            $('#qr_code_numbers').val(aprove_qr.join(', ')); 
+            $('#qr_code_numbers').val(transfer_qr.join(', ')); 
+            $('#mismatch_qr').addClass('d-none');
+            toggleButtons();
+        }
+        
         $(document).ready(function() {
-            $('#qr_code_numbers').on('input', function() {
-                var qr_code_input = $(this).val().trim();
-                console.log(qr_code_input);
-                var updated_qr_codes = qr_code_input.split(',').map(code => code.trim()).filter(code => code !== "");
+            // $('#qr_code_numbers').on('input', function() {
+            //     var qr_code_input = $(this).val().trim();
+            //     console.log(qr_code_input);
+            //     var updated_qr_codes = qr_code_input.split(',').map(code => code.trim()).filter(code => code !== "");
 
-                total_qr_array.forEach(qr => {
-                    console.log("total block",qr);
+            //     total_qr_array.forEach(qr => {
+            //         console.log("total block",qr);
                     
-                    if (!updated_qr_codes.includes(qr)) {
-                        console.log("if block",qr);
-                        approve_qr_array = approve_qr_array.filter(item => item.qr_code !== qr);
-                        transfer_qr_array = transfer_qr_array.filter(item => item.qr_code !== qr);
-                        mismatch_qr = mismatch_qr.filter(item => item.qr_code !== qr);
+            //         if (!updated_qr_codes.includes(qr)) {
+            //             console.log("if block",qr);
+            //             approve_qr_array = approve_qr_array.filter(item => item.qr_code !== qr);
+            //             transfer_qr_array = transfer_qr_array.filter(item => item.qr_code !== qr);
+            //             mismatch_qr = mismatch_qr.filter(item => item.qr_code !== qr);
                 
-                        console.log(approve_qr_array,transfer_qr_array,mismatch_qr);
-                    }
-                });
+            //             console.log(approve_qr_array,transfer_qr_array,mismatch_qr);
+            //         }
+            //     });
 
-                toggleButtons(); 
+            //     toggleButtons(); 
+            // });
+
+            $('#qr_code_numbers').on('paste', function (event) {
+                setTimeout(function () {
+                    get_details_of_qr_code();
+                });
             });
+
         });
 
         function approve_qr_order(){

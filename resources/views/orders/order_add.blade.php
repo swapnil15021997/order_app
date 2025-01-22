@@ -1002,7 +1002,6 @@
                     $('#cust_div').addClass('d-none');
                 }
 
-
             });
 
             $(document).on('mouseup', '.select2-add-new', function (e) {
