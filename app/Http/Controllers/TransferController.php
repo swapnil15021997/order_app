@@ -25,7 +25,7 @@ class TransferController extends Controller
 
     public function transfer_index(Request $request){
         
-        $pageTitle     = 'Orders';
+        $pageTitle     = 'Transfer';
         $login         = auth()->user();
        
         if(!empty($login)){
@@ -58,7 +58,7 @@ class TransferController extends Controller
 
         }
 
-        $activePage       = 'orders';
+        $activePage       = 'transfer';
         $user_permissions = session('combined_permissions', []);
 
         return view('orders/transfer_master',compact('pageTitle','login','activePage','user_branch','user_permissions','activeBranchName'));
@@ -119,7 +119,9 @@ class TransferController extends Controller
         //     }
         // }
         $transferQuery  = Transfer::query()
-        ->where('is_delete',0)->get();
+        ->where('is_delete',0)
+        ->orderBy('trans_id', 'desc')
+        ->get();
         foreach ($transferQuery as $transfer) {
             $trans_Ids = explode(',', $transfer->trans_ids);
             $transactions = Transactions::whereIn('trans_id', $trans_Ids)
@@ -185,7 +187,7 @@ class TransferController extends Controller
     public function view_receipt(Request $request,$id){
         
          
-        $pageTitle     = 'Orders';
+        $pageTitle     = 'Transfer';
         $login         = auth()->user();
        
         if(!empty($login)){
@@ -218,7 +220,7 @@ class TransferController extends Controller
 
         }
 
-        $activePage       = 'orders';
+        $activePage       = 'transfer';
         $user_permissions = session('combined_permissions', []);
 
 
@@ -244,6 +246,70 @@ class TransferController extends Controller
         $transfer_array = $transferQuery->toArray();
         
         return view('orders/receipt',compact('pageTitle','login','activePage','user_branch','user_permissions','activeBranchName','transfer_array'));
+
+    }
+
+
+    public function transfer_receipt(Request $request,$id){
+        $pageTitle     = 'Transfer';
+        $login         = auth()->user();
+       
+        if(!empty($login)){
+            if($login['user_role_id'] != 1){
+
+                $userBranchIds = explode(',', $login['user_branch_ids']);
+                $userBranchIds = array_map('trim', $userBranchIds); 
+                $userBranchIds = array_filter($userBranchIds); 
+              
+                if(!empty($userBranchIds)){
+
+                    $user_branch  = Branch::get_users_branch($userBranchIds);
+                }else{
+                    $user_branch  = [];
+                }
+                
+            }else{
+                $user_branch  = Branch::get_all_branch();
+    
+            }
+            if(!empty($user_branch)){
+                foreach ($user_branch as $branch) {
+                    if ($branch['branch_id'] == $login['user_active_branch']) {
+                        $activeBranchName = $branch['branch_name'];
+                        break;
+                    }
+                }
+            }
+            $activeBranchName = '';
+
+        }
+
+        $activePage       = 'transfer';
+        $user_permissions = session('combined_permissions', []);
+
+
+        $transferQuery  = Transfer::query()
+        ->where('is_delete',0)
+        ->where('trans_id',$id)
+        ->get();
+        foreach ($transferQuery as $transfer) {
+            $trans_Ids = explode(',', $transfer->trans_ids);
+            $transactions = Transactions::whereIn('trans_id', $trans_Ids)
+            ->leftJoin('branch AS from_branch', 'from_branch.branch_id', '=', 'transactions.trans_from')
+            ->leftJoin('branch AS to_branch', 'to_branch.branch_id', '=', 'transactions.trans_to')        
+            ->with('items.colors','transUser', 'transApprovedBy','orders')
+            ->select(
+                'transactions.*',
+                'from_branch.branch_name AS from_branch_name',
+                'to_branch.branch_name AS to_branch_name',
+            ) 
+            ->get();
+            $transfer->transactions = $transactions->toArray();
+        }
+
+        $transfer_array = $transferQuery->toArray();
+        
+        return view('orders/transfer_receipt',compact('pageTitle','login','activePage','user_branch','user_permissions','activeBranchName','transfer_array'));
 
     }
 }

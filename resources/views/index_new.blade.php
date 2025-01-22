@@ -131,12 +131,12 @@
                 <div class="col-md-12 col-lg-12">
                     <div class="card">
                         <div class="card-header">
-                            <h3 class="card-title">Scan Orders with Order Numbers</h3>
+                            <h3 class="card-title">Transfer or Accept with Order Numbers</h3>
                         </div>
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-md-4">
-                                    <textarea  name="" class="form-control" id="qr_code_numbers"></textarea>
+                                    <textarea  name="" class="form-control" id="qr_code_numbers" placeholder="Please provide order number in comma seperated format"></textarea>
                                 </div>
                                 <div class="col-md-4">
                                 

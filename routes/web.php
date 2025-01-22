@@ -136,14 +136,12 @@ Route::post('qr-details', [OrderController::class, 'qr_details'])->name('qr_deta
 
 
 Route::post('multiple-approve', [OrderController::class, 'multiple_approve'])->name('multiple_approve');
-
 Route::post('multiple-transfer', [OrderController::class, 'multiple_transfer'])->name('multiple_transfer');
 
 Route::post('transfer-list', [TransferController::class, 'transfer_list'])->name('transfer-list');
 Route::get('transfer-master',   [TransferController::class, 'transfer_index'])->name('transfer-master');
 Route::get('view-receipt/{id}', [TransferController::class, 'view_receipt'])->name('view_receipt');
-
-
+Route::get('transfer-receipt/{id}', [TransferController::class, 'transfer_receipt'])->name('transfer_receipt');
 
 Route::get('user-master', [UserController::class, 'user_index'])->name('user-master');
 Route::get('user-add', [UserController::class, 'user_add'])->name('user-add');
