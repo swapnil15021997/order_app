@@ -138,26 +138,23 @@
                                 <div class="col-md-4">
                                     <textarea  name="" class="form-control" id="qr_code_numbers" placeholder="Please provide order number in comma seperated format"></textarea>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-4 mt-3">
                                 
                                     <a id="accept_button" href="#" onclick="approve_qr_order()" class="d-none btn btn-danger" >
                                         Approve Orders
                                     </a>
-                                </div>
-                                <div class="col-md-4">
-                                
                                     <a href="#" id="transfer_button" onclick="transfer_multiple()" class="d-none btn btn-danger">
                                         Transfer Orders
                                     </a>
                                 </div>
+                                
                             </div>
                             <div class="row mt-3">
                                 <div class="col-md-4">
                                     <button id="detailBtn" onclick="get_details_of_qr_code()" class="btn btn-secondary"> Click Here to Approve or Transfer </button>
-                                </div>
-                                <div class="col-md-4">
                                     <button id="resetBtn" onclick="reset()" class="btn d-none btn-secondary"> Reset </button>
                                 </div>
+                                
                             </div>
                         </div>
                     </div>
