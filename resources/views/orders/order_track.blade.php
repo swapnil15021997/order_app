@@ -71,7 +71,7 @@
                
             </div>
             <div class="tracking-info">
-                <p>Order Number: <span>{{$check_order['order_number']}}</span></p>
+                <p>Order Number: <span>{{$check_order['order_qr_code']}}</span></p>
 
             </div>
         </div>
