@@ -29,7 +29,7 @@
                                 <div class="row">
                                     <h2 class="font-bold">
                                     <span id="form_title">{{ $type == 'order' ? 'Order Form -' : ($type == 'repairing' ? 'Repairing Form -' : '') }}</span>
-                                                                            #{{$order_number}}</h2>
+                                                                            #{{$qr_code_number}}</h2>
                                     <div class="col-sm-6">
                                         <input type="hidden" id="order_number" name="order_number"
                                             value="{{$order_number}}">
