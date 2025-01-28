@@ -85,11 +85,11 @@ Route::get('/dashboard', function () {
     $combined_permissions = array_unique(array_merge((array)$user_permission, (array)$role_permission));
      
     session(['combined_permissions' => $combined_permissions]);
-
+    $activePage       = 'home';
     return view('index_new',['login'=>$login,'activePage'=>'dashboard',
     'user_branch'=>$users_branch,'order_count'=>$orders_count,
     'user_count'=>$user_count,'branch_count'=>$branch_count,
-    'total_role'=>$total_role,'order'=>$order,'branch'=>$branch,'user_permissions'=>$combined_permissions,'activeBranchName'=>$activeBranchName]);
+    'total_role'=>$total_role,'order'=>$order,'branch'=>$branch,'user_permissions'=>$combined_permissions,'activeBranchName'=>$activeBranchName,'activePage'=>$activePage]);
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
