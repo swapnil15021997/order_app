@@ -78,7 +78,7 @@
             </div>
         </div>
     </div>
-    <div class="page-body chalan table_print">
+    <div class="page-body chalan">
         <div class="container-xl ">
             <div class="row" id="transfer-container">
             </div>
@@ -275,25 +275,21 @@
             }
 
         } */
-
+    /*
         @media print {
             body {
                 font-size: 12px;
-                /* Adjust the base font size for print */
             }
 
             .chalan {
                 width: 100%;
-                /* Make sure it fits within the page width */
                 font-size: 10pt;
-                /* Adjust font size for the specific section */
             }
-
-            /* Optional: Remove unnecessary elements from print */
             .no-print {
                 display: none !important;
             }
         }
+        */
     </style>
     <script>
         var csrfToken = $('meta[name="csrf-token"]').attr('content');
@@ -501,7 +497,7 @@
         });
 
         function printDiv(type) {
-            $('.table_print').addClass('on-print');
+            $('.container-xl').addClass('on-print');
             var existingStyle = document.querySelector('style#customPrintStyle');
             if (existingStyle) {
                 document.head.removeChild(existingStyle);
@@ -517,21 +513,24 @@
                         #payment_info, #cust_details {
                             display: none !important;
                         }
+
+                        
                     }
                 `;
                 document.head.appendChild(style);
 
             }
             var printContents = document.getElementsByClassName('chalan')[0].innerHTML;
+            
             var originalContents = document.body.innerHTML;
 
             document.body.innerHTML = printContents;
 
             window.print();
-            document.body.innerHTML = originalContents;
+            document.body.innerHTML = printContents;
             window.onafterprint = function () {
                 console.log("Removing")
-                $('.table_print').removeClass('on-print');
+                $('.container-xl').removeClass('on-print');
                 document.body.innerHTML = originalContents;
             };
 
