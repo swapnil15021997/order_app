@@ -2,7 +2,7 @@
 
 @section('content')
 <style>
-    
+
 </style>
 <div class="page-header d-print-none">
     <div class="container">
@@ -41,8 +41,10 @@
                     </a>
                 @endif
 
-                <button type="button" class="btn btn-primary printMe" onclick="printDiv('original')">Original Print</button>
-                <button type="button" class="btn btn-primary printMe" onclick="printDiv('duplicate')">Duplicate Print</button>
+                <button type="button" class="btn btn-primary printMe" onclick="printDiv('original')">Original
+                    Print</button>
+                <button type="button" class="btn btn-primary printMe" onclick="printDiv('duplicate')">Duplicate
+                    Print</button>
 
             </div>
         </div>
@@ -94,7 +96,7 @@
                     </div>
                     <div class="child">
                         <p><b>Branch</b><br />
-                             
+
                             @if (!empty($order['current_branch']))
                                 {{ $order['order_current_branch'] }}
                             @else
@@ -499,17 +501,17 @@
         });
 
         function printDiv(type) {
+            $('.table_print').addClass('on-print');
             var existingStyle = document.querySelector('style#customPrintStyle');
             if (existingStyle) {
                 document.head.removeChild(existingStyle);
             }
-            if (type == "original"){
+            if (type == "original") {
                 $('#print_type').text("Original");
-               
-            }else{
+            } else {
                 $('#print_type').text("Duplicate");
                 var style = document.createElement('style');
-                style.id = "customPrintStyle";  
+                style.id = "customPrintStyle";
                 style.innerHTML = `
                     @media print {
                         #payment_info, #cust_details {
@@ -524,15 +526,15 @@
             var originalContents = document.body.innerHTML;
 
             document.body.innerHTML = printContents;
-           
+
             window.print();
             document.body.innerHTML = originalContents;
-            window.onafterprint = function() {
+            window.onafterprint = function () {
                 console.log("Removing")
+                $('.table_print').removeClass('on-print');
                 document.body.innerHTML = originalContents;
-
             };
- 
+
         }
 
     </script>

@@ -968,7 +968,7 @@ body.loading .loader-screeen {
     align-items: start;
 }
 
-.cash-box{
+.cash-box {
     width: 100%;
     max-width: 420px;
     margin-left: auto;
@@ -976,9 +976,26 @@ body.loading .loader-screeen {
     border: 1px solid #a6a6a6;
 }
 
-.cash-box div{
+.cash-box div {
     display: flex;
     align-items: center;
     justify-content: space-between;
     margin-top: 6px;
+}
+
+.table_print.on-print .chalan-card .body {
+    padding: 20px 12px 40px 12px;
+    gap: 22px;
+}
+
+.table_print.on-print .chalan-card .head .child {
+    padding: 12px 10px 12px 10px;
+}
+
+.table_print.on-print .chalan-card .foot .child {
+    padding: 20px 10px 14px 10px;
+}
+
+.table_print.on-print .chalan-card .body .table-my .table-col div {
+    padding: 14px;
 }
