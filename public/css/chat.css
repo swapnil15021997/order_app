@@ -983,7 +983,6 @@ body.loading .loader-screeen {
     margin-top: 6px;
 }
 
-
 .on-print .chalan-card .body {
     padding: 20px 12px 40px 12px;
     gap: 22px;
@@ -999,4 +998,9 @@ body.loading .loader-screeen {
 
 .on-print .chalan-card .body .table-my .table-col div {
     padding: 14px;
+}
+
+.on-print .foot .child:nth-child(2) svg {
+    width: 80px;
+    height: 80px;
 }
