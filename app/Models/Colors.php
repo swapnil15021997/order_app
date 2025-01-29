@@ -3,9 +3,13 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Colors extends Model
 {
+
+    use HasFactory;
+
     protected $table = 'colors';
     protected $primaryKey = 'color_id';
     
@@ -14,5 +18,10 @@ class Colors extends Model
      *
      * @var array<int, string>
      */
+    protected $fillable = [
+        'color_name',
+        
+    ];
+
    
 }

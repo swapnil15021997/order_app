@@ -11,6 +11,9 @@ use App\Models\Transactions;
 use App\Models\Payment;
 use App\Models\Customers;
 use App\Models\Colors;
+
+use App\Models\Melting;
+use App\Models\Metals;
 use App\Models\TempOrders;
 use App\Models\Notes;
 use App\Models\Transfer;
@@ -1504,6 +1507,77 @@ class OrderController extends Controller
             'message' => "Item Transfered successfully" 
         ]);
         
+
+    }
+
+
+    public function custom_save(Request $request){
+        $params = $request->all();
+         
+        $rules = [   
+            'metals_array'          => ['nullable','string'],
+            'colors_array'          => ['nullable','string'],  
+            'melting_array.*'        => ['nullable', 'string']
+                   
+        ]; 
+        $messages = [
+            'metals_array.string'      => 'Metals must be an string.',
+            'colors_array.string'      => 'Colors must be an string.',
+            'melting_array.string'     => 'Melting must be an string.',
+           
+        ]; 
+        $validator = Validator::make($params, $rules, $messages);
+        
+        if($validator->fails()){
+            return response()->json([
+                'status' => 500,
+                'message' => Arr::flatten($validator->errors()->toArray())[0], 
+                'errors'  => $validator->errors(), 
+            ]);
+        } 
+
+        if(empty($params['metals_array']) && empty($params['colors_array']) && empty($params['melting_array'])){
+            return response()->json([
+                'status' => 500,
+                'message' => 'Please provide atleast one of Metals, Colors or Melting' 
+                
+            ]);
+        }
+
+           // $metals        = DB::table('metals')->select('metal_name')->get();
+        // $melting       = DB::table('melting')->select('melting_name')->get();
+    
+        if(!empty($params['metals_array'])){
+            $metalsArray = explode(',', $params['metals_array']);
+
+            foreach ($metalsArray as $metal) {
+                Metals::create(['metal_name' => $metal]); 
+            }
+
+        }
+
+        if(!empty($params['colors_array'])){
+            $colorsArray = explode(',', $params['colors_array']);
+
+            foreach ($colorsArray as $color) {
+                Colors::create(['color_name' => $color]); 
+            }
+        }
+
+        if(!empty($params['melting_array'])){
+            $meltingArray = explode(',', $params['melting_array']);
+
+            foreach ($meltingArray as $melting) {
+                Melting::create(['melting_name' => $melting]); 
+            }
+        }
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Values Stored successfully' 
+            
+        ]);
+
 
     }
 }

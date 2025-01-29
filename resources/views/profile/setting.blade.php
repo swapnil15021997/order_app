@@ -53,6 +53,11 @@
                                     class="list-group-item list-group-item-action d-flex align-items-center">
                                     User & Roles
                                 </a>
+
+                                <a href="#Custom"
+                                    class="list-group-item list-group-item-action d-flex align-items-center"
+                                    data-bs-toggle="tab" role="tab" aria-controls="Custom" aria-selected="true">My
+                                    Custom</a>
                             </div>
                         </div>
                     </div>
@@ -257,6 +262,51 @@
 
                                 </div>
                             </div>
+
+                            <div class="tab-pane fade" id="Custom" role="tabpanel">
+                                <div class="card-body">
+                                    <h2 class="mb-4">Portal Customization</h2>
+                                    <h3 class="card-title">Dynamic Entries</h3>
+
+                                    <p class="card-subtitle">You can add values to Colors,Melting and Metal .</p>
+                                    <form method="post" id="custom_form" action="#" class="mt-6 space-y-6">
+                                         
+                                        <div>
+                                            <div class="row g-3 mb-3">
+
+                                                <div class="col-md">
+                                                    <div class="form-label">Metals</div>
+                                                     <textarea class="form-control" name="" id="metal_value"></textarea>
+                                                </div>
+                                                <div class="col-md">
+                                                    <div class="form-label">Colors</div>
+                                                    <textarea class="form-control" name="" id="colors_value"></textarea>
+
+                                                </div>
+                                                <div class="col-md">
+                                                    <div class="form-label">Melting</div>
+                                                    <textarea class="form-control" name="" id="melting_value"></textarea>
+                                                </div>
+
+
+                                            </div>
+                                        </div>
+
+                                        <div class="card-footer bg-transparent mt-auto">
+                                            <div class="btn-list justify-content-end">
+                                                <!-- <a href="#" class="btn">
+                                                            Cancel
+                                                        </a> -->
+                                                <button 
+                                                    onclick="submitForm()"
+                                                    type="button" class="btn  btn-primary">
+                                                    Submit
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -267,6 +317,50 @@
 
 
 <script>
+
+    $('#custom_form').on('submit', function(e){
+        e.preventDefault();
+    });
+
+
+    function submitForm(){
+        var metals = $('#metal_value').val();
+        var metals_array = metals.split(',');
+          
+        var colors = $('#colors_value').val();
+        var colors_array = colors.split(',');
+        
+        
+        var melting = $('#melting_value').val();
+        var melting_array = melting.split(',');
+        
+        const formData = new FormData();
+        formData.append('metals_array', metals_array);
+        formData.append('colors_array', colors_array);
+        formData.append('melting_array', melting_array);
+           
+        $.ajax({
+            url: "{{ route('custom_save') }}",
+            type: 'POST',
+            data: formData,
+            contentType: false,
+            processData: false,
+            headers: {
+                'X-CSRF-TOKEN': csrfToken
+            },
+            success: function (response) {
+                showAlert('success', response.message);
+                if(response.status == 200){
+                    location.reload();
+                    $('#metal_value').val(''); 
+                    $('#colors_value').val('');
+                    $('#melting_value').val('');
+                }
+                
+            }
+        });
+
+    }
     function file_select() {
 
         $("#fileInput").click();

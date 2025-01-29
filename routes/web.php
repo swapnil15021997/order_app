@@ -133,7 +133,7 @@ Route::get('qr-code/{id}',   [OrderController::class, 'order_qr_code'])->name('o
 Route::post('order-transfer',  [OrderController::class, 'order_transfer'])->name('order_transfer');
 Route::get('track-order/{id}', [OrderController::class, 'track_order'])->name('track_order');
 Route::post('qr-details', [OrderController::class, 'qr_details'])->name('qr_details');
-
+Route::post('custom-save', [OrderController::class, 'custom_save'])->name('custom_save');
 
 Route::post('multiple-approve', [OrderController::class, 'multiple_approve'])->name('multiple_approve');
 Route::post('multiple-transfer', [OrderController::class, 'multiple_transfer'])->name('multiple_transfer');
