@@ -514,14 +514,13 @@
                             display: none !important;
                         }
 
-                        
+
                     }
                 `;
                 document.head.appendChild(style);
-
             }
             var printContents = document.getElementsByClassName('chalan')[0].innerHTML;
-            
+
             var originalContents = document.body.innerHTML;
 
             document.body.innerHTML = printContents;
