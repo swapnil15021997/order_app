@@ -309,7 +309,7 @@ class TransferController extends Controller
 
         $transfer_array = $transferQuery->toArray();
         
-        return view('orders/transfer_receipt',compact('pageTitle','login','activePage','user_branch','user_permissions','activeBranchName','transfer_array'));
+        return view('orders/transfer_receipt_new',compact('pageTitle','login','activePage','user_branch','user_permissions','activeBranchName','transfer_array'));
 
     }
 }

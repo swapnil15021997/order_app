@@ -737,6 +737,7 @@
                 formData.append('item_weight', item_weight);
 
                 var custName = userInput;
+                $('#order_customer_name').val(custName);
                 var custAddress = $('#customer_address').val();
                 var remarks = $('#order_remarks').val();
                 var custPhone = $('#cust_phone_no').val();

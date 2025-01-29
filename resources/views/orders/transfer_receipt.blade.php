@@ -140,7 +140,9 @@
                                     <p>{{ $transaction['items'][0]['item_weight']}}</p>
                                 </div>
                                 <div>
-                                    <p>{{ $transaction['items'][0]['item_melting']}} GM</p>
+                                    <p>{{ $transaction['items'][0]['item_melting']}} GM
+                                        
+                                    </p>
                                 </div>
                                 <div>
                                     <p>{{$transaction['items'][0]['colors']['color_name']}}</p>
