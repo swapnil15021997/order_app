@@ -150,6 +150,9 @@
                                 <p>Item</p>
                             </div>
                             <div>
+                                <p>Metal</p>
+                            </div>
+                            <div>
                                 <p>Melting</p>
                             </div>
                             <div>
@@ -163,6 +166,9 @@
                         <div class="table-col">
                             <div>
                                 <p>{{$order['items'][0]['item_name']}}</p>
+                            </div>
+                            <div>
+                                <p>{{$order['items'][0]['item_metal']}}</p>
                             </div>
                             <div>
                                 <p>{{$order['items'][0]['item_melting']}}</p>

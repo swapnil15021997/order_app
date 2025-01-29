@@ -125,7 +125,7 @@ class TransferController extends Controller
         foreach ($transferQuery as $transfer) {
             $trans_Ids = explode(',', $transfer->trans_ids);
             $transactions = Transactions::whereIn('trans_id', $trans_Ids)
-            ->with('items') 
+            ->with('items','items.colors') 
             ->get();
             $transfer->transactions = $transactions->toArray();
         }
