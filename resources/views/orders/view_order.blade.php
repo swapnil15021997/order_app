@@ -1,6 +1,9 @@
 @extends('app')
 
 @section('content')
+<style>
+    
+</style>
 <div class="page-header d-print-none">
     <div class="container">
         <div class="row g-2 align-items-center">
@@ -38,7 +41,8 @@
                     </a>
                 @endif
 
-                <button type="button" class="btn btn-primary printMe" onclick="printDiv()">Print</button>
+                <button type="button" class="btn btn-primary printMe" onclick="printDiv('original')">Original Print</button>
+                <button type="button" class="btn btn-primary printMe" onclick="printDiv('duplicate')">Duplicate Print</button>
 
             </div>
         </div>
@@ -102,6 +106,9 @@
                     <div class="child">
                         <ul>
                             <li>
+                                <p id="print_type"></p>
+                            </li>
+                            <li>
                                 <p><b>Order Number</b></p>
                                 @if($order['order_type'] == 1)
                                     <p>O - # {{$order['order_qr_code']}}</p>
@@ -121,7 +128,7 @@
                     </div>
                 </div>
                 <div class="body">
-                    <div class="child">
+                    <div class="child" id="cust_details">
                         <p><b>For,</b><br />
 
                             @if(!empty($customer_order['cust_name'])) {{$customer_order['cust_name']}} @endif <br />
@@ -198,7 +205,7 @@
                         </div>
                     </div>
 
-                    <div class="child">
+                    <div class="child" id="payment_info">
                         @if($order['order_type'] == 1)
 
                             <div class="cash-box">
@@ -276,7 +283,7 @@
 
             /* Optional: Remove unnecessary elements from print */
             .no-print {
-                display: none;
+                display: none !important;
             }
         }
     </style>
@@ -485,13 +492,41 @@
             });
         });
 
-        function printDiv() {
+        function printDiv(type) {
+            var existingStyle = document.querySelector('style#customPrintStyle');
+            if (existingStyle) {
+                document.head.removeChild(existingStyle);
+            }
+            if (type == "original"){
+                $('#print_type').text("Original");
+               
+            }else{
+                $('#print_type').text("Duplicate");
+                var style = document.createElement('style');
+                style.id = "customPrintStyle";  
+                style.innerHTML = `
+                    @media print {
+                        #payment_info, #cust_details {
+                            display: none !important;
+                        }
+                    }
+                `;
+                document.head.appendChild(style);
+
+            }
             var printContents = document.getElementsByClassName('chalan')[0].innerHTML;
             var originalContents = document.body.innerHTML;
 
             document.body.innerHTML = printContents;
+           
             window.print();
             document.body.innerHTML = originalContents;
+            window.onafterprint = function() {
+                console.log("Removing")
+                document.body.innerHTML = originalContents;
+
+            };
+ 
         }
 
     </script>
