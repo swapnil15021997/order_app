@@ -27,7 +27,9 @@
             <div class="timeline">
 
                 @php
-                    $formattedDate = \Carbon\Carbon::parse($check_order['created_at'])->format('g:i, M j, Y');
+                $formattedDate = \Carbon\Carbon::parse($check_order['created_at'])
+                ->setTimezone('Asia/Kolkata')
+                ->format('g:i A, M j, Y');
                 @endphp
                 <div class="timeline-item completed">
                     <h3>Created</h3>
@@ -40,7 +42,9 @@
                         @if(!empty($transaction))
                             @php
                                 $formattedDate = isset($transaction['trans_time']) 
-                                    ? \Carbon\Carbon::parse($transaction['trans_time'])->format('g:i, M j, Y') 
+                                    ? \Carbon\Carbon::parse($transaction['trans_time'])                
+                                    ->setTimezone('Asia/Kolkata')
+                                    ->format('g:i A, M j, Y') 
                                     : 'N/A';
                             @endphp
                             <div class="timeline-item completed">
@@ -55,7 +59,9 @@
 
                                             @php
                                                 $acceptedDate = isset($transaction['trans_accepted_time']) 
-                                                    ? \Carbon\Carbon::parse($transaction['trans_accepted_time'])->format('g:i, M j, Y') 
+                                                    ? \Carbon\Carbon::parse($transaction['trans_accepted_time'])
+                                                    ->setTimezone('Asia/Kolkata')
+                                                    ->format('g:i A, M j, Y') 
                                                     : 'N/A';
                                             @endphp
                                             Accepted -- 
