@@ -157,6 +157,10 @@
                                 </div>
                                 
                             </div>
+
+                            <div id="orders" class="row mt-3">
+
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -295,20 +299,22 @@
             var qr_num_array = qr_num.split(',');
             total_qr_array = qr_num_array
             $('#resetBtn').removeClass('d-none');
+            $('#qr_code_numbers').val('')
             // $('#detailBtn').addClass('d-none');
             
             $.ajax({
-                url: "{{ route('qr_details') }}",  // Adjust the route as needed
+                url: "{{ route('qr_details') }}",  
                 type: 'POST',
                 data: {
                     _token: csrfToken,
 
-                    qr_number: qr_num_array,
+                    qr_number: qr_num,
                 },
                 success: function (response) {
                     if(response.status==200){
-                        response.data.forEach(order => {
-
+                        console.log(response);
+                        // response.data.forEach(order => {
+                            var order = response.data[0];
                             let lastTransaction = order.transactions[order.transactions.length - 1];
                             console.log(lastTransaction);
                             let isAnyOrderApproved = approve_qr_array.length > 0;
@@ -317,6 +323,7 @@
                                 if (lastTransaction.trans_status === 1 && isAnyOrderApproved) {
                                     mismatch_qr.push({ order_id: order.order_id, qr_code: order.order_qr_code });
                                     toggleButtons();
+                                    show_data_on_page(order);
                                     alert(`Previous order was approved, and the current order is of transfer. Please remove. ${order.order_qr_code}`);
                                     return false;
                                 }
@@ -324,29 +331,33 @@
                                     mismatch_qr.push({ order_id: order.order_id, qr_code: order.order_qr_code });
 
                                     toggleButtons();
+                                    show_data_on_page(order);
                                     alert(`Previous order was transfer, and the current order is of approve. Please remove. ${order.order_qr_code}`);
                                     return false;
                                 }
                                 if (lastTransaction.trans_status === 0) {
                                     // Add to approve_orders_array
                                     approve_qr_array.push({ order_id: order.order_id, qr_code: order.order_qr_code });
-
+                                    show_data_on_page(order);
                                 }
                                 else {
 
                                     transfer_qr_array.push({ order_id: order.order_id, qr_code: order.order_qr_code });
+                                    show_data_on_page(order);
                                 }
                             }else{
                                 approve_qr_array.push({ order_id: order.order_id, qr_code: order.order_qr_code });
+                                show_data_on_page(order);
                             }
                         toggleButtons();
                         return true;   
-                        });  
+                        // });  
                     }else{
                         alert('Error',response.message);
                     }
                 }
-            });
+
+          });
 
 
         }
@@ -399,43 +410,33 @@
         function remove_mismatch(){
             approve_qr_array  = approve_qr_array.filter(item => !mismatch_qr.includes(item.qr_code));
             transfer_qr_array = transfer_qr_array.filter(item => !mismatch_qr.includes(item.qr_code));
-            
+            // clear container
+
+            mismatch_qr.forEach(qrCode => {
+                console.log(qrCode);
+                $(`#orders [data-index="${qrCode.qr_code}"]`).remove();
+            });
             mismatch_qr = [];
           
             let aprove_qr = approve_qr_array.map(item => item.qr_code);            
             let transfer_qr = transfer_qr_array.map(item => item.qr_code);            
           
-            $('#qr_code_numbers').val(aprove_qr.join(', ')); 
-            $('#qr_code_numbers').val(transfer_qr.join(', ')); 
+            // $('#qr_code_numbers').val(aprove_qr.join(', ')); 
+            // $('#qr_code_numbers').val(transfer_qr.join(', ')); 
             $('#mismatch_qr').addClass('d-none');
             toggleButtons();
         }
         
         $(document).ready(function() {
-            // $('#qr_code_numbers').on('input', function() {
-            //     var qr_code_input = $(this).val().trim();
-            //     console.log(qr_code_input);
-            //     var updated_qr_codes = qr_code_input.split(',').map(code => code.trim()).filter(code => code !== "");
-
-            //     total_qr_array.forEach(qr => {
-            //         console.log("total block",qr);
-                    
-            //         if (!updated_qr_codes.includes(qr)) {
-            //             console.log("if block",qr);
-            //             approve_qr_array = approve_qr_array.filter(item => item.qr_code !== qr);
-            //             transfer_qr_array = transfer_qr_array.filter(item => item.qr_code !== qr);
-            //             mismatch_qr = mismatch_qr.filter(item => item.qr_code !== qr);
-                
-            //             console.log(approve_qr_array,transfer_qr_array,mismatch_qr);
-            //         }
-            //     });
-
-            //     toggleButtons(); 
-            // });
+          
 
             $('#qr_code_numbers').on('paste', function (event) {
+                const element = $(this);
+        
                 setTimeout(function () {
-                    get_details_of_qr_code();
+                    const pastedValue = element.val();
+                    get_details_of_qr_code(pastedValue);
+
                 });
             });
 
@@ -583,6 +584,33 @@
                 }
             });
         }
+
+
+        
+        function show_data_on_page(order){
+            console.log("Order show",order);
+
+            const container = $("#orders");
+            if (order.items && order.items.length > 0) {
+                order.items.forEach((item, index) => {
+                      const itemHtml = `
+                        <div class="col-md-4 mb-3" data-index="${order.order_qr_code}">
+                            <div class="card p-3 shadow-sm">
+                                <h5 class="card-title">${item.item_name}</h5>
+                                <p class="card-text">
+                                    <strong>Metal:</strong> ${item.item_metal}  <strong>Melting:</strong> ${item.item_melting} <br>
+                                    <strong>Weight:</strong> ${item.item_weight}g  
+                                    <strong>Color:</strong> ${item.colors?.color_name || "N/A"} <br>
+                                </p>
+                            </div>
+                        </div>
+                    `;
+
+                    container.append(itemHtml);
+                });
+            }
+        }
+          
      
     </script>
 

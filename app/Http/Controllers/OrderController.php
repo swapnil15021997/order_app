@@ -546,13 +546,13 @@ class OrderController extends Controller
              
         $rules = [   
             
-            'qr_number' => ['required','array'],
+            'qr_number' => ['required','string'],
            
             ]; 
         $messages = [
  
                 'qr_number.required'         => 'Order id is required.',
-                'qr_number.array'           => 'Order id must be a array.'
+                'qr_number.string'           => 'Order id must be a array.'
 
             ]; 
             

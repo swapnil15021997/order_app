@@ -69,7 +69,7 @@ class Order extends Model
         )
         // ->with('items') 
         ->distinct()
-        ->whereIn('orders.order_qr_code', $qr_number)  
+        ->where('orders.order_qr_code', $qr_number)  
         ->get();
          
         if ($order) {
