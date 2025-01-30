@@ -597,14 +597,17 @@
                         <div class="col-md-3 mb-3" data-index="${order.order_qr_code}">
                             <div class="card p-3 shadow-sm">
                                 <h5 class="card-title">${item.item_name}</h5>
-                                <span>
-                                    <strong>Metal:</strong> ${item.item_metal}  
-                                    <strong>Melting:</strong> ${item.item_melting}
-                                </span>
-                                <span>
-                                    <strong>Weight:</strong> ${item.item_weight}g  
-                                    <strong>Color:</strong> ${item.colors?.color_name || "N/A"}
-                                </span>
+                                <p class="card-text d-flex justify-content-between">
+
+                                    <span>
+                                        <strong>Metal:</strong> ${item.item_metal}  
+                                        <strong>Melting:</strong> ${item.item_melting}
+                                    </span>
+                                    <span>
+                                        <strong>Weight:</strong> ${item.item_weight}g  
+                                        <strong>Color:</strong> ${item.colors?.color_name || "N/A"}
+                                    </span>
+                                </p>
                             </div>
                         </div>
                     `;
