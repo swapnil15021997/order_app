@@ -594,7 +594,7 @@
             if (order.items && order.items.length > 0) {
                 order.items.forEach((item, index) => {
                       const itemHtml = `
-                        <div class="col-md-3 mb-3" data-index="${order.order_qr_code}">
+                        <div class="col-md-2 mb-3" data-index="${order.order_qr_code}">
                             <div class="card p-3 shadow-sm">
                                 <h5 class="card-title">${item.item_name}</h5>
                                 <p class="card-text d-flex justify-content-between">
