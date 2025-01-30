@@ -600,11 +600,18 @@
                                 <p class="card-text d-flex justify-content-between">
 
                                     <span>
-                                        <strong>Metal:</strong> ${item.item_metal}  
-                                        <strong>Melting:</strong> ${item.item_melting}
+                                        <strong>Metal:</strong> ${item.item_metal}  </br>
                                     </span>
                                     <span>
                                         <strong>Weight:</strong> ${item.item_weight}g  
+                                       
+                                    </span>
+                                </p>
+                                 <p class="card-text d-flex justify-content-between">
+                                    <span>
+                                        <strong>Melting:</strong> ${item.item_melting}
+                                    </span>
+                                    <span>
                                         <strong>Color:</strong> ${item.colors?.color_name || "N/A"}
                                     </span>
                                 </p>
