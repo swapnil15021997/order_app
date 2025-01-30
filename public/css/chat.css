@@ -984,23 +984,29 @@ body.loading .loader-screeen {
 }
 
 .on-print .chalan-card .body {
-    padding: 20px 12px 40px 12px;
-    gap: 22px;
+    padding: 10px 8px 30px 8px;
+    gap: 16px;
+    font-size: 5px;
 }
 
 .on-print .chalan-card .head .child {
-    padding: 12px 10px 12px 10px;
+    padding: 10px 8px 10px 8px;
+}
+
+.on-print .chalan-card .body .child .w-100 .child_img{
+    width: 100px;
+    height: 80px;
 }
 
 .on-print .chalan-card .foot .child {
-    padding: 20px 10px 14px 10px;
+    padding: 10px 8px 10px 8px;
 }
 
 .on-print .chalan-card .body .table-my .table-col div {
-    padding: 14px;
+    padding: 10px;
 }
 
 .on-print .foot .child:nth-child(2) svg {
-    width: 80px;
-    height: 80px;
+    width: 30px;
+    height: 30px;
 }

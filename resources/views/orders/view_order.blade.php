@@ -92,7 +92,7 @@
             <div class="chalan-card">
                 <div class="head">
                     <div class="child">
-                        <img src="{{ asset('static/sonic-large.svg')}}" width="240" height="auto" alt="Tabler" />
+                        <img  src="{{ asset('static/sonic-large.svg')}}" width="240" height="auto" alt="Tabler" />
                     </div>
                     <div class="child">
                         <p><b>Branch</b><br />
@@ -197,7 +197,7 @@
                                                                             @endphp
 
 
-                                                                            <img src="{{ asset($firstFile->file_url) }}" alt="image" width="240px" height="200px"
+                                                                            <img class="child_img" src="{{ asset($firstFile->file_url) }}" alt="image" width="240px" height="200px"
                                                                                 class="rounded-4" />
 
                                                     @endif
