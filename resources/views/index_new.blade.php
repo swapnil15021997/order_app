@@ -423,7 +423,7 @@
           
             // $('#qr_code_numbers').val(aprove_qr.join(', ')); 
             // $('#qr_code_numbers').val(transfer_qr.join(', ')); 
-            $('#mismatch_qr').addClass('d-none');
+            $('#mismatchBtn').addClass('d-none');
             toggleButtons();
         }
         
@@ -594,14 +594,17 @@
             if (order.items && order.items.length > 0) {
                 order.items.forEach((item, index) => {
                       const itemHtml = `
-                        <div class="col-md-4 mb-3" data-index="${order.order_qr_code}">
+                        <div class="col-md-3 mb-3" data-index="${order.order_qr_code}">
                             <div class="card p-3 shadow-sm">
                                 <h5 class="card-title">${item.item_name}</h5>
-                                <p class="card-text">
-                                    <strong>Metal:</strong> ${item.item_metal}  <strong>Melting:</strong> ${item.item_melting} <br>
+                                <span>
+                                    <strong>Metal:</strong> ${item.item_metal}  
+                                    <strong>Melting:</strong> ${item.item_melting}
+                                </span>
+                                <span>
                                     <strong>Weight:</strong> ${item.item_weight}g  
-                                    <strong>Color:</strong> ${item.colors?.color_name || "N/A"} <br>
-                                </p>
+                                    <strong>Color:</strong> ${item.colors?.color_name || "N/A"}
+                                </span>
                             </div>
                         </div>
                     `;
