@@ -1551,7 +1551,9 @@ class OrderController extends Controller
             $metalsArray = explode(',', $params['metals_array']);
 
             foreach ($metalsArray as $metal) {
-                Metals::create(['metal_name' => $metal]); 
+                Metals::firstOrCreate(
+                    ['metal_name' => $metal]  
+                );
             }
 
         }
@@ -1560,7 +1562,9 @@ class OrderController extends Controller
             $colorsArray = explode(',', $params['colors_array']);
 
             foreach ($colorsArray as $color) {
-                Colors::create(['color_name' => $color]); 
+                Colors::firstOrCreate(
+                    ['color_name' => $color] 
+                );
             }
         }
 
@@ -1568,7 +1572,9 @@ class OrderController extends Controller
             $meltingArray = explode(',', $params['melting_array']);
 
             foreach ($meltingArray as $melting) {
-                Melting::create(['melting_name' => $melting]); 
+                Melting::firstOrCreate(
+                    ['melting_name' => $melting]  
+                );
             }
         }
 

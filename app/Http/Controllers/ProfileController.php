@@ -152,7 +152,11 @@ class ProfileController extends Controller
             return $setting->setting_name !== 'fcm_token';
         })->toArray();
         $user_permissions = session('combined_permissions', []);
-      
+        
+        $metals = \DB::table('metals')->pluck('metal_name')->implode(',');
+        $melting = \DB::table('melting')->pluck('melting_name')->implode(',');
+        $colors = \DB::table('colors')->pluck('color_name')->implode(',');
+
        
         return view('profile.setting', [
             'user' => $request->user(),
@@ -162,8 +166,10 @@ class ProfileController extends Controller
             'branch'=>$branch,
             'user_branch' => $users_branch,
             'settings' => $settings,
-            'user_permissions' => $user_permissions
-
+            'user_permissions' => $user_permissions,
+            'metals' => $metals,
+            'melting'=> $melting,
+            'colors' => $colors
         ]);
     
     }

@@ -103,7 +103,7 @@
                                     </p>
 
                                 </td>
-                                <td width="25%" style="border-bottom :1px solid #a6a6a6; border-left :1px solid #a6a6a6">Order Date
+                                <td width="25%"  style="border-bottom :1px solid #a6a6a6; border-left :1px solid #a6a6a6">Order Date
 
                                 </br>
                                 {{$firstTransaction['orders'][0]['order_date'] }}

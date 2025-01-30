@@ -276,16 +276,16 @@
 
                                                 <div class="col-md">
                                                     <div class="form-label">Metals</div>
-                                                     <textarea class="form-control" name="" id="metal_value"></textarea>
+                                                     <textarea class="form-control" name="" id="metal_value">{{$metals}}</textarea>
                                                 </div>
                                                 <div class="col-md">
                                                     <div class="form-label">Colors</div>
-                                                    <textarea class="form-control" name="" id="colors_value"></textarea>
+                                                    <textarea class="form-control" name="" id="colors_value">{{$colors}}</textarea>
 
                                                 </div>
                                                 <div class="col-md">
                                                     <div class="form-label">Melting</div>
-                                                    <textarea class="form-control" name="" id="melting_value"></textarea>
+                                                    <textarea class="form-control" name="" id="melting_value">{{$melting}}</textarea>
                                                 </div>
 
 
