@@ -278,6 +278,7 @@
                                 $('#branch_address').val('');
                                 $('#branch_table').DataTable().ajax.reload();  // Reload the DataTable
                                 // alert(response.message);
+                                location.reload();
                                 showSuccess('success', response.message);
 
                             } else {
