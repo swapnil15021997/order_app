@@ -225,8 +225,8 @@ class UserController extends Controller
             $user->user_address          = $params['user_address'];
             $user->user_phone_number     = $params['user_phone_number'];
             $user->user_role_id          = $params['user_role'];
-            $user->password              = Hash::Make('Test@123'); 
-            $user->user_sweetword        = 'Test@123'; 
+            $user->password              = Hash::Make('Jaygopal@123'); 
+            $user->user_sweetword        = 'Jaygopal@123'; 
             $user->user_module_id        = $userModuleIds;
             $user->user_permission_id    = $userPermissionIds;
             $user->user_branch_ids       = $branchIds;
