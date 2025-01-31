@@ -1109,7 +1109,7 @@ class OrderController extends Controller
         $login                      = auth()->user()->toArray();
         $active_branch              = $login['user_active_branch'];
         $trans                      = new Transactions();
-        $trans->trans_from          = $order->order_from_branch_id;
+        $trans->trans_from          = $active_branch;
         $trans->trans_to            = $params['transfer_to'];
         $trans->trans_active_branch = $active_branch ?? $order->order_from_branch_id;
         $trans->trans_user_id       = $login['id'];
@@ -1332,6 +1332,23 @@ class OrderController extends Controller
                 'errors'  => $validator->errors(), 
             ]);
         } 
+
+        $trans_to_values = [];
+        foreach ($params['order_id'] as $order_id) {
+            $check_transaction = Transactions::where('trans_order_id',$order_id)
+            ->orderBy('trans_id', 'desc')
+            ->first();
+            
+            $trans_to_values[] = $check_transaction->trans_to;
+        
+        }
+        if (count(array_unique($trans_to_values)) > 1) {
+            return response()->json([
+                'status' => 500,
+                'message' => 'Selected Transactios are not from same Branch'
+            ]);
+        }
+
         foreach ($params['order_id'] as $order_id) {
        
 
@@ -1416,7 +1433,25 @@ class OrderController extends Controller
                 'errors'  => $validator->errors(), 
             ]);
         } 
-        \Log::info(' Transfer Transaction id');
+        
+
+        $trans_from_values = [];
+        foreach ($params['order_id'] as $order_id) {
+            $check_transaction = Transactions::where('trans_order_id',$order_id)
+            ->orderBy('trans_id', 'desc')
+            ->first();
+            \Log::info([' Transfer Transaction id'=>$check_transaction->trans_id]);
+            $trans_from_values[] = $check_transaction->trans_from;
+        
+        }
+        \Log::info(['logs for value'=>$trans_from_values]);
+        if (count(array_unique($trans_from_values)) > 1) {
+            return response()->json([
+                'status' => 500,
+                'message' => 'Selected Transactios are not from same Branch'
+            ]);
+        }
+
         $trans_ids = [];
         foreach ($params['order_id'] as $order_id) {
             
@@ -1481,7 +1516,7 @@ class OrderController extends Controller
             $login                      = auth()->user()->toArray();
             $active_branch              = $login['user_active_branch'];
             $trans                      = new Transactions();
-            $trans->trans_from          = $order->order_from_branch_id;
+            $trans->trans_from          = $active_branch;
             $trans->trans_to            = $params['transfer_to'];
             $trans->trans_active_branch = $active_branch ?? $order->order_from_branch_id;
             $trans->trans_user_id       = $login['id'];
