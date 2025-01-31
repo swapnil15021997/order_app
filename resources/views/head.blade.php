@@ -11,15 +11,15 @@
     <title>{{ $pageTitle ?? 'Order Management' }}</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/css/lightbox.min.css" rel="stylesheet">
     <!-- CSS files -->
-    <link href="{{ asset('css/tabler.min.css')}}" rel="stylesheet" />
-    <link href="{{ asset('css/tabler-flags.min.css')}}" rel="stylesheet" />
-    <link href="{{ asset('css/tabler-payments.min.css')}}" rel="stylesheet" />
-    <link href="{{ asset('css/tabler-vendors.min.css')}}" rel="stylesheet" />
-    <link href="{{ asset('css/demo.min.css')}}" rel="stylesheet" />
-    <link href="{{ asset('css/chat.css')}}" rel="stylesheet" />
-    <link href="{{ asset('libs/dropzone/dist/dropzone.css')}}" rel="stylesheet"/>
-    
-    <link rel="icon" href="{{ asset('static/sonic-icon.svg')}}" type="image/png">
+    <link href="{{ asset('css/tabler.min.css') }}" rel="stylesheet" />
+    <link href="{{ asset('css/tabler-flags.min.css') }}" rel="stylesheet" />
+    <link href="{{ asset('css/tabler-payments.min.css') }}" rel="stylesheet" />
+    <link href="{{ asset('css/tabler-vendors.min.css') }}" rel="stylesheet" />
+    <link href="{{ asset('css/demo.min.css') }}" rel="stylesheet" />
+    <link href="{{ asset('css/chat.css') }}" rel="stylesheet" />
+    <link href="{{ asset('libs/dropzone/dist/dropzone.css') }}" rel="stylesheet" />
+
+    <link rel="icon" href="{{ asset('static/sonic-icon.svg') }}" type="image/png">
 
     <link href="https://cdn.datatables.net/1.13.5/css/jquery.dataTables.min.css" rel="stylesheet" />
 
@@ -30,6 +30,7 @@
 
     <link href='https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/ui-lightness/jquery-ui.css'
         rel='stylesheet'>
+    
     <style>
         @import url('https://rsms.me/inter/inter.css');
 
