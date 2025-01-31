@@ -180,7 +180,7 @@
                                             {{ $transaction['items'][0]['item_weight'] }}
                                         </div>
                                         <div class="w-1/5 font-medium p-2.5 border-r border-[#a6a6a6]">
-                                            {{ $transaction['items'][0]['item_color'] }}
+                                            {{ $transaction['items'][0]['colors']['color_name'] }}
                                         </div>
                                         <div class="w-1/5 font-medium p-2.5">
                                             {{ $transaction['orders'][0]['order_qr_code'] }}
