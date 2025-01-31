@@ -323,8 +323,8 @@
                                 $('#edit_branch_name').val('');
                                 $('#edit_branch_address').val('');
                                 $('#branch_table').DataTable().ajax.reload();  // Reload the DataTable
-
                                 showSuccess('success', response.message);
+                                location.reload();
                             } else {
 
                                 showSuccess('warining', response.message);
@@ -360,6 +360,7 @@
                                 $('#delete_branch').modal('hide');
                                 $('#branch_table').DataTable().ajax.reload();
                                 showSuccess('success', response.message);
+                                location.reload();
                             } else {
                                 showSuccess('warning', response.message);
                             }
