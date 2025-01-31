@@ -180,9 +180,15 @@ class UserController extends Controller
                 'message' => 'One or more permissions do not exist.',
             ]);
         }
+
         $userModuleIds     = implode(',', $moduleIds);       
         $userPermissionIds = implode(',', $permissionIds);  
-        $branchIds         = implode(',', $params['user_branch']);   
+        if(!empty($params['user_branch'])){
+
+            $branchIds         = implode(',', $params['user_branch']);   
+        }else{
+            $branchIds = null;
+        }
         
         if (empty($params['user_id'])){
             $get_data = User::get_data_by_phone_no($params['user_phone_number']);
