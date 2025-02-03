@@ -993,7 +993,7 @@ body.loading .loader-screeen {
     padding: 10px 8px 10px 8px;
 }
 
-.on-print .chalan-card .body .child .w-100 .child_img{
+.on-print .chalan-card .body .child .w-100 .child_img {
     width: 100px;
     height: 80px;
 }
@@ -1009,4 +1009,414 @@ body.loading .loader-screeen {
 .on-print .foot .child:nth-child(2) svg {
     width: 30px;
     height: 30px;
+}
+
+/* .on-print-receipt {
+    display: none;
+} */
+
+.transfer-receipt-container {
+    max-width: 1140px;
+    width: 100%;
+    position: relative;
+    border: 1px solid #a6a6a6;
+    background: white;
+    margin: 0 auto;
+    overflow: hidden;
+    font-family: "Manrope", serif;
+}
+
+.header-section {
+    position: relative;
+    z-index: 50;
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+}
+
+.contact-info {
+    padding-bottom: 20px;
+}
+
+.contact-info-header {
+    display: flex;
+    padding: 12px 16px;
+    font-size: 1.2rem;
+    font-weight: 500;
+    line-height: 1;
+    background-color: #e5e5e5;
+}
+
+.category-label,
+.category-label-last {
+    padding-bottom: 4px;
+    padding-right: 8px;
+    border-right: 2px solid #4c0519;
+    color: #4c0519;
+}
+
+.category-label-last {
+    padding-left: 8px;
+}
+
+.remarkable-text {
+    padding: 8px 16px;
+    color: #881337;
+    font-family: Times, "Times New Roman", Georgia, serif;
+    font-size: 30px;
+    margin: 0;
+}
+
+.address-info {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.address-item {
+    display: flex;
+    align-items: start;
+    gap: 8px;
+    font-weight: 500;
+    font-size: 16px;
+    margin: 0;
+}
+
+.icon {
+    margin-right: 8px;
+}
+
+/* Transfer Details Section */
+.receipt-info {
+    border-top: 1px solid #a6a6a6;
+    border-bottom: 1px solid #a6a6a6;
+}
+
+.receipt-header {
+    padding: 12px;
+    text-align: center;
+    border-bottom: 1px solid #a6a6a6;
+}
+
+.receipt-title {
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 1;
+    margin: 0;
+}
+
+.transfer-details {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0;
+    border-bottom: 1px solid #a6a6a6;
+}
+
+.transfer-detail-left,
+.transfer-detail-right {
+    padding: 8px;
+}
+
+.detail-label {
+    font-weight: 600;
+}
+
+/* Table Section */
+.table-header {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 0;
+    border-bottom: 1px solid #a6a6a6;
+}
+
+.table-header-item {
+    padding: 8px;
+    font-size: 12px;
+    font-weight: 700;
+    border-right: 1px solid #a6a6a6;
+}
+
+.table-row {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 0;
+}
+
+.table-cell {
+    padding: 8px;
+    font-size: 12px;
+    font-weight: 500;
+    border-right: 1px solid #a6a6a6;
+}
+
+/* Signature Section */
+.signature-section {
+    height: 112px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0;
+    align-items: end;
+}
+
+.signature {
+    padding: 8px;
+    font-weight: 700;
+}
+
+.transfers-chalan-container {
+    max-width: 1140px;
+    width: 100%;
+    position: relative;
+    border: 1px solid #a6a6a6;
+    background: white;
+    margin: 0 auto;
+    overflow: hidden;
+    font-family: "Manrope", serif;
+}
+
+.transfers-chalan-container .chalan-container {
+    position: relative;
+    z-index: 50;
+    font-family: Manrope, serif;
+}
+
+.transfers-chalan-container .chalan-container .chalan-head {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.transfers-chalan-container .chalan-container .chalan-head .chalan-hed-img {
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+}
+
+.transfers-chalan-container .chalan-container .chalan-head .chalan-hed-content {
+    padding-bottom: 20px;
+}
+
+.transfers-chalan-container
+    .chalan-container
+    .chalan-head
+    .chalan-hed-content
+    .chalan-hed-content-tag-line {
+    display: flex;
+    padding: 0px 16px;
+    padding-top: 12px;
+    font-size: 1.2rem;
+    font-weight: 500;
+    line-height: 1;
+    background-color: #e5e5e5;
+}
+
+.transfers-chalan-container
+    .chalan-container
+    .chalan-head
+    .chalan-hed-content
+    .chalan-hed-content-tag-line
+    span {
+    padding-bottom: 4px;
+    padding-right: 8px;
+    padding-left: 8px;
+    border-right: 2px solid #4c0519;
+    color: #4c0519;
+}
+
+.transfers-chalan-container
+    .chalan-container
+    .chalan-head
+    .chalan-hed-content
+    .chalan-hed-content-tag-line
+    span:nth-last-child(1) {
+    border-right: 0;
+}
+
+.transfers-chalan-container
+    .chalan-container
+    .chalan-head
+    .chalan-hed-content
+    .chalan-hed-content-tag {
+    padding: 8px 16px;
+    color: #881337;
+    font-family: Times, "Times New Roman", Georgia, serif;
+    font-size: 30px;
+    margin: 0px;
+}
+
+.transfers-chalan-container
+    .chalan-container
+    .chalan-head
+    .chalan-hed-content
+    .chalan-hed-content-location-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.transfers-chalan-container
+    .chalan-container
+    .chalan-head
+    .chalan-hed-content
+    .chalan-hed-content-location-list
+    p {
+    display: flex;
+    align-items: start;
+    gap: 8px;
+    font-weight: 500;
+    font-size: 16px;
+    margin: 0px;
+}
+
+.transfers-chalan-container .chalan-footer {
+    height: 112px;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0px;
+    align-items: end;
+}
+
+.transfers-chalan-container .chalan-footer div {
+    padding: 8px;
+    font-weight: 700;
+}
+
+.transfers-chalan-container .bg-image-chalan {
+    position: absolute;
+    bottom: -160px;
+    right: -304px;
+    opacity: 0.15;
+    filter: grayscale(100%);
+    -webkit-filter: grayscale(100%);
+}
+
+.transfers-chalan-container .chalan-body {
+    border-top: 1px solid #a6a6a6;
+    border-bottom: 1px solid #a6a6a6;
+}
+
+.transfers-chalan-container .chalan-body-head {
+    padding: 12px;
+    text-align: center;
+    border-bottom: 1px solid #a6a6a6;
+}
+
+.transfers-chalan-container .chalan-body-head p {
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 1;
+    margin: 0px;
+}
+
+.transfers-chalan-container .chalan-table-header {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0px;
+    border-bottom: 1px solid #a6a6a6;
+}
+
+.transfers-chalan-container .chalan-table-header .chalan-table-header-first {
+    padding: 8px;
+    border-right: 1px solid #a6a6a6;
+}
+
+.transfers-chalan-container .chalan-table-header .chalan-table-header-first p {
+    margin: 0px;
+}
+
+.transfers-chalan-container
+    .chalan-table-header
+    .chalan-table-header-first
+    p
+    span {
+    font-weight: 600;
+}
+
+.transfers-chalan-container .chalan-table-header .chalan-table-header-second {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0px;
+}
+
+.transfers-chalan-container
+    .chalan-table-header
+    .chalan-table-header-second
+    .chalan-table-header-second-first {
+    display: flex;
+    flex-direction: column;
+    padding: 8px;
+    border-right: 1px solid #a6a6a6;
+}
+
+.transfers-chalan-container
+    .chalan-table-header
+    .chalan-table-header-second
+    .chalan-table-header-second-second {
+    display: flex;
+    flex-direction: column;
+    padding: 8px;
+}
+
+.transfers-chalan-container .table-colume {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0px;
+}
+
+.transfers-chalan-container .table-colume.head {
+    border-bottom: 1px solid #a6a6a6;
+}
+
+.transfers-chalan-container .table-colume .table-first-list {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 0px;
+}
+
+.transfers-chalan-container .table-colume .table-first {
+    grid-column: span 1 / span 1;
+    font-size: 12px;
+    font-weight: 700;
+    border-right: 1px solid #a6a6a6;
+}
+
+.transfers-chalan-container .table-colume .table-second {
+    grid-column: span 5 / span 5;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.transfers-chalan-container .table-colume .table-col {
+    width: 20%;
+    padding: 8px;
+    font-size: 12px;
+    font-weight: 500;
+    border-right: 1px solid #a6a6a6;
+    overflow-wrap: anywhere;
+}
+
+.transfers-chalan-container .table-colume.head .table-col {
+    font-weight: 700;
+}
+
+.transfers-chalan-container .table-colume .table-col:nth-last-child(1) {
+    border-right: 0;
+}
+
+.transfers-chalan-container .table-colume .table-first-second-first {
+    grid-column: span 1 / span 1;
+    padding: 8px;
+    font-size: 12px;
+    font-weight: 500;
+    border-right: 1px solid #a6a6a6;
+}
+
+.transfers-chalan-container .table-colume .table-first-second-second {
+    grid-column: span 5 / span 5;
+    padding: 8px;
+    font-size: 12px;
+    font-weight: 500;
+    border-right: 1px solid #a6a6a6;
 }
