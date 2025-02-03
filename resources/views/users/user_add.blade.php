@@ -37,6 +37,15 @@
                             <input type="text" id="user_name" class="form-control" placeholder="User Name">
                         </div>
                     </div>
+
+                    <div class="col-lg-6">
+
+                        <div class="mb-3">
+
+                            <label class="form-label">User Password</label>
+                            <input type="text" id="user_pass" class="form-control" placeholder="User Password">
+                        </div>
+                    </div>
                 </div>
 
                 <div class="row row-cards">
@@ -319,6 +328,12 @@
                     const roleId = $('#select_role').val();
                     const user_email = $('#user_email').val();
                     const selected_sites = $('#select-states').val();
+                    const user_pass = $('#user_pass').val();
+
+                    if(!user_pass){
+                        showAlertUser('warning', 'Please fill user password');
+                        return;
+                    }
                    
                     // Validate data
                     if (!userName || !userPhone || !roleId ) {
@@ -347,7 +362,8 @@
                         user_permission  : permissionIds.join(','),
                         user_module      : moduleIds.join(','),
                         user_email       : user_email ,
-                        user_branch      :selected_sites
+                        user_branch      :selected_sites,
+                        user_pass        :user_pass
 
                     };
 

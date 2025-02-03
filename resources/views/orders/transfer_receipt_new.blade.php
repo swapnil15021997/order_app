@@ -23,6 +23,7 @@
                         </ol>
                     </nav>
                 </div>
+
             </div>
         </div>
         <div class="page-body">
@@ -41,8 +42,10 @@
                         </div>
                     @endif
 
+                    <button type="button" class="btn btn-primary printMe" onclick="printDiv()">Print</button>
+
                 </div>
-                <div class="max-w-[1140px] w-full relative border-[1px] border-[#a6a6a6] bg-white mx-auto overflow-hidden">
+                <div id="receipt_div" class="receipt max-w-[1140px] w-full relative border-[1px] border-[#a6a6a6] bg-white mx-auto overflow-hidden">
                     <div class="relative z-50 receipt-card">
                         <div class="grid grid-cols-2">
                             <div class="flex items-center px-4">
@@ -237,4 +240,45 @@
             </div>
         </div>
     </div>
+
+    <script>
+        function printDiv(type) {
+            // $('#receipt_div').addClass('on-print');
+            // var existingStyle = document.querySelector('style#customPrintStyle');
+            // if (existingStyle) {
+            //     document.head.removeChild(existingStyle);
+            // }
+            // if (type == "original") {
+            //     $('#print_type').text("Original");
+            // } else {
+            //     $('#print_type').text("Duplicate");
+            //     var style = document.createElement('style');
+            //     style.id = "customPrintStyle";
+            //     style.innerHTML = `
+            //         @media print {
+            //             #payment_info, #cust_details {
+            //                 display: none !important;
+            //             }
+
+
+            //         }
+            //     `;
+            //     document.head.appendChild(style);
+            // }
+            var printContents = document.getElementsByClassName('receipt')[0].innerHTML;
+
+            var originalContents = document.body.innerHTML;
+
+            document.body.innerHTML = printContents;
+
+            window.print();
+            document.body.innerHTML = printContents;
+            window.onafterprint = function () {
+                console.log("Removing")
+                // $('.container-xl').removeClass('on-print');
+                document.body.innerHTML = originalContents;
+            };
+
+        }
+    </script>
 @endsection

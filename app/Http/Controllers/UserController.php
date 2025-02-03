@@ -123,6 +123,7 @@ class UserController extends Controller
             'user_permission'   => ['required','string','max:255'],
             'user_module'       => ['required','string','max:13'],
             'user_branch'       => ['nullable'],
+            'user_pass'         =>['nullable']
             
             ]; 
         $messages = [
@@ -191,6 +192,13 @@ class UserController extends Controller
         }
         
         if (empty($params['user_id'])){
+
+            if(empty($params['user_pass'])){
+                return response()->json([
+                    'status' => 500,
+                    'message' => 'Please provide a user password'
+                ]); 
+            }
             $get_data = User::get_data_by_phone_no($params['user_phone_number']);
             
            
@@ -205,14 +213,14 @@ class UserController extends Controller
             if (!empty($get_data)){
                 return response()->json([
                     'status' => 500,
-                    'message' => 'User already exist with phone number'
+                    'message' => 'User already exist with Email'
                 ]); 
             }
             $get_data = User::get_data_by_user_name($params['user_name']);
             if (!empty($get_data)){
                 return response()->json([
                     'status' => 500,
-                    'message' => 'User already exist'
+                    'message' => 'User already exist with user name'
                 ]); 
             }
             $combined_permissions = session('combined_permissions', []);
@@ -231,8 +239,8 @@ class UserController extends Controller
             $user->user_address          = $params['user_address'];
             $user->user_phone_number     = $params['user_phone_number'];
             $user->user_role_id          = $params['user_role'];
-            $user->password              = Hash::Make('Jaygopal@123'); 
-            $user->user_sweetword        = 'Jaygopal@123'; 
+            $user->password              = Hash::Make($params['user_pass']); 
+            $user->user_sweetword        = $params['user_pass']; 
             $user->user_module_id        = $userModuleIds;
             $user->user_permission_id    = $userPermissionIds;
             $user->user_branch_ids       = $branchIds ?? null;
