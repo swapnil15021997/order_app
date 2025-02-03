@@ -2,7 +2,6 @@
 
 @section('content')
     <!-- Page header -->
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
     <style>
         .receipt-card {
             font-family: "Manrope", serif;
@@ -14,8 +13,8 @@
                 <div class="col">
                     <!-- Page pre-title -->
                     <!-- <div class="page-pretitle">
-                                                                                                                                                                                        Overview
-                                                                                                                                                                                        </div> -->
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        Overview
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        </div> -->
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Home</a></li>
@@ -23,10 +22,16 @@
                         </ol>
                     </nav>
                 </div>
+                <div class="col-auto ms-auto d-print-none">
 
+                    <button type="button" class="btn btn-primary printMe" onclick="printDiv()">
+                        Print
+                    </button>
+
+                </div>
             </div>
         </div>
-        <div class="page-body">
+        <div class="page-body chalan">
             <div class="container-xl">
                 <div id="alert-container"></div>
                 <div class="container">
@@ -42,32 +47,36 @@
                         </div>
                     @endif
 
-                    <button type="button" class="btn btn-primary printMe" onclick="printDiv()">Print</button>
-
                 </div>
-                <div id="receipt_div" class="receipt max-w-[1140px] w-full relative border-[1px] border-[#a6a6a6] bg-white mx-auto overflow-hidden">
-                    <div class="relative z-50 receipt-card">
-                        <div class="grid grid-cols-2">
-                            <div class="flex items-center px-4">
+                <div id="receipt_div"
+                    style="max-width: 1140px;width: 100%;position: relative;border: 1px solid #a6a6a6;background: white;margin: 0 auto;overflow: hidden;font-family: 'Manrope', serif">
+                    <div style="position: relative;z-index: 50;font-family: Manrope, serif;">
+                        <div style="display: grid;grid-template-columns:repeat(2, minmax(0, 1fr)); ">
+                            <div style="display: flex;align-items: center;padding: 0 16px;">
                                 <img src="{{ asset('static/sonic-large.svg') }}" width="240" height="auto"
                                     alt="Tabler" />
                             </div>
                             @php
                                 $firstTransaction = $transfer_array[0]['transactions'][0] ?? null;
                             @endphp
-                            <div class="pb-5">
-                                <div class="flex px-4 pt-3 text-2xl font-medium leading-none bg-neutral-200">
-                                    <span class="pb-1 pe-2 border-r-2 border-black text-rose-950">Gold</span>
-                                    <span class="pb-1 px-2 border-r-2 border-black text-rose-950">Silver</span>
-                                    <span class="pb-1 px-2 border-r-2 border-black text-rose-950">Diamond</span>
-                                    <span class="pb-1 ps-2 text-rose-950">Platinum</span>
+                            <div style="padding-bottom: 20px">
+                                <div
+                                    style="display: flex;padding: 0px 16px;padding-top: 12px;font-size: 1.5rem;font-weight: 500;line-height: 1;background-color: #e5e5e5">
+                                    <span
+                                        style="padding-bottom: 4px;padding-right: 8px;border-right-width: 2px;border-color:#4c0519;color:#4c0519;">Gold</span>
+                                    <span
+                                        style="padding-bottom: 4px;padding: 0px 8px;border-right-width: 2px;border-color:#4c0519;color:#4c0519;">Silver</span>
+                                    <span
+                                        style="padding-bottom: 4px;padding: 0px 8px;border-right-width: 2px;border-color:#4c0519;color:#4c0519;">Diamond</span>
+                                    <span style="padding-bottom: 4px;padding-left: 8px;color:#4c0519;">Platinum</span>
                                 </div>
-                                <p class="px-4 py-2 text-rose-900"
-                                    style="font-family: Times, 'Times New Roman', Georgia, serif; font-size:30px">
+                                <p
+                                    style="padding:8px 16px ;color:#881337 ;font-family: Times, 'Times New Roman', Georgia, serif; font-size:30px">
                                     Remarkable you, Today, Tomorrow</p>
-                                <div class="flex flex-col gap-2">
-                                    <p class="flex items-start gap-2 font-medium text-base">
-                                        <span class="pt-1">
+                                <div style="display: flex;flex-direction: column;gap: 8px">
+                                    <p
+                                        style="display: flex;align-items: start;gap: 8px;font-weight: 500;font-size: 16px;margin: 0px">
+                                        <span>
                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                                                 fill="currentColor" class="bi bi-geo-alt" viewBox="0 0 16 16">
                                                 <path
@@ -79,8 +88,9 @@
                                         Shop No.: 112-119, Shree Laxmi Narayan Dev Complex </br>
                                         Palace Road - Rajkot | Mo.: 9815180980
                                     </p>
-                                    <p class="flex items-start gap-2 font-medium text-base">
-                                        <span class="pt-1">
+                                    <p
+                                        style="display: flex;align-items: start;gap: 8px;font-weight: 500;font-size: 16px;margin: 0px">
+                                        <span>
                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                                                 fill="currentColor" class="bi bi-geo-alt" viewBox="0 0 16 16">
                                                 <path
@@ -95,35 +105,37 @@
                             </div>
                         </div>
 
-                        <div class="border-y-[1px] border-[#a6a6a6]">
-                            <div class="py-2 text-center border-b border-[#a6a6a6]">
-                                <p class="text-lg font-bold">
+                        <div style="border-top:1px solid #a6a6a6;border-bottom: 1px solid #a6a6a6">
+                            <div style="padding: 12px;text-align: center;border-bottom: 1px solid #a6a6a6">
+                                <p style="font-size: 18px;font-weight: 700;line-height: 1;margin: 0px">
                                     Transfer Receipt
                                 </p>
                             </div>
 
-                            <div class="grid grid-cols-2 gap-0 border-b border-[#a6a6a6]">
-                                <div class="p-2 border-r border-[#a6a6a6]">
-                                    <p>
-                                        <span class="font-semibold">Transfer From : </span>
+                            <div
+                                style="display: grid;grid-template-columns: repeat(2, minmax(0, 1fr));gap: 0px;border-bottom: 1px solid #a6a6a6">
+                                <div style="padding: 8px;border-right: 1px solid #a6a6a6">
+                                    <p style="margin: 0px">
+                                        <span style="font-weight: 600">Transfer From : </span>
                                         {{ $firstTransaction['from_branch_name'] }}
                                     </p>
-                                    <p>
-                                        <span class="font-semibold">Transfer To : </span>
+                                    <p style="margin: 0px">
+                                        <span style="font-weight: 600">Transfer To : </span>
                                         {{ $firstTransaction['to_branch_name'] }}
                                     </p>
                                 </div>
-                                <div class="grid grid-cols-2 gap-0">
-                                    <div class="flex flex-col p-2 border-r border-[#a6a6a6]">
+                                <div style="display: grid;grid-template-columns: repeat(2, minmax(0, 1fr));gap: 0px;">
+                                    <div
+                                        style="display: flex;flex-direction: column;padding: 8px;border-right: 1px solid #a6a6a6">
                                         <span>Order Date:</span>
-                                        <span class="font-semibold">
+                                        <span style="font-weight: 600">
                                             {{ $firstTransaction['orders'][0]['order_date'] }}
                                         </span>
                                     </div>
 
-                                    <div class="flex flex-col p-2">
+                                    <div style="display: flex;flex-direction: column;padding: 8px;">
                                         <span>Order Type:</span>
-                                        <span class="font-semibold">
+                                        <span style="font-weight: 600">
                                             @if ($firstTransaction['orders'][0]['order_type'] == 1)
                                                 Order
                                             @else
@@ -134,87 +146,98 @@
                                 </div>
                             </div>
 
-                            <div class="grid grid-cols-2 gap-0 border-b border-[#a6a6a6]">
-                                <div class="grid grid-cols-6 gap-0">
-                                    <div class="col-span-1 p-2 font-bold border-r border-[#a6a6a6]">
+                            <div
+                                style="display: grid;grid-template-columns: repeat(2, minmax(0, 1fr));gap: 0px;border-bottom: 1px solid #a6a6a6">
+                                <div style="display: grid;grid-template-columns: repeat(6, minmax(0, 1fr));gap: 0px">
+                                    <div
+                                        style="grid-column: span 1 / span 1;padding: 8px;font-weight: 700;border-right: 1px solid #a6a6a6">
                                         Sr. No
                                     </div>
-                                    <div class="col-span-5 p-2 font-bold border-r border-[#a6a6a6]">
+                                    <div
+                                        style="grid-column: span 5 / span 5;padding: 8px;font-weight: 700;border-right: 1px solid #a6a6a6">
                                         Item Name
                                     </div>
                                 </div>
-                                <div class="flex">
-                                    <div class="w-1/5 p-2 font-bold border-r border-[#a6a6a6]">
+                                <div style="display: flex">
+                                    <div style="width: 20%;padding: 8px;font-weight: 700;border-right: 1px solid #a6a6a6">
                                         Item Metal
                                     </div>
-                                    <div class="w-1/5 p-2 font-bold border-r border-[#a6a6a6]">
+                                    <div style="width: 20%;padding: 8px;font-weight: 700;border-right: 1px solid #a6a6a6">
                                         Item Melting
                                     </div>
-                                    <div class="w-1/5 p-2 font-bold border-r border-[#a6a6a6]">
+                                    <div style="width: 20%;padding: 8px;font-weight: 700;border-right: 1px solid #a6a6a6">
                                         Item Weight
                                     </div>
-                                    <div class="w-1/5 p-2 font-bold border-r border-[#a6a6a6]">
+                                    <div style="width: 20%;padding: 8px;font-weight: 700;border-right: 1px solid #a6a6a6">
                                         Item Colors
                                     </div>
-                                    <div class="w-1/5 p-2 font-bold">
+                                    <div style="width: 20%;padding: 8px;font-weight: 700;">
                                         QR Code
                                     </div>
                                 </div>
                             </div>
 
                             @foreach ($transfer_array[0]['transactions'] as $index => $transaction)
-                                <div class="grid grid-cols-2 gap-0">
-                                    <div class="grid grid-cols-6 gap-0">
-                                        <div class="col-span-1 font-medium p-2.5 border-r border-[#a6a6a6]">
+                                <div style="display: grid;grid-template-columns: repeat(2, minmax(0, 1fr));gap: 0px;">
+                                    <div style="display: grid;grid-template-columns: repeat(6, minmax(0, 1fr));gap: 0px">
+                                        <div
+                                            style="grid-column: span 1 / span 1;padding: 10px;font-weight: 500;border-right: 1px solid #a6a6a6">
                                             {{ $index + 1 }}
                                         </div>
-                                        <div class="col-span-5 font-medium p-2.5 border-r border-[#a6a6a6]">
+                                        <div
+                                            style="grid-column: span 5 / span 5;padding: 10px;font-weight: 500;border-right: 1px solid #a6a6a6">
                                             {{ $transaction['items'][0]['item_name'] }}
                                         </div>
                                     </div>
-                                    <div class="flex">
-                                        <div class="w-1/5 font-medium p-2.5 border-r border-[#a6a6a6]">
+                                    <div style="display: flex">
+                                        <div
+                                            style="width: 20%;padding: 10px;font-weight: 500;border-right: 1px solid #a6a6a6">
                                             {{ $transaction['items'][0]['item_metal'] }}
                                         </div>
-                                        <div class="w-1/5 font-medium p-2.5 border-r border-[#a6a6a6]">
+                                        <div
+                                            style="width: 20%;padding: 10px;font-weight: 500;border-right: 1px solid #a6a6a6">
                                             {{ $transaction['items'][0]['item_weight'] }}
                                         </div>
-                                        <div class="w-1/5 font-medium p-2.5 border-r border-[#a6a6a6]">
+                                        <div
+                                            style="width: 20%;padding: 10px;font-weight: 500;border-right: 1px solid #a6a6a6">
                                             {{ $transaction['items'][0]['item_weight'] }}
                                         </div>
-                                        <div class="w-1/5 font-medium p-2.5 border-r border-[#a6a6a6]">
+                                        <div
+                                            style="width: 20%;padding: 10px;font-weight: 500;border-right: 1px solid #a6a6a6">
                                             {{ $transaction['items'][0]['colors']['color_name'] }}
                                         </div>
-                                        <div class="w-1/5 font-medium p-2.5">
+                                        <div style="width: 20%;padding: 10px;font-weight: 500">
                                             {{ $transaction['orders'][0]['order_qr_code'] }}
                                         </div>
                                     </div>
                                 </div>
                             @endforeach
-                            @for ($i = count($transfer_array[0]['transactions']); $i < 10; $i++)
-                                <div class="grid grid-cols-2 gap-0">
-                                    <div class="grid grid-cols-6 gap-0">
-                                        <div class="col-span-1 py-2.5 border-r border-[#a6a6a6]">
+                            @for ($i = count($transfer_array[0]['transactions']); $i < 5; $i++)
+                                <div style="display: grid;grid-template-columns: repeat(2, minmax(0, 1fr));gap: 0px;">
+                                    <div style="display: grid;grid-template-columns: repeat(6, minmax(0, 1fr));gap: 0px">
+                                        <div
+                                            style="grid-column: span 1 / span 1;padding: 10px;border-right: 1px solid #a6a6a6">
                                             <p>&nbsp;</p>
                                         </div>
-                                        <div class="col-span-5 py-2.5 border-r border-[#a6a6a6]">
+                                        <div
+                                            style="grid-column: span 5 / span 5;padding: 10px;border-right: 1px solid #a6a6a6">
                                             <p>&nbsp;</p>
                                         </div>
                                     </div>
-                                    <div class="flex">
-                                        <div class="w-1/5 py-2.5 border-r border-[#a6a6a6]">
+                                    <div style="display: flex">
+                                        <div style="width: 20%;padding: 10px;border-right: 1px solid #a6a6a6">
                                             <p>&nbsp;</p>
                                         </div>
-                                        <div class="w-1/5 py-2.5 border-r border-[#a6a6a6]">
+                                        <div style="width: 20%;padding: 10px;border-right: 1px solid #a6a6a6">
                                             <p>&nbsp;</p>
                                         </div>
-                                        <div class="w-1/5 py-2.5 border-r border-[#a6a6a6]">
+                                        <div style="width: 20%;padding: 10px;border-right: 1px solid #a6a6a6">
                                             <p>&nbsp;</p>
                                         </div>
-                                        <div class="w-1/5 py-2.5 border-r border-[#a6a6a6]">
+                                        <div style="width: 20%;padding: 10px;border-right: 1px solid #a6a6a6">
                                             <p>&nbsp;</p>
                                         </div>
-                                        <div class="w-1/5 py-2.5">
+                                        <div style="width: 20%;padding: 10px">
                                             <p>&nbsp;</p>
                                         </div>
                                     </div>
@@ -222,20 +245,21 @@
                             @endfor
                         </div>
 
-                        <div class="h-28 grid grid-cols-3 gap-0 items-end">
-                            <div class="p-2 font-bold">
+                        <div
+                            style="height: 112px;display: grid;grid-template-columns: repeat(3, minmax(0, 1fr));gap: 0px;align-items: end">
+                            <div style="padding: 8px;font-weight: 700">
                                 Manager Signatory
                             </div>
-                            <div class="p-2 font-bold">
+                            <div style="padding: 8px;font-weight: 700">
                                 Customer Signatory
                             </div>
-                            <div class="p-2 font-bold">
+                            <div style="padding: 8px;font-weight: 700">
                                 Salesman Signatory
                             </div>
                         </div>
                     </div>
                     <img src="{{ asset('static/sonic-icon.svg') }}" alt="Icon"
-                        class="absolute -bottom-40 -right-[19rem] grayscale opacity-15">
+                        style="position: absolute;bottom: -160px;right: -304px;opacity: 0.15;filter: grayscale(100%)">
                 </div>
             </div>
         </div>
@@ -243,29 +267,29 @@
 
     <script>
         function printDiv(type) {
-            // $('#receipt_div').addClass('on-print');
-            // var existingStyle = document.querySelector('style#customPrintStyle');
-            // if (existingStyle) {
-            //     document.head.removeChild(existingStyle);
-            // }
-            // if (type == "original") {
-            //     $('#print_type').text("Original");
-            // } else {
-            //     $('#print_type').text("Duplicate");
-            //     var style = document.createElement('style');
-            //     style.id = "customPrintStyle";
-            //     style.innerHTML = `
-            //         @media print {
-            //             #payment_info, #cust_details {
-            //                 display: none !important;
-            //             }
+            $('#receipt_div').addClass('on-print');
+            var existingStyle = document.querySelector('style#customPrintStyle');
+            if (existingStyle) {
+                document.head.removeChild(existingStyle);
+            }
+            if (type == "original") {
+                $('#print_type').text("Original");
+            } else {
+                $('#print_type').text("Duplicate");
+                var style = document.createElement('style');
+                style.id = "customPrintStyle";
+                style.innerHTML = `
+                @media print {
+                    #payment_info, #cust_details {
+                        display: none !important;
+                    }
 
 
-            //         }
-            //     `;
-            //     document.head.appendChild(style);
-            // }
-            var printContents = document.getElementsByClassName('receipt')[0].innerHTML;
+                }
+            `;
+                document.head.appendChild(style);
+            }
+            var printContents = document.getElementsByClassName('chalan')[0].innerHTML;
 
             var originalContents = document.body.innerHTML;
 
@@ -273,9 +297,9 @@
 
             window.print();
             document.body.innerHTML = printContents;
-            window.onafterprint = function () {
+            window.onafterprint = function() {
                 console.log("Removing")
-                // $('.container-xl').removeClass('on-print');
+                $('.container-xl').removeClass('on-print');
                 document.body.innerHTML = originalContents;
             };
 
