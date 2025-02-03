@@ -146,7 +146,7 @@
                                     Item Name
                                 </div>
                             </div>
-                            <div style="display: flex">
+                            <div style="display: flex" class="need-class">
                                 <div class="table-col">
                                     Item Metal
                                 </div>
@@ -175,7 +175,7 @@
                                         {{ $transaction['items'][0]['item_name'] }}
                                     </div>
                                 </div>
-                                <div style="display: flex">
+                                <div class="need-class" style="display: flex">
                                     <div class="table-col">
                                         {{ $transaction['items'][0]['item_metal'] }}
                                     </div>
@@ -194,7 +194,7 @@
                                 </div>
                             </div>
                         @endforeach
-                        @for ($i = count($transfer_array[0]['transactions']); $i < 5; $i++)
+                        <!-- @for ($i = count($transfer_array[0]['transactions']); $i < 5; $i++)
                             <div style="display: grid;grid-template-columns: repeat(2, minmax(0, 1fr));gap: 0px;">
                                 <div style="display: grid;grid-template-columns: repeat(6, minmax(0, 1fr));gap: 0px">
                                     <div style="grid-column: span 1 / span 1;padding: 10px;border-right: 1px solid #a6a6a6">
@@ -222,7 +222,7 @@
                                     </div>
                                 </div>
                             </div>
-                        @endfor
+                        @endfor -->
                     </div>
 
                     <div class="chalan-footer">
