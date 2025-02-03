@@ -144,7 +144,7 @@
                 <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
                     <!-- <a href="{{route('profile.edit')}}" class="dropdown-item">Profile</a> -->
                     <a href="{{route('settings')}}" class="dropdown-item">Account & Settings</a>
-                    <a href="#" onclick="logout()" class="dropdown-item">Logout</a>
+                    <a href="#" onclick="click_logout()" class="dropdown-item">Logout</a>
 
                 </div>
             </div>
@@ -231,8 +231,17 @@
 </script>
 
 <script>
+
+
+    function click_logout(){
+
+        $('#logout_model').modal('show');
+    }
+
+    
     function logout() {
-        alert();
+        $('body').addClass('loading');
+         
         var csrfToken = $('meta[name="csrf-token"]').attr('content');
 
         $.ajax({
@@ -245,6 +254,7 @@
             success: function (response) {
                 console.log(response);
                 if (response.status == 200) {
+                    $('body').removeClass('loading');
                     location.href = "{{ route('login') }}";
                 }
             }

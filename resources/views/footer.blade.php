@@ -282,7 +282,7 @@
                                 Accounts & Settings
                             </span>
                         </a>
-                        <a class="dropdown-item" href="#" onclick="logout()">
+                        <a class="dropdown-item" href="#" onclick="click_logout()">
                             <span
                                 class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/checkbox -->
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"

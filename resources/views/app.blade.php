@@ -160,6 +160,40 @@
         </div>
     </div>
 
+
+
+    <div class="modal modal-blur fade" id="logout_model" tabindex="-2" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h5 class="modal-title">Logout</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+
+                   
+                    <div class="row">
+                        <div class="col-6 select-full">
+                           <p>Do you really want to Logout?</p>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="modal-footer">
+                    <a href="#" class="btn btn-secondary" data-bs-dismiss="modal">
+                        Cancel
+                    </a>
+                    <a id="LogoutBtn" onclick="logout()" href="#" class="btn btn-primary">
+                        Logout
+                    </a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
     <div class="loader-screeen">
         <img src="{{ asset('static/sonic-large.svg')}}"  alt="logo" class="navbar-brand-image">
     </div>
