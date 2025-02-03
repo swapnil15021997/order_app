@@ -13,8 +13,8 @@
                 <div class="col">
                     <!-- Page pre-title -->
                     <!-- <div class="page-pretitle">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        Overview
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        </div> -->
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                Overview
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                </div> -->
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Home</a></li>
@@ -61,17 +61,17 @@
                             @endphp
                             <div style="padding-bottom: 20px">
                                 <div
-                                    style="display: flex;padding: 0px 16px;padding-top: 12px;font-size: 1.5rem;font-weight: 500;line-height: 1;background-color: #e5e5e5">
+                                    style="display: flex;padding: 0px 16px;padding-top: 12px;font-size: 1.2rem;font-weight: 500;line-height: 1;background-color: #e5e5e5">
                                     <span
-                                        style="padding-bottom: 4px;padding-right: 8px;border-right-width: 2px;border-color:#4c0519;color:#4c0519;">Gold</span>
+                                        style="padding-bottom: 4px;padding-right: 8px;border-right: 2px solid #4c0519;color:#4c0519;">Gold</span>
                                     <span
-                                        style="padding-bottom: 4px;padding: 0px 8px;border-right-width: 2px;border-color:#4c0519;color:#4c0519;">Silver</span>
+                                        style="padding-bottom: 4px;padding: 0px 8px;border-right: 2px solid #4c0519;color:#4c0519;">Silver</span>
                                     <span
-                                        style="padding-bottom: 4px;padding: 0px 8px;border-right-width: 2px;border-color:#4c0519;color:#4c0519;">Diamond</span>
+                                        style="padding-bottom: 4px;padding: 0px 8px;border-right: 2px solid #4c0519;color:#4c0519;">Diamond</span>
                                     <span style="padding-bottom: 4px;padding-left: 8px;color:#4c0519;">Platinum</span>
                                 </div>
                                 <p
-                                    style="padding:8px 16px ;color:#881337 ;font-family: Times, 'Times New Roman', Georgia, serif; font-size:30px">
+                                    style="padding:8px 16px ;color:#881337 ;font-family: Times, 'Times New Roman', Georgia, serif; font-size:30px;margin: 0px">
                                     Remarkable you, Today, Tomorrow</p>
                                 <div style="display: flex;flex-direction: column;gap: 8px">
                                     <p
@@ -150,28 +150,32 @@
                                 style="display: grid;grid-template-columns: repeat(2, minmax(0, 1fr));gap: 0px;border-bottom: 1px solid #a6a6a6">
                                 <div style="display: grid;grid-template-columns: repeat(6, minmax(0, 1fr));gap: 0px">
                                     <div
-                                        style="grid-column: span 1 / span 1;padding: 8px;font-weight: 700;border-right: 1px solid #a6a6a6">
+                                        style="grid-column: span 1 / span 1;padding: 8px;font-size: 12px;font-weight: 700;border-right: 1px solid #a6a6a6">
                                         Sr. No
                                     </div>
                                     <div
-                                        style="grid-column: span 5 / span 5;padding: 8px;font-weight: 700;border-right: 1px solid #a6a6a6">
+                                        style="grid-column: span 5 / span 5;padding: 8px;font-size: 12px;font-weight: 700;border-right: 1px solid #a6a6a6">
                                         Item Name
                                     </div>
                                 </div>
                                 <div style="display: flex">
-                                    <div style="width: 20%;padding: 8px;font-weight: 700;border-right: 1px solid #a6a6a6">
+                                    <div
+                                        style="width: 20%;padding: 8px;font-size: 12px;font-weight: 700;border-right: 1px solid #a6a6a6;overflow-wrap: anywhere">
                                         Item Metal
                                     </div>
-                                    <div style="width: 20%;padding: 8px;font-weight: 700;border-right: 1px solid #a6a6a6">
+                                    <div
+                                        style="width: 20%;padding: 8px;font-size: 12px;font-weight: 700;border-right: 1px solid #a6a6a6;overflow-wrap: anywhere">
                                         Item Melting
                                     </div>
-                                    <div style="width: 20%;padding: 8px;font-weight: 700;border-right: 1px solid #a6a6a6">
+                                    <div
+                                        style="width: 20%;padding: 8px;font-size: 12px;font-weight: 700;border-right: 1px solid #a6a6a6;overflow-wrap: anywhere">
                                         Item Weight
                                     </div>
-                                    <div style="width: 20%;padding: 8px;font-weight: 700;border-right: 1px solid #a6a6a6">
+                                    <div
+                                        style="width: 20%;padding: 8px;font-size: 12px;font-weight: 700;border-right: 1px solid #a6a6a6;overflow-wrap: anywhere">
                                         Item Colors
                                     </div>
-                                    <div style="width: 20%;padding: 8px;font-weight: 700;">
+                                    <div style="width: 20%;padding: 8px;font-size: 12px;font-weight: 700;overflow-wrap: anywhere">
                                         QR Code
                                     </div>
                                 </div>
@@ -181,32 +185,32 @@
                                 <div style="display: grid;grid-template-columns: repeat(2, minmax(0, 1fr));gap: 0px;">
                                     <div style="display: grid;grid-template-columns: repeat(6, minmax(0, 1fr));gap: 0px">
                                         <div
-                                            style="grid-column: span 1 / span 1;padding: 10px;font-weight: 500;border-right: 1px solid #a6a6a6">
+                                            style="grid-column: span 1 / span 1;padding: 8px;font-size: 12px;font-weight: 500;border-right: 1px solid #a6a6a6">
                                             {{ $index + 1 }}
                                         </div>
                                         <div
-                                            style="grid-column: span 5 / span 5;padding: 10px;font-weight: 500;border-right: 1px solid #a6a6a6">
+                                            style="grid-column: span 5 / span 5;padding: 8px;font-size: 12px;font-weight: 500;border-right: 1px solid #a6a6a6">
                                             {{ $transaction['items'][0]['item_name'] }}
                                         </div>
                                     </div>
                                     <div style="display: flex">
                                         <div
-                                            style="width: 20%;padding: 10px;font-weight: 500;border-right: 1px solid #a6a6a6">
+                                            style="width: 20%;padding: 8px;font-size: 12px;font-weight: 500;border-right: 1px solid #a6a6a6;overflow-wrap: anywhere">
                                             {{ $transaction['items'][0]['item_metal'] }}
                                         </div>
                                         <div
-                                            style="width: 20%;padding: 10px;font-weight: 500;border-right: 1px solid #a6a6a6">
+                                            style="width: 20%;padding: 8px;font-size: 12px;font-weight: 500;border-right: 1px solid #a6a6a6;overflow-wrap: anywhere">
                                             {{ $transaction['items'][0]['item_weight'] }}
                                         </div>
                                         <div
-                                            style="width: 20%;padding: 10px;font-weight: 500;border-right: 1px solid #a6a6a6">
+                                            style="width: 20%;padding: 8px;font-size: 12px;font-weight: 500;border-right: 1px solid #a6a6a6;overflow-wrap: anywhere">
                                             {{ $transaction['items'][0]['item_weight'] }}
                                         </div>
                                         <div
-                                            style="width: 20%;padding: 10px;font-weight: 500;border-right: 1px solid #a6a6a6">
+                                            style="width: 20%;padding: 8px;font-size: 12px;font-weight: 500;border-right: 1px solid #a6a6a6;overflow-wrap: anywhere">
                                             {{ $transaction['items'][0]['colors']['color_name'] }}
                                         </div>
-                                        <div style="width: 20%;padding: 10px;font-weight: 500">
+                                        <div style="width: 20%;padding: 8px;font-size: 12px;font-weight: 500;overflow-wrap: anywhere">
                                             {{ $transaction['orders'][0]['order_qr_code'] }}
                                         </div>
                                     </div>
