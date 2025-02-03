@@ -31,7 +31,7 @@
                 </div>
             </div>
         </div>
-        <div class="page-body chalan">
+        <div class="page-body chalan" id="transfer_receipt_div">
             <div class="container-xl">
                 <div id="alert-container"></div>
                 <div class="container">
@@ -48,7 +48,7 @@
                     @endif
 
                 </div>
-                <div id="receipt_div"
+                <div 
                     style="max-width: 1140px;width: 100%;position: relative;border: 1px solid #a6a6a6;background: white;margin: 0 auto;overflow: hidden;font-family: 'Manrope', serif">
                     <div style="position: relative;z-index: 50;font-family: Manrope, serif;">
                         <div style="display: grid;grid-template-columns:repeat(2, minmax(0, 1fr)); ">
@@ -271,28 +271,8 @@
 
     <script>
         function printDiv(type) {
-            $('#receipt_div').addClass('on-print');
-            var existingStyle = document.querySelector('style#customPrintStyle');
-            if (existingStyle) {
-                document.head.removeChild(existingStyle);
-            }
-            if (type == "original") {
-                $('#print_type').text("Original");
-            } else {
-                $('#print_type').text("Duplicate");
-                var style = document.createElement('style');
-                style.id = "customPrintStyle";
-                style.innerHTML = `
-                @media print {
-                    #payment_info, #cust_details {
-                        display: none !important;
-                    }
-
-
-                }
-            `;
-                document.head.appendChild(style);
-            }
+            $('#transfer_receipt_div').addClass('on-print');
+            
             var printContents = document.getElementsByClassName('chalan')[0].innerHTML;
 
             var originalContents = document.body.innerHTML;
