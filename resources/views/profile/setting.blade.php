@@ -25,8 +25,35 @@
     <div class="container-xl">
         <div id="alert-profile"></div>
         <div id="alert-site"></div>
+       
         <div class="row">
             <div class="card">
+                @if ($errors->any())
+                    <div class=" p-4 rounded">
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+
+                    @endif
+                    <script>
+                        window.onload = function() {
+                            var errors = @json($errors->all());
+                            console.log(errors);
+                            if (errors.length>0){
+
+                                showAlert('warining',errors);
+                            }
+                            var successMessage = @json(session('status'));
+                            console.log("Success:", successMessage);
+                            if (successMessage.length>0) {
+                                showAlert('success', [successMessage]);
+                            }
+                        }
+                    </script>
+
                 <div class="row g-0">
 
                     <div class="col-12 col-md-3 border-end">
