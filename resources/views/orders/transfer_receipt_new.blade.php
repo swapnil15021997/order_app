@@ -31,8 +31,8 @@
                 </div>
             </div>
         </div>
-        <div class="page-body chalan" id="transfer_receipt_div">
-            <div class="container-xl">
+        <div class="page-body chalan" >
+            <div class="container-xl" id="transfer_receipt_div">
                 <div id="alert-container"></div>
                 <div class="container">
                     <div id="alert-site"></div>
