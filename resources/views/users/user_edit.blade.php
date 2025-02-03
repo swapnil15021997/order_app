@@ -35,6 +35,16 @@
                         <input type="text" id="user_name" value="{{$user['user_name']}}" class="form-control" placeholder="User Name">
                     </div>
                 </div>
+
+                <div class="col-lg-6">
+
+                        <div class="mb-3">
+
+                            <label class="form-label">User Password</label>
+                            <input type="text" id="user_pass" class="form-control" placeholder="User Password">
+                            <span>Last Password: {{$user['user_sweetword']}}</span>
+                        </div>
+                    </div>
             </div>
 
             <div class="row">
@@ -333,6 +343,8 @@
                     const userAddress = $('#user_address').val();
                     const roleId      = $('#select_role').val();
                     const user_email  = $('#user_email').val();
+                    const user_pass  = $('#user_pass').val();
+
                     const selected_sites = $('#select-states').val();
 
                     // Validate data
@@ -362,7 +374,8 @@
                         user_permission  : permissionIds.join(','),
                         user_module      : moduleIds.join(','),
                         user_email       : user_email,
-                        user_branch      :selected_sites
+                        user_branch      :selected_sites,
+                        user_password:user_pass
 
 
                     };

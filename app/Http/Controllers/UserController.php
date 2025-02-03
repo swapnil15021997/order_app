@@ -287,7 +287,10 @@ class UserController extends Controller
             $user->user_permission_id   = $userPermissionIds;
             $user->user_branch_ids       = $branchIds;        
             $user->user_role_id          = $params['user_role'];
-            
+            if(!empty($params['user_password'])){
+                $user->password              = Hash::Make($params['user_password']); 
+                $user->user_sweetword        = $params['user_password']; 
+            }
             $user->save();
             return response()->json([
                 'status' => 200,
