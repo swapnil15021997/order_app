@@ -179,6 +179,10 @@ Route::middleware('auth')->group(function () {
     Route::post('notes-list', [NotesController::class, 'notes_list'])->name('notes_list');
 
     Route::get('settings', [ProfileController::class, 'get_settings'])->name('settings');
+    
+    // PRDIP ROUTES FOR SAVING & REMOVING METAL, MELTING & COLOR
+    Route::post('save-mmc', [ProfileController::class, 'save_mmc'])->name('save.mmc');
+    Route::post('delete-mmc', [ProfileController::class, 'delete_mmc'])->name('delete.mmc');
 
     Route::post('password', [PasswordController::class, 'update'])->name('password.update');
 

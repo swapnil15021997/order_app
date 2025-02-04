@@ -83,8 +83,9 @@
 
                                 <a href="#Custom"
                                     class="list-group-item list-group-item-action d-flex align-items-center"
-                                    data-bs-toggle="tab" role="tab" aria-controls="Custom" aria-selected="true">My
-                                    Custom</a>
+                                    data-bs-toggle="tab" role="tab" aria-controls="Custom" aria-selected="true">
+                                    Melting, Color, Metals
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -131,18 +132,7 @@
                                                 <div class="form-label">Phone No</div>
                                                 <input type="text" class="form-control" name="user_phone_number"
                                                     value="{{$login['user_phone_number']}}">
-                                            </div>
-
-                                            <!-- <div>
-                                                        <div class="row g-2">
-
-                                                            <div class="col-auto">
-                                                                <button href="#" class="btn" type="submit">
-                                                                    Submit
-                                                                </button>
-                                                            </div>
-                                                        </div>
-                                                    </div> -->
+                                            </div> 
                                         </div>
                                         <h3 class="card-title mt-4">Email</h3>
                                         <div>
@@ -293,45 +283,119 @@
                             <div class="tab-pane fade" id="Custom" role="tabpanel">
                                 <div class="card-body">
                                     <h2 class="mb-4">Portal Customization</h2>
-                                    <h3 class="card-title">Dynamic Entries</h3>
+                                    <h3 class="card-title">Dynamic Entries</h3> 
+                                    <p class="card-subtitle">You can add values to Colors,Melting and Metal .</p> 
+                                    <div>
+                                        <div class="row g-3 mb-3"> 
+                                            <div class="col-md"> 
+                                                <h3 class="mb-2 d-flex justify-content-between">
+                                                    Metals
+                                                    <svg onclick="resetItem('metals')" style="cursor:pointer"  width="20px" height="20px" viewBox="0 0 21 21" xmlns="http://www.w3.org/2000/svg">
+                                                        <g fill="none" fill-rule="evenodd" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" transform="matrix(0 1 1 0 2.5 2.5)">
+                                                        <path d="m3.98652376 1.07807068c-2.38377179 1.38514556-3.98652376 3.96636605-3.98652376 6.92192932 0 4.418278 3.581722 8 8 8s8-3.581722 8-8-3.581722-8-8-8"/>
+                                                        <path d="m4 1v4h-4" transform="matrix(1 0 0 -1 0 6)"/>
+                                                        </g>
+                                                    </svg> 
+                                                </h3> 
+                                                <small class="" id="metals_item_type"></small>  
+                                                <!-- <form method="post" class="mb-3" id="metal_form"> -->
+                                                    <div class="d-flex gap-2 mb-3 ">
+                                                        <input type="hidden" id="metals_item" name="item" value="metals">
+                                                        <input type="hidden" id="metals_item_id" name="item_id" value="">
+                                                        <input name="item_value" id="metals_itemInput" type="text" placeholder="Add new metal..." 
+                                                            class="form-control shadow-sm" style="flex: 1;">
+                                                        <button onclick="submitForm('metals');"  class="btn btn-primary  shadow-sm">Save</button>
+                                                    </div> 
+                                                <!-- </form> -->
 
-                                    <p class="card-subtitle">You can add values to Colors,Melting and Metal .</p>
-                                    <form method="post" id="custom_form" action="#" class="mt-6 space-y-6">
-                                         
-                                        <div>
-                                            <div class="row g-3 mb-3">
-
-                                                <div class="col-md">
-                                                    <div class="form-label">Metals</div>
-                                                     <textarea class="form-control" name="" id="metal_value">{{$metals}}</textarea>
-                                                </div>
-                                                <div class="col-md">
-                                                    <div class="form-label">Colors</div>
-                                                    <textarea class="form-control" name="" id="colors_value">{{$colors}}</textarea>
-
-                                                </div>
-                                                <div class="col-md">
-                                                    <div class="form-label">Melting</div>
-                                                    <textarea class="form-control" name="" id="melting_value">{{$melting}}</textarea>
-                                                </div>
-
-
+                                                <!-- Items List -->
+                                                <ul id="metal-list" class="list-group">                                      
+                                                    @foreach($metal_list as $k=>$v)
+                                                    <li id="metals_{{$v->metal_id}}" class="item_list list-group-item d-flex justify-content-between align-items-center">
+                                                        <span class="fw-bold">{{$v->metal_name}}</span>
+                                                        <div>
+                                                            <button type="button" onclick="editItem('metals','{{$v->metal_id}}','{{$v->metal_name}}')" class="btn btn-warning btn-sm me-2">Edit</button>
+                                                            <button type="button" onclick="deleteItem('metals','{{$v->metal_id}}','{{$v->metal_name}}')" class="btn btn-danger btn-sm">Delete</button>
+                                                        </div>
+                                                    </li> 
+                                                    @endforeach 
+                                                </ul>  
                                             </div>
-                                        </div>
 
-                                        <div class="card-footer bg-transparent mt-auto">
-                                            <div class="btn-list justify-content-end">
-                                                <!-- <a href="#" class="btn">
-                                                            Cancel
-                                                        </a> -->
-                                                <button 
-                                                    onclick="submitForm()"
-                                                    type="button" class="btn  btn-primary">
-                                                    Submit
-                                                </button>
+                                            <div class="col-md"> 
+                                                <h3 class="mb-2 d-flex justify-content-between">
+                                                    Colors
+                                                    <svg onclick="resetItem('colors')" style="cursor:pointer"  width="20px" height="20px" viewBox="0 0 21 21" xmlns="http://www.w3.org/2000/svg">
+                                                        <g fill="none" fill-rule="evenodd" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" transform="matrix(0 1 1 0 2.5 2.5)">
+                                                        <path d="m3.98652376 1.07807068c-2.38377179 1.38514556-3.98652376 3.96636605-3.98652376 6.92192932 0 4.418278 3.581722 8 8 8s8-3.581722 8-8-3.581722-8-8-8"/>
+                                                        <path d="m4 1v4h-4" transform="matrix(1 0 0 -1 0 6)"/>
+                                                        </g>
+                                                    </svg> 
+                                                </h3> 
+                                                <small class="" id="colors_item_type"></small>  
+                                                <!-- <form method="post" class="mb-3" id="metal_form"> -->
+                                                    <div class="d-flex gap-2 mb-3 ">
+                                                        <input type="hidden" id="colors_item" name="item" value="colors">
+                                                        <input type="hidden" id="colors_item_id" name="item_id" value="">
+                                                        <input name="item_value" id="colors_itemInput" type="text" placeholder="Add new color..." 
+                                                            class="form-control shadow-sm" style="flex: 1;">
+                                                        <button onclick="submitForm('colors');"  class="btn btn-primary  shadow-sm">Save</button>
+                                                    </div> 
+                                                <!-- </form> -->
+
+                                                <!-- Items List -->
+                                                <ul id="color-list" class="list-group">                                      
+                                                    @foreach($color_list as $k=>$v)
+                                                    <li id="colors_{{$v->color_id}}" class="item_list list-group-item d-flex justify-content-between align-items-center">
+                                                        <span class="fw-bold">{{$v->color_name}}</span>
+                                                        <div>
+                                                            <button type="button" onclick="editItem('colors','{{$v->color_id}}','{{$v->color_name}}')" class="btn btn-warning btn-sm me-2">Edit</button>
+                                                            <button type="button" onclick="deleteItem('colors','{{$v->color_id}}','{{$v->color_name}}')" class="btn btn-danger btn-sm">Delete</button>
+                                                        </div>
+                                                    </li> 
+                                                    @endforeach 
+                                                </ul>  
                                             </div>
+
+                                            <div class="col-md"> 
+                                                <h3 class="mb-2 d-flex justify-content-between">
+                                                    Melting
+                                                    <svg onclick="resetItem('melting')" style="cursor:pointer"  width="20px" height="20px" viewBox="0 0 21 21" xmlns="http://www.w3.org/2000/svg">
+                                                        <g fill="none" fill-rule="evenodd" stroke="#000000" stroke-linecap="round" stroke-linejoin="round" transform="matrix(0 1 1 0 2.5 2.5)">
+                                                        <path d="m3.98652376 1.07807068c-2.38377179 1.38514556-3.98652376 3.96636605-3.98652376 6.92192932 0 4.418278 3.581722 8 8 8s8-3.581722 8-8-3.581722-8-8-8"/>
+                                                        <path d="m4 1v4h-4" transform="matrix(1 0 0 -1 0 6)"/>
+                                                        </g>
+                                                    </svg> 
+                                                </h3> 
+                                                <small class="" id="melting_item_type"></small>  
+                                                <!-- <form method="post" class="mb-3" id="metal_form"> -->
+                                                    <div class="d-flex gap-2 mb-3 ">
+                                                        <input type="hidden" id="melting_item" name="item" value="melting">
+                                                        <input type="hidden" id="melting_item_id" name="item_id" value="">
+                                                        <input name="item_value" id="melting_itemInput" type="text" placeholder="Add new melting..." 
+                                                            class="form-control shadow-sm" style="flex: 1;">
+                                                        <button onclick="submitForm('melting');"  class="btn btn-primary  shadow-sm">Save</button>
+                                                    </div> 
+                                                <!-- </form> -->
+
+                                                <!-- Items List -->
+                                                <ul id="melting-list" class="list-group">                                      
+                                                    @foreach($melting_list as $k=>$v)
+                                                    <li id="melting_{{$v->melting_id}}" class="item_list list-group-item d-flex justify-content-between align-items-center">
+                                                        <span class="fw-bold">{{$v->melting_name}}</span>
+                                                        <div>
+                                                            <button type="button" onclick="editItem('melting','{{$v->melting_id}}','{{$v->melting_name}}')" class="btn btn-warning btn-sm me-2">Edit</button>
+                                                            <button type="button" onclick="deleteItem('melting','{{$v->melting_id}}','{{$v->melting_name}}')" class="btn btn-danger btn-sm">Delete</button>
+                                                        </div>
+                                                    </li> 
+                                                    @endforeach 
+                                                </ul>  
+                                            </div>
+                                             
+
                                         </div>
-                                    </form>
+                                    </div>
+
                                 </div>
                             </div>
                         </div>
@@ -342,32 +406,80 @@
     </div>
 </div>
 
+<div class="modal modal-blur fade" id="delete_item" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Delete <span class='itemName'></span></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    Do you want to delete this <span class='itemName'></span> ?
+                </div>
+            </div>
+            <input type="hidden" id="delete_item" value=''/>
+            <input type="hidden" id="delete_item_id" value=''/>
+
+            <div class="modal-footer">
+                <a href="#" class="btn btn-secondary" data-bs-dismiss="modal">
+                    Cancel
+                </a>
+                <a onclick="doDeleteItem();" href="#" class="btn btn-primary" data-bs-dismiss="modal">
+                    Delete Now
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 <script>
+    document.querySelectorAll('[data-bs-toggle="tab"]').forEach(tab => {
+        tab.addEventListener('shown.bs.tab', function (event) {
+            const targetId = event.target.getAttribute('href');
+            history.pushState(null, '', targetId);
+        });
+    });
 
-    $('#custom_form').on('submit', function(e){
+    function editItem(item,id,name){
+        $('#'+item+'_item').val(item);
+        $('#'+item+'_item_id').val(id)
+        $('#'+item+'_itemInput').val(name);
+        $('#'+item+'_item_type').text('Editing..');
+        $('.item_list').css('background','none');
+        $('#'+item+'_'+id).css('background','#842b2540');
+        
+        console.log(item,id,name);
+    }
+    function resetItem(item){
+        $('#'+item+'_item').val(item);
+        $('#'+item+'_item_id').val('')
+        $('#'+item+'_itemInput').val('');
+        $('#'+item+'_item_type').text(''); 
+        $('.item_list').css('background','none');
+    }
+
+     
+    $('#metal_form').on('submit', function(e){
         e.preventDefault();
     });
 
+    function deleteItem(item,item_id,item_value){
+        $('#delete_item').val(item);
+        $('#delete_item_id').val(item_id);
+        $('.itemName').text(item_value);
+        $('#delete_item').modal('show');
+    }
 
-    function submitForm(){
-        var metals = $('#metal_value').val();
-        var metals_array = metals.split(',');
-          
-        var colors = $('#colors_value').val();
-        var colors_array = colors.split(',');
-        
-        
-        var melting = $('#melting_value').val();
-        var melting_array = melting.split(',');
-        
+    function submitForm(item){ 
         const formData = new FormData();
-        formData.append('metals_array', metals_array);
-        formData.append('colors_array', colors_array);
-        formData.append('melting_array', melting_array);
+        formData.append('item', $('#'+item+'_item').val());
+        formData.append('item_id', $('#'+item+'_item_id').val());
+        formData.append('item_value', $('#'+item+'_itemInput').val());
            
         $.ajax({
-            url: "{{ route('custom_save') }}",
+            url: "{{ route('save.mmc') }}",
             type: 'POST',
             data: formData,
             contentType: false,
@@ -378,18 +490,34 @@
             success: function (response) {
                 showAlert('success', response.message);
                 if(response.status == 200){
-                    location.reload();
-                    $('#metal_value').val(''); 
-                    $('#colors_value').val('');
-                    $('#melting_value').val('');
+                    location.reload(); 
                 }
-                
             }
-        });
-
+        }); 
     }
-    function file_select() {
+    function doDeleteItem(item,item_id){ 
+        const formData = new FormData();
+        formData.append('item', $('#delete_item').val());
+        formData.append('item_id', $('#delete_item_id').val()); 
+        $.ajax({
+            url: "{{ route('delete.mmc') }}",
+            type: 'POST',
+            data: formData,
+            contentType: false,
+            processData: false,
+            headers: {
+                'X-CSRF-TOKEN': csrfToken
+            },
+            success: function (response) {
+                showAlert('success', response.message);
+                if(response.status == 200){
+                    location.reload(); 
+                }
+            }
+        }); 
+    }
 
+    function file_select() { 
         $("#fileInput").click();
 
     }

@@ -121,6 +121,89 @@ class ProfileController extends Controller
     }
 
 
+    public function save_mmc(Request $request)
+    {
+        $params = $request->all(); 
+        $rules = [   
+            'item'              => ['required','string','in:metals,colors,melting'],
+            'item_id'           => ['nullable','integer'],  
+            'item_value'        => ['required','string',] 
+
+        ]; 
+        $validator = Validator::make($params, $rules, []);
+        if($validator->fails()){
+            return response()->json([
+                'status' => 500,
+                'message' => Arr::flatten($validator->errors()->toArray())[0], 
+                'errors'  => $validator->errors(), 
+            ]);
+        } 
+        $table = $params['item']; 
+        $key=$column ='';
+        if ($table=='metals') {
+            $key='metal_id';
+            $column='metal_name';
+        }
+        if ($table=='melting') {
+            $key='melting_id';
+            $column='melting_name';
+        }
+        if ($table=='colors') {
+            $key='color_id';
+            $column='color_name';
+        }
+        if (!empty($params['item_id'])) {
+            \DB::table($table)->where($key,$params['item_id'])->update([
+                $column=>$params['item_value']
+            ]);
+        }else{
+            \DB::table($table)->insert([
+                $column=>$params['item_value']
+            ]);
+        }
+        return response()->json([
+            'status' => 200,
+            'message' => 'Item saved successfully' 
+        ]); 
+    }
+    public function delete_mmc(Request $request)
+    {
+        $params = $request->all(); 
+        $rules = [   
+            'item'              => ['required','string','in:metals,colors,melting'],
+            'item_id'           => ['required','integer'],  
+
+        ]; 
+        $validator = Validator::make($params, $rules, []);
+        if($validator->fails()){
+            return response()->json([
+                'status' => 500,
+                'message' => Arr::flatten($validator->errors()->toArray())[0], 
+                'errors'  => $validator->errors(), 
+            ]);
+        } 
+        $table = $params['item']; 
+        $key=$column ='';
+        if ($table=='metals') {
+            $key='metal_id'; 
+        }
+        if ($table=='melting') {
+            $key='melting_id'; 
+        }
+        if ($table=='colors') {
+            $key='color_id'; 
+        }
+         
+        \DB::table($table)->where($key,$params['item_id'])->update([
+            'is_delete'=>1
+        ]);
+         
+        return response()->json([
+            'status' => 200,
+            'message' => 'Item removed successfully' 
+        ]); 
+    }
+
 
     public function get_settings(Request $request) {
         
@@ -157,6 +240,12 @@ class ProfileController extends Controller
         $melting = \DB::table('melting')->pluck('melting_name')->implode(',');
         $colors = \DB::table('colors')->pluck('color_name')->implode(',');
 
+        $metal_list     = \DB::table('metals')->where('is_delete',0)->get()->toArray();
+        $melting_list   = \DB::table('melting')->where('is_delete',0)->get()->toArray();
+        $color_list     = \DB::table('colors')->where('is_delete',0)->get()->toArray();
+
+
+        // dd($metal_list);
        
         return view('profile.setting', [
             'user' => $request->user(),
@@ -169,7 +258,11 @@ class ProfileController extends Controller
             'user_permissions' => $user_permissions,
             'metals' => $metals,
             'melting'=> $melting,
-            'colors' => $colors
+            'colors' => $colors,
+
+            'metal_list'    =>  $metal_list,
+            'melting_list'  =>  $melting_list,
+            'color_list'    =>  $color_list,
         ]);
     
     }

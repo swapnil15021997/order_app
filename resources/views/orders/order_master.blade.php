@@ -303,8 +303,8 @@
 
                                     activeBranchHtml = `
 
-                                        <div style="border: 2px solid green; width: -webkit-max-content; padding: 4px; border-radius: 5px; color: green; font-weight: 500;" title="Transfer from ${lastTransaction.trans_from.branch_name} and not Accepted by ${lastTransaction.trans_to.branch_name}">
-                                            T-${lastTransaction.trans_from.branch_name}
+                                        <div style="border: 2px solid rgba(0, 128, 0, 0.5); width: -webkit-max-content; padding: 4px; border-radius: 5px; color: rgba(0, 128, 0, 0.6); font-weight: 500; cursor:pointer" title="Transfer from ${lastTransaction.trans_from.branch_name} and not Accepted by ${lastTransaction.trans_to.branch_name}">
+                                            Transfer -${lastTransaction.trans_from.branch_name}
                                         </div>
                                     `;
 
@@ -313,8 +313,8 @@
 
                                         activeBranchHtml = `
 
-                                            <div style="border: 2px solid red; width: -webkit-max-content; padding: 4px; border-radius: 5px; color: green; font-weight: 500;"  title="Transfer from ${lastTransaction.trans_from.branch_name} and Accepted by ${lastTransaction.trans_to.branch_name}">
-                                                A-${lastTransaction.trans_to.branch_name}
+                                            <div style="border: 2px solid rgba(255, 0, 0, 0.5); width: -webkit-max-content; padding: 4px; border-radius: 5px; color: rgba(255, 0, 0, 0.6); font-weight: 500;cursor:pointer"  title="Transfer from ${lastTransaction.trans_from.branch_name} and Accepted by ${lastTransaction.trans_to.branch_name}">
+                                                Approve - ${lastTransaction.trans_to.branch_name}
                                             </div>
                                         `;
 
