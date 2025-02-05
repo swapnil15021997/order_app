@@ -454,8 +454,8 @@
                 const inputValue = $('#qr_code_numbers').val();
                 console.log(inputValue);
                 get_details_of_qr_code(inputValue);
-            }, 2000); 
-            // Listen to both paste and input events
+            }, 3000); 
+
             $('#qr_code_numbers').on('input paste', handleInputChange);
 
         });
