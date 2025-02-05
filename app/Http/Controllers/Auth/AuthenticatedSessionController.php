@@ -50,10 +50,10 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerateToken();
 
-        // return redirect()->route('login');
-        return response()->json([
-            'status'=>200,
-            'message'=>'Successfully logged out'
-        ]);
+        return redirect()->route('login');
+        // return response()->json([
+        //     'status'=>200,
+        //     'message'=>'Successfully logged out'
+        // ]);
     }
 }

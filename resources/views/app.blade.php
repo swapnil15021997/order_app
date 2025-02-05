@@ -185,7 +185,7 @@
                     <a href="#" class="btn btn-secondary" data-bs-dismiss="modal">
                         Cancel
                     </a>
-                    <a id="LogoutBtn" onclick="logout()" href="#" class="btn btn-primary">
+                    <a id="LogoutBtn"  href="{{ route('logout') }}" class="btn btn-primary">
                         Logout
                     </a>
                 </div>
