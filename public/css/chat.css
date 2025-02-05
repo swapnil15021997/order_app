@@ -1007,8 +1007,8 @@ body.loading .loader-screeen {
 }
 
 .on-print .foot .child:nth-child(2) svg {
-    width: 30px;
-    height: 30px;
+    width: 70px;
+    height: 70px;
 }
 
 /* .on-print-receipt {
