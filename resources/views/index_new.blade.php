@@ -136,7 +136,9 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-md-4">
-                                    <textarea  name="" class="form-control" id="qr_code_numbers" placeholder="Please provide order number in comma seperated format"></textarea>
+                                    <!-- <textarea  name="" class="form-control" id="qr_code_numbers" placeholder="Please provide order number in comma seperated format"></textarea>
+                                      -->
+                                    <input class="form-control" type="text" name="" id="qr_code_numbers">
                                 </div>
                                 <div class="col-md-4 mt-3">
                                 
@@ -430,15 +432,31 @@
         $(document).ready(function() {
           
 
-            $('#qr_code_numbers').on('paste', function (event) {
-                const element = $(this);
+            // $('#qr_code_numbers').on('paste', function (event) {
+            //     const element = $(this);
         
-                setTimeout(function () {
-                    const pastedValue = element.val();
-                    get_details_of_qr_code(pastedValue);
+            //     setTimeout(function () {
+            //         const pastedValue = element.val();
+            //         get_details_of_qr_code(pastedValue);
 
-                });
-            });
+            //     });
+            // });
+
+            const debounce = (func, delay) => {
+                let timer;
+                return function (...args) {
+                    clearTimeout(timer);
+                    timer = setTimeout(() => func.apply(this, args), delay);
+                };
+            };
+
+            const handleInputChange = debounce(function () {
+                const inputValue = $('#qr_code_numbers').val();
+                console.log(inputValue);
+                get_details_of_qr_code(inputValue);
+            }, 2000); 
+            // Listen to both paste and input events
+            $('#qr_code_numbers').on('input paste', handleInputChange);
 
         });
 
