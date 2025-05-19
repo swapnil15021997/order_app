@@ -359,7 +359,6 @@
                     order_id: order_id,
                 },
                 success: function (response) {
-                    alert(response.message);
                     
                     if (response.data.transactions && response.data.transactions.length > 0) {
 

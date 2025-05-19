@@ -384,7 +384,7 @@
         function onScanSuccess(result) {
 
             const scannedText = result.data || result;
-            alert("Scanned text is" +scannedText);
+             
             const [order_id, orderQrCode, orderStatus, orderNumber, orderDate] = scannedText.split('|');
             create_order_array(order_id, orderQrCode, orderStatus, orderNumber, orderDate);
 
