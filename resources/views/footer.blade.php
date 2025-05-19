@@ -372,6 +372,7 @@
             })
                 .catch((err) => {
                     console.error("Error starting QR scanner:", err);
+                    stopScanner();
                     alert("An error occurred while starting the QR scanner. Please try again." + err);
                 });
 

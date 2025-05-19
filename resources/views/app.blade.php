@@ -331,6 +331,7 @@
 
             if (isScanning) {
                 alert("Please wait until the current scan is complete.");
+                isScanning = false;
                 return;
             }
             isScanning = true;
