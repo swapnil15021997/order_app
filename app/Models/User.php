@@ -67,7 +67,9 @@ class User extends Authenticatable
     }
 
     public static function get_data_by_phone_no($phone){
-        $user = User::where('user_phone_number',$phone)->first();
+        $user = User::where('user_phone_number',$phone)
+        ->where('is_delete',0)
+        ->first();
         return $user;
     }
 
@@ -84,7 +86,9 @@ class User extends Authenticatable
     }
 
     public static function get_data_by_email($user_email){
-        $user = User::where('email',$user_email)->first();
+        $user = User::where('email',$user_email)
+        ->where('is_delete',0)
+        ->first();
         return $user;
 
     }
