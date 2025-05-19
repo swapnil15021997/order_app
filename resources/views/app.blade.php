@@ -359,8 +359,8 @@
                     order_id: order_id,
                 },
                 success: function (response) {
-                    alert(response);
-
+                    alert(response.message);
+                    
                     if (response.data.transactions && response.data.transactions.length > 0) {
 
                         let lastTransaction = response.data.transactions[response.data.transactions.length - 1];
