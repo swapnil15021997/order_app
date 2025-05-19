@@ -93,8 +93,10 @@ class OrderController extends Controller
         // ); 
         // $orderUrl = route('order_get_approve', ['id' => $order['order_qr_code']]);
         $qr_code  = QrCode::size(50)->generate(
-          $order['order_qr_code'] 
-            );
+            implode('|', [
+                $order['order_id'],$order['order_qr_code'],$order['order_status'],$order['order_number'],$order['order_date'] 
+            ])
+        );
         return view('orders/view_order',['order'=>$order,'fileArray'=>$fileArray,
             'pageTitle'=>'Order','login'=>$login,'activePage'=>$activePage,
             'user_branch'=>$users_branch,'user_permissions'=>$user_permissions,
