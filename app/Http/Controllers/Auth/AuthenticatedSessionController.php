@@ -6,7 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+
 use Illuminate\View\View;
 use App\Models\User;
 use DB;
@@ -32,14 +34,22 @@ class AuthenticatedSessionController extends Controller
         $data = $request->all();
         $get_data = User::get_data_by_email($data['email']);
          
-        if (!$get_data){
+        if (!$get_data || $get_data->is_delete == 1){
             // dd("ehk");
             \Log::info("User not found: redirecting to login");
       
             return redirect()->route('login')->withErrors(['email' => 'Please register first'])->withInput();
         }
-        \Log::info(['Before Session Regeneration'=> session()->getId()]);
+        if (!Hash::check($data['password'], $get_data->password)) {
+            \Log::info("Invalid password for user: " . $data['email']);
+            return redirect()->route('login')
+                ->withErrors(['email' => 'Invalid credentials'])
+                ->withInput();
+        }
+        
 
+        \Log::info(['Before Session Regeneration'=> session()->getId()]);
+        
         $request->authenticate();
         $request->session()->regenerate();
         \Log::info(['Session Regenerated' => session()->getId()]);
