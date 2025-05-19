@@ -247,6 +247,7 @@
             // Get DOM elements
             const videoElem   = document.getElementById("videoElem");
             const startButton = document.getElementById("start-scan");
+            const close_qr_code = document.getElementById("close_qr_code");
             const resultDiv   = document.getElementById("result");
             const my_orders   = document.getElementById("my_orders");
             let qrScanner = null;
@@ -269,7 +270,8 @@
             }
 
             function startScanner() {
-                // create_order_array(3,7656545, 1, 5765654,6/34/3432)
+                console.log("scanner")
+                // create_order_array(9,1748973467, 0, 3577306849,6/34/3432)
 
                 // Show the video element
 
@@ -307,6 +309,11 @@
                     startScanner();
             });
 
+            close_qr_code.addEventListener("click", function () {
+                    stopScanner();
+            });
+
+
         });
         function stopScanner() {
 
@@ -331,7 +338,7 @@
 
             if (isScanning) {
                 alert("Please wait until the current scan is complete.");
-                isScanning = false;
+                // isScanning = false;
                 return;
             }
             isScanning = true;
@@ -352,7 +359,7 @@
                     order_id: order_id,
                 },
                 success: function (response) {
-                    console.log(response);
+                    alert(response);
 
                     if (response.data.transactions && response.data.transactions.length > 0) {
 

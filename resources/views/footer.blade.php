@@ -348,7 +348,8 @@
         const videoElem = document.getElementById("videoElem");
         const startButton = document.getElementById("start-scann");
         const my_orders = document.getElementById("my_orders");
-
+        const close_qr_code = document.getElementById("close_qr_code");
+           
 
         function startScanner() {
             // Show the video element
@@ -369,6 +370,8 @@
             // Start scanning
             qrScanner.start().then(() => {
                 console.log("QR Scanner started successfully");
+                // create_order_array(9,1748973467, 0, 3577306849,6/34/3432)
+
             })
                 .catch((err) => {
                     console.error("Error starting QR scanner:", err);
@@ -381,10 +384,11 @@
         function onScanSuccess(result) {
 
             const scannedText = result.data || result;
-            alert(scannedText);
+            alert("Scanned text is" +scannedText);
             const [order_id, orderQrCode, orderStatus, orderNumber, orderDate] = scannedText.split('|');
             create_order_array(order_id, orderQrCode, orderStatus, orderNumber, orderDate);
 
+            
         }
 
         function stopScanner() {
@@ -403,6 +407,9 @@
 
 
         });
+        close_qr_code.addEventListener("click", function () {
+                    stopScanner();
+            });
 
 
     });
