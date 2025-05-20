@@ -329,7 +329,9 @@
         let transfer_array = [];
         let scanned = [];
         let isScanning = false;
-        function create_order_array(order_id,orderQrCode, orderStatus, orderNumber,orderDate){
+        // function create_order_array(order_id,orderQrCode, orderStatus, orderNumber,orderDate){
+        function create_order_array(order_id){
+            
             const my_orders   = document.getElementById("my_orders");
             const qr_list = document.querySelector(".qr-list");
             let my_ord;
@@ -351,19 +353,24 @@
 
 
             $.ajax({
-                url: "{{ route('order_details') }}",  // Adjust the route as needed
+                url: "{{ route('qr_details') }}",  // Adjust the route as needed
                 type: 'POST',
                 data: {
                     _token: csrfToken,
 
-                    order_id: order_id,
+                    // order_id: order_id,
+                    qr_number:order_id
                 },
+                
                 success: function (response) {
+                    var order = response.data[0];
+                    let lastTransaction = order.transactions[order.transactions.length - 1];
                     
-                    if (response.data.transactions && response.data.transactions.length > 0) {
+                    if (order &&  order.transactions.length > 0){        
+                    // if (response.data.transactions && response.data.transactions.length > 0) {
 
-                        let lastTransaction = response.data.transactions[response.data.transactions.length - 1];
-
+                        // let lastTransaction = response.data.transactions[response.data.transactions.length - 1];
+                        let lastTransaction = order.transactions[order.transactions.length - 1];
 
                         let isAnyOrderApproved = approve_array.length > 0;
                         let isAnyOrderTransferred = transfer_array.length > 0;
@@ -381,8 +388,9 @@
 
                         if (lastTransaction.trans_status === 0) {
                             // Add to approve_array
-                            approve_array.push(order_id);
-
+                            approve_array.push(order.order_id);
+                            orderNumber = order_id
+                            orderDate   = order.order_date
                             my_ord = `
 
                                <li class="card">

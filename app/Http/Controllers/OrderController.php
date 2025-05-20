@@ -86,17 +86,17 @@ class OrderController extends Controller
         }else{
             $type = 'Reparing';
         }
-        // $qr_code = QrCode::size(50)->generate(
-        //     implode('|', [
-        //         $order['order_qr_code']
-        //     ])
-        // ); 
-        // $orderUrl = route('order_get_approve', ['id' => $order['order_qr_code']]);
-        $qr_code  = QrCode::size(50)->generate(
+        $qr_code = QrCode::size(50)->generate(
             implode('|', [
-                $order['order_id'],$order['order_qr_code'],$order['order_status'],$order['order_number'],$order['order_date'] 
+                $order['order_qr_code']
             ])
-        );
+        ); 
+        // $orderUrl = route('order_get_approve', ['id' => $order['order_qr_code']]);
+        // $qr_code  = QrCode::size(50)->generate(
+        //     implode('|', [
+        //         $order['order_id'],$order['order_qr_code'],$order['order_status'],$order['order_number'],$order['order_date'] 
+        //     ])
+        // );
         return view('orders/view_order',['order'=>$order,'fileArray'=>$fileArray,
             'pageTitle'=>'Order','login'=>$login,'activePage'=>$activePage,
             'user_branch'=>$users_branch,'user_permissions'=>$user_permissions,
@@ -1338,8 +1338,9 @@ class OrderController extends Controller
             $check_transaction = Transactions::where('trans_order_id',$order_id)
             ->orderBy('trans_id', 'desc')
             ->first();
-            
-            $trans_to_values[] = $check_transaction->trans_to;
+            if (!empty($check_transaction->trans_to)){
+                $trans_to_values[] = $check_transaction->trans_to;
+            }
         
         }
         if (count(array_unique($trans_to_values)) > 1) {
@@ -1348,7 +1349,7 @@ class OrderController extends Controller
                 'message' => 'Selected Transactios are not from same Branch'
             ]);
         }
-
+        
         foreach ($params['order_id'] as $order_id) {
        
 
