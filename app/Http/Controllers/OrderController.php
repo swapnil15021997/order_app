@@ -386,8 +386,8 @@ class OrderController extends Controller
 
     // order add page
     public function order_add_page(Request $request){
-        $metals        = DB::table('metals')->select('metal_name')->get();
-        $melting       = DB::table('melting')->select('melting_name')->get();
+        $metals        = DB::table('metals')->select('metal_name')->where('is_delete', 0)->get();
+        $melting       = DB::table('melting')->select('melting_name')->where('is_delete', 0)->get();
         $branches      = Branch::select('branch_id', 'branch_name')->take(5)->get();
         $branchesArray = $branches->toArray();
         $pageTitle     = 'Orders';
@@ -446,8 +446,8 @@ class OrderController extends Controller
 
     
     public function order_edit_page(Request $request,$id){
-        $metals        = DB::table('metals')->select('metal_name')->get();
-        $melting       = DB::table('melting')->select('melting_name')->get();
+        $metals        = DB::table('metals')->select('metal_name')->where('is_delete', 0)->get();
+        $melting       = DB::table('melting')->select('melting_name')->where('is_delete', 0)->get();
         $branches      = Branch::select('branch_id', 'branch_name')->take(5)->get();
         $branchesArray = $branches->toArray();
         $order         = Order::get_order_with_items($id);
