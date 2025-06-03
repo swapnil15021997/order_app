@@ -272,7 +272,7 @@
             function startScanner() {
                 console.log("scanner")
                 // create_order_array(9,1748973467, 0, 3577306849,6/34/3432)
-
+                // create_order_array(4297220712);
                 // Show the video element
 
                 document.getElementById("my-qr-reader").style.display = "block";
@@ -330,7 +330,7 @@
         let scanned = [];
         let isScanning = false;
         // function create_order_array(order_id,orderQrCode, orderStatus, orderNumber,orderDate){
-        function create_order_array(order_id){
+        function create_order_array(order_id){  
             
             const my_orders   = document.getElementById("my_orders");
             const qr_list = document.querySelector(".qr-list");
@@ -343,6 +343,7 @@
                 // isScanning = false;
                 return;
             }
+            console.log("here");
             isScanning = true;
 
             if (scanned.includes(order_id)) {
@@ -364,6 +365,7 @@
                 
                 success: function (response) {
                     var order = response.data[0];
+                    console.log(order)
                     let lastTransaction = order.transactions[order.transactions.length - 1];
                     
                     if (order &&  order.transactions.length > 0){        
@@ -416,7 +418,9 @@
                             // If any previous order was approved, do not allow transfer
                             if (isAnyOrderApproved) {
                                 approve_array.push(order_id);
-
+                                orderNumber = order_id
+                                orderDate   = order.order_date
+                           
                                 my_ord = `
                                    <li class="card">
                                     <div class="card-body">
@@ -441,6 +445,9 @@
                             } else {
 
                                 transfer_array.push(order_id);
+                                orderNumber = order_id
+                                orderDate   = order.order_date
+                           
                                 my_ord = `
                                      <li class="card">
                                     <div class="card-body">
