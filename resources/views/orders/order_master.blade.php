@@ -109,7 +109,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Transfer Order</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close cancel_transfer_btn" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <div id="transfer-container"></div>
@@ -124,7 +124,7 @@
 
 
                 <div class="modal-footer">
-                    <a href="#" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <a href="#" id="cancel_btn" class="btn btn-secondary cancel_transfer_btn" data-bs-dismiss="modal">
                         Cancel
                     </a>
                     <a id="TransferOrderBtn" href="#" class="btn btn-primary">
@@ -169,7 +169,7 @@
 
                 <div class="modal-header">
                     <h5 class="modal-title">Transfer Order</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close multiple_transfer" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
 
@@ -184,7 +184,7 @@
 
 
                 <div class="modal-footer">
-                    <a href="#" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <a href="#" class="btn btn-secondary multiple_transfer" data-bs-dismiss="modal">
                         Cancel
                     </a>
                     <a id="TransferOrderBtns" onclick="transfer_multiple_order()" href="#" class="btn btn-primary">
@@ -205,6 +205,26 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
     <script>
+
+        $(document).ready(function () {
+            $('.cancel_transfer_btn').on('click', function () {
+                // Clear the select2 dropdown
+                $('#searchableSelectTo').val(null).trigger('change'); 
+                $('#transfer_order').modal('hide'); // Replace 'yourModalId' with your actual modal ID
+                document.getElementById('transfer-container').innerHTML = '';
+            });
+        });
+
+
+        
+        $(document).ready(function () {
+            $('.multiple_transfer').on('click', function () {
+                // Clear the select2 dropdown
+                $('#TransferOrder').val(null).trigger('change'); 
+                $('#transfer_order_modal').modal('hide'); 
+            });
+        });
+        
         let orderArray;
         $(document).ready(function () {
             $('#order_date').val('');
@@ -580,7 +600,7 @@
 
             $('#transfer_order_id_master').val(order_id);
             $('#transfer_order').modal('show');
-
+            document.getElementById('transfer-container').innerHTML = '';
         }
         $(document).ready(function () {
 
@@ -660,6 +680,7 @@
 
 
                                 setTimeout(function () {
+                                    document.getElementById('transfer-container').innerHTML = '';
                                     $('#transfer_order').modal('hide');
                                 }, 2000);
                             } else {
@@ -840,6 +861,7 @@
 
         function transfer_order_open() {
             $('#transfer_order_modal').modal('show');
+            document.getElementById('transfer-container').innerHTML = '';
         }
 
 
@@ -912,6 +934,7 @@
                         $('#transfer_order_id').val('');
                         $('#TransferOrder').val('');
                         $('#transfer_order_modal').modal('hide');
+
                         alert(response.message);
                         showAlert('success', response.message);
 
