@@ -173,7 +173,7 @@
                     <div class="card">
                         <div class="card-header">
                             <h3 class="card-title">Latest Approved Orders</h3>
-                        </div>
+                         </div>
                         <div class="card-table table-responsive">
                             <table class="table table-vcenter">
                                 <thead>
@@ -282,13 +282,38 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
 
     <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        @if(session('success'))
+            showAlert('success', "{{ session('success') }}");
+        @elseif(session('error'))
+        alert();
+        console.log("here");
+            showAlert('error', "{{ session('error') }}");
+        @endif
+    });
 
         $('document').ready(function (){
             $('#resetBtn').addClass('d-none');
         });
 
         function ViewOrder(order_id){
-            window.location.href = `/view-order/${order_id}`;
+            // window.location.href = `/view-order/${order_id}`;
+
+            fetch(`/view-order/${order_id}`, {
+                method: 'GET',
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    window.location.href = data.redirect_url;
+                } else {
+                    showAlert('error', data.message);
+                }
+            })
         }
 
         let approve_qr_array  = [];

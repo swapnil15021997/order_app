@@ -41,7 +41,7 @@ class CustomerController extends Controller
         $combined_permissions = session('combined_permissions', []);
 
         if(empty($params['customer_id'])){
-            if(! in_array(3 ,$combined_permissions)){
+            if(! in_array(22 ,$combined_permissions)){
                 return response()->json([
                     'status' => 500,
                     'message' => 'You dont have permission to add customer' 
@@ -62,10 +62,10 @@ class CustomerController extends Controller
                 ]
             ]);
         }else{
-            if(! in_array(2 ,$combined_permissions)){
+            if(! in_array(21 ,$combined_permissions)){
                 return response()->json([
                     'status' => 500,
-                    'message' => 'You dont have permission to update branch' 
+                    'message' => 'You dont have permission to update customer' 
                 ]);
             }
 
@@ -114,6 +114,18 @@ class CustomerController extends Controller
                 'message' => Arr::flatten($validator->errors()->toArray())[0],
                 'errors'  => $validator->errors(),
             ]);
+        }
+        if($login['user_role_id'] != 1){
+            $user_permissions = session('combined_permissions', []);
+            
+            if (!in_array(20, $user_permissions)) {
+                
+                // return redirect()->route('dashboard')->with('error', 'You are not allowed to view order');
+                    return response()->json([
+                    'status' => 'error',
+                    'message' => 'You are not allowed to view customer list'
+                ]);
+            }
         }
     
         $searchQuery = $request->input('search', ''); 

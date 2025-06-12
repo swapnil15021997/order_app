@@ -39,6 +39,16 @@ class OrderController extends Controller
         if(!empty($login)){
            
             if($login['user_role_id'] != 1){
+                $user_permissions = session('combined_permissions', []);
+                
+                if (!in_array(19, $user_permissions)) {
+                    
+                    // return redirect()->route('dashboard')->with('error', 'You are not allowed to view order');
+                     return response()->json([
+                        'status' => 'error',
+                        'message' => 'You are not allowed to view order'
+                    ]);
+                }
 
                 $userBranchIds = explode(',', $login['user_branch_ids']);
                 $userBranchIds = array_map('trim', $userBranchIds); 
@@ -663,7 +673,7 @@ class OrderController extends Controller
             $sortColumn = 'order_id'; 
         }
         $userBranchIds = $login['user_branch_ids'];
-        
+ 
         if($login['user_role_id']==1){
 
             $ordersQuery = Order::with('transactions','items','transactions.trans_from','transactions.trans_to')    
@@ -677,8 +687,9 @@ class OrderController extends Controller
                 'to_branch.branch_name AS order_to_name',
                 'current_branch.branch_name AS order_current_branch',
                 'cust.cust_name'
+ 
                 )
-                ->distinct()  
+                ->distinct()   
             ->where('orders.is_delete',0)
     
             ->orderBy($sortColumn, $sortOrder);
@@ -705,21 +716,26 @@ class OrderController extends Controller
                 //       });
             })->orderBy($sortColumn, $sortOrder);
         }
+ 
         $total_orders = Order::where('is_delete',0)->count();
-
+       
         if (!empty($searchQuery)) {
+              
             $ordersQuery->where(function ($query) use ($searchQuery) {
                 $query->where('order_number', 'like', "%{$searchQuery}%")
-                      ->orWhere('order_qr_code', 'like', "%{$searchQuery}%");
+                      ->orWhere('order_qr_code', 'like', "%{$searchQuery}%")
+                      ->orWhere('cust.cust_name', 'like', "%{$searchQuery}%");
             });
+            $orders = $ordersQuery->get();
+        }else{
+             $orders = $ordersQuery
+                ->offset($offset)
+                ->limit($perPage)
+                ->get();
         }
 
         
-        
-        $orders = $ordersQuery
-        ->offset($offset)
-        ->limit($perPage)
-        ->get();
+         
         $orders->each(function ($order, $index) {
             $order->serial_number = $index + 1; 
             $order->order_date = Carbon::parse($order->order_date)->format('d-m-Y');
@@ -1040,7 +1056,7 @@ class OrderController extends Controller
                 'transfer_to.string'           => 'Transfer to must be a string.'
 
             ]; 
-            
+        
         $validator = Validator::make($params, $rules, $messages);
         
         if($validator->fails()){
@@ -1067,16 +1083,21 @@ class OrderController extends Controller
                 'message' => 'You are not allowed to transfer this order'
             ]);
         }
+
+        $check_transaction = Transactions::where('trans_order_id',$order->order_id)
+        ->orderBy('trans_id', 'desc')
+        ->first();
         if($login['user_role_id'] !== 1){
             $user_branch = $login['user_branch_ids'];
             $user_branch_array = explode(',', $user_branch); 
-            if ($trans->trans_to && !in_array($trans->trans_to, $user_branch_array)) {
+            if ($check_transaction->trans_to && !in_array($check_transaction->trans_to, $user_branch_array)) {
                 return response()->json([
                     'status' => 500,
                     'message' => 'Sorry You cant transfer this order !'
                 ]);
             }
         }
+  
         // if( $order->order_to_branch_id == $params['transfer_to']){
         //     return response()->json([
         //         'status' => 500,
@@ -1101,6 +1122,7 @@ class OrderController extends Controller
         $branches   = $prev_branches ? explode(',', $prev_branches) : [];
         // Current branch
         $branches[] = $params['transfer_to'];
+        
         // comma seperated again
         $order->order_branch_id     = implode(',', $branches);
         $order->order_status        = 0;

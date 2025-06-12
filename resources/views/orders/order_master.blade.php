@@ -687,16 +687,14 @@
                                 $('body').removeClass('loading');
                                 $('#TransferOrderBtn').prop('disabled', false);
                                 showAlertTransfer('warning', response.message);
-                                $('#searchableSelectTo').val('');
-
+                                
                             }
                         },
                         error: function (xhr, status, error) {
                             $('body').removeClass('loading');
                             $('#TransferOrderBtn').prop('disabled', false);
                             showAlertTransfer('warning', error);
-
-                            $('#searchableSelectTo').val('');
+ 
 
                         }
                     });
