@@ -282,15 +282,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
 
     <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        @if(session('success'))
-            showAlert('success', "{{ session('success') }}");
-        @elseif(session('error'))
-        alert();
-        console.log("here");
-            showAlert('error', "{{ session('error') }}");
-        @endif
-    });
+   
 
         $('document').ready(function (){
             $('#resetBtn').addClass('d-none');
@@ -306,12 +298,22 @@
                     'Content-Type': 'application/json'
                 }
             })
-            .then(res => res.json())
-            .then(data => {
-                if (data.status === 'success') {
-                    window.location.href = data.redirect_url;
+            .then(res => {
+                const contentType = res.headers.get('content-type');
+                if (contentType && contentType.includes('application/json')) {
+                    return res.json();
                 } else {
+                    // Not JSON: assume user has permission, redirect
+                    window.location.href = `/view-order/${order_id}`;
+                    return Promise.reject(); // stop further .then()
+                }
+            })
+            .then(data => {
+                console.log(data);
+                if (data.status == 500) {
                     showAlert('error', data.message);
+                } else {
+                    window.location.href = `/view-order/${order_id}`;
                 }
             })
         }

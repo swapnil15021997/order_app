@@ -537,6 +537,7 @@
         }
 
         function view_order(order_id) {
+            
             window.location.href = `/view-order/${order_id}`;
 
         }

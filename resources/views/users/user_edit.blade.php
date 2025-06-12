@@ -124,7 +124,7 @@
                                             <th>Delete</th>
                                             <th>Order Transfer</th>
                                             <th>Order Approve</th>
-                                            <th>View</th>
+                                            <th>View Receipt</th>
                                         </tr>
                                     </thead>
                                     <tbody>

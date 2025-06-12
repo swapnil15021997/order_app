@@ -43,11 +43,11 @@ class OrderController extends Controller
                 
                 if (!in_array(19, $user_permissions)) {
                     
-                    // return redirect()->route('dashboard')->with('error', 'You are not allowed to view order');
-                     return response()->json([
-                        'status' => 'error',
-                        'message' => 'You are not allowed to view order'
-                    ]);
+                    return redirect()->route('dashboard')->with('error', 'You are not allowed to view order');
+                    //  return response()->json([
+                    //     'status' => '500',
+                    //     'message' => 'You are not allowed to view order'
+                    // ]);
                 }
 
                 $userBranchIds = explode(',', $login['user_branch_ids']);

@@ -117,9 +117,11 @@
                                         <th>Read</th>
                                         <th>Write</th>
                                         <th>Create</th>
-                                        <th>Update</th>
+                                        <th>Delete</th>
                                         <th>Order Transfer</th>
                                         <th>Order Approve</th>
+                                        <th>View Receipt</th>
+                                        
                                     </tr>
                                 </thead>
                                 <tbody>
