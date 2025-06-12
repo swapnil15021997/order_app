@@ -121,9 +121,10 @@
                                             <th>Read</th>
                                             <th>Write</th>
                                             <th>Create</th>
-                                            <th>Update</th>
+                                            <th>Delete</th>
                                             <th>Order Transfer</th>
                                             <th>Order Approve</th>
+                                            <th>View</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -134,10 +135,11 @@
                                                 $user_permission_ids = explode(',', $user->user_permission_id);
                                             @endphp
                                             <td>{{ $module['module_name'] }}</td>
-                                            @foreach (['read', 'update', 'create', 'delete', 'order transfer', 'order approve'] as $permission_name)
+                                            @foreach (['read', 'update', 'create', 'delete', 'order transfer', 'order approve', 'view'] as $permission_name)
                                             @php
                                                 $permission = collect($module['permissions'])->firstWhere('permission_name', $permission_name);
-                                            @endphp
+                                            @endphp 
+                                             
                                             @if ($permission)
                                                 <td>
                                                     <input

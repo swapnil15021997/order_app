@@ -310,7 +310,7 @@ class UserController extends Controller
         $roles = UserRole::select('role_id', 'role_name')->get()->toArray();
         
         $modules = Modules::get_modules_with_permissions();     
-            
+        
         $branch     = Branch::get_all_branch();
         $login = auth()->user();
        
