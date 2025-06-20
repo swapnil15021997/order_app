@@ -115,6 +115,8 @@ class CustomerController extends Controller
                 'errors'  => $validator->errors(),
             ]);
         }
+        $login         = auth()->user();
+       
         if($login['user_role_id'] != 1){
             $user_permissions = session('combined_permissions', []);
             
