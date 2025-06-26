@@ -1644,4 +1644,52 @@ class OrderController extends Controller
 
 
     }
+
+
+    // http://localhost:8000/item-list?token=erbrhnjmf&search=swapnil
+    // http://localhost:8000/item-list?token=jaygopal&search=&page=1&sort_column=order_date&sort=asc
+    public function item_list(Request $request){
+        $search = $request->search;
+        $token = $request->token;
+        $page = $request->page;
+        $sort = $request->sort;
+        $sort_column = $request->sort_column;
+        $limit = 10;
+        $page = $page ?? 1;
+        $sort = $sort ?? 'desc';
+        $sort_column = $sort_column ?? 'order_id';
+        $api_token = env('API_TOKEN');
+        
+        if($token != $api_token){
+            return response()->json([
+                'success' => 0,
+                'message' => 'Invalid Token'
+            ]);
+        }
+        $order = Order::with('items','customer')
+        ->where('is_delete',0);
+        $total_count = $order->count();
+        if (!empty($search)) {
+            $order = $order->where(function($query) use ($search) {
+                $query->where('order_number', 'like', '%' . $search . '%')
+                      ->orWhereHas('customer', function($q) use ($search) {
+                          $q->where('cust_name', 'like', '%' . $search . '%')
+                            ->orWhere('cust_phone_no', 'like', '%' . $search . '%');
+                      });
+            });
+        }
+        $offset = ($page - 1) * $limit;
+        $fetched  = $order->orderBy($sort_column, $sort)->skip($offset)->take($limit)->get();
+        $data = [
+            'total_count' => $total_count,
+            'data' => $fetched,
+            'page' => $page,
+            'limit' => $limit
+        ];
+        return response()->json([
+            'success' => 1,
+            'message' => 'Data fetched successfully',
+            'data' => $data
+        ]);
+    }
 }

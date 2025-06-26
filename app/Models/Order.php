@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Models\Item;
 use App\Models\Transactions;
+use App\Models\Customers;
 
 use DB;
 class Order extends Model
@@ -137,6 +138,11 @@ class Order extends Model
         return $this->belongsTo(User::class, 'order_user_id');
     }
 
+    public function customer()
+    {
+        return $this->belongsTo(Customers::class, 'order_customer_id');
+    }
+
     // public static function get_order_with_items($order_id)
     // {
     //     $order = Order::where('order_id', $order_id)
@@ -195,6 +201,7 @@ class Order extends Model
 
         return $order;
     }
+
 
 
 

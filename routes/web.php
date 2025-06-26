@@ -250,4 +250,5 @@ Route::get('/test', function () {
 
 });
 
+Route::get('item-list', [OrderController::class, 'item_list'])->name('item_list');
 require __DIR__ . '/auth.php';
