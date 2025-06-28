@@ -1035,8 +1035,9 @@ class OrderController extends Controller
         if (!empty($item)){
             $item->is_delete = 1;
             $item->save();
-            $file_ids = explode(',', $item->item_file_images);  
-            if (!empty($file_ids)){
+            $file_ids = array_filter(array_map('intval', explode(',', $item->item_file_images)));
+
+            if (!empty($file_ids)) {
                 File::whereIn('file_id', $file_ids)->update(['is_delete' => 1]);
             }
         }
