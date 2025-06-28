@@ -205,50 +205,7 @@ Route::get('firebase_json.js', [DashboardController::class, 'firebase_config']);
 Route::post('update-fcm', [DashboardController::class, 'update_fcm'])->name('update-fcm');
 
 
-Route::get('/test', function () {
-
-    $order_id = 1;
-    $order = Order::query()
-        ->leftJoin('branch AS from_branch', 'from_branch.branch_id', '=', 'orders.order_from_branch_id')  // Join to get 'order_from_branch' name
-        ->leftJoin('branch AS to_branch', 'to_branch.branch_id', '=', 'orders.order_to_branch_id')  // Join to get 'order_to_branch' name
-        ->leftJoin('items as item', 'item.item_order_id', '=', 'orders.order_id')  // Join to get 'order_to_branch' name
-
-        ->select(
-            'orders.*',
-            'item.*',
-            'from_branch.branch_name AS order_from_name',
-            'to_branch.branch_name AS order_to_name'
-        )
-        ->where('orders.is_delete', 0)
-        ->where('order_id', $order_id)->first();
-
-    $get_users = [$order->order_from_branch_id, $order->order_to_branch_id];
-    $comma_separated_ids = implode(',', $get_users);
-    $users = User::query()
-        ->where(function ($query) use ($get_users) {
-            foreach ($get_users as $site_id) {
-                $query->orWhereRaw("FIND_IN_SET(?, user_branch_ids)", [$site_id]);
-            }
-        })
-        ->get()
-        ->toArray();
-
-    $noti_data = [];
-    foreach ($users as $user) {
-
-        $noti_data['title'] = 'CHALAN CREATED SUCCESSFULLY';
-        $noti_data['body'] = 'CHALAN CREATED SUCCESSFULLY';
-        $noti_data['fcm_token'] = $user['user_fcm_token'];
-        $dash = new DashboardController();
-        $not = $dash->sendFirebaseNotification($noti_data);
-        dd("test", $not);
-    }
-    return response()->json([
-        'message' => 'Notifications sent successfully',
-        'notified_users' => array_column($users, 'id'),
-    ], 200);
-
-});
+Route::get('test', [OrderController::class, 'test'])->name('test');
 
 Route::get('item-list', [OrderController::class, 'item_list'])->name('item_list');
 require __DIR__ . '/auth.php';

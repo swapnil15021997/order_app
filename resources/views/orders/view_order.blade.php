@@ -112,12 +112,14 @@
                                     <p id="print_type"></p>
                                 </li>
                                 <li>
-                                    <p><b>Order Number</b></p>
+                                    <p><b>Order Number</b>
                                     @if ($order['order_type'] == 1)
-                                        <p>O - # {{ $order['order_qr_code'] }}</p>
+                                        <span>O - # {{ $order['order_qr_code'] }}</span>
                                     @else
-                                        <p>R - # {{ $order['order_qr_code'] }}</p>
+                                        <span>R - # {{ $order['order_qr_code'] }}</span>
                                     @endif
+                                    <br /></p>
+                                
                                 </li>
                                 <li>
                                     <p><b>Order Date</b></p>
@@ -257,6 +259,7 @@
                         <div class="child">
                             <p><b>Scan to Accept :</b></p>
                             {{ $qr_code }}
+                            <p>{{ $order['order_number'] }}</p>
                         </div>
                     </div>
                 </div>

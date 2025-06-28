@@ -275,10 +275,23 @@ class OrderController extends Controller
             $customer_id = $params['order_user_id'];
         }
         $formattedDate = Carbon::createFromFormat('d-m-Y', $params['order_date'])->format('Y-m-d'); 
-      
+        
+        $lastOrder = Order::where('order_type', $params['order_type'])
+        ->orderBy('order_id', 'desc')
+        ->first();
+
+        $prefix = ($params['order_type'] == 1) ? 'O-' : 'R-';
+
+       
+        $lastNumberStr = str_replace($prefix, '', $lastOrder->order_number);
+        $lastNumber = (int) $lastNumberStr;
+        $nextNumber = $lastNumber + 1;
+        
+        $newOrderNumber = $prefix . str_pad($nextNumber, strlen($lastNumberStr), '0', STR_PAD_LEFT);
+ 
         $order                       = new Order();
         $order->order_date           = $formattedDate;
-        $order->order_number         = $params['order_number'];
+        $order->order_number         = $newOrderNumber;
         $order->order_qr_code        = $params['qr_code_number'];
         $order->order_from_branch_id = $params['order_from_branch_id'];
         $order->order_to_branch_id   = $params['order_to_branch_id'];
@@ -1654,7 +1667,7 @@ class OrderController extends Controller
         $page = $request->page;
         $sort = $request->sort;
         $sort_column = $request->sort_column;
-        $limit = 10;
+        $limit = $request->per_page;
         $page = $page ?? 1;
         $sort = $sort ?? 'desc';
         $sort_column = $sort_column ?? 'order_id';
@@ -1672,24 +1685,59 @@ class OrderController extends Controller
         if (!empty($search)) {
             $order = $order->where(function($query) use ($search) {
                 $query->where('order_number', 'like', '%' . $search . '%')
+                
                       ->orWhereHas('customer', function($q) use ($search) {
+
                           $q->where('cust_name', 'like', '%' . $search . '%')
+                            
                             ->orWhere('cust_phone_no', 'like', '%' . $search . '%');
-                      });
+                      })
+                    ->orWhereHas('items', function($q) use ($search) {
+                  $q->where('item_name', 'like', '%' . $search . '%');
+              });
             });
         }
         $offset = ($page - 1) * $limit;
         $fetched  = $order->orderBy($sort_column, $sort)->skip($offset)->take($limit)->get();
+        $total_pages = ceil($total_count / $limit);
         $data = [
-            'total_count' => $total_count,
+            'total' => $total_count,
             'data' => $fetched,
-            'page' => $page,
-            'limit' => $limit
+            'current_page' => $page,
+            'per_page' => $limit,
+            'total_page'=> $total_pages
+
+
+
         ];
         return response()->json([
             'success' => 1,
             'message' => 'Data fetched successfully',
             'data' => $data
         ]);
+    }
+
+
+
+    public function test(){
+        $orders = Order::where('is_delete',0)
+        ->get();
+        $order_n  = 000;
+        $sr_no    = 1;
+        $r_sr_no  = 1;
+        $r_order_n = 000;  
+        foreach($orders as $order){
+
+            if($order->order_type == 1){
+                $order->order_number = 'O-'. str_pad($sr_no, 3, '0', STR_PAD_LEFT);
+                $sr_no++;
+                 
+            }else{
+
+                $order->order_number = 'R-'. str_pad($r_sr_no, 3, '0', STR_PAD_LEFT);
+                $r_sr_no++;
+            }
+            $order->save();
+        } 
     }
 }

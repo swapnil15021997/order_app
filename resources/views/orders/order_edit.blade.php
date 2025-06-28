@@ -45,7 +45,7 @@
                         <div class="card">
                             <div class="card-body">
                                 <div class="row">
-                                    <h2 class="font-bold">#{{$order['order_qr_code']}}</h2>
+                                    <h2 class="font-bold">#{{$order['order_qr_code']}} <br /> {{$order['order_number']}}</h2>
                                     <div class="col-sm-6">
                                         <div class="col-12">
                                             <label for="order_date" class="form-label">Order Date

@@ -291,7 +291,8 @@
                     { data: 'order_qr_code', name: 'order_qr_code', orderable: false,
                         render: function (data, type, row) {
                             if (row && row.order_type) {
-                                return `${row.order_type} # ${row.order_qr_code}
+                                return `
+                                ${row.order_number}
                                 <br />
                                 ${row.order_date}
                                 `;

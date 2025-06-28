@@ -86,6 +86,7 @@
                             max-width: 30%;
                         ">
                                 <p>{{$order['order_number']}}</p>
+                                
                             </div>
 
                             <div style="
