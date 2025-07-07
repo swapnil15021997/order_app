@@ -1477,6 +1477,7 @@ class OrderController extends Controller
             $check_transaction = Transactions::where('trans_order_id',$order_id)
             ->orderBy('trans_id', 'desc')
             ->first();
+ 
             \Log::info([' Transfer Transaction id'=>$check_transaction->trans_id]);
             $trans_from_values[] = $check_transaction->trans_from;
         

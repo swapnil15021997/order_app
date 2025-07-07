@@ -687,12 +687,15 @@
                                 }, 2000);
                             } else {
                                 $('body').removeClass('loading');
+                                $('#searchableSelectTo').val('');
                                 $('#TransferOrderBtn').prop('disabled', false);
                                 showAlertTransfer('warning', response.message);
                                 
                             }
                         },
                         error: function (xhr, status, error) {
+                            $('#searchableSelectTo').val('');
+
                             $('body').removeClass('loading');
                             $('#TransferOrderBtn').prop('disabled', false);
                             showAlertTransfer('warning', error);

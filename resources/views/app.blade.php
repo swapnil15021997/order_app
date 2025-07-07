@@ -271,7 +271,8 @@
 
             function startScanner() {
                 console.log("scanner")
-                // create_order_array(9,1748973467, 0, 3577306849,6/34/3432)
+                // create_order_array(46,9332728860, 0, R-036,07/07/2025)
+               
                 // create_order_array(4297220712);
                 // Show the video element
 
@@ -331,7 +332,7 @@
         let isScanning = false;
         // function create_order_array(order_id,orderQrCode, orderStatus, orderNumber,orderDate){
         function create_order_array(order_id){  
-            
+            console.log(order_id);
             const my_orders   = document.getElementById("my_orders");
             const qr_list = document.querySelector(".qr-list");
             let my_ord;
@@ -417,7 +418,7 @@
                         } else {
                             // If any previous order was approved, do not allow transfer
                             if (isAnyOrderApproved) {
-                                approve_array.push(order_id);
+                                approve_array.push(order.order_id);
                                 orderNumber = order_id
                                 orderDate   = order.order_date
                            
@@ -444,7 +445,7 @@
                                 `;
                             } else {
 
-                                transfer_array.push(order_id);
+                                transfer_array.push(order.order_id);
                                 orderNumber = order_id
                                 orderDate   = order.order_date
                            

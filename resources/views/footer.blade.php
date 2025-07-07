@@ -371,7 +371,10 @@
             qrScanner.start().then(() => {
                 console.log("QR Scanner started successfully");
                 // create_order_array(9,1748973467, 0, 3577306849,6/34/3432)
-                // create_order_array(1748973467); 
+                // // create_order_array(1748973467); 
+                // create_order_array(9332728860);
+                // create_order_array(2810638022);
+
             })
                 .catch((err) => {
                     console.error("Error starting QR scanner:", err);
