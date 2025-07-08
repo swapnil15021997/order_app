@@ -1122,7 +1122,7 @@ class OrderController extends Controller
         ->orderBy('trans_id', 'desc')
         ->first();
         if(!empty($check_transaction)){
-            if ($order->order_status==0){
+            if ($check_transaction->trans_status==0){
                 return response()->json([
                     'status' => 500,
                     'message' => 'Cant transfer item right now Please approve previous order'
@@ -1521,7 +1521,7 @@ class OrderController extends Controller
             ->first();
             if(!empty($check_transaction)){
                 \Log::info(['Order STatus' => $order->order_id]);
-                if ($order->order_status==0){
+                if ($check_transaction->trans_status==0){
                     return response()->json([
                         'status' => 500,
                         'message' => 'Cant transfer item right now Please approve previous order'
