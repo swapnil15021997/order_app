@@ -332,7 +332,7 @@
         let isScanning = false;
         // function create_order_array(order_id,orderQrCode, orderStatus, orderNumber,orderDate){
         function create_order_array(order_id){  
-            console.log(order_id);
+            console.log("I am calling this function",order_id);
             const my_orders   = document.getElementById("my_orders");
             const qr_list = document.querySelector(".qr-list");
             let my_ord;
@@ -564,6 +564,11 @@
             }
             var csrfToken = $('meta[name="csrf-token"]').attr('content');
             var transferTo = $('#TransfersearchableSelectTo').val();
+
+            if (transferTo == null || transferTo == ''){
+                alert('Please select a branch');
+                return;
+            }
             $('body').addClass('loading');
             $('#TransferOrderBtn').prop('disabled', true);
           
