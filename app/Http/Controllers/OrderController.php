@@ -1189,51 +1189,80 @@ class OrderController extends Controller
             ]);
         } 
 
-        $order = Order::get_order_by_qr_number_id($params['trans_id']);  
-        $order = $order->toArray();
-        
-        $trans = Transactions::get_trans_by_order_id($order['order_id']);
-         
-        if (empty($trans)){
-            return response()->json([
-                'status' => 500,
-                'message' => 'Order does not exist'
-            ]);
-        }
-        $user_permissions = session('combined_permissions', []);
-
-        
-        if (!in_array(17, $user_permissions)) {
-            return response()->json([
-                'status' => 500,
-                'message' => 'You are not allowed to approve this order'
-            ]);
-        }
-        if($login['user_role_id'] !== 1){
-            $user_branch = $login['user_branch_ids'];
-            $user_branch_array = explode(',', $user_branch); 
-            if ($trans->trans_to && !in_array($trans->trans_to, $user_branch_array)) {
+        try {
+            DB::beginTransaction();
+            
+            $order = Order::get_order_by_qr_number_id($params['trans_id']);  
+            
+            if (empty($order)) {
+                DB::rollback();
                 return response()->json([
                     'status' => 500,
-                    'message' => 'Sorry You cant transfer this order !'
+                    'message' => 'Order does not exist'
                 ]);
             }
+            
+            $trans = Transactions::get_trans_by_order_id($order->order_id);
+             
+            if (empty($trans)){
+                DB::rollback();
+                return response()->json([
+                    'status' => 500,
+                    'message' => 'Transaction does not exist'
+                ]);
+            }
+            
+            $user_permissions = session('combined_permissions', []);
+
+            if (!in_array(17, $user_permissions)) {
+                DB::rollback();
+                return response()->json([
+                    'status' => 500,
+                    'message' => 'You are not allowed to approve this order'
+                ]);
+            }
+            
+            if($login['user_role_id'] !== 1){
+                $user_branch = $login['user_branch_ids'];
+                $user_branch_array = explode(',', $user_branch); 
+                if ($trans->trans_to && !in_array($trans->trans_to, $user_branch_array)) {
+                    DB::rollback();
+                    return response()->json([
+                        'status' => 500,
+                        'message' => 'Sorry You cant transfer this order !'
+                    ]);
+                }
+            }
+            
+            // Update transaction
+            $trans->trans_status = 1;
+            $trans->trans_approved_by = $login['id'];
+            $trans->trans_accepted_time = Carbon::now()->toDateTimeString();
+            $trans->save();
+            
+            // Update order status
+            $order->order_status = 1;
+            $order->order_current_branch = $trans->trans_to;
+            $order->save();
+            
+            DB::commit();
+            
+            SendEmailJob::dispatch($order->order_id, $type="Approve");
+            SendNotification::dispatch($order->order_id, $type="Approve");
+            
+            return response()->json([
+                'status' => 200,
+                'message' => "Order Received Successfully" 
+            ]);
+            
+        } catch (\Exception $e) {
+            DB::rollback();
+            \Log::error('Order approval failed: ' . $e->getMessage());
+            return response()->json([
+                'status' => 500,
+                'message' => 'Failed to approve order. Please try again.'
+            ]);
         }
-        $trans->trans_status = 1;
-        $trans->trans_approved_by = $login['id'];
-        $trans->trans_accepted_time = Carbon::now()->toDateTimeString();
-        $trans->save();
-        $order = Order::get_order_by_id($trans->trans_order_id);
-        $order->order_status        = 1;
-        $order->order_current_branch= $trans->trans_to;
-        $order->save();
-        SendEmailJob::dispatch($order->order_id,$type="Approve");
-        SendNotification::dispatch($order->order_id,$type="Approve");
-        
-        return response()->json([
-            'status' => 200,
-            'message' => "Order Received Successfully" 
-        ]);
     }
 
     public function success(){
@@ -1242,55 +1271,66 @@ class OrderController extends Controller
 
     public function order_get_approve(Request $request,$id){
         $login  = auth()->user()->toArray();
-        $order = Order::get_order_by_qr_number_id($id);  
-        $order = $order->toArray();
         
         if(empty($login)){
             return redirect()->back()->with('error', 'Please login to continue');
         }
-        if (empty($order)) {
-            return redirect()->back()->with('error', 'Order does not exist or already approved');
-        }
-    
-        $trans = Transactions::get_trans_by_order_id($order['order_id']);
-
-        if (empty($trans)) {
-            return redirect()->back()->with('error', 'Order does not exist or already approved');
-        }
-        $user_permissions = session('combined_permissions', []);
-        if (!in_array(17, $user_permissions)) {
-            return response()->json([
-                'status' => 500,
-                'message' => 'You are not allowed to approve this order'
-            ]);
-        }
-
-        if($login['user_role_id'] !== 1){
-            $user_branch = $login['user_branch_ids'];
-            $user_branch_array = explode(',', $user_branch); 
-            if ($trans->trans_to && !in_array($trans->trans_to, $user_branch_array)) {
-                return response()->json([
-                    'status' => 500,
-                    'message' => 'Sorry You cant transfer this order !'
-                ]);
+        
+        try {
+            DB::beginTransaction();
+            
+            $order = Order::get_order_by_qr_number_id($id);  
+            
+            if (empty($order)) {
+                DB::rollback();
+                return redirect()->back()->with('error', 'Order does not exist or already approved');
             }
+        
+            $trans = Transactions::get_trans_by_order_id($order->order_id);
+
+            if (empty($trans)) {
+                DB::rollback();
+                return redirect()->back()->with('error', 'Order does not exist or already approved');
+            }
+            
+            $user_permissions = session('combined_permissions', []);
+            if (!in_array(17, $user_permissions)) {
+                DB::rollback();
+                return redirect()->back()->with('error', 'You are not allowed to approve this order');
+            }
+
+            if($login['user_role_id'] !== 1){
+                $user_branch = $login['user_branch_ids'];
+                $user_branch_array = explode(',', $user_branch); 
+                if ($trans->trans_to && !in_array($trans->trans_to, $user_branch_array)) {
+                    DB::rollback();
+                    return redirect()->back()->with('error', 'Sorry You cant transfer this order !');
+                }
+            }
+        
+            // Update transaction
+            $trans->trans_status = 1;
+            $trans->trans_approved_by = $login['id'];
+            $trans->trans_accepted_time = Carbon::now()->toDateTimeString();
+            $trans->save();
+            
+            // Update order status
+            $order->order_status = 1;
+            $order->order_current_branch = $trans->trans_to;
+            $order->save();
+            
+            DB::commit();
+            
+            SendEmailJob::dispatch($order->order_id, $type="Approve");
+            SendNotification::dispatch($order->order_id, $type="Approve");
+            
+            return redirect()->route('order-master')->with('success', 'Order received successfully');
+            
+        } catch (\Exception $e) {
+            DB::rollback();
+            \Log::error('Order approval failed: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Failed to approve order. Please try again.');
         }
-    
-        SendEmailJob::dispatch($order->order_id,$type="Approve");
-        SendNotification::dispatch($order->order_id,$type="Approve");
-        $trans->trans_status = 1;
-        $trans->trans_approved_by = $login['id'];
-        $trans->trans_accepted_time = Carbon::now()->toDateTimeString();
-        $trans->save();
-        $order = Order::get_order_by_id($trans->trans_order_id);
-        $order->order_status        = 1;
-        $order->order_current_branch= $trans->trans_to;
-        $order->save();
-        // return response()->json([
-        //     'status' => 200,
-        //     'message' => "Order Received Successfully" 
-        // ]);
-        return redirect()->route('order-master')->with('success', 'Order received successfully');
     }
 
 
@@ -1369,75 +1409,109 @@ class OrderController extends Controller
             ]);
         } 
 
-        $trans_to_values = [];
-        foreach ($params['order_id'] as $order_id) {
-            $check_transaction = Transactions::where('trans_order_id',$order_id)
-            ->orderBy('trans_id', 'desc')
-            ->first();
-            if (!empty($check_transaction->trans_to)){
-                $trans_to_values[] = $check_transaction->trans_to;
+        try {
+            DB::beginTransaction();
+            
+            $trans_to_values = [];
+            foreach ($params['order_id'] as $order_id) {
+                $check_transaction = Transactions::where('trans_order_id',$order_id)
+                ->orderBy('trans_id', 'desc')
+                ->first();
+                if (!empty($check_transaction->trans_to)){
+                    $trans_to_values[] = $check_transaction->trans_to;
+                }
+            
             }
-        
-        }
-        if (count(array_unique($trans_to_values)) > 1) {
-            return response()->json([
-                'status' => 500,
-                'message' => 'Selected Transactios are not from same Branch'
-            ]);
-        }
-        
-        foreach ($params['order_id'] as $order_id) {
-       
-
-            $order = Order::get_order_by_order_id($order_id);  
-            $order = $order->toArray();
-            
-            $trans = Transactions::get_trans_by_order_id($order['order_id']);
-            
-            if (empty($trans)){
+            if (count(array_unique($trans_to_values)) > 1) {
+                DB::rollback();
                 return response()->json([
                     'status' => 500,
-                    'message' => 'Order does not exist'
+                    'message' => 'Selected Transactios are not from same Branch'
                 ]);
             }
-            $user_permissions = session('combined_permissions', []);
-
             
+            $user_permissions = session('combined_permissions', []);
             if (!in_array(17, $user_permissions)) {
+                DB::rollback();
                 return response()->json([
                     'status' => 500,
                     'message' => 'You are not allowed to approve this order'
                 ]);
             }
-            if($login['user_role_id'] !== 1){
-                $user_branch = $login['user_branch_ids'];
-                $user_branch_array = explode(',', $user_branch); 
-                if ($trans->trans_to && !in_array($trans->trans_to, $user_branch_array)) {
+            
+            $approved_orders = [];
+            
+            foreach ($params['order_id'] as $order_id) {
+                $order = Order::get_order_by_order_id($order_id);  
+                
+                if (empty($order)){
+                    DB::rollback();
                     return response()->json([
                         'status' => 500,
-                        'message' => 'Sorry You cant accept this order !'
+                        'message' => 'Order does not exist'
                     ]);
                 }
+                
+                $trans = Transactions::get_trans_by_order_id($order->order_id);
+                
+                if (empty($trans)){
+                    DB::rollback();
+                    return response()->json([
+                        'status' => 500,
+                        'message' => 'Transaction does not exist'
+                    ]);
+                }
+                
+                if($login['user_role_id'] !== 1){
+                    $user_branch = $login['user_branch_ids'];
+                    $user_branch_array = explode(',', $user_branch); 
+                    if ($trans->trans_to && !in_array($trans->trans_to, $user_branch_array)) {
+                        DB::rollback();
+                        return response()->json([
+                            'status' => 500,
+                            'message' => 'Sorry You cant accept this order !'
+                        ]);
+                    }
+                }
+                
+                // Update transaction
+                $trans->trans_status = 1;
+                $trans->trans_approved_by = $login['id'];
+                $trans->trans_accepted_time = Carbon::now()->toDateTimeString();
+                $trans->save();
+                
+                \Log::info(' Approve Transaction id');
+                \Log::info(['Transaction id'=>$trans->trans_id,'Order id'=>$trans->trans_order_id]);
+                
+                // Update order status
+                $order->order_status = 1;
+                $order->order_current_branch = $trans->trans_to;
+                $order->save();
+                
+                $approved_orders[] = $order->order_id;
             }
-            $trans->trans_status = 1;
-            $trans->trans_approved_by = $login['id'];
-            $trans->trans_accepted_time = Carbon::now()->toDateTimeString();
-            $trans->save();
-            \Log::info(' Approve Transaction id');
-            \Log::info(['Transaction id'=>$trans->trans_id,'Order id'=>$trans->trans_order_id]);
-            $order = Order::get_order_by_id($trans->trans_order_id);
-            $order->order_status        = 1;
-            $order->order_current_branch= $trans->trans_to;
-            $order->save();
+            
+            DB::commit();
+            
+            // Send notifications for all approved orders
+            foreach ($approved_orders as $order_id) {
+                SendEmailJob::dispatch($order_id, $type="Approve");
+                SendNotification::dispatch($order_id, $type="Approve");
+            }
+            
+            return response()->json([
+                'status' => 200,
+                'message' => "Orders Received Successfully" 
+            ]);
+            
+        } catch (\Exception $e) {
+            DB::rollback();
+            \Log::error('Multiple order approval failed: ' . $e->getMessage());
+            return response()->json([
+                'status' => 500,
+                'message' => 'Failed to approve orders. Please try again.'
+            ]);
         }
-        SendEmailJob::dispatch($order->order_id,$type="Approve");
-        SendNotification::dispatch($order->order_id,$type="Approve");
-        return response()->json([
-            'status' => 200,
-            'message' => "Order Received Successfully" 
-        ]);
-
-
     }
 
 
