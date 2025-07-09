@@ -656,7 +656,10 @@
 
                 var orderId = $('#transfer_order_id_master').val();
                 var transferTo = $('#searchableSelectTo').val();
-
+                if (!transferTo || transferTo === '') {
+                    showAlertTransfer('warning', 'Please select a branch to transfer to.');
+                    return;
+                }
                 if (orderId) {
                     $('body').addClass('loading');
                     $('#TransferOrderBtn').prop('disabled', true);
@@ -677,8 +680,8 @@
 
                                 showAlertTransfer('success', response.message);
                                 $('#transfer_order_id_master').val('');
-                                $('#searchableSelectTo').val('');
-                                $('#branch_table').DataTable().ajax.reload();
+                                $('#searchableSelectTo').val(null).trigger('change');
+                                 $('#branch_table').DataTable().ajax.reload();
 
 
                                 setTimeout(function () {
@@ -687,14 +690,14 @@
                                 }, 2000);
                             } else {
                                 $('body').removeClass('loading');
-                                $('#searchableSelectTo').val('');
+                                $('#searchableSelectTo').val(null).trigger('change');
                                 $('#TransferOrderBtn').prop('disabled', false);
                                 showAlertTransfer('warning', response.message);
                                 
                             }
                         },
                         error: function (xhr, status, error) {
-                            $('#searchableSelectTo').val('');
+                            $('#searchableSelectTo').val(null).trigger('change');
 
                             $('body').removeClass('loading');
                             $('#TransferOrderBtn').prop('disabled', false);
@@ -917,6 +920,12 @@
             }
             var csrfToken = $('meta[name="csrf-token"]').attr('content');
             var transferTo = $('#TransferOrder').val();
+            
+            if (!transferTo || transferTo === '') {
+                showAlertTransfer('warning', 'Please select a branch to transfer to.');
+                return;
+            }
+
             $('body').addClass('loading');
             $('#TransferOrderBtns').prop('disabled', true);
 
@@ -935,7 +944,7 @@
                         $('#TransferOrderBtns').prop('disabled', false);
 
                         $('#transfer_order_id').val('');
-                        $('#TransferOrder').val('');
+                        $('#TransferOrder').val(null).trigger('change');
                         $('#transfer_order_modal').modal('hide');
 
                         alert(response.message);
@@ -948,12 +957,12 @@
                         $('body').removeClass('loading');
                         $('#TransferOrderBtns').prop('disabled', false);
 
+                        $('#TransferOrder').val(null).trigger('change');
                         $('#transfer_order_modal').modal('hide');
 
                         alert(response.message);
 
                         showAlert('warning', response.message);
-                        $('#TransferOrder').val('');
                         setTimeout(function () {
                             location.reload();
                         }, 2000);
@@ -963,11 +972,11 @@
                 },
                 error: function (xhr, status, error) {
                     $('body').removeClass('loading');
+                    $('#TransferOrder').val('');
                     $('#TransferOrderBtns').prop('disabled', false);
 
                     showAlert('success', error);
 
-                    $('#TransferOrder').val('');
 
                 }
             });
