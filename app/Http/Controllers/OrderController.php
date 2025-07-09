@@ -11,6 +11,7 @@ use App\Models\Transactions;
 use App\Models\Payment;
 use App\Models\Customers;
 use App\Models\Colors;
+use App\Models\ActivityLog;
 
 use App\Models\Melting;
 use App\Models\Metals;
@@ -401,6 +402,10 @@ class OrderController extends Controller
         
         SendEmailJob::dispatch($order->order_id,$type="Add");
         SendNotification::dispatch($order->order_id,$type="Add");
+        
+        // Log activity
+        ActivityLog::logActivity($order->order_id, 'Order Created', $login->id, $trans->trans_id);
+        
         return response()->json([
             "status" =>200,
             "message"=>"Order created successfully"
@@ -979,6 +984,9 @@ class OrderController extends Controller
         }
         SendEmailJob::dispatch($order_rec->order_id,$type="Edit");
         SendNotification::dispatch($order_rec->order_id,$type="Edit");
+        
+        // Log activity
+        ActivityLog::logActivity($order_rec->order_id, 'Order Updated', auth()->id());
 
         return response()->json([
             'status'  => 200,
@@ -1037,16 +1045,19 @@ class OrderController extends Controller
             $item->save();
             $file_ids = array_filter(array_map('intval', explode(',', $item->item_file_images)));
 
-            if (!empty($file_ids)) {
-                File::whereIn('file_id', $file_ids)->update(['is_delete' => 1]);
-            }
+                    if (!empty($file_ids)) {
+            File::whereIn('file_id', $file_ids)->update(['is_delete' => 1]);
         }
+    }
+    
+    // Log activity
+    ActivityLog::logActivity($check_order->order_id, 'Order Removed', auth()->id());
 
-        return response()->json([
-            'status'  => 200,
-            'message' => 'Order removed successfully'
+    return response()->json([
+        'status'  => 200,
+        'message' => 'Order removed successfully'
 
-        ]);
+    ]);
     }
 
 
@@ -1157,6 +1168,10 @@ class OrderController extends Controller
         $trans->save();
         SendEmailJob::dispatch($order->order_id,$type="Transfer");
         SendNotification::dispatch($order->order_id,$type="Transfer");
+        
+        // Log activity
+        ActivityLog::logActivity($order->order_id, 'Order Transfer', $login['id'], $trans->trans_id);
+        
         return response()->json([
             'status'  => 200,
             'message' => "Item Transfered successfully" 
@@ -1250,6 +1265,9 @@ class OrderController extends Controller
             SendEmailJob::dispatch($order->order_id, $type="Approve");
             SendNotification::dispatch($order->order_id, $type="Approve");
             
+            // Log activity
+            ActivityLog::logActivity($order->order_id, 'Order Approve', $login['id'], $trans->trans_id);
+            
             return response()->json([
                 'status' => 200,
                 'message' => "Order Received Successfully" 
@@ -1323,6 +1341,9 @@ class OrderController extends Controller
             
             SendEmailJob::dispatch($order->order_id, $type="Approve");
             SendNotification::dispatch($order->order_id, $type="Approve");
+            
+            // Log activity
+            ActivityLog::logActivity($order->order_id, 'Order Approve', $login['id'], $trans->trans_id);
             
             return redirect()->route('order-master')->with('success', 'Order received successfully');
             
@@ -1499,6 +1520,9 @@ class OrderController extends Controller
                 SendNotification::dispatch($order_id, $type="Approve");
             }
             
+            // Log activity for multiple orders
+            ActivityLog::logMultipleOrdersActivity($approved_orders, 'Order Approve', $login['id']);
+            
             return response()->json([
                 'status' => 200,
                 'message' => "Orders Received Successfully" 
@@ -1649,6 +1673,10 @@ class OrderController extends Controller
         $multiple->save();
         SendEmailJob::dispatch($order->order_id,$type="Transfer");
         SendNotification::dispatch($order->order_id,$type="Transfer");
+        
+        // Log activity for multiple orders
+        ActivityLog::logMultipleOrdersActivity($params['order_id'], 'Order Transfer', $login['id'], $trans_ids);
+        
         return response()->json([
             'status'  => 200,
             'message' => "Item Transfered successfully" 

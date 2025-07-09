@@ -10,6 +10,7 @@ use App\Http\Controllers\NotesController;
 use App\Http\Controllers\MailController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\TransferController;
+use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\Auth\PasswordController;
 use Illuminate\Support\Facades\Route;
 use App\Models\Branch;
@@ -193,6 +194,10 @@ Route::middleware('auth')->group(function () {
 
 
     Route::post('file-remove', [NotesController::class, 'file_remove'])->name('file_remove');
+
+    // Activity Log Routes
+    Route::get('activity-master', [ActivityController::class, 'activity_index'])->name('activity-master');
+    Route::post('activity-list', [ActivityController::class, 'activity_list'])->name('activity_list');
 
 
 });

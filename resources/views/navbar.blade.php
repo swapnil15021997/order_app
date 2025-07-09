@@ -58,6 +58,19 @@
                             </span>
                         </a>
                     </div>
+                    <div>
+                        <a class="nav-btn {{ $activePage === 'activity' ? 'active' : '' }}"
+                            href="{{route('activity-master')}}">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                class="lucide lucide-activity">
+                                <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
+                            </svg>
+                            <span class="nav-link-title">
+                                Activity Log
+                            </span>
+                        </a>
+                    </div>
                 @endif
                 <div class="my-md-0 flex-grow-1 flex-md-grow-0 d-md-flex d-none">
                     <button class="nav-btn" id="start-scan">
