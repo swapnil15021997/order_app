@@ -495,7 +495,7 @@ class OrderController extends Controller
         
         $qr_code  = QrCode::size(50)->generate(
             implode('|', [
-                $order['order_id'],$order['order_qr_code'],$order['order_status'],$order['order_number'],$order['order_date'] 
+                $order['order_qr_code'] 
             ])
         );
         // $order['order_cust']
