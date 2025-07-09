@@ -18,6 +18,7 @@ use App\Models\Metals;
 use App\Models\TempOrders;
 use App\Models\Notes;
 use App\Models\Transfer;
+use App\Models\User;
 use DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Arr;
@@ -691,6 +692,9 @@ class OrderController extends Controller
             $sortColumn = 'order_id'; 
         }
         $userBranchIds = $login['user_branch_ids'];
+        $user_id       = $login['id'];
+       
+
  
         if($login['user_role_id']==1){
 
@@ -726,12 +730,14 @@ class OrderController extends Controller
                 )
                 ->distinct()  
             ->where('orders.is_delete',0)
-            ->where(function ($query) use ($userBranchIds) {
+            ->where(function ($query) use ($userBranchIds, $user_id) {
                 $query->whereIn('orders.order_from_branch_id', explode(',', $userBranchIds))
-                ->orWhereIn('orders.order_branch_id', explode(',', $userBranchIds));     
+                ->orWhereIn('orders.order_branch_id', explode(',', $userBranchIds))   
                 // ->orWhereHas('transactions', function ($transQuery) use ($userBranchIds) {
                 //           $transQuery->whereIn('trans_to', explode(',', $userBranchIds));
                 //       });
+                ->orWhereRaw("FIND_IN_SET(?, orders.order_user_ids)", [$user_id]);
+ 
             })->orderBy($sortColumn, $sortOrder);
         }
  
@@ -1091,6 +1097,13 @@ class OrderController extends Controller
                 'errors'  => $validator->errors(), 
             ]);
         } 
+        $active_branch              = $login['user_active_branch'];
+        if ($active_branch == null){
+            return response()->json([
+                'status' => 500,
+                'message' => 'Please select a active branch'
+            ]);
+        }
 
         $order = Order::get_order_with_items($params['order_id']);
         if (empty($order)){
@@ -1148,6 +1161,20 @@ class OrderController extends Controller
         // Current branch
         $branches[] = $params['transfer_to'];
         
+        $t_branch = $params['transfer_to'];
+        
+        $users = User::whereRaw("FIND_IN_SET(?, user_branch_ids)", [$t_branch])->get();
+        
+        $new_user_ids = $users->pluck('id')->toArray();
+ 
+        $existing_user_ids = $order->order_user_ids 
+            ? explode(',', $order->order_user_ids) 
+            : [];
+ 
+        $merged_user_ids = array_unique(array_merge($existing_user_ids, $new_user_ids));
+ 
+        $order->order_user_ids = implode(',', $merged_user_ids);
+
         // comma seperated again
         $order->order_branch_id     = implode(',', $branches);
         $order->order_status        = 0;
@@ -1244,7 +1271,7 @@ class OrderController extends Controller
                     DB::rollback();
                     return response()->json([
                         'status' => 500,
-                        'message' => 'Sorry You cant transfer this order !'
+                        'message' => 'Sorry You cant approve this order !'
                     ]);
                 }
             }
@@ -1645,6 +1672,15 @@ class OrderController extends Controller
             // Current branch
             $branches[] = $params['transfer_to'];
             // comma seperated again
+            $t_branch = $params['transfer_to'];
+            $users = User::whereRaw("FIND_IN_SET(?, user_branch_ids)", [$t_branch])->get();
+            $new_user_ids = $users->pluck('id')->toArray();
+            $existing_user_ids = $order->order_user_ids 
+            ? explode(',', $order->order_user_ids) 
+            : [];
+            $merged_user_ids = array_unique(array_merge($existing_user_ids, $new_user_ids));
+            $order->order_user_ids = implode(',', $merged_user_ids);
+
             $order->order_branch_id     = implode(',', $branches);
             $order->order_status        = 0;
             $order->save();
