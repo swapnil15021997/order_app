@@ -1862,22 +1862,36 @@ class OrderController extends Controller
     public function test(){
         $orders = Order::where('is_delete',0)
         ->get();
-        $order_n  = 000;
-        $sr_no    = 1;
-        $r_sr_no  = 1;
-        $r_order_n = 000;  
+        
+
         foreach($orders as $order){
+            $get_trans = Transactions::where('trans_order_id',$order->order_id)->get();
+            if(!empty($get_trans)){
+                foreach($get_trans as $trans){
+                    $f_branch = $trans->trans_from;
+                    $t_branch = $trans->trans_to; 
 
-            if($order->order_type == 1){
-                $order->order_number = 'O-'. str_pad($sr_no, 3, '0', STR_PAD_LEFT);
-                $sr_no++;
-                 
-            }else{
+                    $users = User::
+                    where('is_delete',0)
 
-                $order->order_number = 'R-'. str_pad($r_sr_no, 3, '0', STR_PAD_LEFT);
-                $r_sr_no++;
+                    ->where(function($query) use ($f_branch, $t_branch) {
+                        $query->whereRaw("FIND_IN_SET(?, user_branch_ids)", [$f_branch])
+                              ->orWhereRaw("FIND_IN_SET(?, user_branch_ids)", [$t_branch]);
+                    })->get();
+                    $new_user_ids = $users->pluck('id')->toArray();
+                    $existing_user_ids = $order->order_user_ids 
+                    ? explode(',', $order->order_user_ids) 
+                    : [];
+                    $merged_user_ids = array_unique(array_merge($existing_user_ids, $new_user_ids));
+                   
+                    $order->order_user_ids = implode(',', $merged_user_ids);
+                    $order->save();
+
+                    \Log::info(['Order User IDs' => $order->order_user_ids, 'Order ID' => $order->order_id]);
+
+                    
+                }
             }
-            $order->save();
-        } 
+        }
     }
 }
