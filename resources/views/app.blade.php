@@ -151,7 +151,7 @@
                     <a href="#" class="btn btn-secondary" data-bs-dismiss="modal">
                         Cancel
                     </a>
-                    <a id="TransferOrderBtn" onclick="transfer_this()" href="#" class="btn btn-primary">
+                    <a id="TransferOrderBtnApp" onclick="transfer_this()" href="#" class="btn btn-primary">
                         Transfer This Order
                     </a>
                 </div>
@@ -366,6 +366,29 @@
                 
                 success: function (response) {
                     var order = response.data[0];
+                    var items = order.items || [];
+                    
+                    var itemInfo = '';
+                    if (items.length > 0) {
+                        var item = items[0];
+                        var metalCode = '';
+
+                        if (item.item_metal.toLowerCase() === 'gold') {
+                            metalCode = 'G';
+                        } else if (item.item_metal.toLowerCase() === 'platinum') {
+                            metalCode = 'P';
+                        } else {
+                            metalCode = item.item_metal.charAt(0).toUpperCase(); // fallback
+                        }
+
+                        itemInfo = `
+                            <p>${metalCode} - ${item.item_name}</p>
+                            <p>p - ${item.item_melting}</p>
+                            <p>w - ${item.item_weight}</p>
+                        `;
+                    } else {
+                        itemInfo = '<p>No item info</p>';
+                    }
                     console.log(order)
                     let lastTransaction = order.transactions[order.transactions.length - 1];
                     
@@ -404,12 +427,9 @@
                                         </div>
                                         <div class="d-flex align-items-center gap-2">
                                             <div>
-                                                <p>G - brckle</p>
-                                                <p>p - 91.6</p>
-                                                <p>w - 22.5</p>
+                                                 ${itemInfo}
                                             </div>
-                                            <img src="https://upload.wikimedia.org/wikipedia/commons/d/d0/QR_code_for_mobile_English_Wikipedia.svg"
-                                                alt="qr-code" />
+
                                         </div>
                                     </div>
                                 </li>
@@ -431,12 +451,9 @@
                                         </div>
                                         <div class="d-flex align-items-center gap-2">
                                             <div>
-                                                <p>G - brckle</p>
-                                                <p>p - 91.6</p>
-                                                <p>w - 22.5</p>
+                                                  ${itemInfo}
                                             </div>
-                                            <img src="https://upload.wikimedia.org/wikipedia/commons/d/d0/QR_code_for_mobile_English_Wikipedia.svg"
-                                                alt="qr-code" />
+                                             
                                         </div>
                                     </div>
                                 </li>
@@ -458,13 +475,9 @@
                                         </div>
                                         <div class="d-flex align-items-center gap-2">
                                             <div>
-                                                <p>G - brckle</p>
-                                                <p>p - 91.6</p>
-                                                <p>w - 22.5</p>
+                                                  ${itemInfo}
                                             </div>
-                                            <img src="https://upload.wikimedia.org/wikipedia/commons/d/d0/QR_code_for_mobile_English_Wikipedia.svg"
-                                                alt="qr-code" />
-                                        </div>
+                                         </div>
                                     </div>
                                 </li>
 
@@ -570,7 +583,7 @@
                 return;
             }
             $('body').addClass('loading');
-            $('#TransferOrderBtn').prop('disabled', true);
+            $('#TransferOrderBtnApp').prop('disabled', true);
           
             $.ajax({
                 url: "{{ route('multiple_transfer') }}",
@@ -584,7 +597,7 @@
                 success: function (response) {
                     if (response.status == 200) {
                         $('body').removeClass('loading');
-                        $('#TransferOrderBtn').prop('disabled', false);
+                        $('#TransferOrderBtnApp').prop('disabled', false);
           
                         $('#transfer_order_id').val('');
                         $('#TransfersearchableSelectTo').val('');
@@ -597,7 +610,7 @@
                         }, 2000);
                     } else {
                         $('body').removeClass('loading');
-                        $('#TransferOrderBtn').prop('disabled', false);
+                        $('#TransferOrderBtnApp').prop('disabled', false);
                         alert(response.message);
 
                         showAlert('success', response.message);
@@ -608,7 +621,7 @@
                 },
                 error: function (xhr, status, error) {
                     $('body').removeClass('loading');
-                    $('#TransferOrderBtn').prop('disabled', false);
+                    $('#TransferOrderBtnApp').prop('disabled', false);
                     showAlert('success', error);
 
                     $('#TransfersearchableSelectTo').val('');

@@ -491,7 +491,7 @@
                         }
                     });
                 } else {
-                    alert('Please fill in both fields.');
+                    alert('Please select order to delete.');
                 }
             });
         });
