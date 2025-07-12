@@ -127,7 +127,7 @@
             </div>
         </div>
 
-        <div class="modal modal-blur fade" id="transfer_order" tabindex="-2" role="dialog" aria-hidden="true">
+        <div class="modal modal-blur fade" id="transfer_order_app" tabindex="-2" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
 
@@ -525,7 +525,7 @@
 
         function transfer_order() {
 
-            $('#transfer_order').modal('show');
+            $('#transfer_order_app').modal('show');
         }
 
 
@@ -533,7 +533,7 @@
         var csrfToken = $('meta[name="csrf-token"]').attr('content');
 
         $('#TransfersearchableSelectTo').select2({
-            dropdownParent: $('#transfer_order'),
+            dropdownParent: $('#transfer_order_app'),
             placeholder: "Select an option",
             allowClear: true,
             ajax: {
@@ -601,7 +601,7 @@
           
                         $('#transfer_order_id').val('');
                         $('#TransfersearchableSelectTo').val('');
-                        $('#transfer_order').modal('hide');
+                        $('#transfer_order_app').modal('hide');
                         alert(response.message);
                         showAlert('success', response.message);
 
