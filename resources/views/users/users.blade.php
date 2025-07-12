@@ -778,7 +778,7 @@
                     }
                 });
             } else {
-                showAlert('success','Please fill in both fields' );
+                showAlert('success','Please select user to delete' );
             }
         });
 
@@ -877,7 +877,7 @@
                     }
                 });
             } else {
-                showAlert('warning', 'Please fill in both fields.');
+                showAlert('warning', 'Please select role to delete.');
 
             }
         });

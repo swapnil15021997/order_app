@@ -359,7 +359,7 @@
                         }
                     });
                 } else {
-                    alert('Please fill in both fields.');
+                    alert('Please select any one order.');
                 }
             });
 

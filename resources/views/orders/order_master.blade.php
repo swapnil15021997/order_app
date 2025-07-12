@@ -707,7 +707,7 @@
                         }
                     });
                 } else {
-                    showAlertTransfer('warning', 'Please fill in both fields.');
+                    showAlertTransfer('warning', 'Please select at least one order.');
                 }
             });
 
