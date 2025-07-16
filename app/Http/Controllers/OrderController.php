@@ -1616,6 +1616,16 @@ class OrderController extends Controller
         }
 
         $trans_ids = [];
+
+        $login                      = auth()->user()->toArray();
+        $active_branch              = $login['user_active_branch'] ?? null;
+        if(empty($active_branch)){
+            return response()->json([
+                'status' => 500,
+                'message' => 'Please select active branch first'
+            ]);
+        }
+        
         foreach ($params['order_id'] as $order_id) {
             
             $order = Order::get_order_with_items($order_id);
