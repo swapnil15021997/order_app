@@ -716,7 +716,8 @@ class OrderController extends Controller
     
             ->orderBy($sortColumn, $sortOrder);
         }else{
-            $ordersQuery = Order::with('transactions','items','transactions.trans_from','transactions.trans_to')    
+            
+            $ordersQuery = Order::with('transactions', 'items', 'transactions.trans_from', 'transactions.trans_to')    
             ->leftJoin('branch AS from_branch', 'from_branch.branch_id', '=', 'orders.order_from_branch_id')  
             ->leftJoin('branch AS to_branch', 'to_branch.branch_id', '=', 'orders.order_to_branch_id')  
             ->leftJoin('branch AS current_branch', 'current_branch.branch_id', '=', 'orders.order_current_branch')  
@@ -727,21 +728,38 @@ class OrderController extends Controller
                 'to_branch.branch_name AS order_to_name',
                 'current_branch.branch_name AS order_current_branch',
                 'cust.cust_name'
-                )
-                ->distinct()  
-            ->where('orders.is_delete',0)
+            )
+            ->distinct()  
+            ->where('orders.is_delete', 0)
             ->where(function ($query) use ($userBranchIds, $user_id) {
-                $query->whereIn('orders.order_from_branch_id', explode(',', $userBranchIds))
-                ->orWhereIn('orders.order_branch_id', explode(',', $userBranchIds))   
-                // ->orWhereHas('transactions', function ($transQuery) use ($userBranchIds) {
-                //           $transQuery->whereIn('trans_to', explode(',', $userBranchIds));
-                //       });
-                ->orWhereRaw("FIND_IN_SET(?, orders.order_user_ids)", [$user_id]);
- 
-            })->orderBy($sortColumn, $sortOrder);
-        }
- 
-        $total_orders = Order::where('is_delete',0)->count();
+
+                $userBranchIdArr = explode(',', $userBranchIds);
+                $userIdArr = explode(',', $user_id);
+
+                $query->where(function ($q) use ($userBranchIdArr) {
+                    $q->whereIn('orders.order_from_branch_id', $userBranchIdArr)
+                    ->whereIn('orders.order_to_branch_id', $userBranchIdArr);
+                });
+
+                // Check if any branch in userBranchIdArr is in order_branch_id (comma-separated)
+                $query->orWhere(function ($q) use ($userBranchIdArr) {
+                    foreach ($userBranchIdArr as $branchId) {
+                        $q->orWhereRaw('FIND_IN_SET(?, orders.order_branch_id)', [$branchId]);
+                    }
+                });
+        
+                $query->orWhereIn('orders.order_user_id', $userIdArr);
+        
+                $query->orWhere(function ($q) use ($userIdArr) {
+                    foreach ($userIdArr as $uid) {
+                        $q->orWhereRaw('FIND_IN_SET(?, orders.order_user_ids)', [$uid]);
+                    }
+                });
+            })
+            ->orderBy($sortColumn, $sortOrder);
+         }
+         
+        $total_orders = $ordersQuery->count();
        
         if (!empty($searchQuery)) {
               
@@ -782,7 +800,7 @@ class OrderController extends Controller
             'message' => 'Orders list fetched successfully!',
             'data'    => $orders,
             'draw' => intval($request->input('draw')),
-            'recordsTotal'  => $orders->count(),
+            'recordsTotal'  => $total_orders    ,
             'recordsFiltered' => $total_orders,
             'per_page'     => $perPage,
             'current_page' => $page,
@@ -1128,12 +1146,12 @@ class OrderController extends Controller
         if($login['user_role_id'] !== 1){
             $user_branch = $login['user_branch_ids'];
             $user_branch_array = explode(',', $user_branch); 
-            if ($check_transaction->trans_to && !in_array($check_transaction->trans_to, $user_branch_array)) {
-                return response()->json([
-                    'status' => 500,
-                    'message' => 'Sorry You cant transfer this order !'
-                ]);
-            }
+            // if ($check_transaction->trans_to && !in_array($check_transaction->trans_to, $user_branch_array)) {
+            //     return response()->json([
+            //         'status' => 500,
+            //         'message' => 'Sorry You cant transfer this order !'
+            //     ]);
+            // }
         }
   
         // if( $order->order_to_branch_id == $params['transfer_to']){
@@ -1666,12 +1684,12 @@ class OrderController extends Controller
             if($login['user_role_id'] !== 1){
                 $user_branch = $login['user_branch_ids'];
                 $user_branch_array = explode(',', $user_branch); 
-                if ($check_transaction->trans_to && !in_array($check_transaction->trans_to, $user_branch_array)) {
-                    return response()->json([
-                        'status' => 500,
-                        'message' => 'Sorry You cant transfer this order !'
-                    ]);
-                }
+                // if ($check_transaction->trans_to && !in_array($check_transaction->trans_to, $user_branch_array)) {
+                //     return response()->json([
+                //         'status' => 500,
+                //         'message' => 'Sorry You cant transfer this order !'
+                //     ]);
+                // }
             }
             $items = $order->items->toArray();
              
