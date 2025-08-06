@@ -330,12 +330,12 @@
             </tr>
         </tbody>
     </table>
-    <table width="100%" cellpadding="0" cellspacing="0">
-        <tr>
-            <td>
+    <table class="border" width="100%" cellpadding="0" cellspacing="0">
+        <tr >
+            <td class="border-c border-r border-b">
                 HSN/SAC
-            </td>
-            <td>
+            </td >
+            <td class="border-c border-r border-b">
                 Taxable Value
             </td>
         </tr>
@@ -344,24 +344,24 @@
                     @endphp
                
         <tr>
-            <td>
+            <td class="border-c border-r border-b">
 
                 {{$hsn_sac}}
             </td>
-            <td></td>
+            <td class="border-c border-r border-b"></td>
         </tr>
         <tr>
-            <td>Total</td>
-            <td></td>
+            <td class="border-c border-r border-b">Total</td>
+            <td class="border-c border-r border-b"></td>
         </tr>
     </table>
 
-    <table width="100%" cellpadding="0" cellspacing="0">
+    <table class="border" width="100%" cellpadding="0" cellspacing="0">
         <tr>
             <td class="w-50">
                 <table width="100%" cellpadding="0" cellspacing="0">
                     <tr>
-                        <td class="font-bold">Tax Amount (in words):</td>
+                        <td class="font-bold ">Tax Amount (in words):</td>
                          
                     </tr>
                     <tr>
