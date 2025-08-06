@@ -338,6 +338,46 @@ class TransferController extends Controller
 
     }
 
+    public function transfer_receipt_pdf(Request $request, $id){
+        $login = auth()->user();
+        
+        $transferQuery = Transfer::query()
+            ->where('is_delete',0)
+            ->where('trans_id',$id)
+            ->get();
+            
+        foreach ($transferQuery as $transfer) {
+            $trans_Ids = explode(',', $transfer->trans_ids);
+            $transactions = Transactions::whereIn('trans_id', $trans_Ids)
+            ->leftJoin('branch AS from_branch', 'from_branch.branch_id', '=', 'transactions.trans_from')
+            ->leftJoin('branch AS to_branch', 'to_branch.branch_id', '=', 'transactions.trans_to')        
+            ->with('items.colors','transUser', 'transApprovedBy','orders')
+            ->select(
+                'transactions.*',
+                'from_branch.branch_name AS from_branch_name',
+                'to_branch.branch_name AS to_branch_name',
+                'from_branch.branch_address AS from_branch_address',
+                'to_branch.branch_address AS to_branch_address',
+            ) 
+            ->get();
+            $transfer->transactions = $transactions->toArray();
+        }
+        
+        $transfer_type = '';
+        if($transferQuery[0]['multiple_transfer_type'] == 1){
+            $transfer_type = 'Issue for Karagir';
+        }else{
+            $transfer_type = 'Issue for Hallmarking';
+        }
+        
+        $transfer_array = $transferQuery->toArray();
+        $firstTransaction = $transfer_array[0]['transactions'][0] ?? null;
+        
+        $pdf = \PDF::loadView('orders.transfer_receipt_pdf', compact('transfer_array', 'transfer_type', 'firstTransaction'));
+        
+        return $pdf->stream('transfer_receipt.pdf');
+    }
+
 
 
     public function transfer_receipt_edit(Request $request,$id){

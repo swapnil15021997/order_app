@@ -156,6 +156,7 @@ Route::middleware('auth')->group(function () {
     Route::get('transfer-receipt/{id}', [TransferController::class, 'transfer_receipt'])->name('transfer_receipt');
     Route::get('transfer-receipt-edit/{id}', [TransferController::class, 'transfer_receipt_edit'])->name('transfer_receipt_edit');
     Route::post('transfer-receipt-save', [TransferController::class, 'transfer_receipt_save'])->name('transfer_receipt_save');
+    Route::get('transfer-receipt-pdf/{id}', [TransferController::class, 'transfer_receipt_pdf'])->name('transfer_receipt_pdf');
 
     Route::get('user-master', [UserController::class, 'user_index'])->name('user-master');
     Route::get('user-add', [UserController::class, 'user_add'])->name('user-add');

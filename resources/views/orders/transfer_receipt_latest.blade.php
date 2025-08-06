@@ -14,6 +14,9 @@
                 </nav>
             </div>
             <div class="col-auto ms-auto d-print-none">
+                <a href="{{ route('transfer_receipt_pdf', $transfer_array[0]['trans_id']) }}" class="btn btn-success me-2" target="_blank">
+                    Download PDF
+                </a>
                 <button type="button" class="btn btn-primary printMe" onclick="printDiv()">
                     Print
                 </button>
