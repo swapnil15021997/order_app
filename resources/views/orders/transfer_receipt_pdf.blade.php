@@ -4,6 +4,11 @@
     <meta charset="utf-8">
     <title>Transfer Receipt</title>
     <style>
+        *{
+            margin  : 0;
+            padding:0;
+            box-sizing: border-box;
+        }
         body {
             font-family: Arial, sans-serif;
             font-size: 12px;
@@ -18,9 +23,11 @@
             margin-bottom: 10px;
         }
         td, th {
-            border: 1px solid #000;
             padding: 4px 6px;
             vertical-align: top;
+        }
+        .border{
+            border: 1px solid #000;
         }
         .text-center {
             text-align: center;
@@ -73,127 +80,204 @@
         .document-title {
             font-size: 18px;
             font-weight: bold;
-            border: 2px solid #000;
-            padding: 8px;
             text-align: center;
+            position: absolute;
+            left:50%;
+            transform: translateX(-50%);
         }
         .header-info {
             font-size: 10px;
             color: #666;
             text-align: center;
+            margin-top: -10px;
         }
-        .w-50 {
-            width: 50%;
+        .no-border{
+            border:none !important;
         }
-        .w-25 {
-            width: 25%;
+        .text-right{
+            text-align: right !important;
         }
-        .w-33 {
-            width: 33.33%;
+        .item-table{
+            border:1px solid #000;
         }
-    </style>
+        .item-table tr{
+            border-bottom : 1px solid #000;
+        }
+        .item-table td,
+        .item-table th{
+            border-right : 1px solid #000;
+        }
+        .border-c {
+            border-style:solid;
+            border-color:#000;
+            border-width:0px;
+        }
+        .border-b {
+            border-bottom-width:1px;
+        }
+         .border-t {
+            border-top-width:1px;
+        }
+        .border-r {
+            border-right-width:1px;
+        }
+          .border-l {
+            border-left-width:1px;
+        }
+        .head{
+            padding-bottom: 26px;
+        }
+        .section-first{
+             border:1px solid #000;
+                margin-bottom:14px;
+                  display: table;
+                  width: 100%;
+        }
+        .column-one,
+        .column-two {
+                  width: 50%;
+              display: table-cell;
+        }
+
+
+                .column-one tr .hight{
+                     min-height: 90px;
+                    padding: 4px 6px;
+                }
+
+.column-two tr,
+{
+            width: 100%;
+}
+
+.column-two td .two-height{
+                     min-height: 35px;
+}
+
+.column-two table tr:nth-last-child(1) td .two-height{
+                     min-height: 80px;
+}
+
+        </style>
 </head>
 <body>
-    <table width="100%" cellpadding="0" cellspacing="0">
-        <tr>
-            <td align="center">
-                <table width="100%" cellpadding="0" cellspacing="0">
-                    <tr>
-                        <td class="document-title">{{ $transfer_type }}</td>
-                    </tr>
-                    <tr>
-                        <td class="header-info">Printed on {{ date('d-M-y') }} at {{ date('H:i') }} (TRIPLICATE FOR CONSIGNER)</td>
-                    </tr>
-                </table>
-            </td>
-        </tr>
-    </table>
+    <div class="head">
+                    <div>
+                        <div class="document-title">{{ $transfer_type }}</div>
+                    </div>
+                    <div>
+                        <div class="header-info text-right">Printed on {{ date('d-M-y') }} at {{ date('H:i') }} <br /> (TRIPLICATE FOR CONSIGNER)</div>
+                    </div>
+    </div>
 
-    <table width="100%" cellpadding="0" cellspacing="0">
-        <tr>
-            <td class="w-50">
-                <table width="100%" cellpadding="0" cellspacing="0">
-                    
-                    
-                    <tr>
-                        <td class="font-bold">{{ $firstTransaction['from_branch_name'] }}</td>
-                    </tr>
-                    <tr>
-                        <td>{{ $firstTransaction['from_branch_address'] }}</td>
-                    </tr>
-                    <tr><td><br></td></tr>
-                    <tr><td><br></td></tr>
-                  
-                    
-                    <tr>
-                        <td class="font-bold">Buyer (Bill to)</td>
-                    </tr>
-                    <tr>
-                        <td class="font-bold">{{ $firstTransaction['to_branch_name'] }}</td>
-                    </tr>
-                    <tr>
-                        <td>{{ $firstTransaction['to_branch_address'] }}</td>
-                    </tr>
-                    <tr>
-                        <td>GSTIN/UIN: 24ABICS3406J1ZD</td>
-                    </tr>
-                    <tr>
-                        <td>State Name: Gujarat, Code: 24</td>
-                    </tr>
-                    
-                </table>
-            </td>
-            <td class="w-50">
-                <table width="100%" cellpadding="0" cellspacing="0">
-                    <tr>
-                        <td class="font-bold">Delivery Note No.:</td>
-                        <td class="font-bold">Dated:</td>
-                    </tr>
-                    <tr>
-                        <td>
-                             {{ $transfer_array[0]['multiple_transfer_delivery_note'] }}<br>
-                        
-                        </td>
-                        <td>{{ $firstTransaction['trans_date'] }}</td>
-                    </tr>
-                    <tr>
-                        <td class="font-bold">Reference No. & Date:
-                            <br><br>
-                        </td>
-                        <td class="font-bold">Other References</td>
-                    </tr>
-                   
-                    <tr>
-                        <td class="font-bold">Buyer's Order No.:
-                        <br><br>
-                        </td>
-                        <td class="font-bold">Dated:</td>
-                    </tr>
-                     
-                    <tr>
-                        <td class="font-bold">Dispatch Doc No.:
-
-                        <br><br>
-                        </td>
-                        <td class="font-bold">Destination
- 
-                        </td>
-                    </tr>
-                    
-                    <tr>
-                        <td class="font-bold">Terms of Delivery:
-                        <br><br>
-                        </td>
-                        <td></td>
-                    </tr>
-                   
-                </table>
-            </td>
+  <div class="section-first">
+        <div class="column-one border-c border-r">
+                <table width="100%" cellspacing="0" cellpadding="0">
+        <tr class="border-c border-b">
+            <div class="hight">
+            <div class="font-bold">{{ $firstTransaction['from_branch_name'] }}</div>
+            <div>{{ $firstTransaction['from_branch_address'] }}</div>
+            </div>
         </tr>
-    </table>
+            <tr>
+            <div class="hight">
+            <div>Buyer (Bill to)</div>
+            <div class="font-bold">{{ $firstTransaction['to_branch_name'] }}</div>
+            <div>{{ $firstTransaction['to_branch_address'] }}</div>
+            <div><span>GSTIN/UIN:</span> 24ABICS3406J1ZD</div>
+            <div><span>State Name:</span> Gujarat, Code: 24</div>
+            </div>
+        </tr>
+            </table>
+        </div>
+     <div class="column-two">
+  <table width="100%" cellspacing="0" cellpadding="0">
+    <tr>
+      <td class="border-c border-r border-b" width="50%">
+        <div class="two-height">
+            <div class="font-bold">Delivery Note No.</div>
+            <div>{{ $transfer_array[0]['multiple_transfer_delivery_note'] }}</div>
+        </div>
+      </td>
+      <td class="border-c border-b" width="50%">
+        <div class="two-height">
+        <div class="font-bold">Dated.</div>
+        <div>{{ $firstTransaction['trans_date'] }}</div>
+</div>
+      </td>
+    </tr>
+    <tr>
+        <td class="border-c border-r border-b">
+        <div class="two-height">
+</div>
+      </td>
+        <td class="border-c  border-b">
+        <div class="two-height">
+        <div class="font-bold">Mode/Terms of payment.</div>
+</div>
+      </td>
+    </tr>
+    <tr>
+      <td class="border-c  border-r border-b">
+        <div class="two-height">
+        <div class="font-bold">Reference No. & Date.</div>
+</div>
+      </td>
+       <td class="border-c border-b">
+        <div class="two-height">
+        <div class="font-bold">Other References</div>
+</div>
+      </td>
+    </tr>
+    <tr>
+      <td class="border-c border-r border-b">
+        <div class="two-height">
+        <div class="font-bold">Buyer's Order No.</div>
+</div>
+      </td>
+       <td class="border-c  border-b">
+        <div class="two-height">
+        <div class="font-bold">Dated.</div>
+</div>
+      </td>
+    </tr>
+    <tr>
+      <td class="border-c border-r border-b">
+        <div class="two-height">
+        <div class="font-bold">Dispatch Doc No.</div>
+</div>
+      </td>
+      <td class="border-c border-b">
+        <div class="two-height"></div>
+      </td>
+    </tr>
+    <tr>
+      <td class="border-c border-r border-b">
+        <div class="two-height">
+        <div class="font-bold">Dispatch Through</div>
+</div>
+      </td>
+      <td class="border-c border-b">
+        <div class="two-height">
+        <div class="font-bold">Destination</div>
+</div>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2">
+        <div class="two-height">
+        <div class="font-bold">Terms of Delivery</div>
+</div>
+      </td>
+    </tr>
+  </table>
+</div>
+
+    </div>
+
     
    
-    <table width="100%" cellpadding="0" cellspacing="0">
+    <table width="100%" class="item-table" cellpadding="0" cellspacing="0">
         <thead>
             <tr class="bg-gray">
                 <th class="text-center">SI No.</th>
@@ -222,8 +306,8 @@
                     <tr>
                         <td class="text-center">{{ $index }}</td>
                         <td class="text-left">
-                            {{ $item['item_name'] }}<br>
-                            <span class="font-tiny">{{ $item['item_metal'] }}<br>1 Pcs ({{ $transaction['orders'][0]['order_number'] }})</span>
+                            {{ $item['item_name'] }}<br />
+                            <span class="font-tiny">{{ $item['item_metal'] }}<br />1 Pcs ({{ $transaction['orders'][0]['order_number'] }})</span>
                         </td>
                         <td class="text-center">{{ $item['item_hsn_number'] }}</td>
                         <td class="text-center">{{ $item['item_weight'] }} GRM</td>
@@ -235,9 +319,14 @@
                 @endforeach
             @endforeach
             <tr class="total-row">
-                <td colspan="3" class="font-bold">Total</td>
+                <td></td>
+                <td  class="font-bold">Total</td>
+                <td></td>
+                <td></td>
                 <td class="text-center font-bold">{{ $total_weight }} GRM</td>
-                <td colspan="4"></td>
+                <td></td>
+                <td></td>
+                <td></td>
             </tr>
         </tbody>
     </table>
@@ -286,37 +375,37 @@
         </tr>
          
     </table>
-    <table width="100%" cellpadding="0" cellspacing="0">
 
-                
-                <tr>
-                    <td class="font-bold">Recd. in Good Condition</td>
-                     
-                    <td class="text-center font-bold">Prepared by</td>
-                    <td class="text-center font-bold">Verified by</td>
-                    <td class="text-center font-bold">Authorised Signatory</td>
+    <table width="100%" class="border" cellpadding="0" cellspacing="0">
+        <tr>
+            <td class="border-c border-r" width="50%">
+                <div>
+                    <div class="font-bold">Recd. in Good Condition</div>
+                </div>
+            </td>
+            <td width="50%">
+                <table>
+                    <tr>
+                    <td>
+                        <div class="text-center font-bold">Prepared by</div>
+                        <div></div>
+                    </td>
+                    <td>
+                        <div class="text-center font-bold">Verified by</div>
+                        <div></div>
+                    </td>
+                    <td>
+                        <div class="text-center font-bold">Authorised Signatory</div>
+                        <div></div>
+                    </td>
                 </tr>
-                <tr>
-                    <td class="font-bold"></td>
-                   
-                    <td class="text-center"> 
-                        <div style="margin-top: 20px;"></div>
-                    </td>
-                    <td class="text-center"> 
-                        <div style="margin-top: 20px;"></div>
-                    </td>
-                    <td class="text-center"> 
-                        <div style="margin-top: 20px;">[Signature]</div>
-                    </td>
+                </table>
+                </td>
                 </tr>
             </table>
 
-    <table width="100%" cellpadding="0" cellspacing="0">
-        <tr>
-            <td class="computer-generated">
+            <p class="computer-generated">
                 This is a Computer Generated Document
-            </td>
-        </tr>
-    </table>
+</p>
 </body>
 </html> 
