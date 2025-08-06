@@ -95,7 +95,7 @@
                     <table class="table table-bordered">
                         <thead class="text-center">
                             <tr>
-                                <th>Sl No.</th>
+                                <th>SR No.</th>
                                 <th>Description of Goods</th>
                                 <th>HSN/SAC</th>
                                 <th>Gross Weight</th>
@@ -109,15 +109,17 @@
                             @php
                                 $total_weight = 0;
                                 $hsn_sac = [];
+                                $index = 0;
                             @endphp
                         @foreach ($transfer_array[0]['transactions'] as $index => $transaction)
                             @foreach($transaction['items'] as $item)
                             @php
                                 $total_weight += $item['item_weight'];
                                 $hsn_sac[] = $item['item_hsn_number'];
+                                $index++;
                             @endphp
                             <tr>
-                                <td>1</td>
+                                <td>{{$index}}</td>
                                 <td>{{$item['item_name']}}<br><small>{{$item['item_metal']}}<br>1 Pcs</small></td>
                                 <td contenteditable="true" id="hsn_sac_1">{{$item['item_hsn_number']}}
 
