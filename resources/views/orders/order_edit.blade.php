@@ -155,7 +155,7 @@
                                             <span style="color: red;">*</span>
                                         </label>
                                         <input type="text" class="form-control" id="item_name" placeholder="Select Item"
-                                            value="{{$order['items'][0]['item_name']}}"  tabindex="9"/>
+                                            value="{{$order['items'] && $order['items'][0] ? $order['items'][0]['item_name'] : ''}}"  tabindex="9"/>
                                     </div>
                                     <div class="col-12 col-md-6 col-lg-2">
                                         <label for="item_metal" class="form-label">Metal
@@ -191,14 +191,14 @@
                                             <span style="color: red;">*</span>
                                         </label>
                                         <input type="number" class="form-control" id="item_weight" tabindex="12"
-                                            name="example-text-input" value="{{$order['items'][0]['item_weight']}}"
+                                            name="example-text-input" value="{{$order['items'] && $order['items'][0] ? $order['items'][0]['item_weight'] : ''}}"
                                             placeholder="Weight of item" step="0.01"/>
                                     </div>
                                     <div class="col-12 col-md-6 col-lg-2">
                                         <label for="item_colors" class="form-label">Colors</label>
                                         <select class="form-select" id="item_colors" tabindex="13">
                                             @foreach ($colors as $color)
-                                                <option value="{{ $color['color_id'] }}" @if ($color['color_id'] == $order['items'][0]['item_color']) selected @endif>
+                                                <option value="{{ $color['color_id'] }}" @if ($color['color_id'] == $order['items'] && $order['items'][0] ? $order['items'][0]['item_color'] : '') selected @endif>
                                                     {{ $color['color_name'] }}
                                                 </option>
                                             @endforeach
@@ -206,7 +206,7 @@
                                     </div>
                                     <div class="col-12 col-md-6 col-lg-2">
                                         <label for="item_hsn_number" class="form-label">HSN</label>
-                                        <input type="text" class="form-control" id="item_hsn_number" placeholder="HSN/SAC" tabindex="14" value="{{$order['items'][0]['item_hsn_number']}}" />
+                                        <input type="text" class="form-control" id="item_hsn_number" placeholder="HSN/SAC" tabindex="14" value="{{$order['items'] && $order['items'][0] ? $order['items'][0]['item_hsn_number'] : ''}}" />
                                     </div>
                                 </div>
                                 <div class="row mt-3">

@@ -352,7 +352,11 @@
                         name: 'item',
                         orderable: false,
                         render: function (data, type, row) {
-                            return `${row.items[0].item_name}--${row.items[0].item_metal}--${row.items[0].item_weight}`;
+                            if(row.items && row.items.length > 0 && row.items[0]){
+                                return `${row.items[0].item_name || ''}--${row.items[0].item_metal || ''}--${row.items[0].item_weight || ''}`;
+                            }else{
+                                return 'No items available';
+                            }
                         }
                     },
                         {

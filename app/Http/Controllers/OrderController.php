@@ -940,7 +940,11 @@ class OrderController extends Controller
 
         $order_rec->save();
         $item = Item::where('item_order_id', $order_rec->order_id)->first();
-
+        if(empty($item)){
+            $item = new Item();
+            
+            $item->item_order_id = $order_rec->order_id;
+        }
         $item->item_metal    = $params['item_metal'];
         $item->item_name     = $params['item_name'];
         $item->item_melting  = $params['item_melting'];
