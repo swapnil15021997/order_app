@@ -215,7 +215,7 @@ $(document).ready(function () {
 
 
         function view_receipt(trans_id) {
-            window.location.href = `/transfer-receipt/${trans_id}`;
+            window.location.href = `/transfer-receipt-pdf/${trans_id}`;
         }
 
 

@@ -191,7 +191,8 @@
             </td>
         </tr>
     </table>
-
+    
+   
     <table width="100%" cellpadding="0" cellspacing="0">
         <thead>
             <tr class="bg-gray">
@@ -240,6 +241,31 @@
             </tr>
         </tbody>
     </table>
+    <table width="100%" cellpadding="0" cellspacing="0">
+        <tr>
+            <td>
+                HSN/SAC
+            </td>
+            <td>
+                Taxable Value
+            </td>
+        </tr>
+        @php
+                        $hsn_sac = implode(',', array_unique($hsn_sac)); // comma-separated and unique values
+                    @endphp
+               
+        <tr>
+            <td>
+
+                {{$hsn_sac}}
+            </td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>Total</td>
+            <td></td>
+        </tr>
+    </table>
 
     <table width="100%" cellpadding="0" cellspacing="0">
         <tr>
@@ -273,16 +299,13 @@
                 <tr>
                     <td class="font-bold"></td>
                    
-                    <td class="text-center">
-                        <div class="arrow">↓</div>
-                        <div style="margin-top: 20px;">H.P.Koner</div>
+                    <td class="text-center"> 
+                        <div style="margin-top: 20px;"></div>
                     </td>
-                    <td class="text-center">
-                        <div class="arrow">→</div>
-                        <div style="margin-top: 20px;">BM</div>
+                    <td class="text-center"> 
+                        <div style="margin-top: 20px;"></div>
                     </td>
-                    <td class="text-center">
-                        <div class="star">★</div>
+                    <td class="text-center"> 
                         <div style="margin-top: 20px;">[Signature]</div>
                     </td>
                 </tr>
