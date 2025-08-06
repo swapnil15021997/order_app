@@ -13,10 +13,13 @@ class Transfer extends Model
     protected $primaryKey = 'trans_id';
     protected $fillable = [
         'trans_ids',
-        'trans_status'
+        'trans_status',
+        'multiple_transfer_delivery_note',
+        'multiple_transfer_type'
     ];
     public function transactions()
     {
         return $this->hasMany(Transactions::class, 'trans_id', 'trans_ids');
     }
+
 }

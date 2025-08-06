@@ -180,6 +180,11 @@
                                             @endforeach
                                         </select>
                                     </div>
+                                    <div class="col-12 col-md-6 col-lg-2">
+                                        <label for="item_hsn_number" class="form-label">HSN</label>
+                                        <input type="text" class="form-control" id="item_hsn_number" placeholder="HSN/SAC" tabindex="14" />
+                                    </div>
+                                    
                                 </div>
 
                                 <div class="row mt-3">
@@ -687,6 +692,7 @@
             var orderTo = $('#searchableSelectTo').val();
             var cust = $('#searchableCust').val();
             var item_color = $('#item_colors').val();
+            var item_hsn_number = $('#item_hsn_number').val();
             var item_metal = $('#item_metal').val();
             var item_name = $('#item_name').val();
             var item_melting = $('#item_melting').val();
@@ -718,6 +724,7 @@
                 formData.append('qr_code_number', orderQRCode);
                 formData.append('order_notes', notesList);
                 formData.append('item_color', item_color);
+                formData.append('item_hsn_number', item_hsn_number);
                 formData.append('temp_order_id',temp_order_id);
 
                 if (payment_advance) {

@@ -182,8 +182,10 @@ class OrderController extends Controller
             'order_user_id'         => ['required', 'string'],
             'item_weight'           => ['required', 'numeric'],
             'item_color'            => ['nullable', 'numeric'],
+            'item_hsn_number'       => ['nullable', 'string'],
             'item_file_images'      => ['nullable'],  
             'item_file_images.*'    => ['file', 'mimes:jpeg,jpg,png,pdf', 'max:10240'],
+
             'payment_advanced'      => ['nullable','numeric'],
             'payment_booking'       => ['nullable','numeric'],
             'order_number'          => ['nullable','string'],
@@ -212,6 +214,7 @@ class OrderController extends Controller
                 'item_metal.string'              => 'Item metal must be a string.',
                 'item_name.required'             => 'Item name is required.',
                 'item_name.string'               => 'Item name must be a string.',
+                'item_hsn_number.string'         => 'Item hsn number must be a string.',
                 'item_melting.required'          => 'Item melting is required.',
                 'item_melting.string'            => 'Item melting must be a string.',
                 'item_weight.required'           => 'Item weight is required.',
@@ -310,6 +313,7 @@ class OrderController extends Controller
         $item->item_name     = $params['item_name'];
         $item->item_melting  = $params['item_melting'];
         $item->item_color    = $params['item_color'];
+        $item->item_hsn_number = $params['item_hsn_number'];
         $item->item_weight   = $params['item_weight'];
         $item->item_order_id = $order->order_id;
         $item->save();
@@ -823,6 +827,7 @@ class OrderController extends Controller
             'item_melting'         => ['required', 'string'],
             'item_weight'          => ['required', 'numeric'],
             'item_color'           => ['required', 'numeric'],
+            'item_hsn_number'      => ['nullable', 'string'],
             'item_file_images'     => ['nullable'],  
             'item_file_images.*'   => ['file', 'mimes:jpeg,jpg,png,pdf', 'max:10240'],
             'payment_advanced'     => ['nullable','numeric'],
@@ -859,6 +864,7 @@ class OrderController extends Controller
                 'item_weight.required'        => 'Item weight is required.',
                 'item_weight.numeric'         => 'Item weight must be a number.',
                 'item_file_images.array'      => 'Item file images must be an array.',
+                'item_hsn_number.string'      => 'Item hsn number must be a string.',
                 'item_file_images.*.file'     => 'Each item file image must be a valid file.',
                 'item_file_images.*.mimes'    => 'Each item file image must be a jpeg, jpg, png, or pdf file.',
                 'item_file_images.*.max'      => 'Each item file image cannot exceed 10MB.',
@@ -940,6 +946,7 @@ class OrderController extends Controller
         $item->item_melting  = $params['item_melting'];
         $item->item_weight   = $params['item_weight'];
         $item->item_color    = $params['item_color'];
+        $item->item_hsn_number = $params['item_hsn_number'];
     
         $fileIds = [];
         if ($request->hasFile('item_file_images')) {

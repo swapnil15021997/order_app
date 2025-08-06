@@ -302,14 +302,104 @@ class TransferController extends Controller
                 'transactions.*',
                 'from_branch.branch_name AS from_branch_name',
                 'to_branch.branch_name AS to_branch_name',
+                'from_branch.branch_address AS from_branch_address',
+                'to_branch.branch_address AS to_branch_address',
             ) 
             ->get();
             $transfer->transactions = $transactions->toArray();
         }
-
+        $transfer_type = '';
+        if($transferQuery[0]['multiple_transfer_type'] == 1){
+            $transfer_type = 'Issue for Karagir';
+        }else{
+            $transfer_type = 'Issue for Hallmarking';
+        }
         $transfer_array = $transferQuery->toArray();
+        
         // dd($transfer_array);
-        return view('orders/transfer_receipt_latest',compact('pageTitle','login','activePage','user_branch','user_permissions','activeBranchName','transfer_array'));
+        return view('orders/transfer_receipt_latest',compact('pageTitle','login','activePage','user_branch','user_permissions','activeBranchName','transfer_array','transfer_type'));
 
     }
+
+
+
+    public function transfer_receipt_edit(Request $request,$id){
+        $pageTitle     = 'Transfer';
+        $login         = auth()->user();
+        $transfer      = Transfer::where('trans_id',$id)
+        ->where('is_delete',0)
+        ->first();
+        $activePage       = 'transfer';
+        if(!empty($login)){
+            if($login['user_role_id'] != 1){
+
+                $userBranchIds = explode(',', $login['user_branch_ids']);
+                $userBranchIds = array_map('trim', $userBranchIds); 
+                $userBranchIds = array_filter($userBranchIds); 
+              
+                if(!empty($userBranchIds)){
+
+                    $user_branch  = Branch::get_users_branch($userBranchIds);
+                }else{
+                    $user_branch  = [];
+                }
+                
+            }else{
+                $user_branch  = Branch::get_all_branch();
+    
+            }
+            if(!empty($user_branch)){
+                foreach ($user_branch as $branch) {
+                    if ($branch['branch_id'] == $login['user_active_branch']) {
+                        $activeBranchName = $branch['branch_name'];
+                        break;
+                    }
+                }
+            }
+            $activeBranchName = '';
+
+        }
+        
+        $user_permissions = session('combined_permissions', []);
+
+        return view('orders/transfer_receipt_edit',compact('pageTitle','login','transfer','user_permissions','activePage','user_branch','activeBranchName'));
+    }
+
+
+
+    public function transfer_receipt_save(Request $request){
+        $params = $request->all();
+        
+        $rules = [
+            'multiple_transfer_delivery_note'   => ['nullable', 'string'], 
+            'multiple_transfer_type' => ['required', 'integer', 'min:1'], 
+            'trans_id'     => ['required', 'integer'], 
+        ];
+    
+        $messages = [
+            'multiple_transfer_delivery_note.string'   => 'Delivery note must be a valid string.',
+            'multiple_transfer_type.integer' => 'Transfer type must be a valid integer.',
+            'multiple_transfer_type.min'     => 'Transfer type must be at least 1.',
+            'trans_id.integer'     => 'Transfer id must be a valid integer.',
+         ];
+    
+        $validator = Validator::make($request->all(), $rules, $messages);
+    
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 500,
+                'message' => Arr::flatten($validator->errors()->toArray())[0],
+                'errors'  => $validator->errors(),
+            ]);
+        }
+        $transfer = Transfer::where('trans_id',$params['trans_id'])
+        ->where('is_delete',0)
+        ->first();
+        $transfer->multiple_transfer_delivery_note = $params['multiple_transfer_delivery_note'];
+        $transfer->multiple_transfer_type = $params['multiple_transfer_type'];
+        $transfer->save();
+        return response()->json(['status' => 200, 'message' => 'Transfer receipt saved successfully!']);
+        
+    }
+
 }

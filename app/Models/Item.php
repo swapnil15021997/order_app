@@ -25,6 +25,7 @@ class Item extends Model
         'item_weight',
         'item_file_images',
         'item_order_id',
+        'item_hsn_number',
         'item_color'
     ];
 

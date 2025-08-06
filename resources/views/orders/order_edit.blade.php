@@ -204,6 +204,10 @@
                                             @endforeach
                                         </select>
                                     </div>
+                                    <div class="col-12 col-md-6 col-lg-2">
+                                        <label for="item_hsn_number" class="form-label">HSN</label>
+                                        <input type="text" class="form-control" id="item_hsn_number" placeholder="HSN/SAC" tabindex="14" value="{{$order['items'][0]['item_hsn_number']}}" />
+                                    </div>
                                 </div>
                                 <div class="row mt-3">
                                     <div class="col-12">
@@ -840,6 +844,7 @@
             var payment_advance = $('#payment_advance').val();
             var payment_booking = $('#payment_booking').val();
             var item_color = $('#item_colors').val();
+            var item_hsn_number = $('#item_hsn_number').val();
             var cust = $('#searchableCust').val();
             var remarks = $('#order_remarks').val();
 
@@ -866,6 +871,7 @@
                 formData.append('item_weight', itemWeight);
                 formData.append('order_user_id', cust);
                 formData.append('item_color', item_color);
+                formData.append('item_hsn_number', item_hsn_number);
 
                 formData.append('order_remark', remarks);
 
