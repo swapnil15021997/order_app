@@ -33,6 +33,7 @@ class Order extends Model
         'order_status',
         'order_remark',
         'order_branch_id',
+        'order_number'
     ];
 
 

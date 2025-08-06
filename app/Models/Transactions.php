@@ -86,4 +86,16 @@ class Transactions extends Model
         return $this->hasMany(Order::class,'order_id', 'trans_order_id');  
     }
 
+
+    
+    public function items_trans()
+    {
+        return $this->hasMany(Item::class,'item_id', 'trans_item_id')->where('is_delete',0);  
+    }
+
+
+    public function orders_trans()
+    {
+        return $this->hasMany(Order::class,'order_id', 'trans_order_id')->where('is_delete',0);  
+    }
 }

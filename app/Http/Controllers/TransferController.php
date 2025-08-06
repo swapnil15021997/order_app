@@ -105,81 +105,97 @@ class TransferController extends Controller
         if (!in_array($sortColumn, $allowedSortColumns)) {
             $sortColumn = 'trans_id'; // Fallback to default
         }
-        // if(!empty($login)){
-        //     if ($login['user_role_id']!=1){
-
-        //         $user_branch_ids = $login['user_branch_ids'];
-        //         $branchIdsArray = explode(',', $user_branch_ids);
+        // $query = Transfer::query()
+        // ->where('is_delete', 0);
+         
+        // $totalRecords = $query->count();
+        // $transfers = $query
+        // // ->orderBy($sortColumn, $sortOrder)
+        // ->skip(($page - 1) * $perPage)
+        // ->take($perPage)
+        // ->get();
         
-        //         $branchQuery  = Branch::query()->where('is_delete',0)
-        //         ->whereIn('branch_id', $branchIdsArray);      
-        //     }else{
-        //         $branchQuery  = Branch::query()->where('is_delete',0);      
+        // $transfers = collect();
 
+        // foreach ($transfers as $transfer) {
+        //     $trans_Ids = explode(',', $transfer->trans_ids);
+        //     $transactions = Transactions::whereIn('trans_id', $trans_Ids)
+        //     ->with('items_trans','items.colors','orders_trans') 
+        //     ->where('is_delete',0)
+        //     ->get()
+        //     ->filter(function ($transaction) {
+        //         return !$transaction->orders_trans->isEmpty();
+        //     })
+        //     ->values();
+        //     if (!$transactions->isEmpty()) {
+        //         $transfer->transactions = $transactions->toArray();
+                
         //     }
-        // }
-        $transferQuery  = Transfer::query()
-        ->where('is_delete',0)
-        ->orderBy('trans_id', 'desc')
-        ->get();
-        foreach ($transferQuery as $transfer) {
-            $trans_Ids = explode(',', $transfer->trans_ids);
-            $transactions = Transactions::whereIn('trans_id', $trans_Ids)
-            ->with('items','items.colors') 
-            ->get();
-            $transfer->transactions = $transactions->toArray();
-        }
         
-        // $transferQuery = Transactions::whereIn('trans_id', function($query) {
-        //     $query->select(DB::raw('trans_id'))
-        //         ->from('multiple_transfer')
-        //         ->where('is_delete', 0)
-        //     ->unionAll(
-        //         Transfer::where('is_delete', 0)
-        //             ->selectRaw('SUBSTRING_INDEX(SUBSTRING_INDEX(trans_ids, ",", n.digit + 1), ",", -1) as trans_id')
-        //             ->crossJoin(DB::raw('(SELECT 0 digit UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3) n'))
-        //             ->whereRaw('LENGTH(REPLACE(trans_ids, ",", "")) <= LENGTH(trans_ids) - n.digit')
-        //     );
-        // })->get();
-
-
-        // // ->where(function ($query) use ($trans_ids) {
-        //     foreach ($trans_ids as $transaction_id) {
-        //         // Use FIND_IN_SET to check if the transaction_id exists in trans_ids
-        //         $query->orWhereRaw("FIND_IN_SET(?, trans_ids) > 0", [$transaction_id]);
-        //     }
-        // });
-        // if (!empty($searchQuery)) {
-        //     $transferQuery->where(function ($query) use ($searchQuery) {
-        //         $query->where('branch_name', 'like', "%{$searchQuery}%");
-        //     });
-        // }
-        // $transferQuery->orderBy($sortColumn, $sortOrder);
-        $total_branches = $transferQuery->count();
-        // $branches = $transferQuery
-        //     ->offset($offset)
-        //     ->limit($perPage)
-        //     ->get();
-        $transferQuery->each(function ($transfer, $index) {
-            $transfer->serial_number = $index + 1; 
-            $transfer->trans_at    = Carbon::parse($transfer->created_at)->format('d-m-Y');
             
+        // }
+        // dd($transfers->toArray());
+        
+        // $transfers->each(function ($transfer, $index) {
+        //     $transfer->serial_number = $index + 1; 
+        //     $transfer->trans_at    = Carbon::parse($transfer->created_at)->format('d-m-Y');
+            
+        // });
+ 
+
+        $query = Transfer::query()
+            ->where('is_delete', 0);
+
+        // Only needed if you want total **before filtering**
+        $rawTotal = $query->count();
+
+        $rawTransfers = $query
+            ->skip(($page - 1) * $perPage)
+            ->take($perPage)
+            ->get();
+
+        $filteredTransfers = collect();
+
+        foreach ($rawTransfers as $transfer) {
+            $trans_Ids = explode(',', $transfer->trans_ids);
+
+            $transactions = Transactions::whereIn('trans_id', $trans_Ids)
+                ->with('items_trans', 'items.colors', 'orders_trans')
+                ->where('is_delete', 0)
+                ->get()
+                ->filter(function ($transaction) {
+                    return !$transaction->orders_trans->isEmpty();
+                })
+                ->values();
+
+            // if (!$transactions->isEmpty()) {
+                $transfer->transactions = $transactions->toArray();
+                $filteredTransfers->push($transfer);
+            // }
+        }
+
+        // Update serial number and date
+        $filteredTransfers->each(function ($transfer, $index) {
+            $transfer->serial_number = $index + 1;
+            $transfer->trans_at = Carbon::parse($transfer->created_at)->format('d-m-Y');
         });
+     
+        // Update total count **after filtering**
+        $totalFiltered = $filteredTransfers->count();
 
-        $total_pages = ceil($total_branches / $perPage);
-
+         
         return response()->json([
             'status' => 200,
             'message' => 'Transfer list fetched successfully!',
-            'data'    =>  $transferQuery,
+            'data'    =>  $filteredTransfers,
             
             'draw' => intval($request->input('draw')),
 
-            'recordsTotal'        => $transferQuery->count(),
-            'recordsFiltered' => $total_branches,
+            'recordsTotal'        => $rawTotal,
+            'recordsFiltered' => $rawTotal,
             'per_page'     => $perPage,
             'current_page' => $page,
-            'total_pages'  => $total_pages,
+            'total_pages' => ceil($rawTotal / $perPage),
         ]);
     }
 
@@ -300,6 +316,7 @@ class TransferController extends Controller
             ->with('items.colors','transUser', 'transApprovedBy','orders')
             ->select(
                 'transactions.*',
+                
                 'from_branch.branch_name AS from_branch_name',
                 'to_branch.branch_name AS to_branch_name',
                 'from_branch.branch_address AS from_branch_address',

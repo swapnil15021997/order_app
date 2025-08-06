@@ -69,7 +69,7 @@
                             
                                 <tr>
                                     <td><strong>Reference No. & Date:</strong></td>
-                                    <td><strong>Other References</strong></td>
+                                    <td>Other References</td>
                                 </tr>
                                 <tr>
                                     <td><strong>Buyer's Order No.:</strong></td>
@@ -79,7 +79,7 @@
                             
                                 <tr>
                                     <td><strong>Dispatch Doc No.:</strong></td>
-                                    <td><strong>Destination</strong></td>
+                                    <td>Destination</td>
                                 </tr>
                                 
                                 <tr>
@@ -118,9 +118,9 @@
                                 $hsn_sac[] = $item['item_hsn_number'];
                                 $index++;
                             @endphp
-                            <tr> 
+                            <tr>
                                 <td>{{$index}}</td>
-                                <td>{{$item['item_name']}}<br><small>{{$item['item_metal']}}<br>1 Pcs ({{$transaction['orders'][0]['order_number']}})</small></td>
+                                <td>{{$item['item_name']}}<br><small>{{$item['item_metal']}}<br>1 Pcs</small></td>
                                 <td contenteditable="true" id="hsn_sac_1">{{$item['item_hsn_number']}}
 
                                 </td>
