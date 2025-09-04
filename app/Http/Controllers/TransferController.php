@@ -104,7 +104,7 @@ class TransferController extends Controller
         $allowedSortColumns = ['trans_id'];
         if (!in_array($sortColumn, $allowedSortColumns)) {
             $sortColumn = 'trans_id'; // Fallback to default
-        }
+        } 
         // $query = Transfer::query()
         // ->where('is_delete', 0);
          
@@ -144,7 +144,7 @@ class TransferController extends Controller
  
 
         $query = Transfer::query()
-            ->where('is_delete', 0);
+            ->where('is_delete', 0)->orderBy($sortColumn, $sortOrder);
 
         // Only needed if you want total **before filtering**
         $rawTotal = $query->count();

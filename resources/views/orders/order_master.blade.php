@@ -90,6 +90,7 @@
                                 <th>Customer Name</th>
                                 <th>From --> To</th>
                                 <th>Item</th>
+                                <th>Order Current Branch</th>
                                  <th>Action</th>
                             </tr>
                         </thead>
@@ -357,6 +358,14 @@
                             }else{
                                 return 'No items available';
                             }
+                        }
+                    },
+                    {
+                        data: 'order_current_branch',
+                        name: 'order_current_branch',
+                        orderable: false,
+                        render: function (data, type, row) {
+                            return `${row.order_current_branch}`;
                         }
                     },
                         {
